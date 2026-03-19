@@ -1,0 +1,17 @@
+# Desactivar listado de directorios
+Options -Indexes
+
+# Hacer que login.php sea la página por defecto
+DirectoryIndex login.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Si es la raíz y no se está pidiendo un archivo estático, ir a login.php
+    RewriteCond %{REQUEST_URI} ^/?$ 
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^$ login.php [L]
+
+    # (Opcional) Podrías agregar reglas adicionales para rutas limpias más adelante
+</IfModule>

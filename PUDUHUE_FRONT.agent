@@ -1,0 +1,719 @@
+# PUDUHUE_FRONT.agent – Reglas para el Frontend Web (views) de Puduhue App
+
+Contexto:
+Estás ayudando a construir el frontend web de “Puduhue App”, una aplicación PHP + MariaDB.
+
+Alta nivel de arquitectura (lado web):
+
+- Backend PHP:
+  - `src/Config/Env.php` y `src/Config/Database.php` (clases globales sin namespace; cargar con `require_once` porque no hay autoload confiable en hosting)
+  - `src/Auth/SessionManager.php`
+  - `src/Middleware/AuthMiddleware.php`
+  - `src/Helpers/Logger.php` (namespace `App\\Helpers`, cargar manual con `require_once` cuando se use)
+  - `src/Services/*Service.php` (lógica de negocio; llaman SP via `Database::callSpMaint` / `callSpQuery`)
+  - `src/Controllers/Web/*Controller.php` (controladores para vistas web)
+  - `src/Routes/web.php` (router web: normaliza `?route=modulo/accion` y mapea módulo→controlador)
+- Web frontend (views):
+  - Ubicadas en `/apps/web-php/`
+  - Layout común:
+    - `head.php`:
+      - abre `<html>`, `<body>`,
+      - incluye Bootstrap 5, Bootstrap Icons,
+      - define contenedor flex principal.
+    - `menu.php`:
+      - construye sidebar izquierdo a partir de datos de menús (BD o `menu.json` de apoyo),
+      - abre `<main>` para el contenido central.
+    - `footer.php`:
+      - cierra `<main>` y el contenedor flex,
+      - incluye JS de Bootstrap y scripts comunes.
+
+Ejemplo de vista existente:
+- `apps/web-php/empresas_listar.php` (usar como referencia de estilo y estructura).
+
+============================================================
+1. Routing Web
+============================================================
+
+Patrón de routing (frontend interno):
+
+- Punto de entrada: `apps/web-php/index.php`.
+  - Inicia sesión.
+  - Carga `src/Config/Env.php`, `src/Config/Database.php`, `src/Auth/SessionManager.php`, `src/Middleware/AuthMiddleware.php`, `src/Helpers/Logger.php` vía `require_once` (no hay autoload confiable en hosting).
+  - Incluye `src/Routes/web.php` y delega con `handleWebRequest()` (patrón `?route=modulo/accion`, ruta por defecto `dashboard`).
+- `src/Routes/web.php`:
+  - Normaliza `?route=<modulo>/<accion>` (acepta también `<modulo>_<accion>.php`), arma `allowedMenuRoutes` desde `menu.json` y permite siempre `crear` / `editar` / `anular` aunque no estén en el menú (formularios invocados desde otras vistas).
+  - Mapea módulo→controlador y hace `require_once` del archivo si la clase no está cargada; fallback 404 si no hay coincidencia.
+  - Rutas típicas (Empresas):
+
+    - `GET  ?route=empresas/listar`       → `EmpresasController::listar()`
+    - `GET  ?route=empresas/crear`        → `EmpresasController::crearForm()`
+    - `POST ?route=empresas/crear`        → `EmpresasController::crearPost()`
+    - `GET  ?route=empresas/editar&id=X`  → `EmpresasController::editarForm()`
+    - `POST ?route=empresas/editar`       → `EmpresasController::editarPost()`
+    - `POST ?route=empresas/anular`       → `EmpresasController::anularPost()`
+
+- El router:
+  - Aplica `AuthMiddleware::requireAuth()` para rutas protegidas (login/mostrar y login/procesar quedan públicas).
+  - Implementa fallback 404 si la ruta no existe.
+  - Soporta modo "SPA parcial":
+    - Si `$_GET['partial'] === '1'` o la petición es AJAX,
+      el controlador puede devolver solo el contenido central (sin layout completo).
+    - Las vistas siguen siendo PHP tradicionales, solo que pueden omitir `head.php`/`menu.php`/`footer.php` cuando el controlador así lo indique.
+
+============================================================
+2. Autenticación y contexto de usuario
+============================================================
+
+- Los controladores Web ya se encargan de:
+  - Llamar a `AuthMiddleware::requireAuth()` donde corresponda.
+  - Obtener contexto de usuario con `AuthMiddleware::getUserContext()` (empresa, perfil, permisos).
+- Las vistas **NO implementan lógica de autenticación**:
+  - Asumen que el usuario está autenticado (salvo vistas públicas como login).
+  - Pueden mostrar el nombre del usuario o empresa si el controlador se lo entrega en variables (ej. `$userContext`).
+
+============================================================
+3. Reglas generales para views
+============================================================
+
+3.1. Inclusión de layout
+Siempre que se genere una vista completa, seguir este patrón mínimo:
+
+```php
+<?php
+require 'head.php';
+require 'menu.php';
+?>
+<!-- Contenido específico de la vista -->
+...
+<?php require 'footer.php'; ?>
+NO cargar head.php/menu.php/footer.php cuando el controlador haya indicado que es una respuesta parcial (por ejemplo, respuesta AJAX donde solo se devuelve el contenido central). En esos casos, la vista puede limitarse al contenido HTML.
+
+3.2. Uso de Bootstrap
+
+Usar Bootstrap 5:
+
+Grid (.container, .row, .col-*)
+
+Formularios (.form-control, .form-label, .form-check, etc.).
+
+Botones (.btn, .btn-primary, .btn-secondary, etc.).
+
+Iconos:
+
+Usar Bootstrap Icons (ya incluidos en head.php).
+
+Ejemplos:
+
+<i class="bi bi-plus-circle"></i>
+
+<i class="bi bi-pencil-square"></i>
+
+<i class="bi bi-trash"></i>
+
+3.3. No modificar el backend desde vistas
+
+Las vistas NO:
+
+definen ni modifican clases de backend (Database, Services, Controllers, Middleware).
+
+ejecutan SP directamente.
+
+acceden a $_SESSION directamente para lógica compleja (esa lógica vive en controladores/servicios).
+
+Las vistas SOLO:
+
+muestran datos recibidos de su controlador (arrays, objetos simples).
+
+envían formularios con method="POST" al router.
+
+3.4. Success/Failure Toasts
+- Mostrar feedback de éxito/error con toasts no intrusivos (evitar alerts bloqueantes en el frontend interno).
+- Reutilizar el helper JS común si existe; el backend debe entregar mensajes listos para mostrar en toast.
+
+============================================================
+4. Convenciones de CRUD en views
+4.1. Pantallas de Maestros / Mantenedores
+
+Incluyen:
+
+Listado principal (tabla).
+
+Filtro de texto simple (ej. razón social, nombre).
+
+Botones:
+
+“Nuevo” → ?route=<modulo>/crear.
+
+“Editar” → ?route=<modulo>/editar&id=... (por fila).
+
+“Anular” (cuando aplique) → POST a ?route=<modulo>/anular.
+
+“Exportar a Excel” (cuando aplique).
+
+Regla importante:
+
+Maestros NO se filtran por empresa/fundo del usuario logueado.
+
+Las asociaciones usuario–empresa/usuario–fundo se usan solo en transacciones.
+
+4.2. Formularios de creación
+
+Convención:
+
+php
+Copiar código
+<form method="POST" action="?route=empresas/crear">
+    <!-- campos -->
+</form>
+No incluir la PK (auto-increment).
+
+Campos a mostrar:
+
+Solo columnas no-auditoría (auditcreacion*, auditedicion* se excluyen).
+
+Respetar nombre de columnas reales del .sql (database/tables/01_table_<tabla>.sql).
+
+Botones:
+
+“Guardar” (submit).
+
+“Volver” → enlace a ?route=empresas/listar.
+
+4.3. Formularios de edición
+
+Convención:
+
+php
+Copiar código
+<form method="POST" action="?route=empresas/editar">
+    <input type="hidden" name="empresaid" value="<?= htmlspecialchars($empresa['empresaid']) ?>">
+    <!-- resto de campos -->
+</form>
+Debe incluir un campo oculto con la PK:
+
+Ej. empresaid.
+
+Campos:
+
+Se cargan con valores actuales (el controlador pasa la entidad completa).
+
+No se muestra ni edita campos de auditoría (solo lectura si el diseño lo justifica, pero por defecto se ocultan).
+
+Botones:
+
+“Guardar cambios”.
+
+“Volver”.
+
+4.4. Campos booleanos (tinyint(1) tipo activo/vigente)
+
+Representar como:
+
+Checkbox (ej. “Activo”).
+
+O select con opciones “Sí/No”.
+
+Convención básica con checkbox:
+
+php
+Copiar código
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" id="empresaactivo" name="empresaactivo" value="1"
+           <?= !empty($empresa['empresaactivo']) ? 'checked' : '' ?>>
+    <label class="form-check-label" for="empresaactivo">Activo</label>
+</div>
+============================================================
+5. Módulo Empresas (referencia base)
+Service: src/Services/EmpresasService.php.
+
+Controller: src/Controllers/Web/EmpresasController.php.
+
+Stored procedures: sp_empresas_* ya definidos en BD.
+
+Views asociadas:
+
+apps/web-php/empresas_listar.php
+
+apps/web-php/empresas_crear.php
+
+apps/web-php/empresas_editar.php
+
+Reglas:
+
+Las vistas NO llaman SP directamente.
+
+Las vistas leen y escriben variables exactamente como el controlador las define (ej. $empresas, $empresa, $errorMessage).
+
+Si el controlador envía $errorMessage, mostrarlo como alerta:
+
+php
+Copiar código
+<?php if (!empty($errorMessage)): ?>
+    <div class="alert alert-danger" role="alert">
+        <?= htmlspecialchars($errorMessage) ?>
+    </div>
+<?php endif; ?>
+============================================================
+6. Menú lateral (menu.php)
+menu.php construye el árbol de menús usando:
+
+Tabla menus en BD, vía MenusService, o
+
+Un archivo menu.json auxiliar para bootstrap inicial (estructura equivalente a la tabla):
+
+jerarquía:
+
+Transacciones
+
+Leche
+
+Producción de Leche
+
+Retiro de leche
+
+Alimentación de Ganado
+
+Suplementación Animal
+
+Configuración
+
+Administración
+
+Empresas
+
+Usuarios
+
+Usuarios Empresas
+
+Usuarios Fundos
+
+Menús
+
+Perfiles
+
+Cambio de contraseña
+
+Maestros
+
+Fundos
+
+Fundos Estanques
+
+Tipos de Leche
+
+Inventario Bodegas
+
+Inventario Ítems (Productos)
+
+Inventario Categorías Ganado
+
+Clientes
+
+Cada nodo hija (opción final) debe tener mapeado:
+
+texto visible (ej. “Empresas”),
+
+icono (ej. bi-building),
+
+ruta interna (?route=empresas/listar u otra según diseño),
+
+nombre del formulario asociado (columna menuform de la tabla menus).
+
+El menú debe:
+
+Resaltar la opción activa según la ruta actual.
+
+Colapsar/expandir grupos (Bootstrap collapse o similar).
+
+============================================================
+7. Exportar a Excel
+Existe un helper genérico para exportar a Excel utilizando PhpSpreadsheet en el backend.
+
+Convención de vista:
+
+Mostrar un botón “Exportar a Excel” que envía el formulario a un script tipo export_excel.php:
+
+php
+Copiar código
+<form method="POST" action="export_excel.php" class="d-inline">
+    <input type="hidden" name="tipo" value="empresas">
+    <button type="submit" class="btn btn-outline-success btn-sm">
+        <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
+    </button>
+</form>
+La vista NO:
+
+construye el Excel,
+
+utiliza PhpSpreadsheet directamente.
+
+Solo envía los parámetros para que el backend genere el archivo.
+
+============================================================
+8. Reglas para generación automática de CRUD (Prompt Universal)
+Codex debe ser capaz de generar 3 archivos de vista para cualquier módulo:
+
+<modulo>_listar.php
+
+<modulo>_crear.php
+
+<modulo>_editar.php
+
+Usando como insumo:
+
+Columnas reales de la tabla (database/tables/01_table_<tabla>.sql).
+
+Reglas de SP y filtros (Columns.csv, Tables.csv).
+
+Reglas de auditoría (Audit Columns.csv).
+
+Reglas de LOG/HIST (Generic Log Table.csv).
+
+Patrón de rutas (?route=<modulo>/listar|crear|editar).
+
+Layout común (head.php, menu.php, footer.php).
+
+Convenciones de formularios descritas arriba.
+
+AuthMiddleware para asegurar que las vistas se usen dentro de un flujo con sesión válida.
+
+Cuando se le pida generar un CRUD de vistas para un módulo:
+
+Listar (<modulo>_listar.php):
+
+Tabla con columnas principales y columnas de auditoría relevantes (solo lectura).
+
+Filtros básicos (texto, fechas si aplica).
+
+Botones Crear/Editar/Anular/Exportar a Excel.
+
+Uso de rutas correctas (?route=<modulo>/...).
+
+Crear (<modulo>_crear.php):
+
+Formulario con campos no-auditoría.
+
+Acción POST a ?route=<modulo>/crear.
+
+Sin campo PK.
+
+Botón Volver al listado.
+
+Editar (<modulo>_editar.php):
+
+Formulario con campos no-auditoría.
+
+Acción POST a ?route=<modulo>/editar.
+
+Hidden input con la PK (<tabla>id).
+
+Botón Volver.
+
+Codex debe:
+
+Reutilizar el estilo y estructura de empresas_listar.php como referencia visual.
+
+Mantener consistencia en nombres de campos, rutas y layout.
+
+NO mezclar reglas de API externa en estas vistas (no usar formato JSON estándar aquí).
+
+============================================================
+9. Resumen de responsabilidades de la vista
+La vista (archivo en /apps/web-php/):
+
+Sí hace:
+
+Recibir datos del controlador (arrays/objetos).
+
+Mostrar tablas, formularios y mensajes de error/éxito.
+
+Enviar formularios al router (?route=...).
+
+Incluir head.php, menu.php, footer.php cuando es vista completa.
+
+NO hace:
+
+Conectarse a la base de datos.
+
+Llamar SP.
+
+Manipular sesiones más allá de mostrar datos provistos.
+
+Implementar reglas de negocio complejas.
+
+Cualquier generación automática de vistas debe seguir estrictamente estas reglas para asegurar que cada pieza encaje con el backend ya definido para Puduhue App.
+
+============================================================
+10. Reglas específicas para generar <modulo>_listar.php
+
+Toda vista de listado debe cumplir:
+
+10.1. Estructura base:
+<?php require 'head.php'; ?>
+<?php require 'menu.php'; ?>
+
+<div class="container-fluid px-4">
+    <h1 class="mt-2">Título del módulo</h1>
+
+    <!-- filtros -->
+    <!-- tabla -->
+    <!-- acciones -->
+</div>
+
+<?php require 'footer.php'; ?>
+
+10.2. Comportamiento requerido:
+
+Mostrar filtros según las columnas marcadas con spListar_Filter_Column = TRUE en Columns.csv
+
+Mostrar columnas según spListar_Select_Column = TRUE
+
+Mostrar columnas JOIN según spListar_Select_JOIN_Column_Name
+
+Mostrar botones:
+
+Crear
+
+Editar (por fila)
+
+Anular (solo si aplica)
+
+Exportar a Excel (ya existe un handler genérico)
+
+10.3. Convenciones:
+
+El filtro principal siempre es de tipo texto
+
+Los filtros se envían por GET ($_GET[...]) y se reenvían al controlador
+
+El controlador devuelve $listado como array plano
+
+La tabla se construye con Bootstrap 5 y clases standard (table, table-striped)
+
+============================================================
+11. Reglas específicas para <modulo>_crear.php
+11.1. Estructura base:
+<?php require 'head.php'; ?>
+<?php require 'menu.php'; ?>
+
+<div class="container mt-3">
+    <h1>Crear Nueva Empresa</h1>
+
+    <?php if (!empty($errorMessage)) : ?>
+        <div class="alert alert-danger"><?= $errorMessage ?></div>
+    <?php endif; ?>
+
+    <form method="POST" action="?route=empresas/crear">
+        <!-- Inputs -->
+        <button class="btn btn-primary">Guardar</button>
+        <a href="?route=empresas/listar" class="btn btn-secondary">Volver</a>
+    </form>
+</div>
+
+<?php require 'footer.php'; ?>
+
+11.2. Convenciones obligatorias:
+
+No incluir PK (auto_increment)
+
+No incluir columnas de auditoría
+
+Validaciones básicas HTML5 (required, maxlength)
+
+Campos tinyint(1) → como checkbox o select “Sí / No”
+
+El nombre del campo HTML debe coincidir EXACTAMENTE con la columna en BD
+
+============================================================
+12. Reglas específicas para <modulo>_editar.php
+12.1. Estructura base idéntica a crear, salvo:
+
+Incluir:
+
+<input type="hidden" name="empresaid" value="<?= $empresa['empresaid'] ?>">
+
+
+Pre-cargar valores con value="<?= $empresa['razonsocial'] ?>"
+
+12.2. Convenciones:
+
+Si existe $errorMessage, mostrarlo con alert-danger
+
+method="POST" y action="?route=empresas/editar"
+
+No manipular auditoría ni cálculos internos
+
+============================================================
+13. Reglas para módulos Maestros vs Transacciones
+13.1. Maestros:
+
+Listar, Crear, Editar, Anular
+
+Sin dependencias del usuario logueado (solo AuthMiddleware)
+
+Filtros simples (texto, combos simples)
+
+13.2. Transacciones:
+
+Requieren validaciones de negocio complejas, pero éstas viven en el Service/Controller, NO en la vista
+
+Pueden requerir combos dinámicos (p.ej. Fundos activos)
+
+Pueden requerir uploads (caso “Retiro de Leche”)
+
+La vista nunca llama SP directamente
+
+============================================================
+14. Reglas para navegación y menú lateral
+
+menu.php carga menu.json
+
+Cada opción del menú tiene:
+
+{
+  "menuid": 5,
+  "menupadre": 2,
+  "menudesc": "Empresas",
+  "menuform": "empresas_listar.php",
+  "menunvlord": 1,
+  "menuicono": "building",
+  "menuactivo": 1
+}
+
+
+Cuando el usuario hace clic, debe cargar:
+
+?route=<modulo>/<accion>
+
+
+Ejemplo:
+
+?route=empresas/listar
+
+
+menu.php abre <main> y footer.php lo cierra
+
+No recargar CSS/JS dentro de las vistas
+
+============================================================
+15. SPA-parcial (no SPA completa)
+
+La app NO es SPA, pero se comporta como SPA en lo siguiente:
+
+menu.php permanece siempre visible
+
+Solo cambia el contenido en <main>
+
+head.php y footer.php no deben duplicarse
+
+Evitar recargar librerías JS/CSS en cada vista
+
+Las vistas deben renderizarse completas en el servidor (server-side rendering)
+
+============================================================
+16. Prompt Universal — reglas para Codex
+
+Cuando el usuario solicite:
+
+“Generate CRUD for module X”
+
+El agente debe:
+
+Leer README.md, PUDUHUE.agent, PUDUHUE_FRONT.agent
+
+Revisar tables/*.sql para conocer la estructura de columnas
+
+Aplicar:
+
+filtros desde Columns.csv
+
+auditoría
+
+reglas de SP
+
+validación Frontend para formularios
+
+Generar:
+
+<modulo>_listar.php
+
+<modulo>_crear.php
+
+<modulo>_editar.php
+
+Usar la estructura:
+
+<?php require 'head.php'; ?>
+<?php require 'menu.php'; ?>
+...
+<?php require 'footer.php'; ?>
+
+
+No generar lógica interna del backend (Services, Models, Controllers)
+
+El Prompt Universal siempre inicia:
+
+You are Codex inside the Puduhue App project.
+Reload the full context:
+1. README.md
+2. PUDUHUE.agent
+3. PUDUHUE_FRONT.agent
+4. .htaccess inside /apps/web-php/ (if present)
+5. All SQL source files in:
+  * /database/tables/*.sql (CREATE TABLE files)
+  * /database/sps/*.sql (Stored Procedure files)
+
+
+Y finaliza:
+
+Generate the 3 frontend files for module <X> using the rules above.
+
+============================================================
+17. Validaciones mínimas para formularios
+
+Inputs con required cuando corresponda
+
+maxlength según tamaño de columna
+
+type="number" para INT
+
+type="date" para fechas
+
+textarea para TEXT
+
+No hacer validaciones JavaScript avanzadas
+
+La validación real SIEMPRE la hace el Service/Controller con el SP
+
+============================================================
+18. Reglas para exportación a Excel
+
+Cada vista “listar” debe incluir:
+
+<form method="POST" action="export_excel.php" class="d-inline">
+    <input type="hidden" name="module" value="empresas">
+    <button class="btn btn-success btn-sm">Exportar a Excel</button>
+</form>
+
+
+NO generar lógica Excel en la vista
+
+La vista solo envía el módulo y los filtros
+
+============================================================
+19. Estándar de nombres para archivos CRUD
+
+Deben ser:
+
+empresas_listar.php
+empresas_crear.php
+empresas_editar.php
+
+
+No usar CamelCase ni PascalCase para archivos de vistas.
+
+============================================================
+20. Regla final del agente
+
+La vista nunca debe reinventar lógica existente en Controller/Service/SP.
+La vista solo muestra datos, obtiene inputs y los envía al router.

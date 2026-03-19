@@ -1,0 +1,54 @@
+CREATE TABLE `usuariosapitokens` (
+  `usuarioapitokenid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `usuarioid` int(11) NOT NULL,
+  `tokennombre` varchar(150) NOT NULL,
+  `tokenhash` varchar(255) NOT NULL,
+  `tokenprefijo` varchar(20) NOT NULL,
+  `tokenactiva` tinyint(1) NOT NULL DEFAULT 1,
+  `tokenfechaexpira` datetime NULL DEFAULT NULL,
+  `tokenultuso` datetime NULL DEFAULT NULL,
+  `tokenipultuso` varchar(50) NULL DEFAULT NULL,
+  `observacion` varchar(255) NULL DEFAULT NULL,
+  `auditcreacionusuarioid` int(11) NOT NULL,
+  `auditcreaciondispositivo` varchar(100) NOT NULL,
+  `auditcreacionip` varchar(50) NOT NULL,
+  `auditcreacionfechahora` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `auditedicionusuarioid` int(11) NULL DEFAULT NULL,
+  `auditediciondispositivo` varchar(100) NULL DEFAULT NULL,
+  `auditedicionip` varchar(50) NULL DEFAULT NULL,
+  `auditedicionfechahora` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`usuarioapitokenid`),
+  UNIQUE KEY `uq_usuariosapitokens_tokenhash` (`tokenhash`),
+  KEY `idx_usuariosapitokens_usuarioid` (`usuarioid`),
+  KEY `idx_usuariosapitokens_tokenactiva` (`tokenactiva`),
+  KEY `idx_usuariosapitokens_tokenfechaexpira` (`tokenfechaexpira`),
+  CONSTRAINT `fk_usuariosapitokens_usuarioid`
+    FOREIGN KEY (`usuarioid`) REFERENCES `usuarios` (`usuarioid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `apirequestlog` (
+  `apirequestlogid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `requestid` char(36) NOT NULL,
+  `usuarioid` int(11) NULL DEFAULT NULL,
+  `usuarioapitokenid` bigint(20) NULL DEFAULT NULL,
+  `apiversion` varchar(20) NOT NULL,
+  `recurso` varchar(100) NOT NULL,
+  `metodohttp` varchar(10) NOT NULL,
+  `endpoint` varchar(255) NOT NULL,
+  `iporigen` varchar(50) NULL DEFAULT NULL,
+  `useragent` varchar(500) NULL DEFAULT NULL,
+  `requestheadersjson` json NULL,
+  `requestbodyjson` json NULL,
+  `responsecode` int(11) NOT NULL,
+  `responsetimems` int(11) NULL DEFAULT NULL,
+  `fechahora` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`apirequestlogid`),
+  UNIQUE KEY `uq_apirequestlog_requestid` (`requestid`),
+  KEY `idx_apirequestlog_usuarioid_fechahora` (`usuarioid`, `fechahora`),
+  KEY `idx_apirequestlog_usuarioapitokenid` (`usuarioapitokenid`),
+  KEY `idx_apirequestlog_responsecode` (`responsecode`),
+  CONSTRAINT `fk_apirequestlog_usuarioid`
+    FOREIGN KEY (`usuarioid`) REFERENCES `usuarios` (`usuarioid`),
+  CONSTRAINT `fk_apirequestlog_usuarioapitokenid`
+    FOREIGN KEY (`usuarioapitokenid`) REFERENCES `usuariosapitokens` (`usuarioapitokenid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

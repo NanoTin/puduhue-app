@@ -1,0 +1,10 @@
+Table;Column Name;Data Type;Extra;PK;FK;FK Table.column;Null;Default;Unique;Description;Validate;Note
+*;PK from Principal Table;PK data type;;;True;;False;;;"For example: empresaid from ""empresas""";;
+*;logid;int(11);AUTO_INCREMENT;True;;;False;;;;;
+*;logusuarioid;int(11);;;;;False;;;p_in_usuarioid;;
+*;logdispositivo;varchar(100);;;;;False;;;p_in_dispositivo;;
+*;logip;varchar(50);;;;;False;;;p_in_ip;;
+*;logfechahora;datetime;;;;;False;CURRENT_TIMESTAMP;;;;
+*;logtipo;varchar(3);;;;;False;;;INS/UPD/ANL/QRY son las opciones que soporta;;
+*;logparamjson;json;;;;;False;;;"Cuando se ejecuta el sp, se almacena lo que contenga el parametro de entrada ""p_in_json""";;
+*;logregbkpjson;json;;;;;False;;;Si el sp es de tipo UPD, se debe guardar el registro afectado antes de su modificaci�n;;

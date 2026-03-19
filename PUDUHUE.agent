@@ -1,0 +1,449 @@
+# AGENT: Puduhue App – Instrucciones para Codex (Backend + DB)
+
+Contexto del proyecto:
+- Sistema web multi-empresa para el rubro lechero.
+- Desarrollo 100% PHP con base de datos MariaDB (10.11.15).
+- Hosting compartido con cPanel, sin SSH.
+- PHP 8.4.x con extensiones: mysqli, curl, mbstring.
+- Administración de la base vía phpMyAdmin.
+- Uso intensivo de Stored Procedures para la lógica de datos.
+- Integración con ERP Finnegans mediante endpoints específicos y token reutilizable.
+- La estructura de tablas y columnas está definida en CSV/Excel (Tables.csv, Columns.csv, Audit Columns.csv, Generic Log Table.csv).
+
+Objetivo de Codex:
+- Generar y mantener código PHP alineado con la arquitectura basada en capas:
+  - Controllers (Web y Api)
+  - Services
+  - Models
+  - Core (Database, Response, Router, etc.)
+  - Auth, Middleware, Helpers
+  - Routes (web.php / api.php)
+- Respetar la estructura de carpetas y convenciones definidas en el README.
+- Implementar la lógica de acceso a datos y reglas de SP según la especificación técnica.
+
+Regla base:
+- El **README.md** describe la arquitectura general y estructura de carpetas.
+- Este archivo (`PUDUHUE.agent`) define las **reglas obligatorias** a seguir por Codex.
+- NO inventar reglas nuevas. NO cambiar decisiones de arquitectura.
+
+============================================================
+1. Hosting compartido / restricciones
+============================================================
+
+1.1. Asunciones de entorno
+- No asumir que sea posible ejecutar comandos en el servidor (no hay SSH).
+- Composer se usa solo en ambiente local. En producción se sube el `vendor/` ya generado.
+- No generar código que requiera extensiones PHP no listadas (mysqli, curl, mbstring).
+
+ - No hay autoload garantizado en hosting: carga dependencias clave con `require_once` antes de usarlas (`src/Config/Env.php`, `src/Config/Database.php`, `src/Middleware/AuthMiddleware.php`; `Logger` en `src/Helpers/Logger.php` con namespace `App\Helpers`).
+
+1.2. Acceso a base de datos
+- Usar `src/Config/Database.php` como capa central de acceso a datos (global, sin namespace; las versiones en `src/Core` quedan como referencia/legacy). Incluye el archivo con `require_once` antes de instanciarlo porque no hay autoload confiable en hosting.
+- Database.php:
+  - Implementa conexión PDO (MySQL/MariaDB).
+  - Define métodos:
+    - `callSpMaint(string $spName, array $dataJson, int $usuarioId, ?string $dispositivo, ?string $ip): array`
+      - Para SP de mantenimiento (insertar/editar/anular/eliminar) con control de transacción.
+    - `callSpQuery(string $spName, array $dataJson, int $usuarioId, ?string $dispositivo, ?string $ip): array`
+      - Para SP de consulta (listar/consulta_por_id) que retornan filas + meta.
+    - Métodos auxiliares `select()` y `execute()` para SQL simples cuando no exista SP.
+  - Maneja `BEGIN/COMMIT/ROLLBACK` SOLO en PHP para SP de mantenimiento.
+  - Decodifica `p_out_json` y lanza excepción en caso de error.
+
+- NO escribir SQL de negocio en Controllers.
+- NO llamar SP directamente en vistas.
+- Los SP se consumen desde Models/Services a través de Database.php.
+
+============================================================
+2. Stored Procedures (SP) – Reglas generales
+============================================================
+
+2.1. Firma estándar de parámetros
+Todos los SP usan esta firma:
+
+- `p_in_json`
+- `p_in_usuarioid`
+- `p_in_dispositivo`
+- `p_in_ip`
+- `p_out_json`
+
+2.2. Reglas de validación
+- SP de mantenimiento (insertar/editar/anular/eliminar):
+  - Validar:
+    - Que `p_in_json` no esté vacío.
+    - Usuario (`p_in_usuarioid`) existente, activo, no bloqueado.
+    - No duplicar PK al insertar.
+    - Existencia de registro al actualizar/anular/eliminar.
+  - Retornar en `p_out_json`:
+    - `status` (200, 400, 500, etc.).
+    - `message`.
+    - (Opcional) `id` generado.
+
+- SP de consulta:
+  - Realizan `SELECT` normal.
+  - No devuelven DATA en `p_out_json`.
+  - `p_out_json` se puede usar solo para códigos de error genéricos si hace falta.
+
+2.3. Nomenclatura de SP
+- `sp_<modulo>_insertar`
+- `sp_<modulo>_editar`
+- `sp_<modulo>_anular`
+- `sp_<modulo>_eliminar` (solo si la lógica de negocio lo permite)
+- `sp_<modulo>_listar_resumen`
+- `sp_<modulo>_listar_detalle`
+- `sp_<modulo>_consulta_por_id_resumen`
+- `sp_<modulo>_consulta_por_id_detalle`
+
+2.4. Transacciones
+- NUNCA poner `BEGIN`, `COMMIT` ni `ROLLBACK` dentro de los SP.
+- Las transacciones se controlan desde PHP (Database.php):
+  - `callSpMaint()`:
+    - inicia transacción (`beginTransaction`),
+    - ejecuta el SP,
+    - analiza `p_out_json`:
+      - `status = 200` → `COMMIT`.
+      - error → `ROLLBACK` + log + excepción.
+- Los SP asumen ejecución dentro de una transacción externa.
+
+============================================================
+3. Auditoría, LOG e HIST
+============================================================
+
+3.1. Columnas de auditoría
+- Si una tabla tiene `"Audit Columns" = TRUE` en `Tables.csv`:
+  - Debe incluir las columnas definidas en `Audit Columns.csv`:
+    - `auditcreacionusuarioid`
+    - `auditcreaciondispositivo`
+    - `auditcreacionip`
+    - `auditcreacionfechahora`
+    - `auditedicionusuarioid`
+    - `auditediciondispositivo`
+    - `auditedicionip`
+    - `auditedicionfechahora`
+
+Reglas:
+- Campos de auditoría NUNCA se leen desde `p_in_json`.
+- `sp_<modulo>_insertar`:
+  - Asigna ONLY `auditcreacion*` usando:
+    - `p_in_usuarioid`
+    - `p_in_dispositivo`
+    - `p_in_ip`
+    - `NOW()`.
+- `sp_<modulo>_editar`, `sp_<modulo>_anular`, `sp_<modulo>_eliminar`:
+  - Asignan ONLY `auditedicion*` con los mismos parámetros.
+
+3.2. Tablas LOG
+- Definidas en `Generic Log Table.csv` y referenciadas desde `Tables.csv` (columna "Generic Log Table").
+- Ejemplo de estructura típica (`empresaslog`):
+  - `logid` (PK)
+  - `empresaid` (PK principal)
+  - `logusuarioid`
+  - `logdispositivo`, `logip`, `logfechahora`
+  - `logtipo` (INSERT, EDIT, ANULAR, ELIMINAR)
+  - `logparamjson` (JSON con parámetros de entrada)
+  - `logregbkpjson` (JSON con estado previo del registro)
+
+Reglas:
+- SP de mantenimiento que afectan la tabla principal deben insertar en la LOG:
+  - `sp_<modulo>_insertar`
+  - `sp_<modulo>_editar`
+  - `sp_<modulo>_anular`
+  - `sp_<modulo>_eliminar` (si existe)
+- Comportamiento de `logregbkpjson`:
+  - En `insertar`: SIEMPRE `NULL` (no hay estado previo).
+  - En `editar`: JSON con estado previo completo.
+  - En `anular`/`eliminar`: JSON previo o versión simplificada (el generador deja TODO si se requiere).
+
+Las tablas LOG solo reciben `INSERT` (sin `UPDATE` ni `DELETE`).
+
+3.3. Tablas HIST
+- Tablas que terminan en `HIST` almacenan histórico de `DELETE` físico.
+- Ejemplos:
+  - `usuariosempresas` → `usuariosempresashist`
+  - `usuariosfundos` → `usuariosfundoshist`
+- Regla:
+  - `sp_usuariosempresas_eliminar` (y análogos):
+    1. Copian el registro actual a `...hist` con:
+       - columnas originales con prefijo `ori_`.
+       - columnas de auditoría histórica (`hist_auditusuarioid`, etc.).
+    2. Ejecutan `DELETE` físico en tabla principal.
+- Para el resto de tablas se prefiere `sp_<modulo>_anular` (baja lógica).
+
+============================================================
+4. Listados y filtros (LIST SPs)
+============================================================
+
+4.1. SP de listado
+- `sp_<modulo>_listar_resumen`
+- `sp_<modulo>_listar_detalle`
+
+Reglas generales:
+- Deben soportar, como mínimo, un filtro de texto opcional.
+- Filtros de texto:
+  - Se reciben en `p_in_json` como `filtroXxx`.
+  - Se aplican con `LIKE '%valor%'` (para VARCHAR/TEXT).
+  - Si el filtro está vacío/NULL, no restringe.
+
+Ejemplos:
+- `filtroRazonSocial` para empresas.
+- `filtroUsuarioNombre` para usuarios.
+- `filtroInvItemDsc` para ítems de inventario.
+
+4.2. Columns.csv – metadatos para LIST
+Tres columnas especiales de `Columns.csv` se usan para generar los `SELECT` de listados:
+
+- `spListar_Select_Column`:
+  - `"TRUE"` → incluir columna en el `SELECT`.
+- `spListar_Filter_Column`:
+  - `"TRUE"` → definir filtro `filtro<ColumnName>` en `p_in_json`.
+  - Para columnas VARCHAR/TEXT → `LIKE CONCAT('%', valor, '%')`.
+- `spListar_Select_JOIN_Column_Name`:
+  - Si trae valor, ej. `"empresas.razonsocial"`:
+    - El SP debe:
+      - agregar el `JOIN` correspondiente por la FK,
+      - incluir esta expresión en el `SELECT` con alias claro.
+
+4.3. Filtros de fecha en tablas de transacciones
+- Encabezados de transacción deben soportar:
+  - `filtroFechaDesde`
+  - `filtroFechaHasta`
+- Implementar `WHERE fecha BETWEEN desde AND hasta`:
+  - `desde = '1900-01-01'` si viene NULL.
+  - `hasta = CURRENT_DATE` (o `NOW()`) si viene NULL.
+
+4.4. Columnas de auditoría en listados
+- Si la tabla tiene `"Audit Columns" = TRUE`, los SP de listado incluyen las columnas de auditoría en el `SELECT`, salvo indicación contraria en `Columns.csv`.
+
+============================================================
+5. PK autoincremental y JSON de entrada
+============================================================
+
+5.1. sp_<modulo>_insertar
+- La PK numérica `<tabla>id` (INT AUTO_INCREMENT) NUNCA se envía en `p_in_json`.
+- El ID lo genera la BD.
+- El SP puede:
+  - usar `LAST_INSERT_ID()`,
+  - incluirlo en `p_out_json` como `id` o similar.
+- Al escribir en tabla LOG:
+  - `logregbkpjson = NULL`.
+
+5.2. sp_<modulo>_editar
+- `p_in_json` incluye la PK y las columnas a actualizar.
+- El SP:
+  1. Lee registro actual por PK.
+  2. Convierte ese registro a JSON.
+  3. Inserta en LOG con `logregbkpjson` = JSON previo.
+  4. Ejecuta `UPDATE` en tabla principal.
+
+5.3. sp_<modulo>_anular
+- `p_in_json` incluye solo la PK.
+- SP:
+  - valida existencia,
+  - **no** hace `DELETE` físico,
+  - actualiza columna `...vig` / `...activo` a `FALSE/0`,
+  - actualiza `auditedicion*` usando parámetros de entrada.
+
+============================================================
+6. Capas y estructura de código PHP
+============================================================
+
+6.1. Capas principales
+- `apps/web-php/`:
+  - Vistas PHP del frontend interno (formularios, listados, login, etc.).
+  - No consumen JSON ni llaman `/api` por HTTP.
+  - Incluyen `head.php`, `menu.php`, `footer.php`.
+- `apps/api-php/`:
+  - Entrada de API externa (`index.php`).
+- `src/Config/`:
+  - `Env.php` (global, sin namespace; cargar con `require_once`).
+  - `Database.php` (global, sin namespace; cargar con `require_once`).
+- `src/Core/`:
+  - `BaseModel.php`
+  - `BaseController.php`
+  - `Response.php` (para JSON en API).
+  - `Router.php` (router genérico; el router web actual usa `handleWebRequest` en `src/Routes/web.php` sin esta clase).
+- `src/Routes/`:
+  - `web.php`:
+    - Registra rutas web (`?route=modulo/accion`).
+    - Usa Router.php.
+    - Aplica `AuthMiddleware` para rutas protegidas.
+    - Soporta modo parcial (`partial=1`) para devolver solo contenido central.
+  - `api.php` (futuro):
+    - Rutas API externa.
+- `src/Controllers/Web/`:
+  - Controladores para frontend interno.
+  - No devuelven JSON estándar (salvo AJAX muy puntual).
+  - Trabajan con arrays y vistas.
+- `src/Controllers/Api/`:
+  - Controladores API externa.
+  - Devuelven JSON estándar.
+- `src/Services/`:
+  - Lógica de negocio.
+  - Orquestan Models y SP.
+- `src/Models/`:
+  - Acceso a datos; llaman a SP vía Database.php.
+- `src/Auth/`:
+  - `AuthService`, `SessionManager`, `JwtService`, `PasswordResetService`.
+- `src/Middleware/`:
+  - `AuthMiddleware`, `JwtMiddleware`, `ApiKeyMiddleware`, `RecaptchaMiddleware`.
+- `src/Helpers/`:
+  - `RutHelper`, `Validator`, `Logger`, `Mailer`, `Utils`.
+- `src/api-external/`:
+  - `FinnegansClient.php`
+  - DTOs.
+
+6.2. Frontend interno vs API externa
+- Frontend interno:
+  - No hace llamadas HTTP internas a `/api`.
+  - Usa `Controllers/Web → Services → Models → SP`.
+  - Devuelve vistas PHP (HTML) + arrays.
+- API externa:
+  - Implementada en `Controllers/Api`.
+  - Devuelve JSON:
+    - `{ "status": <int>, "message": <string>, "totReg": <int>, "data": <array|object> }`.
+  - `totReg` se calcula con `count($data)`.
+- Frontend interno:
+  - Mostrar feedback de operaciones con toasts de éxito/error (Success/Failure Toasts); evitar alerts intrusivos.
+
+============================================================
+7. Router web + Front Controller
+============================================================
+
+7.1. Front Controller `apps/web-php/index.php`
+- Es el punto de entrada principal del frontend web.
+- Responsabilidades:
+  - Cargar autoload (`vendor/autoload.php`) si existe.
+  - Iniciar sesión (`session_start()`).
+  - Cargar `src/Config/Env.php`, `src/Config/Database.php`, `src/Auth/SessionManager.php`, `src/Middleware/AuthMiddleware.php`, `src/Helpers/Logger.php` vía `require_once` (no hay autoload confiable en hosting).
+  - Incluir `src/Routes/web.php` y delegar con `handleWebRequest()` (patrón `?route=modulo/accion`, `dashboard` por defecto).
+  - Rutas públicas: Login (mostrar/procesar).
+  - Rutas protegidas: llamar `AuthMiddleware::requireAuth()`.
+
+7.2. `src/Routes/web.php`
+- Normaliza `?route=<modulo>/<accion>` (`dashboard` por defecto) y convierte formatos alternativos (`empresas_listar.php` → `empresas/listar`).
+- Construye `allowedMenuRoutes` desde `menu.json` y permite siempre las acciones `crear` / `editar` / `anular` aunque no estén en el menú (formularios invocados desde otras vistas).
+- Mapea módulo→controlador en `$map` y hace `require_once` del archivo si la clase no está cargada; fallback 404 si no hay coincidencia.
+- Selecciona el método según acción y verbo HTTP (`listar`, `crearForm/crearPost`, `editarForm/editarPost`, `anularPost`, `detalle`).
+- Soporta “SPA parcial”: con `partial=1` o AJAX devuelve solo el contenido (sin `head.php`/`menu.php`/`footer.php`).
+
+============================================================
+8. Seguridad (login, JWT, API Keys)
+============================================================
+
+8.1. Login
+- RUT chileno como usuario:
+  - Formato `XXXXXXXX-V`, sin puntos. Excluir usuario ROOT.
+  - Validar DV y formato usando `RutHelper`. Excluir usuario ROOT.
+- Contraseñas:
+  - Encriptadas.
+  - Política mínima:
+    - Largo mínimo.
+    - Mayúscula, número, carácter especial.
+- Bloqueo:
+  - Usuario se bloquea tras N intentos fallidos (configurable vía `.env`).
+- Recuperación de contraseña:
+  - Token `tkn` enviado por correo.
+  - Validación de expiración.
+
+8.2. JWT (para API externa)
+- Configurado en `.env`:
+  - Algoritmo HS256.
+  - Expiración normal y de refresh.
+- `JwtService`:
+  - Genera / valida tokens.
+- `JwtMiddleware`:
+  - Protege rutas de API.
+
+8.3. API Keys
+- Empresas y Usuarios pueden tener API Keys.
+- API Key se entrega vía header `x-api-key`.
+- Almacenar solo hash en BD.
+- Validar con `password_verify()`.
+- `ApiKeyService`:
+  - generar/regenerar,
+  - guardar hash,
+  - registrar última fecha/IP de uso.
+
+============================================================
+9. Logs y carpetas
+============================================================
+
+9.1. Carpetas
+- `storage/LOGS/`:
+  - Logs internos (errores, excepciones).
+- `storage/APILog/`:
+  - Logs de integración ERP (token ofuscado, JSON enviado, respuesta, error).
+- `storage/temp/`:
+  - Archivos temporales.
+
+9.2. Logger
+- `src/Helpers/Logger.php`:
+  - Debe exponer al menos `Logger::error($mensaje)` y `Logger::info($mensaje)`.
+
+============================================================
+10. Estilo de código
+============================================================
+
+- Nombres descriptivos para clases/métodos:
+  - `EmpresasService`, `ProduccionLecheService`, `AuthService`, etc.
+- Clases y métodos en inglés; nombres de tablas/columnas/SP tal y como están en BD.
+- Manejar errores con excepciones y logging.
+- Evitar duplicar lógica de negocio:
+  - Services deben centralizarla.
+  - Controllers deben ser finos.
+
+============================================================
+11. Reglas específicas para generación automática (tablas y SP)
+============================================================
+
+11.1. Fuente de verdad para modelo de datos
+- `database/Tables.csv`
+- `database/Columns.csv`
+- `database/Audit Columns.csv`
+- `database/Generic Log Table.csv`
+
+11.2. Scripts de generación
+- `database/generate_tables_from_csv.php`:
+  - Genera `tables/*.sql` para cada tabla.
+- `database/generate_sp_from_csv.php`:
+  - Genera `sp/*.sql` para cada tabla:
+    - `sp_<modulo>_insertar`
+    - `sp_<modulo>_editar`
+    - `sp_<modulo>_anular`
+    - `sp_<modulo>_eliminar` (si corresponde)
+    - `sp_<modulo>_listar_resumen`
+    - `sp_<modulo>_listar_detalle`
+    - `sp_<modulo>_consulta_por_id_resumen`
+    - `sp_<modulo>_consulta_por_id_detalle`
+
+Regla:
+- Codex debe tratar estos scripts y CSV como referencia de reglas.
+- NO modificar la estructura de los CSVs desde el código generado.
+- NO inventar columnas ni tablas.
+
+============================================================
+12. Diferenciación Maestros / Transacciones (regla importante)
+============================================================
+
+- Pantallas de **Maestros / Administración** (Empresas, Usuarios, Fundos, Menús, Perfiles, etc.):
+  - NO se filtran por empresa/fundo del usuario logueado.
+  - Se listan todos los registros (con filtros simples de texto).
+- Pantallas de **Transacciones**:
+  - Sí utilizan asociaciones usuario–empresa/usuario–fundo según modelo.
+  - Aplican filtros por empresa/fundo y permisos.
+
+============================================================
+13. Uso de este AGENT
+============================================================
+
+Cuando el usuario pida generar o modificar código:
+
+- Verificar:
+  - Capa involucrada (Controller, Service, Model, Core, SP, Route).
+  - Módulo (Empresas, Usuarios, Producción, etc.).
+- Respetar SIEMPRE:
+  - Reglas de SP (parámetros, transacciones, auditoría, LOG, HIST).
+  - Estructura de carpetas.
+  - Separación Frontend interno vs API externa.
+  - Patrones de Router (web.php) y Database.php.
+- Para generación de vistas (listar/crear/editar), seguir además las reglas de `PUDUHUE_FRONT.agent`.

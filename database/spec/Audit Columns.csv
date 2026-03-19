@@ -1,0 +1,9 @@
+Table;Column Name;Data Type;Extra;PK;FK;FK Table.column;Null;Default;Unique;Description;Validate;Note
+*;auditcreacionusuarioid;varchar(12);;;;;False;'';;p_in_usuarioid;;
+*;auditcreaciondispositivo;varchar(100);;;;;False;'';;Dispositivo nombre;;
+*;auditcreacionip;varchar(50);;;;;False;'';;IP del PC;;
+*;auditcreacionfechahora;datetime;;;;;False;CURRENT_TIMESTAMP;;Fecha hora de INS;;
+*;auditedicionusuarioid;varchar(12);;;;;False;'';;p_in_usuarioid;;
+*;auditediciondispositivo;varchar(100);;;;;False;'';;Dispositivo nombre;;
+*;auditedicionip;varchar(50);;;;;False;'';;IP del PC;;
+*;auditedicionfechahora;datetime;;;;;False;CURRENT_TIMESTAMP;;Fecha hora de UPD;;

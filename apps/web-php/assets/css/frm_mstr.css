@@ -1,0 +1,311 @@
+/* Container principal de formularios */
+.form-responsive-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Grid responsive para formularios */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Variantes de grid para controlar columnas específicas */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Grupo de campo individual */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Importante para evitar overflow */
+}
+
+/* Labels responsive */
+.form-field label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+/* Inputs y selects responsive */
+.form-field input,
+.form-field select,
+.form-field textarea {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid #ddd;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Textarea específico */
+.form-field textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Contenedor de botones responsive */
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.form-actions button,
+.form-actions a {
+    padding: 0.625rem 1.5rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s, transform 0.1s;
+    display: inline-block;
+    text-align: center;
+}
+
+.form-actions button:active,
+.form-actions a:active {
+    transform: scale(0.98);
+}
+
+/* Estilos de botones */
+.btn-primary {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5c636a;
+}
+
+/* Campos de ancho completo */
+.form-field-full {
+    grid-column: 1 / -1;
+}
+
+/* Campos de ancho específico */
+.form-field-half {
+    grid-column: span 2;
+}
+
+/* Alertas responsive */
+.alert {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.375rem;
+    border-left: 4px solid;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+.alert-success {
+    background-color: #d1e7dd;
+    border-color: #198754;
+    color: #0f5132;
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Tablets pequeñas y móviles grandes (768px y menos) */
+@media (max-width: 768px) {
+    .form-responsive-container {
+        padding: 0.75rem;
+    }
+    
+    .form-grid,
+    .form-grid-2,
+    .form-grid-3,
+    .form-grid-4 {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .form-field label {
+        font-size: 0.9rem;
+    }
+    
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+        font-size: 0.95rem;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions button,
+    .form-actions a {
+        width: 100%;
+    }
+}
+
+/* Móviles pequeños (480px y menos) */
+@media (max-width: 480px) {
+    .form-responsive-container {
+        padding: 0.5rem;
+    }
+    
+    .form-grid,
+    .form-grid-2,
+    .form-grid-3,
+    .form-grid-4 {
+        gap: 0.75rem;
+    }
+    
+    .form-field label {
+        font-size: 0.85rem;
+        margin-bottom: 0.375rem;
+    }
+    
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
+    
+    h3 {
+        font-size: 1.25rem;
+    }
+}
+
+/* Pantallas grandes (1200px y más) */
+@media (min-width: 1200px) {
+    .form-grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .form-grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .form-grid-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ============================================
+   UTILIDADES ADICIONALES
+   ============================================ */
+
+/* Contenedor principal con mejor espaciado */
+.page-container {
+    padding: 1.5rem;
+}
+
+.page-title {
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+/* Input group para agregar iconos o texto adicional */
+.input-group {
+    display: flex;
+    align-items: stretch;
+}
+
+.input-group-text {
+    display: flex;
+    align-items: center;
+    padding: 0.625rem 0.875rem;
+    background-color: #e9ecef;
+    border: 1px solid #ddd;
+    border-right: none;
+    border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.input-group input {
+    border-radius: 0 0.375rem 0.375rem 0 !important;
+}
+
+/* Estados de validación */
+.form-field.is-invalid input,
+.form-field.is-invalid select {
+    border-color: #dc3545;
+}
+
+.form-field.is-valid input,
+.form-field.is-valid select {
+    border-color: #198754;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.valid-feedback {
+    color: #198754;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Campo requerido indicator */
+.form-field label.required::after {
+    content: " *";
+    color: #dc3545;
+}
+
+/* Disabled state */
+.form-field input:disabled,
+.form-field select:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    opacity: 0.6;
+}

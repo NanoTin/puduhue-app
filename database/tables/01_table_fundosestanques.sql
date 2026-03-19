@@ -1,0 +1,21 @@
+CREATE TABLE `fundosestanques` (
+  `fundoestanqueid` int(11) NOT NULL AUTO_INCREMENT,
+  `fundoid` int(11) NOT NULL,
+  `fundoestanquedsc` varchar(50) NOT NULL,
+  `estanquemarcaid` int(11) NOT NULL,
+  `fundoestanqueorden` int(4) NOT NULL,
+  `fundoestanqueactivo` tinyint(1) NOT NULL DEFAULT 1,
+  `auditcreacionusuarioid` int(11) NOT NULL COMMENT 'p_in_usuarioid',
+  `auditcreaciondispositivo` varchar(100) NOT NULL COMMENT 'Dispositivo nombre',
+  `auditcreacionip` varchar(50) NOT NULL COMMENT 'IP del PC',
+  `auditcreacionfechahora` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha hora de INS',
+  `auditedicionusuarioid` int(11) NULL COMMENT 'p_in_usuarioid',
+  `auditediciondispositivo` varchar(100) NOT NULL COMMENT 'Dispositivo nombre',
+  `auditedicionip` varchar(50) NOT NULL DEFAULT '' COMMENT 'IP del PC',
+  `auditedicionfechahora` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha hora de UPD',
+  PRIMARY KEY (`fundoestanqueid`),
+  KEY `idx_fundosestanques_fundoid` (`fundoid`),
+  CONSTRAINT `fk_fundosestanques_fundoid` FOREIGN KEY (`fundoid`) REFERENCES `fundos` (`fundoid`),
+  KEY `idx_fundosestanques_estanquemarcaid` (`estanquemarcaid`),
+  CONSTRAINT `fk_fundosestanques_estanquemarcaid` FOREIGN KEY (`estanquemarcaid`) REFERENCES `estanquesmarcas` (`estanquemarcaid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'Gestiona los Estanques de Leche por Fundo';

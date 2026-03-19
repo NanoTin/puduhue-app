@@ -1,0 +1,17 @@
+{
+    "name": "pdh/puduhueapp",
+    "autoload": {
+        "psr-4": {
+            "Phpoffice\\Phpspreadsheet\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Carlos Gallardo G",
+            "email": "carlos.gallardo2305@gmail.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^5.3"
+    }
+}

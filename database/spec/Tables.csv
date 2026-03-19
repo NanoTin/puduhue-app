@@ -1,0 +1,30 @@
+"Table Name";"Table Type";"Generic Log Table";"Audit Columns";Description;sp_insertar;sp_editar;sp_anular;sp_eliminar;sp_listar_resumen;sp_listar_detalle;sp_consultar_por_id_resumen;sp_consultar_por_id_detalle;SqlGenerated;SpGenerated
+menus;Master;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+perfiles;Master;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+perfilesmenus;Master;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+erptokenactivo;ERP;False;False;"Siempre mantiene el ultimo token activo para integrar con el ERP.";TRUE;TRUE;FALSE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+empresas;Master;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+usuarios;Master;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+usuariosempresas;Master;False;False;"Asocia usuarios empresas";TRUE;FALSE;FALSE;TRUE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+usuariosempresashist;Historical;False;False;"Cuando elimina una asociación, se copian los datos antes de eliminar de la tabla ""usuariosempresas""";FALSE;FALSE;FALSE;FALSE;FALSE;FALSE;FALSE;FALSE;TRUE;FALSE
+tokentipos;Master;False;False;"Tipos de Tokens para ser usados en la tabla ""usuariostokens""";TRUE;TRUE;FALSE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+usuariostokens;Master;False;False;"Solo para temas usuarios relacionado con la contraseña";TRUE;TRUE;FALSE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+fundostipos;Master;False;False;;TRUE;TRUE;FALSE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+fundos;Master;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+estanquesmarcas;Master;True;True;"Marcas y Modelos de Estanques de Leche";TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+fundosestanques;Master;True;True;"Gestiona los Estanques de Leche por Fundo";TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+fundosestanquesclientes;Master;True;True;"Asocia los Estanques de Leche del Fundo con Clientes para Retiro de Leche";TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+usuariosfundos;Master;False;False;;TRUE;FALSE;FALSE;TRUE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+usuariosfundoshist;Historical;False;False;"Cuando elimina una asociación, se copian los datos antes de eliminar de la tabla ""usuariosfundos""";FALSE;FALSE;FALSE;FALSE;FALSE;FALSE;FALSE;FALSE;TRUE;FALSE
+invbodegas;Master;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+invunidadesmedidas;Master;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+invitems;Master;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+prodlechetipos;Master;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+invcateganimal;Master;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+clientes;Master;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;FALSE;FALSE;TRUE;TRUE
+prodleche;Transaction;True;True;;TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;TRUE;FALSE;TRUE;TRUE
+prodlechedetalle;Transaction;False;False;"Producción de Leche - Detalle";TRUE;TRUE;FALSE;FALSE;FALSE;TRUE;FALSE;TRUE;TRUE;TRUE
+suplanimal;Transaction;True;True;"Suplementación de animales - Encabezado";TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;TRUE;FALSE;TRUE;TRUE
+suplanimaldetalle;Transaction;False;False;"Suplementación de animales - Detalle";TRUE;TRUE;FALSE;FALSE;FALSE;TRUE;FALSE;TRUE;TRUE;TRUE
+retiroleche;Transaction;True;True;"Retiro de Leche Planta - Encabezado";TRUE;TRUE;TRUE;FALSE;TRUE;FALSE;TRUE;FALSE;TRUE;TRUE
+retirolechedetalle;Transaction;False;False;"Retiro de Leche Planta - Detalle";TRUE;TRUE;FALSE;FALSE;FALSE;TRUE;FALSE;TRUE;TRUE;TRUE

@@ -1,0 +1,113 @@
+<?php
+// Listado de ítems de inventario
+$isPartial = $partial ?? false;
+if (!$isPartial) {
+    require 'head.php';
+    require 'menu.php';
+}
+?>
+
+<div class="container mt-4">
+    <h3 class="mb-4">Ítems de Inventario</h3>
+
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <form action="export_excel.php" method="POST" target="_blank" class="m-0">
+            <input type="hidden" name="exportModule" value="invitems">
+            <!-- reenviar mismos filtros usados en la pantalla -->
+            <input type="hidden" name="filtroInvitemdsc" value="<?= htmlspecialchars($filtros['filtroInvitemdsc'] ?? '') ?>">
+            <input type="hidden" name="filtroInvunidmedid" value="<?= htmlspecialchars($filtros['filtroInvunidmedid'] ?? '') ?>">
+            <input type="hidden" name="filtroErpinvitemcod" value="<?= htmlspecialchars($filtros['filtroErpinvitemcod'] ?? '') ?>">
+            <input type="hidden" name="filtroInvitemleche" value="<?= htmlspecialchars($filtros['filtroInvitemleche'] ?? '') ?>">
+            <input type="hidden" name="filtroInvitemactivo" value="<?= htmlspecialchars($filtros['filtroInvitemactivo'] ?? '') ?>">
+            <button class="btn btn-success btn-sm">
+                <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
+            </button>
+        </form>
+
+        <a href="?route=invitems/crear" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-circle"></i> Crear Ítem
+        </a>
+    </div>
+
+    <form action="?route=invitems/listar" method="GET" class="row g-2 mb-3">
+        <input type="hidden" name="route" value="invitems/listar">
+        <div class="col-md-3">
+            <input type="text" name="filtroInvitemdsc" class="form-control" placeholder="Descripción"
+                   value="<?= htmlspecialchars($filtros['filtroInvitemdsc'] ?? '') ?>">
+        </div>
+        <div class="col-md-2">
+            <input type="number" name="filtroInvunidmedid" class="form-control" placeholder="Unidad ID"
+                   value="<?= htmlspecialchars($filtros['filtroInvunidmedid'] ?? '') ?>">
+        </div>
+        <div class="col-md-2">
+            <input type="text" name="filtroErpinvitemcod" class="form-control" placeholder="ERP Ítem"
+                   value="<?= htmlspecialchars($filtros['filtroErpinvitemcod'] ?? '') ?>">
+        </div>
+        <div class="col-md-2">
+            <select name="filtroInvitemleche" class="form-select">
+                <option value="">Leche</option>
+                <option value="1" <?= ($filtros['filtroInvitemleche'] ?? '') === '1' ? 'selected' : '' ?>>Sí</option>
+                <option value="0" <?= ($filtros['filtroInvitemleche'] ?? '') === '0' ? 'selected' : '' ?>>No</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="filtroInvitemactivo" class="form-select">
+                <option value="">Estado</option>
+                <option value="1" <?= ($filtros['filtroInvitemactivo'] ?? '') === '1' ? 'selected' : '' ?>>Activo</option>
+                <option value="0" <?= ($filtros['filtroInvitemactivo'] ?? '') === '0' ? 'selected' : '' ?>>Inactivo</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-secondary w-100">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Descripción</th>
+                    <th>Unidad</th>
+                    <th>ERP Código</th>
+                    <th>Leche</th>
+                    <th>Activo</th>
+                    <th style="width: 190px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (empty($invitems)): ?>
+                    <tr><td colspan="7" class="text-center text-muted">No se encontraron registros</td></tr>
+                <?php else: ?>
+                    <?php foreach ($invitems as $i): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($i['invitemid'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($i['invitemdsc'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($i['invunidmeddsc'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($i['erpinvitemcod'] ?? '') ?></td>
+                            <td><?= !empty($i['invitemleche']) ? '<span class="badge bg-info">Sí</span>' : '<span class="badge bg-secondary">No</span>' ?></td>
+                            <td><?= !empty($i['invitemactivo']) ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-danger">No</span>' ?></td>
+                            <td>
+                                <a class="btn btn-warning btn-sm" href="?route=invitems/editar&id=<?= urlencode($i['invitemid'] ?? '') ?>">
+                                    <i class="bi bi-pencil-square"></i> Editar
+                                </a>
+                                <?php if (!empty($i['invitemactivo'])): ?>
+                                    <form action="?route=invitems/anular" method="POST" class="d-inline">
+                                        <input type="hidden" name="invitemid" value="<?= htmlspecialchars($i['invitemid'] ?? '') ?>">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Desea anular este ítem?');">
+                                            <i class="bi bi-x-circle"></i> Anular
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<?php if (!$isPartial) { require 'footer.php'; } ?>

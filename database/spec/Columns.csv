@@ -1,0 +1,233 @@
+Table;Column Name;Data Type;Extra;PK;FK;FK Table.column;Null;Default;Unique;spListar_Select_Column;spListar_Filter_Column;spListar_Select_JOIN_Column_Name;Description;Validate;Note
+menus;menuid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+menus;menupadre;int(11);;;;;True;NULL;;TRUE;TRUE;;Menu superior para dise�ar la estructura de los men�s tipo Arbol;;
+menus;menudesc;varchar(100);;;;;False;;True;TRUE;TRUE;;El nombre del menu debe ser unico.;;
+menus;menuform;varchar(100);;;;;False;;True;TRUE;FALSE;;Archivo PHP. Debe ser unico;True;This refers to the PHP file to display to the user
+menus;menunvlord;int(4);;;;;False;0;;TRUE;FALSE;;Order in which the menu is ordered;;
+menus;menuicono;varchar(50);;;;;False;;;TRUE;FALSE;;Icon name;;
+menus;menuactivo;tinyint(1);;;;;False;1;;TRUE;TRUE;;Si esta activo el registro;;0: FALSE - 1: TRUE
+perfiles;perfilid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+perfiles;perfildesc;varchar(100);;;;;False;;True;TRUE;TRUE;;El nombre del perfil debe ser unico.;True;
+perfiles;perfilesroot;tinyint(1);;;;;False;0;True;TRUE;TRUE;;Solo puede haber un perfil ROOT;True;
+perfiles;perfilesadmin;tinyint(1);;;;;False;0;True;TRUE;TRUE;;Solo puede haber un perfil Admin;True;
+perfiles;perfilactivo;tinyint(1);;;;;False;1;;TRUE;TRUE;;Si esta activo el registro;;
+perfilesmenus;perfilid;int(11);;True;True;perfiles.perfilid;False;;;TRUE;TRUE;perfiles.perfildesc;;;
+perfilesmenus;menuid;int(11);;True;True;menus.menuid;False;;;TRUE;TRUE;menus.menudesc;;;
+perfilesmenus;perfilmenuactivo;tinyint(1);;;;;False;1;;TRUE;TRUE;;;;
+erptokenactivo;access_token;varchar(50);;;;;False;;;TRUE;FALSE;;;;
+erptokenactivo;generado;datetime;on update current_timestamp();;;;False;CURRENT_TIMESTAMP;;TRUE;FALSE;;;;
+empresas;empresaid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+empresas;empresacod;varchar(12);;;;;False;;;FALSE;FALSE;;Lo mismo que el Rut;;Por ahora se usuar� lo mismo que el Rut, pero si m�s adelante hay una definici�n diferente, se puede modificar este dato
+empresas;empresarut;varchar(12);;;;;False;;True;TRUE;TRUE;;;;
+empresas;razonsocial;varchar(100);;;;;False;;;TRUE;TRUE;;;;
+empresas;giro;varchar(100);;;;;False;;;TRUE;TRUE;;;;
+empresas;empresaemail;varchar(100);;;;;False;;;TRUE;TRUE;;;True;Requerido para crear el usuario con el Rut de la empresa
+empresas;contactonombre;varchar(100);;;;;False;;;TRUE;TRUE;;;;
+empresas;contactoemail;varchar(100);;;;;False;;;TRUE;FALSE;;;;
+empresas;contactocelular;varchar(12);;;;;False;;;TRUE;FALSE;;;;
+empresas;empresaiderp;varchar(50);;;;;False;;;TRUE;FALSE;;Columna que se usa para la integraci�n;;
+empresas;empapikeyhash;varchar(255);;;;;False;;;FALSE;FALSE;;;;
+empresas;empapikeyactiva;tinyint(1);;;;;False;1;;TRUE;FALSE;;;;
+empresas;empapikeyfechagen;datetime;;;;;False;;;TRUE;FALSE;;;;
+empresas;empapikeyultuso;datetime;;;;;False;;;TRUE;FALSE;;Fecha Hora ultimo uso;;
+empresas;empapikeyipultuso;varchar(50);;;;;False;;;TRUE;FALSE;;IP ultimo uso;;
+empresas;empresaactivo;tinyint(1);;;;;False;1;;TRUE;TRUE;;Si esta activo el registro;;
+usuarios;usuarioid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+usuarios;usuariocod;varchar(12);;;;;False;;;FALSE;FALSE;;Usado en el Login;True;Se debe validar que exista y/o este vigente
+usuarios;usuariorut;varchar(12);;;;;False;;True;TRUE;TRUE;;;;
+usuarios;usuarionombre;varchar(100);;;;;False;;;TRUE;TRUE;;;;
+usuarios;usuariopwdhash;varchar(255);;;;;False;;;FALSE;FALSE;;Contrase�a encriptada;;
+usuarios;usuarioemail;varchar(100);;;;;False;;;TRUE;TRUE;;;;
+usuarios;usuariocelular;varchar(12);;;;;False;;;TRUE;FALSE;;;;
+usuarios;perfilid;int(11);;;True;perfiles.perfilid;False;;;TRUE;TRUE;perfiles.perfildesc;;;
+usuarios;empresaiddefault;int(11);;;True;empresas.empresaid;False;;;TRUE;FALSE;empresas.razonsocial;Una empresa default asociada al usuario para el Login;;
+usuarios;usuarioesroot;tinyint(1);;;;;False;0;True;FALSE;FALSE;;Solo puede haber un usuario ROOT;True;
+usuarios;usuarioesadmin;tinyint(1);;;;;False;0;;TRUE;TRUE;;;;
+usuarios;usuariobloqueado;tinyint(1);;;;;False;0;;TRUE;TRUE;;;;
+usuarios;usuariobloqueadodesc;varchar(100);;;;;False;;;TRUE;FALSE;;;;
+usuarios;usuarioapikeyhash;varchar(255);;;;;False;;;FALSE;FALSE;;;;
+usuarios;usuarioapikeyactiva;tinyint(1);;;;;False;1;;TRUE;FALSE;;;;
+usuarios;usuarioapikeyfechagen;datetime;;;;;False;;;TRUE;FALSE;;;;
+usuarios;usuarioapikeyultuso;datetime;;;;;False;;;TRUE;FALSE;;;;
+usuarios;usuarioapikeyipultuso;varchar(50);;;;;False;;;TRUE;FALSE;;;;
+usuarios;usuarioactivo;tinyint(1);;;;;False;1;;TRUE;TRUE;;;;
+usuariosempresas;usuarioid;int(11);;True;True;usuarios.usuarioid;False;;;TRUE;TRUE;usuarios.usuarionombre;;;
+usuariosempresas;empresaid;int(11);;True;True;empresas.empresaid;False;;;TRUE;TRUE;empresas.razonsocial;;;
+usuariosempresas;auditcreacionusuarioid;varchar(12);;;;;False;;;TRUE;FALSE;;;;
+usuariosempresas;auditcreaciondispositivo;varchar(100);;;;;False;;;TRUE;FALSE;;;;
+usuariosempresas;auditcreacionip;varchar(50);;;;;False;;;TRUE;FALSE;;;;
+usuariosempresas;auditcreacionfechahora;datetime;;;;;False;CURRENT_TIMESTAMP;;TRUE;FALSE;;;;
+usuariosempresashist;historialid;int(11);AUTO_INCREMENT;True;;;False;;;N/A;N/A;;;;
+usuariosempresashist;histusuarioid;int(11);;;True;usuarios.usuarioid;False;;;N/A;N/A;;"Copia de la columna ""usuariosempresas.usuarioid""";;Antes de eliminar
+usuariosempresashist;histempresaid;int(11);;;True;empresas.empresaid;False;;;N/A;N/A;;"Copia de la columna ""usuariosempresas.empresaid""";;Antes de eliminar
+usuariosempresashist;histauditcreacionusuarioid;varchar(12);;;;;False;;;N/A;N/A;;"Copia de la columna ""usuariosempresas.auditcreacionusuarioid""";;Antes de eliminar
+usuariosempresashist;histauditcreaciondispositivo;varchar(100);;;;;False;;;N/A;N/A;;"Copia de la columna ""usuariosempresas.auditcreaciondispositivo""";;Antes de eliminar
+usuariosempresashist;histauditcreacionip;varchar(50);;;;;False;;;N/A;N/A;;"Copia de la columna ""usuariosempresas.auditcreacionip""";;Antes de eliminar
+usuariosempresashist;histauditcreacionfechahora;datetime;;;;;False;;;N/A;N/A;;"Copia de la columna ""usuariosempresas.auditcreacionfechahora""";;Antes de eliminar
+usuariosempresashist;auditedicionusuarioid;varchar(12);;;;;False;;;N/A;N/A;;"Usuario que elimino la asociaci�n ""usuario-empresa""";;p_in_usuarioid
+usuariosempresashist;auditediciondispositivo;varchar(100);;;;;False;;;N/A;N/A;;;;p_in_dispositivo
+usuariosempresashist;auditedicionip;varchar(50);;;;;False;;;N/A;N/A;;;;p_in_ip
+usuariosempresashist;auditedicionfechahora;datetime;;;;;False;CURRENT_TIMESTAMP;;N/A;N/A;;;;
+tokentipos;tokentipoid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+tokentipos;tokentipodsc;varchar(50);;;;;False;;;TRUE;TRUE;;;;
+usuariostokens;requerimientoid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+usuariostokens;tokentipoid;int(11);;;True;tokentipos.tokentipoid;False;;;TRUE;TRUE;tokentipos.tokentipodsc;;;
+usuariostokens;usuarioid;varchar(12);;;True;usuarios.usuarioid;False;;;TRUE;TRUE;usuarios.usuarionombre;;;
+usuariostokens;usuarioemail;varchar(100);;;;;False;;;TRUE;TRUE;;Email donde se envio el token;;
+usuariostokens;usuariotoken;varchar(255);;;;;False;;;FALSE;FALSE;;Token que se compara con el parametro en la URL;;
+usuariostokens;fechareq;datetime;;;;;False;CURRENT_TIMESTAMP;;TRUE;TRUE;;Fecha Requerimiento o solicitud del Token;;
+usuariostokens;fechaexp;datetime;;;;;False;;;TRUE;TRUE;;Fecha Expiraci�n del Token;;
+usuariostokens;usado;tinyint(1);;;;;False;0;;TRUE;TRUE;;Cuando sea usado, cambia a 1 (True);;
+fundostipos;fundotipoid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+fundostipos;fundotipodsc;varchar(50);;;;;False;;;TRUE;TRUE;;;;
+fundos;fundoid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+fundos;fundonombre;varchar(50);;;;;False;;;TRUE;TRUE;;;;
+fundos;fundotipoid;int(11);;;True;fundostipos.fundotipoid;False;;;TRUE;TRUE;fundostipos.fundotipodsc;;;
+fundos;empresaid;int(11);;;True;empresas.empresaid;False;;;TRUE;TRUE;empresas.razonsocial;;;
+fundos;erpestablecimientocod;varchar(50);;;;;False;;;TRUE;TRUE;;C�digo que corresponde al ERP, para despues usar en las integraciones;;
+fundos;erplotecod;varchar(50);;;;;False;;;TRUE;TRUE;;C�digo que corresponde al ERP, para despues usar en las integraciones;;
+fundos;erpleche_invbodegacod;varchar(50);;;;;False;;;TRUE;TRUE;;C�digo que corresponde al ERP, para despues usar en las integraciones;;Bodega en el ERP
+fundos;erpleche_invcateganimalcod;varchar(50);;;;;False;;;TRUE;TRUE;;C�digo que corresponde al ERP, para despues usar en las integraciones;;"Para los de tipo SALA, siempre ser� ""VACA EN LECHE"""
+fundos;fundopabco;tinyint(1);;;;;False;0;;TRUE;TRUE;;;;
+fundos;fundorup;varchar(50);;;;;False;;;TRUE;TRUE;;;;
+fundos;fundoregion;varchar(50);;;;;False;;;FALSE;FALSE;;;;
+fundos;fundoprovincia;varchar(50);;;;;False;;;FALSE;FALSE;;;;
+fundos;fundocomuna;varchar(50);;;;;False;;;FALSE;FALSE;;;;
+fundos;fundodireccion;varchar(100);;;;;False;;;FALSE;FALSE;;;;
+fundos;fundolatitud;float;;;;;False;;;FALSE;FALSE;;;;
+fundos;fundolongitud;float;;;;;False;;;FALSE;FALSE;;;;
+fundos;fundoemail;varchar(100);;;;;False;;;TRUE;FALSE;;;;
+fundos;fundoactivo;tinyint(1);;;;;False;1;;TRUE;TRUE;;;;
+estanquesmarcas;estanquemarcaid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+estanquesmarcas;estanquemarcadsc;varchar(50);;;;;False;;;TRUE;FALSE;;;;
+estanquesmarcas;estanquemodelodsc;varchar(50);;;;;False;;;TRUE;FALSE;;;;
+estanquesmarcas;estanquecapacidadlts;int(4);;;;;False;;;TRUE;FALSE;;;;
+estanquesmarcas;estanquemarcamodelo;varchar(100);;;;;False;;;TRUE;TRUE;;"Columna calculada que concatena las columnas ""estanquemarcadsc""+""estanquemodelodsc""";;
+estanquesmarcas;estanquereglaminmm;int(4);;;;;False;;;TRUE;FALSE;;;;
+estanquesmarcas;estanquereglamaxmm;int(4);;;;;False;;;TRUE;FALSE;;;;
+estanquesmarcas;estanqueactivo;tinyint(1);;;;;False;1;;TRUE;TRUE;;;;
+fundosestanques;fundoestanqueid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+fundosestanques;fundoid;int(11);;;True;fundos.fundoid;False;;;TRUE;TRUE;fundos.fundonombre;;;
+fundosestanques;fundoestanquedsc;varchar(50);;;;;False;;;TRUE;TRUE;;;;
+fundosestanques;estanquemarcaid;int(11);;;True;estanquesmarcas.estanquemarcaid;False;;;TRUE;TRUE;estanquesmarcas.estanquemarcadsc;;;
+fundosestanques;fundoestanqueorden;int(4);;;;;False;;;TRUE;FALSE;;;;
+fundosestanques;fundoestanqueactivo;tinyint(1);;;;;False;1;;TRUE;TRUE;;;;
+fundosestanquesclientes;fundoestanqueid;int(11);;True;True;fundosestanques.fundoestanqueid;False;;;TRUE;FALSE;fundosestanques.fundoestanquedsc;;;
+fundosestanquesclientes;clienteid;int(11);;True;True;clientes.clienteid;False;;;TRUE;TRUE;clientes.clienteid;;;
+fundosestanquesclientes;estanqueclientecod;int(11);;;;;False;;;TRUE;TRUE;;Es el c�digo interno del Cliente que usa para identificar al Estanque;;
+fundosestanquesclientes;fndestcliactivo;tinyint(1);;;;;False;;;TRUE;TRUE;;;;
+usuariosfundos;usuarioid;int(11);;True;True;usuarios.usuarioid;False;;;TRUE;TRUE;usuarios.usuarionombre;;;
+usuariosfundos;fundoid;int(11);;True;True;fundos.fundoid;False;;;TRUE;TRUE;fundos.fundonombre;;;
+usuariosfundos;auditcreacionusuarioid;varchar(12);;;;;False;;;TRUE;FALSE;;;;
+usuariosfundos;auditcreaciondispositivo;varchar(100);;;;;False;;;TRUE;FALSE;;;;
+usuariosfundos;auditcreacionip;varchar(50);;;;;False;;;TRUE;FALSE;;;;
+usuariosfundos;auditcreacionfechahora;datetime;;;;;False;;;TRUE;FALSE;;;;
+usuariosfundoshist;historialid;int(11);AUTO_INCREMENT;True;;;False;;;N/A;N/A;;;;
+usuariosfundoshist;histusuarioid;int(11);;;True;usuarios.usuarioid;False;;;N/A;N/A;;"Copia de la columna ""usuariosfundos.usuarioid""";;Antes de eliminar
+usuariosfundoshist;histfundoid;int(11);;;True;fundos.fundoid;False;;;N/A;N/A;;"Copia de la columna ""usuariosfundos.empresaid""";;Antes de eliminar
+usuariosfundoshist;histauditcreacionusuarioid;varchar(12);;;;;False;;;N/A;N/A;;"Copia de la columna ""usuariosfundos.auditcreacionusuarioid""";;Antes de eliminar
+usuariosfundoshist;histauditcreaciondispositivo;varchar(100);;;;;False;;;N/A;N/A;;"Copia de la columna ""usuariosfundos.auditcreaciondispositivo""";;Antes de eliminar
+usuariosfundoshist;histauditcreacionip;varchar(50);;;;;False;;;N/A;N/A;;"Copia de la columna ""usuariosfundos.auditcreacionip""";;Antes de eliminar
+usuariosfundoshist;histauditcreacionfechahora;datetime;;;;;False;;;N/A;N/A;;"Copia de la columna ""usuariosfundos.auditcreacionfechahora""";;Antes de eliminar
+usuariosfundoshist;auditedicionusuarioid;varchar(12);;;;;False;;;N/A;N/A;;"Usuario que elimino la asociaci�n ""usuario-fundo""";;p_in_usuarioid
+usuariosfundoshist;auditediciondispositivo;varchar(100);;;;;False;;;N/A;N/A;;;;p_in_dispositivo
+usuariosfundoshist;auditedicionip;varchar(50);;;;;False;;;N/A;N/A;;;;p_in_ip
+usuariosfundoshist;auditedicionfechahora;datetime;;;;;False;CURRENT_TIMESTAMP;;N/A;N/A;;;;
+invbodegas;invbodegaid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+invbodegas;invbodegadsc;varchar(50);;;;;False;;;TRUE;TRUE;;;;
+invbodegas;erpinvbodegacod;varchar(50);;;;;False;;;TRUE;TRUE;;C�digo que corresponde al ERP, para despues usar en las integraciones;True;No puede ser Blanco ni NULO. Corresponde a Deposito en el ERP
+invbodegas;fundoid;int(11);;;True;fundos.fundoid;False;;;TRUE;TRUE;fundos.fundonombre;;;
+invbodegas;invbodactivo;tinyint(1);;;;;False;1;;TRUE;TRUE;;;;
+invunidadesmedidas;invunidmedid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+invunidadesmedidas;invunidmeddsc;varchar(50);;;;;False;;;TRUE;TRUE;;;;
+invunidadesmedidas;erpunidmedcod;varchar(50);;;;;False;;;TRUE;TRUE;;C�digo que corresponde al ERP, para despues usar en las integraciones;;C�digo Unidad de Medida del ERP
+invunidadesmedidas;invunidmedactivo;int(11);;;;;False;;;TRUE;TRUE;;;;
+invitems;invitemid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+invitems;invitemdsc;varchar(50);;;;;False;;;TRUE;TRUE;;;;
+invitems;invunidmedid;int(11);;;True;invunidadesmedidas.invunidmedid;False;;;TRUE;TRUE;invunidadesmedidas.invunidmeddsc;;;
+invitems;erpinvitemcod;varchar(50);;;;;False;;;TRUE;TRUE;;Código que corresponde al ERP, para despues usar en las integraciones;;Esta columna es el que se envía en el JSON para integrar producción de leche
+invitems;invitemleche;tinyint(1);;;;;False;0;;TRUE;TRUE;;Para utilizar en el modulo de Leche;;
+invitems;invitemactivo;tinyint(1);;;;;False;1;;TRUE;TRUE;;;;
+prodlechetipos;prodlechetipoid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+prodlechetipos;prodlechetipodsc;varchar(50);;;;;False;;;TRUE;TRUE;;;;
+prodlechetipos;invitemid;int(11);;;True;invitems.invitemid;False;;;TRUE;TRUE;invitems.invitemdsc;where invitemleche = 1;True;No puede ser Blanco ni NULO
+prodlechetipos;prodlecheventa;tinyint(1);;;;;False;;;TRUE;TRUE;;;;
+prodlechetipos;prodlecheactivo;tinyint(1);;;;;False;1;;TRUE;TRUE;;;;
+invcateganimal;invcateganimalid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+invcateganimal;invcateganimaldsc;varchar(50);;;;;False;;;TRUE;TRUE;;;;
+invcateganimal;erpinvcateganimalcod;varchar(50);;;;;False;;;TRUE;TRUE;;C�digo que corresponde al ERP, para despues usar en las integraciones;;
+invcateganimal;invcateganimalkilosxcab;float;;;;;False;;;TRUE;FALSE;;;;
+invcateganimal;invcateganimalactivo;tinyint(1);;;;;False;1;;TRUE;TRUE;;;;
+clientes;clienteid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+clientes;clienterut;varchar(12);;;;;False;;;TRUE;TRUE;;;True;Validar formato chileno
+clientes;clienterazonsocial;varchar(100);;;;;False;;;TRUE;TRUE;;;;
+clientes;clienteemail;varchar(100);;;;;False;;;TRUE;TRUE;;;;
+clientes;clientecontacto;varchar(100);;;;;False;;;TRUE;TRUE;;;;
+clientes;clienteactivo;tinyint(1);;;;;False;;;TRUE;TRUE;;;;
+prodleche;prodlecheid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;TRUE;;;;
+prodleche;prodlechestatus;varchar(3);;;;;False;;;TRUE;TRUE;;CN: Confirmada | ANL: Anulada | PND: Pendiente ERP;;
+prodleche;empresaid;int(11);;;True;empresas.empresaid;False;;;TRUE;TRUE;empresas.razonsocial;;;
+prodleche;fundoid;int(11);;;True;fundos.fundoid;False;;;TRUE;TRUE;fundos.fundonombre;;;
+prodleche;prodlechefecha;datetime;;;;;False;;;TRUE;TRUE;;;;
+prodleche;prodlechehoraini;time;;;;;False;;;TRUE;FALSE;;;;
+prodleche;prodlechehorafin;time;;;;;False;;;TRUE;FALSE;;;;
+prodleche;prodlechehorario;char(2);;;;;False;;;TRUE;TRUE;;Se calcula con la fecha hora de inicio de orde�a: AM/PM;;
+prodleche;pl_erpestablecimientocod;varchar(50);;;;;False;;;TRUE;FALSE;;Se obtiene desde el fundo seleccionado: fundos.erpestablecimientocod;;
+prodleche;pl_erplotecod;varchar(50);;;;;False;;;TRUE;FALSE;;Se obtiene desde el fundo seleccionado: fundos.erplotecod;;
+prodleche;pl_erpleche_invbodegacod;varchar(50);;;;;False;;;TRUE;FALSE;;Se obtiene desde el fundo seleccionado: fundos.erpleche_invbodegacod;;
+prodleche;pl_erpleche_invcateganimalcod;varchar(50);;;;;False;;;TRUE;FALSE;;Se obtiene desde el fundo seleccionado: fundos.erpleche_invcateganimalcod;;
+prodleche;prodlechetotlitros;int(4);;;;;False;;;TRUE;FALSE;;"Suma de todos los litros en tabla detalle: ""prodlechedetalle.pldetlitros"" independiente del tipo de leche";;
+prodleche;prodlechetotvacas;int(4);;;;;False;;;TRUE;FALSE;;"Suma de todos los litros en tabla detalle: ""prodlechedetalle.pldetvacas"" independiente del tipo de leche";;
+prodleche;prodlecheventatotlitros;int(4);;;;;False;;;TRUE;FALSE;;"Suma los Litros en tabla detalle: ""prodlechedetalle.pldetlitros"" where prodlechetipos.prodlecheventa = 1 group by prodlechetipos.prodlechetipoid";;
+prodleche;prodlecheventatotvacas;int(4);;;;;False;;;TRUE;FALSE;;"Suma las Vacas en tabla detalle: ""prodlechedetalle.pldetvacas"" where prodlechetipos.prodlecheventa = 1 group by prodlechetipos.prodlechetipoid";;
+prodleche;prodlecheventalitrosxvaca;float;;;;;False;;;TRUE;FALSE;;"Promedio de Litros x Vaca en tabla detalle: ""prodlechedetalle.pldetlitrosxvaca"" where prodlechetipos.prodlecheventa = 1 group by prodlechetipos.prodlechetipoid";;
+prodleche;prodlecheobservacion;varchar(50);;;;;False;;;TRUE;TRUE;;;;
+prodlechedetalle;prodlecheid;int(11);;True;True;prodleche.prodlecheid;False;;;N/A;N/A;;;;
+prodlechedetalle;prodlechetipoid;int(11);;True;True;prodlechetipos.prodlechetipoid;False;;;N/A;N/A;;;;
+prodlechedetalle;pldetlitros;int(4);;;;;False;;;N/A;N/A;;;;
+prodlechedetalle;pldetvacas;int(4);;;;;False;;;N/A;N/A;;;;
+prodlechedetalle;pldetlitrosxvaca;float;;;;;False;;;N/A;N/A;;;;
+prodlechedetalle;prodlechecod;varchar(20);;;;;False;;True;N/A;N/A;;PL-0000000000X;;
+prodlechedetalle;erpdocumentocod;varchar(20);;;;;False;;;N/A;N/A;;"Lo que devuelve en el JSON atributo ""documento""";;
+prodlechedetalle;pldetfechareg;datetime;;;;;False;CURRENT_TIMESTAMP;;N/A;N/A;;;;
+prodlechedetalle;pldetfechaedt;datetime;on update current_timestamp();;;;False;CURRENT_TIMESTAMP;;N/A;N/A;;;;
+suplanimal;suplanimalid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+suplanimal;empresaid;int(11);;;True;empresas.empresaid;False;;;TRUE;TRUE;empresas.razonsocial;;;
+suplanimal;fundoid;int(11);;;True;fundos.fundoid;False;;;TRUE;TRUE;fundos.fundonombre;;;
+suplanimal;invbodegaid;int(11);;;True;invbodegas.invbodegaid;False;;;TRUE;TRUE;invbodegas.invbodegadsc;;;
+suplanimal;suplanimalfecha;datetime;;;;;False;;;TRUE;TRUE;;;;
+suplanimal;suplanimalobservacion;varchar(50);;;;;False;;;TRUE;TRUE;;;;
+suplanimal;sup_erpestablecimientocod;varchar(50);;;;;False;;;TRUE;FALSE;;Se obtiene desde el fundo seleccionado: fundos.erpestablecimientocod;;
+suplanimal;sup_erplotecod;varchar(50);;;;;False;;;TRUE;FALSE;;Se obtiene desde el fundo seleccionado: fundos.erplotecod;;
+suplanimal;sup_erpinvbodegacod;varchar(50);;;;;False;;;TRUE;FALSE;;Se obtiene desde la Bodega seleccionada: invbodegas.erpinvbodegacod;;
+suplanimaldetalle;suplanimalid;int(11);;True;True;suplanimal.suplanimalid;False;;;N/A;N/A;;;;
+suplanimaldetalle;suplanimallinea;int(4);;True;;;False;;;N/A;N/A;;;;
+suplanimaldetalle;invcateganimalid;int(11);;;True;invcateganimal.invcateganimalid;False;;;N/A;N/A;;;;
+suplanimaldetalle;sup_erpinvcateganimalcod;varchar(50);;;;;False;;;N/A;N/A;;Se obtiene desde la Categor�a seleccionada - JOIN: invcateganimal.erpinvcateganimalcod con sus respectivas PK;;
+suplanimaldetalle;invitemid;int(11);;;True;invitems.invitemid;False;;;N/A;N/A;;;;
+suplanimaldetalle;sup_erpinvitemcod;varchar(50);;;;;False;;;N/A;N/A;;Se obtiene desde el �tem seleccionado - JOIN: invitems.erpinvitemcod con sus respectivas PK;;
+suplanimaldetalle;invunidmedid;int(11);;;True;invunidadesmedidas.invunidmedid;False;;;N/A;N/A;;;;
+suplanimaldetalle;sup_erpunidmedcod;varchar(50);;;;;False;;;N/A;N/A;;Se obtiene desde la Unidad de Medida del �tem seleccionado - JOIN: invunidadesmedidas.erpunidmedcod con sus respectivas PK;;
+suplanimaldetalle;totalconsumido;float;;;;;False;;;N/A;N/A;;;;
+suplanimaldetalle;totalanimales;int(4);;;;;False;;;N/A;N/A;;;;
+suplanimaldetalle;dosisporanimal;float;;;;;False;;;N/A;N/A;;;;
+suplanimaldetalle;erpdocumentocod;varchar(20);;;;;False;;;N/A;N/A;;"Lo que devuelve en el JSON atributo ""documento""";;
+suplanimaldetalle;supdetfechareg;datetime;;;;;False;CURRENT_TIMESTAMP;;N/A;N/A;;;;
+suplanimaldetalle;supdetfechaedt;datetime;on update current_timestamp();;;;False;CURRENT_TIMESTAMP;;N/A;N/A;;;;
+retiroleche;retirolecheid;int(11);AUTO_INCREMENT;True;;;False;;;TRUE;FALSE;;;;
+retiroleche;empresaid;int(11);;;True;empresas.empresaid;False;;;TRUE;TRUE;empresas.razonsocial;;;
+retiroleche;fundoid;int(11);;;True;fundos.fundoid;False;;;TRUE;TRUE;fundos.fundonombre;;;
+retiroleche;retirolechefecha;datetime;;;;;False;;;TRUE;TRUE;;;;
+retiroleche;prodlechestatus;varchar(3);;;;;False;;;TRUE;TRUE;;CN: Confirmada | ANL: Anulada;;
+retirolechedetalle;retirolecheid;int(11);;;True;retiroleche.retirolecheid;False;;;N/A;N/A;;;;
+retirolechedetalle;clienteid;int(11);;;True;clientes.clienteid;False;;;N/A;N/A;;;;
+retirolechedetalle;fundoestanqueid;int(11);;;True;fundosestanques.fundoestanqueid;False;;;N/A;N/A;;;;
+retirolechedetalle;retirolechehoraini;time;;;;;False;;;N/A;N/A;;;;
+retirolechedetalle;retirolechehorafin;time;;;;;False;;;N/A;N/A;;;;
+retirolechedetalle;retirolechelitros;int(6);;;;;False;;;N/A;N/A;;;;
+retirolechedetalle;retirolechetemperatura;float;;;;;False;;;N/A;N/A;;;;
+retirolechedetalle;retirolecheobservacion;varchar(100);;;;;False;;;N/A;N/A;;;;
+retirolechedetalle;retirolechefoto;varchar(255);;;;;False;;;N/A;N/A;;"Nombre del archivo con us extensi�n que se almacena dentro de la ruta ""uploads/retiroleche/img/""";;
+retirolechedetalle;rldetfechareg;datetime;;;;;False;CURRENT_TIMESTAMP;;N/A;N/A;;;;
+retirolechedetalle;rldetfechaedt;datetime;on update current_timestamp();;;;False;CURRENT_TIMESTAMP;;N/A;N/A;;;;
+;;;;;;;;;;;;;;;
