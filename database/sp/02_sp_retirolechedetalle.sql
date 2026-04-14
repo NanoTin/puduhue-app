@@ -458,7 +458,8 @@ sp_main: BEGIN
     AND t.`fundoid` IN (
       SELECT sq.`fundoid`
       FROM `usuariosfundos` sq
-      WHERE sq.`usuarioid` = p_in_usuarioid);
+      WHERE sq.`usuarioid` = p_in_usuarioid)
+  ORDER BY t.`retirolechefecha` DESC, t.`retirolechehorafin` DESC, f.`fundonombre` ASC;
 
   SET p_out_json = JSON_OBJECT('status', 200, 'message', 'OK');
 END//

@@ -76,6 +76,12 @@ class RetirolecheController
     {
         AuthMiddleware::requireAuth();
         $user = AuthMiddleware::getUserContext();
+        $fundoIdWS = $user['fundoId'] ?? 0;
+
+        \App\Helpers\Logger::info('Retiroleche crearPost start: content_length=' . (string)($_SERVER['CONTENT_LENGTH'] ?? '0')
+            . ', post_keys=' . implode(',', array_keys($_POST))
+            . ', files=' . implode(',', array_keys($_FILES))
+            . ', upload_error=' . (string)(($_FILES['retirolechefoto']['error'] ?? 'NA')));
 
         $data = $_POST;
         unset($data['_token'], $data['action'], $data['route']);
@@ -83,7 +89,7 @@ class RetirolecheController
 
         $uploadedFile = $_FILES['retirolechefoto'] ?? null;
         if (!$uploadedFile || ($uploadedFile['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
-            $errorMessage = 'Debe adjuntar una imagen valida.';
+            $errorMessage = $this->getUploadErrorMessage($uploadedFile, true);
             $fundosOptions = $this->usuariosfundosService->listarFundosPorUsuarioFormSelect(1, $user['usuarioId'], $user['empresaId']);
             $fundosestanquesclientesOptions = $this->fundosestanquesclientesService->listarFundosestanquesclientesFormSelect(1);
             $formData = $data;
@@ -128,6 +134,14 @@ class RetirolecheController
             $formData = $data;
             $viewFile = $this->viewPath('retiroleche_crear.php');
             require $viewFile;
+        } catch (Throwable $e) {
+            \App\Helpers\Logger::error('Retiroleche crearPost: ' . $e->getMessage());
+            $errorMessage = 'Ocurrio un error inesperado al guardar el retiro de leche.';
+            $fundosOptions = $this->usuariosfundosService->listarFundosPorUsuarioFormSelect(1, $user['usuarioId'], $user['empresaId']);
+            $fundosestanquesclientesOptions = $this->fundosestanquesclientesService->listarFundosestanquesclientesFormSelect(1);
+            $formData = $data;
+            $viewFile = $this->viewPath('retiroleche_crear.php');
+            require $viewFile;
         }
     }
 
@@ -166,6 +180,11 @@ class RetirolecheController
         AuthMiddleware::requireAuth();
         $user = AuthMiddleware::getUserContext();
 
+        \App\Helpers\Logger::info('Retiroleche editarPost start: content_length=' . (string)($_SERVER['CONTENT_LENGTH'] ?? '0')
+            . ', post_keys=' . implode(',', array_keys($_POST))
+            . ', files=' . implode(',', array_keys($_FILES))
+            . ', upload_error=' . (string)(($_FILES['retirolechefoto']['error'] ?? 'NA')));
+
         $id = isset($_POST['retirolecheid']) ? (int)$_POST['retirolecheid'] : 0;
         if ($id <= 0) {
             header('Location: ?route=retiroleche/listar');
@@ -196,6 +215,20 @@ class RetirolecheController
                 return;
             }
             $data['retirolechefoto'] = $newFileName;
+        } elseif ($uploadedFile && ($uploadedFile['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+            $errorMessage = $this->getUploadErrorMessage($uploadedFile, false);
+            $result = $this->service->consultarRetirolechePorId(
+                $id,
+                $user['usuarioId'],
+                $user['dispositivo'],
+                $user['ip']
+            );
+            $retiro = $result['rows'][0] ?? null;
+            $fundosOptions = $this->usuariosfundosService->listarFundosPorUsuarioFormSelect(1, $user['usuarioId'], $user['empresaId']);
+            $fundosestanquesclientesOptions = $this->fundosestanquesclientesService->listarFundosestanquesclientesFormSelect(1);
+            $viewFile = $this->viewPath('retiroleche_editar.php');
+            require $viewFile;
+            return;
         } else {
             $data['retirolechefoto'] = $currentFileName;
         }
@@ -220,6 +253,20 @@ class RetirolecheController
             exit;
         } catch (RuntimeException $e) {
             $errorMessage = $e->getMessage();
+            $result = $this->service->consultarRetirolechePorId(
+                $id,
+                $user['usuarioId'],
+                $user['dispositivo'],
+                $user['ip']
+            );
+            $retiro = $result['rows'][0] ?? null;
+            $fundosOptions = $this->usuariosfundosService->listarFundosPorUsuarioFormSelect(1, $user['usuarioId'], $user['empresaId']);
+            $fundosestanquesclientesOptions = $this->fundosestanquesclientesService->listarFundosestanquesclientesFormSelect(1);
+            $viewFile = $this->viewPath('retiroleche_editar.php');
+            require $viewFile;
+        } catch (Throwable $e) {
+            \App\Helpers\Logger::error('Retiroleche editarPost: ' . $e->getMessage());
+            $errorMessage = 'Ocurrio un error inesperado al actualizar el retiro de leche.';
             $result = $this->service->consultarRetirolechePorId(
                 $id,
                 $user['usuarioId'],
@@ -345,5 +392,23 @@ class RetirolecheController
         $mime = finfo_file($finfo, $path);
         finfo_close($finfo);
         return is_string($mime) && $mime !== '' ? $mime : null;
+    }
+
+    private function getUploadErrorMessage(?array $file, bool $required): string
+    {
+        $error = $file['error'] ?? UPLOAD_ERR_NO_FILE;
+
+        return match ($error) {
+            UPLOAD_ERR_OK => 'Archivo cargado correctamente.',
+            UPLOAD_ERR_NO_FILE => $required
+                ? 'Debe adjuntar una imagen valida.'
+                : 'La imagen no pudo cargarse. Intente nuevamente.',
+            UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'La imagen excede el tamano maximo permitido por el servidor.',
+            UPLOAD_ERR_PARTIAL => 'La imagen se cargo parcialmente. Intente nuevamente.',
+            UPLOAD_ERR_NO_TMP_DIR => 'El servidor no tiene directorio temporal configurado para cargas.',
+            UPLOAD_ERR_CANT_WRITE => 'El servidor no pudo escribir la imagen en disco.',
+            UPLOAD_ERR_EXTENSION => 'La carga de la imagen fue bloqueada por una extension del servidor.',
+            default => 'No fue posible procesar la imagen adjunta.',
+        };
     }
 }

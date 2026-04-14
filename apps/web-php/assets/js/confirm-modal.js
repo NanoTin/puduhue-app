@@ -1,6 +1,7 @@
 (function () {
   let pendingForm = null;
   let modalInstance = null;
+  let isSubmitting = false;
 
   function getModal() {
     const el = document.getElementById('confirmSubmitModal');
@@ -43,6 +44,11 @@
     if (!okBtn) return;
 
     if (!pendingForm) return;
+    if (isSubmitting) return;
+
+    if (typeof pendingForm.reportValidity === 'function' && !pendingForm.reportValidity()) {
+      return;
+    }
 
     // Permite sobreescribir action dinámicamente si se define
     const forcedAction = pendingForm.getAttribute('data-confirm-action');
@@ -50,9 +56,10 @@
       pendingForm.setAttribute('action', forcedAction);
     }
 
+    isSubmitting = true;
+    okBtn.disabled = true;
     pendingForm.dataset.confirmed = '1';
 
-    // Dispara submit real
     if (typeof pendingForm.requestSubmit === 'function') {
       pendingForm.requestSubmit();
     } else {
@@ -60,5 +67,20 @@
     }
 
     pendingForm = null;
+  });
+
+  document.addEventListener('hidden.bs.modal', function (evt) {
+    if (evt.target?.id !== 'confirmSubmitModal') return;
+    if (isSubmitting) return;
+
+    const okBtn = document.getElementById('confirmSubmitModalBtnOk');
+    if (okBtn) okBtn.disabled = false;
+    pendingForm = null;
+  });
+
+  window.addEventListener('pageshow', function () {
+    isSubmitting = false;
+    const okBtn = document.getElementById('confirmSubmitModalBtnOk');
+    if (okBtn) okBtn.disabled = false;
   });
 })();
