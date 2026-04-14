@@ -1,0 +1,147 @@
+{
+    "IdentificacionExterna": "OC - 5003",
+    "Fecha": "2026-04-13",
+    "Proveedor": "82392600-6",
+    "CondicionPagoCodigo": "30",
+    "TransaccionTipoCodigo": "OPER",
+    "TransaccionSubtipoCodigo": "OC",
+    "WorkflowCodigo": "CPRA-INS-SERV",
+    "Descripcion": "",
+    "NumeroComprobante": "00084",
+    "MonedaCodigo": "PES",
+    "EmpresaCodigo": "PRUEBA39",
+    "Nombre": "OC - 5003",
+    "ComprobanteAdicional": "",
+    "Items": [
+        {
+            "ProductoCodigo": "TRA071",
+            "Cantidad": 10.000000,
+            "CantidadPendiente": 10.000000,
+            "Precio": 39500.000000,
+            "Descripcion": null,
+            "ProvinciaOrigen": null,
+            "ProvinciaDestino": null,
+            "FechaProximoPaso": null,
+            "IdentificacionExterna": "OC - 5003 Item-1",
+            "RegistroID": null,
+            "AplicaAnticipoFinanciero": false,
+            "USRSolicitanteID": null,
+            "USRtransaccioncnid": null,
+            "vinculacionDestino": null,
+            "vinculacionOrigen": null,
+            "ImporteExento": 0.0000,
+            "DimensionDistribucion": [
+                {
+                    "dimensionCodigo": "DIMPARFIN",
+                    "distribucionCodigo": "",
+                    "tipoCalculo": "2",
+                    "distribucionItems": [
+                        {
+                            "codigo": "REB000",
+                            "porcentaje": 100.000000,
+                            "importe": 395000.0000
+                        }
+                    ]
+                },
+                {
+                    "dimensionCodigo": "DIMCTC",
+                    "distribucionCodigo": "",
+                    "tipoCalculo": "2",
+                    "distribucionItems": [
+                        {
+                            "codigo": "LBV-0002",
+                            "porcentaje": 100.000000,
+                            "importe": 395000.0000
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "ProductoCodigo": "TRA071",
+            "Cantidad": 5.000000,
+            "CantidadPendiente": 5.000000,
+            "Precio": 39500.000000,
+            "Descripcion": "",
+            "ProvinciaOrigen": null,
+            "ProvinciaDestino": null,
+            "FechaProximoPaso": null,
+            "IdentificacionExterna": "OC - 5003 Item-2",
+            "RegistroID": null,
+            "AplicaAnticipoFinanciero": false,
+            "USRSolicitanteID": null,
+            "USRtransaccioncnid": null,
+            "vinculacionDestino": null,
+            "vinculacionOrigen": null,
+            "ImporteExento": 0.0000,
+            "DimensionDistribucion": [
+                {
+                    "dimensionCodigo": "DIMPARFIN",
+                    "distribucionCodigo": "",
+                    "tipoCalculo": "2",
+                    "distribucionItems": [
+                        {
+                            "codigo": "REB000",
+                            "porcentaje": 100.000000,
+                            "importe": 197500.0000
+                        }
+                    ]
+                },
+                {
+                    "dimensionCodigo": "DIMCTC",
+                    "distribucionCodigo": "",
+                    "tipoCalculo": "2",
+                    "distribucionItems": [
+                        {
+                            "codigo": "LCO-0002",
+                            "porcentaje": 100.000000,
+                            "importe": 197500.0000
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "Conceptos": [
+        {
+            "ConceptoCodigo": "IVA19COMPRA",
+            "ConceptoImporte": 112575.0000,
+            "ConceptoImporteGravado": 592500.0000
+        },
+        {
+            "ConceptoCodigo": "COMPRA-RET12.25",
+            "ConceptoImporte": 0.0000,
+            "ConceptoImporteGravado": 0.0000
+        },
+        {
+            "ConceptoCodigo": "COMPRA-RET15.25",
+            "ConceptoImporte": 0.0000,
+            "ConceptoImporteGravado": 0.0000
+        },
+        {
+            "ConceptoCodigo": "COMPRA-RET13",
+            "ConceptoImporte": 0.0000,
+            "ConceptoImporteGravado": 0.0000
+        },
+        {
+            "ConceptoCodigo": "COMPRA-RET14",
+            "ConceptoImporte": 0.0000,
+            "ConceptoImporteGravado": 0.0000
+        }
+    ],
+    "ProvinciaOrigenCodigo": null,
+    "ProvinciaDestinoCodigo": null,
+    "FechaBaseVencimiento": "2026-04-13",
+    "PorcentajeAnticipoFinanciero": 0.00,
+    "ProductoAnticipoFinancieroCodigo": null,
+    "CHL_ModVenta": "1",
+    "CHL_ViaTransporte": null,
+    "USR_Serv3": null,
+    "AFIPDGI_Cosecha": null,
+    "USR_SolicitanteID": null,
+    "CHL_CantBultos": 0,
+    "CHL_FolioRef": null,
+    "CHL_FechaRef": null,
+    "CHL_TipoIndicadorTraslado": "1",
+    "IdentificacionExternaPadre": ""
+}

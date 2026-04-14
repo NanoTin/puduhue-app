@@ -1,0 +1,71 @@
+{
+    "Nombre": "",
+    "Conceptos": [
+        {
+            "ConceptoImporteGravado": 1234.56,
+            "ConceptoImporte": 1234.56,
+            "ConceptoCodigo": "codigoFKBSConcepto"
+        }
+    ],
+    "AFIPDGI_Cosecha": "",
+    "PorcentajeAnticipoFinanciero": 1234.56,
+    "ProductoAnticipoFinancieroCodigo": "codigoFKBSProducto",
+    "CHL_TipoIndicadorTraslado": "",
+    "NumeroComprobante": "",
+    "IdentificacionExterna": "",
+    "ComprobanteAdicional": "",
+    "CHL_ViaTransporte": "codigoFKCHLViaTransporte",
+    "WorkflowCodigo": "codigoFKBSWorkflow",
+    "ProvinciaOrigenCodigo": "codigoFKBSProvincia",
+    "Fecha": "2026-04-13",
+    "CondicionPagoCodigo": "codigoFKBSCondicionPago",
+    "MonedaCodigo": "codigoFKBSMoneda",
+    "EmpresaCodigo": "codigoFKFAFEmpresa",
+    "TransaccionSubtipoCodigo": "codigoFKFAFTransaccionSubtipo",
+    "Descripcion": "",
+    "Items": [
+        {
+            "vinculacionOrigen": "valor",
+            "CantidadPendiente": 1234.56,
+            "FechaProximoPaso": "2026-04-13",
+            "ProvinciaDestino": "codigoFKBSProvincia",
+            "RegistroID": "codigoFKnull",
+            "vinculacionDestino": "valor",
+            "ProvinciaOrigen": "codigoFKBSProvincia",
+            "IdentificacionExterna": "",
+            "AplicaAnticipoFinanciero": true,
+            "ProductoCodigo": "codigoFKBSProducto",
+            "ImporteExento": -1234.56,
+            "USRSolicitanteID": "codigoFKBSPersona",
+            "Cantidad": 1234.56,
+            "USRtransaccioncnid": "codigoFKBSTransaccion",
+            "Descripcion": "",
+            "DimensionDistribucion": [
+                {
+                    "tipoCalculo": "(Tipo) String, (Obligatorio) Si. Si se quieren pasar distribucionItems, indique 1 para pasar Importe, 2 para Porcentaje. Caso contrario, indique 0.",
+                    "distribucionCodigo": "(Tipo) String, (Obligatorio) No, Pasar el codigo de la dimensión distribucion en caso de querer pasar una distribución por default. No sería necesario pasar distribucionItems",
+                    "distribucionItems": [
+                        {
+                            "codigo": "(Tipo) String, (Obligatorio) No, Codigo de registro de la dimension. Ej.: Código de un registro perteneciente a la dimensión Centro de Costo.",
+                            "porcentaje": "(Tipo) Numero, (Obligatorio) No, Porcentaje de distribución",
+                            "importe": "(Tipo) Numero, (Obligatorio) No, Importe de distribución"
+                        }
+                    ],
+                    "dimensionCodigo": "(Tipo) String, (Obligatorio) Si, si lo requiere la transacción. Consulte la API /Dimension/list"
+                }
+            ],
+            "Precio": 1234.56
+        }
+    ],
+    "TransaccionTipoCodigo": "codigoFKFAFTransaccionTipo",
+    "CHL_ModVenta": "",
+    "IdentificacionExternaPadre": "",
+    "CHL_CantBultos": 1,
+    "USR_Serv3": "",
+    "Proveedor": "codigoFKBSOrganizacion",
+    "CHL_FechaRef": "2026-04-13",
+    "FechaBaseVencimiento": "2026-04-13",
+    "USR_SolicitanteID": "codigoFKBSPersona",
+    "CHL_FolioRef": "",
+    "ProvinciaDestinoCodigo": "codigoFKBSProvincia"
+}
