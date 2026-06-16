@@ -1,0 +1,66 @@
+Puduhue - Consultas Modulo de Compras
+* Sobre el Requerimiento de Compra (solicitudes internas)
+** ¿Un mismo requerimiento puede mezclar materiales y servicios, o prefieren que sean solicitudes separadas (una para materiales, otra para servicios)?
+R: No. Deben ser separados.
+** Los servicios/materiales a solicitar que vienen del maestro de productos que ya existe en Finnegans ¿Necesitan todos o solo algunos?
+R: Todos los vigentes. Se debe tener una tarea diaria para realizar una copia a través de la API/EndPoint que dispone Finnegans. También, un On-Demand en el Maestro de Productos. 
+Ademas, se debe realizar algunas mejoras a este maestro. Como:
+* adicionar si es de tipo Material o Servicio. Según lo revisado en el ERP, un producto para que sea SERVICIO, solo debe tener marcado [Es Compra]. Para que sea MATERIAL, debe tener marcado [Es Compra] y [Es Stockeable]
+* Distinguir en que modulo se usa el producto. Por ejemplo: el Modulo de Producción de Leche, actualmente, utiliza los productos que tiene el atributo LECHE = SI. Lo que dice NO, se utilizan en el modulo de Alimentación. Para diferenciar, se debe crear un nuevo atributo y un Maestro de Clasificación del Producto, o algo así, para saber en que modulo se usa: LCH = Modulo de Producción de Leche | CMB = Modulo de Combustible | ALM = Modulo de Alimentación | BDG = Modulo de Bodega (Consumos y Traslados)
+* Bloquear Crear/Modificar Items en Puduhue App. Solo podrán usuarios que tengan la autorización. Para ello, se debe crear un nuevo atributo en “Usuarios” que diga “Permite Crear/Editar Productos” (1 o 0)
+* Otros atributos: Compra | Venta | Inventario —> Así igual se puede separar por módulos, como dato adicional al modulo donde se usa.
+** Los servicios/materiales ¿Están bien configurados en Finnegans con su descripción que ayude al usuario al momento de solicitar, o requieren de apoyo de un texto libre para que el usuario digite?
+R: Se utiliza la descripción del ERP, que será la misma en el Maestro de Productos (espejo), sin poder editar. En el encabezado se debe contemplar una “Observación” genérica del requerimiento.
+** ¿Se puede aprobar un requerimiento parcialmente (solo algunas líneas sí y otras no)?
+R: No. La autorización es general.
+** ¿Quién aprueba los requerimientos? ¿Solo el jefe directo, depende del monto, o hay varios niveles de aprobación?
+R: Para los requerimientos, por default se agrega al jefe que esta configurado en el Maestro de Centros, pero el usuario creador puede agregar más aprobadores.
+** Si un requerimiento es rechazado, ¿el solicitante puede corregirlo y reenviarlo, o debe crear uno nuevo?
+R: Sí, se puede corregir. El requerimiento queda en estado “Rechazado” y puede ser modificado. Solo cuando este en estado “Anulado”, no puede volver a hacer modificado.
+** ¿Necesitan un estado "Borrador”? para ir armando la solicitud antes de enviarla, o ¿todo requerimiento se envía de inmediato al crearla?
+R: Sí, se requiere un estado “Borrador”.
+** ¿El requerimiento se asocia a un Centro de Costo o Departamento? ¿Cada usuario tiene centros de costo asignados? ¿Esta información está en Finnegans o es de otro sistema?
+R: Se asocia a un Centro de Costo. Se debe crear este Mantenedor. Ademas, contemplar en el sincronizador con el ERP. El ERP tiene la información oficial, por lo que en su pantalla no debe haber eventos CRUD. Solo Exportar y un botón para sincronizar bajo demanda. Sobre los usuarios si tienen CC, no es en base a ese atributo, si no, en base al solicitante asignado. Es por ello que en la cabecera se debe contemplar esta columna. Es diferente al usuario creador/editor. 
+Al seleccionar al solicitante, por default se carga su centro de costo. Pero, este dato queda disponible para editar por si requiere cambiar de centro de costo aunque sea para un solicitante que pertenece a otro C.C.
+Solicitante Asignado debe ser completado con un listado de funcionarios. Es por ello que se debe contemplar un Maestros de Funcionarios: Rut - Nombre - Cargo - Activo - Email - Centro Costo, para comenzar (C.C FK).
+Inicialmente este se cargará desde un Excel con los funcionarios activos. Si un funcionario ya no viene en el Excel, lo debe desactivar. 
+** ¿Qué pasa si el "jefe" de cada Centro de Costo está de vacaciones? ¿Creamos una opción para inhabilitar + un reemplazo en un periodo de tiempo?
+R: Sí, crea una transacción para funcionarios con periodo de inactividad, que puede ser por: Vacaciones, Licencia, Permiso, Otro, etc.
+Esta opción es solo para aprobadores. Se selecciona el aprobador, se coloca su reemplazo y sus fechas (desde - hasta). Mientras un requerimiento este entre ese rango (incluye el hasta), al crear la lista de firmantes, se agregará ambos, pero uno tendrá el estado “omitido por inactividad” (Nuevo estado a considerar) y el reemplazo quedaría como el pendiente de autorización.
+* Sobre la Pre-Orden de Compra (antes de enviar a Finnegans)
+** ¿Una Pre-OC puede consolidar múltiples requerimientos (juntar varias solicitudes en una sola orden), o es siempre 1 requerimiento = 1 orden? Revise alguna en Finnegans y me da la impresión de que hace una por Centro.
+R: Una OC en ERP puede tener múltiples requerimientos, pero cada línea esta asociada solo a un centro de costo, por lo que un producto se puede repetir. Nota: Se debe usar el atributo “Descripcion” que están en el listado de “productos” y colocar el nombre del centro, pues, en pantalla del ERP no se ve. Solo se ve esta columna y sirve para identificar a que C.C corresponde. En caso contrario, se debe ir uno a uno (línea por línea) revisando.
+** ¿Quién crea la Pre-OC? ¿El área de Adquisiciones/Compras o son colaboradores que no dependen de un área?
+R: Son las secretarias. Se debe agregar un atributo en el maestro de “Usuarios” que señale quienes son compradores: “comprador” y con ello utilizar para verificar que puedan CREAR/EDITAR/ANULAR en el modulo correspondiente, a pesar de que tengan el modulo en su perfil. Nota: Por default en la pantalla de consulta se les muestra sus PreOC, pero pueden limpiar el filtro para consultar las de otros usuarios.
+** ¿Se necesita comparar cotizaciones de distintos proveedores antes de generar la Pre OC? O sea, ¿adicionar un módulo de Cotizaciones? O, ¿Desde Requerimiento a Pre-OC?
+R: Solo desde Requerimiento a PreOC. Se debe crear una tabla intermedia que contenga solo los requerimientos Aprobados. Esta misma tendrá una tabla detalle donde se irán creando las transacciones a medida que se vallan generando PreOC. Esto es porque un requerimiento puede ser comprado parcialmente y debe ir quedando su saldo disponible para la siguiente PreOC.
+** ¿La Pre-OC se aprueba solo con el Responsable/Administrador/Colaborador del Presupuesto + adicionales manuales que desee agregar el comprador o se debe adicionar alguna regla especial?
+R: Esto “Responsable/Administrador/Colaborador del Presupuesto + adicionales manuales” + por monto neto. Para esto, se debe adicionar una tabla que contenga el usuario aprobador, su monto (“mayor que”) cuando la PreOC supere ese valor y el orden en que se debe adicionar a la lista de firmantes. Nota: Al generar la PreOC, la lista se genera a medida que se valla completando los datos de esta y se mostrará al usuario como ultimo paso antes de grabar, permitiendo que pueda editar o cambiar el orden default: Responsable —> Administrador —> Colaborador del Presupuesto —> Por monto + Manuales o a criterio del usuario. Puede ser drag and drop para cambiar el orden o con flechas en cada fila. El aprobador solo puede existir solo una vez en la lista, para tener en cuenta si, por ejemplo, el responsable y administrador de pato es el mismo aprobador. 
+** ¿Se puede cambiar la fecha de la Pre-OC o tomamos la fecha en que se crea sin poder modificar por el comprador?
+R: Si bien en el ERP se puede cambiar, en este desarrollo se tomará por default la fecha de creación	(solo fecha) y no podrá se editada.
+** ¿El comprador puede cambiar el ítem que proviene desde el requerimiento en el caso de que no sea el correcto o se debe rechazar e informar al usuario que lo realice con el ítem que corresponda (procedimiento interno)?
+R: Si, pero lo debe hacer en la pantalla principal de requerimiento pendiente de compra y debe quedar trazabilidad de ese cambio junto con alguna estadística para determinar cuanto se podrían estar equivocando los usuarios que realizan requerimientos. Nota: Debe validar que el cambio no sea por un ítem que ya exista en el requerimiento original. En el requerimiento original igual se debe mostrar el cambio, con la opción de ver el histórico de cambios (solo si tuvo). Por otra parte, debe existir métricas de cuanto tiempo un requerimiento esta pendiente de compra, tomando como referencia su fecha de creación y fecha de autorización. La idea es que el usuario creador del requerimiento tenga todo el historial de su requerimiento, tipo un seguimiento de transporte e incluso incluir (en otra etapa) cuando fue su recepción (obtener desde el ERP. Dejar como punto de mejora para la siguiente etapa, pero con el diseño que soporte esta mejora futura).
+* Sobre Presupuestos
+** ¿Cómo se define el presupuesto de compras? ¿Es anual, semestral, trimestral, mensual, por proyecto o solo por un rango de fechas?
+R: Puede ser por cualquier temporalidad. Ejemplo: “T1-26” ‎ =  Trimestre 1 del año 2026. Se debe buscar la forma de que el usuario pueda completar esta información sin crear nuevas nomenclaturas: A = Anual , T‎ =  Trimestre, S = Semestral, M = Mensual junto con adicionar el año. Se podría agregar la fecha de inicio y final, pero sería solo como dato para un posible reporte, pues, el usuario creador de la PreOC es quien determina cual presupuesto se usará, en base a los que se muestren cuando este creando una PreOC (Activo y con Saldo)
+** ¿El presupuesto es por empresa/concepto, por centro de costo, o por otra categorización?
+R: Es global por empresa. Se consideran 3 niveles: Clasificación / Sub-clasificación / Presupuesto —> Este ultimo tendrá el saldo inicial, los ajustes manuales, el re-proyectado (inicial + ajustes manuales ), consumos por PreOC, saldo disponible. El detalle, debe ser transacciones que identifiquen cada movimiento, como una cartilla de una cuenta corriente de un banco o kardex, identificando los que moverán, por ejemplo, los ajustes manuales (deberá ser una opción especifica) y los consumos por PreOC (esta línea cuando esta en proceso de aprobación, debe restar, pero debe tener un estado para que cuando sea aprobada, cambie, al igual que cuando es rechazada o anulada, pues, ese monto debe devolverse como positivo al pato. En sí, todos los consumos por PreOC tendrán transacciones que sumarán (+) o restarán (-) según el caso.
+** ¿Cuáles son los niveles que manejan para agrupar presupuestos?Ejemplo: Nivel 0: Empresa à Nivel 1: Capex/Opex à Nivel 2: Remuneraciones / Alimentación / Forraje / Salud Animal à Nivel 3: Presupuestos para Salud Animal (Insumos Veterinarios / Asesorías Salud Animal / Inseminación / Etc.)
+R: Exacto, esos niveles.
+** ¿La validación del presupuesto es bloqueante (no se puede aprobar si no hay saldo) o solo informativa (alerta, pero permite continuar)?
+R: No puede avanzar si no hay saldo. De forma interna, deberán generar un ajuste positivo manual para aumentar el presupuesto.
+** ¿Quién carga y administra los presupuestos?
+R: La Gerencia de Administración y Finanzas. Los compradores no pueden tener acceso a esta funcionalidad, solo un reporte donde puedan consultar.
+* Sobre Monedas, Bodegas y Logística
+** ¿Compran en otras monedas o solo en pesos chilenos? Si es solo CLP simplificamos bastante.
+R: Solo CLP.
+** ¿Existe un concepto de bodega central que recepciona y luego traslada al destino, o la bodega de recepción es el destino final?
+R: La bodega de recepción es el destino final.
+** ¿Cómo es el flujo logístico actual? (proveedor → recepción → destino)
+R: Correcto.
+* Sobre Roles y Reportes
+** ¿Qué reportes necesitan? Algunas ideas: listado de requerimientos, listado de órdenes, ejecución presupuestaria, historial de aprobaciones, exportación a Excel. Compartir lo que tenga actualmente para analizar.
+R: Si, todos esos reportes.
+* Sobre el Proyecto
+** ¿Este módulo se integra al proyecto actual (Puduhue App) o prefieren un proyecto/sistema separado?
+R: Sobre Puduhue App.

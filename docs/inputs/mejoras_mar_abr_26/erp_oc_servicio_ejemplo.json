@@ -1,0 +1,220 @@
+{
+    "IdentificacionExterna": "OCSS - 10050",
+    "Fecha": "2026-04-13",
+    "Proveedor": "76914877-9",
+    "CondicionPagoCodigo": "30",
+    "TransaccionTipoCodigo": "OPER",
+    "TransaccionSubtipoCodigo": "OCSS",
+    "WorkflowCodigo": "CPRA-INS-SERV",
+    "Descripcion": "",
+    "NumeroComprobante": "014890",
+    "MonedaCodigo": "PES",
+    "EmpresaCodigo": "2",
+    "Nombre": "OCSS - 10050",
+    "ComprobanteAdicional": "",
+    "Items": [
+        {
+            "ProductoCodigo": "IMR004",
+            "Cantidad": 1.000000,
+            "CantidadPendiente": 1.000000,
+            "Precio": 16260.000000,
+            "Descripcion": "BV",
+            "ProvinciaOrigen": null,
+            "ProvinciaDestino": "RDLL",
+            "FechaProximoPaso": null,
+            "IdentificacionExterna": "OCSS - 10050 Item-1",
+            "RegistroID": null,
+            "AplicaAnticipoFinanciero": false,
+            "USRSolicitanteID": null,
+            "USRtransaccioncnid": null,
+            "vinculacionDestino": null,
+            "vinculacionOrigen": null,
+            "ImporteExento": 0.0000,
+            "DimensionDistribucion": [
+                {
+                    "dimensionCodigo": "DIMPARFIN",
+                    "distribucionCodigo": "CRM000",
+                    "tipoCalculo": "2",
+                    "distribucionItems": [
+                        {
+                            "codigo": "CRM000",
+                            "porcentaje": 100.000000,
+                            "importe": 16260.0000
+                        }
+                    ]
+                },
+                {
+                    "dimensionCodigo": "DIMCTC",
+                    "distribucionCodigo": "",
+                    "tipoCalculo": "2",
+                    "distribucionItems": [
+                        {
+                            "codigo": "LBV-0002",
+                            "porcentaje": 100.000000,
+                            "importe": 16260.0000
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "ProductoCodigo": "SMA001",
+            "Cantidad": 3.000000,
+            "CantidadPendiente": 3.000000,
+            "Precio": 10000.000000,
+            "Descripcion": "BOLSO TOALLA BV",
+            "ProvinciaOrigen": null,
+            "ProvinciaDestino": "RDLL",
+            "FechaProximoPaso": null,
+            "IdentificacionExterna": "OCSS - 10050 Item-2",
+            "RegistroID": null,
+            "AplicaAnticipoFinanciero": false,
+            "USRSolicitanteID": null,
+            "USRtransaccioncnid": null,
+            "vinculacionDestino": null,
+            "vinculacionOrigen": null,
+            "ImporteExento": 0.0000,
+            "DimensionDistribucion": [
+                {
+                    "dimensionCodigo": "DIMPARFIN",
+                    "distribucionCodigo": "LEC000",
+                    "tipoCalculo": "2",
+                    "distribucionItems": [
+                        {
+                            "codigo": "LEC000",
+                            "porcentaje": 100.000000,
+                            "importe": 30000.0000
+                        }
+                    ]
+                },
+                {
+                    "dimensionCodigo": "DIMBU",
+                    "distribucionCodigo": "",
+                    "tipoCalculo": "2",
+                    "distribucionItems": [
+                        {
+                            "codigo": "",
+                            "porcentaje": 100.000000,
+                            "importe": 30000.0000
+                        }
+                    ]
+                },
+                {
+                    "dimensionCodigo": "DIMCTC",
+                    "distribucionCodigo": "",
+                    "tipoCalculo": "2",
+                    "distribucionItems": [
+                        {
+                            "codigo": "LBV-0002",
+                            "porcentaje": 100.000000,
+                            "importe": 30000.0000
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "ProductoCodigo": "SMA029",
+            "Cantidad": 1.000000,
+            "CantidadPendiente": 1.000000,
+            "Precio": 12495.000000,
+            "Descripcion": "BOTIQUIN SF",
+            "ProvinciaOrigen": null,
+            "ProvinciaDestino": "RDLL",
+            "FechaProximoPaso": null,
+            "IdentificacionExterna": "OCSS - 10050 Item-3",
+            "RegistroID": null,
+            "AplicaAnticipoFinanciero": false,
+            "USRSolicitanteID": null,
+            "USRtransaccioncnid": null,
+            "vinculacionDestino": null,
+            "vinculacionOrigen": null,
+            "ImporteExento": 0.0000,
+            "DimensionDistribucion": [
+                {
+                    "dimensionCodigo": "DIMPARFIN",
+                    "distribucionCodigo": "CRM000",
+                    "tipoCalculo": "2",
+                    "distribucionItems": [
+                        {
+                            "codigo": "CRM000",
+                            "porcentaje": 100.000000,
+                            "importe": 12495.0000
+                        }
+                    ]
+                },
+                {
+                    "dimensionCodigo": "DIMBU",
+                    "distribucionCodigo": "",
+                    "tipoCalculo": "2",
+                    "distribucionItems": [
+                        {
+                            "codigo": "",
+                            "porcentaje": 100.000000,
+                            "importe": 12495.0000
+                        }
+                    ]
+                },
+                {
+                    "dimensionCodigo": "DIMCTC",
+                    "distribucionCodigo": "",
+                    "tipoCalculo": "2",
+                    "distribucionItems": [
+                        {
+                            "codigo": "3-1-3-01",
+                            "porcentaje": 100.000000,
+                            "importe": 12495.0000
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "Conceptos": [
+        {
+            "ConceptoCodigo": "IVA19COMPRA",
+            "ConceptoImporte": 11163.0000,
+            "ConceptoImporteGravado": 58755.0000
+        },
+        {
+            "ConceptoCodigo": "COMPRA-RET12.25",
+            "ConceptoImporte": 0.0000,
+            "ConceptoImporteGravado": 0.0000
+        },
+        {
+            "ConceptoCodigo": "COMPRA-RET15.25",
+            "ConceptoImporte": 0.0000,
+            "ConceptoImporteGravado": 0.0000
+        },
+        {
+            "ConceptoCodigo": "COMPRA-RET13",
+            "ConceptoImporte": 0.0000,
+            "ConceptoImporteGravado": 0.0000
+        },
+        {
+            "ConceptoCodigo": "COMPRA-RET16",
+            "ConceptoImporte": 0.0000,
+            "ConceptoImporteGravado": 0.0000
+        },
+        {
+            "ConceptoCodigo": "COMPRA-RET14",
+            "ConceptoImporte": 0.0000,
+            "ConceptoImporteGravado": 0.0000
+        }
+    ],
+    "ProvinciaOrigenCodigo": null,
+    "ProvinciaDestinoCodigo": "RDLL",
+    "FechaBaseVencimiento": "2026-04-13",
+    "PorcentajeAnticipoFinanciero": 0.00,
+    "ProductoAnticipoFinancieroCodigo": null,
+    "CHL_ModVenta": "1",
+    "CHL_ViaTransporte": null,
+    "USR_Serv3": null,
+    "AFIPDGI_Cosecha": null,
+    "USR_SolicitanteID": null,
+    "CHL_CantBultos": 0,
+    "CHL_FolioRef": null,
+    "CHL_FechaRef": null,
+    "CHL_TipoIndicadorTraslado": "1",
+    "IdentificacionExternaPadre": ""
+}
