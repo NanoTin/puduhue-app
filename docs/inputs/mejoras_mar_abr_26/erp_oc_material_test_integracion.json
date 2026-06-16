@@ -1,0 +1,160 @@
+{
+  "Nombre": "OC - Test001",
+  "IdentificacionExterna": "PreOC0001",
+  "WorkflowCodigo": "CPRA-INS-SERV",
+  "Fecha": "2026-06-16",
+  "CondicionPagoCodigo": "30",
+  "MonedaCodigo": "PES",
+  "EmpresaCodigo": "PRUEBA39",
+  "TransaccionSubtipoCodigo": "OC",
+  "ImporteTotal": 2484718.0000,
+  "EdicionVencimientoModo": 2,
+  "TransaccionTipoCodigo": "OPER",
+  "Proveedor": "76180494-4",
+  "FechaBaseVencimiento": "2026-06-16",
+  "PorcentajeAnticipoFinanciero": 0.00,
+  "CHL_ModVenta": "1",
+  "CHL_TipoIndicadorTraslado": "1",
+  "CHL_FolioRef": "",
+  "CHL_FechaRef": null,
+  "Items": [
+    {
+      "CantidadPendiente": 1100.0,
+      "IdentificacionExterna": "PreOC0001 Item-1",
+      "ProductoCodigo": "TRA031",
+      "Cantidad": 1100.0,
+      "Precio": 1718.18,
+      "Descripcion": "MT",
+      "ImporteGravado": 1889998.0000,
+      "ImporteMonTransaccion": 1889998.0000,
+      "ImporteGravadoMonPrincipal": 1889998.0000,
+      "Importe": 1889998.0000,
+      "ImporteMonPrincipal": 1889998.0000,
+      "ImporteGravadoSinTruncar": 1889998.0000,
+      "ImporteExento": 0.00,
+      "FechaDesdeForecast": "2026-06-16",
+      "FechaPrimerVencimiento": "2026-06-16",
+      "AplicaAnticipoFinanciero": false,
+      "DimensionDistribucion": [
+        {
+          "dimensionCodigo": "DIMPARFIN",
+          "distribucionCodigo": "",
+          "tipoCalculo": "2",
+          "distribucionItems": [
+            {
+              "codigo": "REB000",
+              "porcentaje": 100.0,
+              "importe": 1889998.0
+            }
+          ]
+        },
+        {
+          "dimensionCodigo": "DIMCTC",
+          "distribucionCodigo": "",
+          "tipoCalculo": "2",
+          "distribucionItems": [
+            {
+              "codigo": "LMT-0002",
+              "porcentaje": 100.0,
+              "importe": 1889998.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "CantidadPendiente": 300.0,
+      "IdentificacionExterna": "PreOC0001 Item-2",
+      "ProductoCodigo": "SOR013",
+      "Cantidad": 300.0,
+      "Precio": 660.0,
+      "Descripcion": "MT",
+      "ImporteGravado": 198000.0000,
+      "ImporteMonTransaccion": 198000.0000,
+      "ImporteGravadoMonPrincipal": 198000.0000,
+      "Importe": 198000.0000,
+      "ImporteMonPrincipal": 198000.0000,
+      "ImporteGravadoSinTruncar": 198000.0000,
+      "ImporteExento": 0.00,
+      "FechaDesdeForecast": "2026-06-16",
+      "FechaPrimerVencimiento": "2026-06-16",
+      "AplicaAnticipoFinanciero": false,
+      "DimensionDistribucion": [
+        {
+          "dimensionCodigo": "DIMPARFIN",
+          "distribucionCodigo": "",
+          "tipoCalculo": "2",
+          "distribucionItems": [
+            {
+              "codigo": "LEC000",
+              "porcentaje": 100.0,
+              "importe": 198000.0
+            }
+          ]
+        },
+        {
+          "dimensionCodigo": "DIMCTC",
+          "distribucionCodigo": "",
+          "tipoCalculo": "2",
+          "distribucionItems": [
+            {
+              "codigo": "LMT-0002",
+              "porcentaje": 100.0,
+              "importe": 198000.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Conceptos": [
+    {
+      "ConceptoImporteGravado": 2087998.0,
+      "ConceptoImporte": 396720.0,
+      "ConceptoCodigo": "IVA19COMPRA"
+    },
+    {
+      "ConceptoCodigo": "COMPRA-RET12.25"
+    },
+    {
+      "ConceptoCodigo": "COMPRA-RET15.25"
+    },
+    {
+      "ConceptoCodigo": "COMPRA-RET13"
+    },
+    {
+      "ConceptoCodigo": "COMPRA-RET14"
+    }
+  ],
+  "Vencimientos": [
+        {
+            "Descripcion": "",
+            "Tipo": 2,
+            "OrganizacionID": "76180494-4",
+            "IncluyeImpuesto": false,
+            "PorcentajeTasaImpositiva": null,
+            "ImporteGravado": null,
+            "DebeHaberAgrupado": null,
+            "CuentaID": "210201",
+            "ImporteMonTransaccion": null,
+            "ImporteMonPrincipal": null,
+            "AsigManualLote": false,
+            "OrganizacionIDDestino": null,
+            "Orden": null,
+            "RegistroID": null,
+            "OrganizacionIDOrigen": null,
+            "ImporteMonSecundaria": null,
+            "PorcentajeAplicado": 100.00,
+            "ImporteGravadoSinTruncar": null,
+            "FechaCashflow": "2026-07-12",
+            "Importe": 2484718.0000,
+            "Fecha": "2026-07-12",
+            "IdentificacionExterna": "",
+            "CashflowSuspendido": false,
+            "CalculoImpositivo": null,
+            "OrganizacionIDProveedor": null,
+            "ImporteSinTruncar": null,
+            "CriterioDescripcionCuota": null
+        }
+    ]
+}

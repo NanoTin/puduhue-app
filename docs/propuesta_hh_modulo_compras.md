@@ -10,6 +10,9 @@
 
 > Este documento consolida el levantamiento técnico del Módulo de Compras, organizado por componentes para facilitar la estimación. El módulo se integra a Puduhue App Web y cubre el ciclo completo desde la Solicitud Interna hasta la generación de la Orden de Compra en Finnegans.
 
+> [!NOTE]
+> Los componentes transversales compartidos con otros módulos deben estimarse por separado para evitar duplicación de HH. Ver `docs/propuesta_hh_componentes_transversales.md`.
+
 ---
 
 ## Componente 1 — Maestros Base y Sincronización ERP
@@ -31,25 +34,24 @@
 | Provincias / Establecimientos | `erpprovinciasdestino` | Cron diario + On-Demand |
 
 **Incluye también:**
-- Mejoras al Maestro de Productos (`invitems`): nuevos atributos de tipo, módulo de uso, compra/venta/inventario.
-- Migración del atributo `LECHE = SI/NO` al nuevo código de módulo (`LCH`, `ALM`, etc.).
-- Maestro de Funcionarios (`funcionarios`): carga inicial desde Excel + lógica de desactivación.
+- Consumo de los maestros espejo requeridos por Compras dentro de sus flujos y formularios.
+- Referencia al proyecto transversal de Maestro de Ítems para cualquier mejora de `invitems`, migraciones de atributos o definición de sincronización con ERP.
+- Referencia al proyecto transversal de Maestro de Funcionarios para carga inicial, mantención y desactivación.
 
-**Estimación HH:** `40 – 55` hrs.
+**Estimación HH:** `30 – 40` hrs.
 
 ---
 
-## Componente 2 — Maestro de Centros de Costo y Usuarios
+## Componente 2 — Maestro de Centros de Costo y Configuración de Aprobación
 
 **Descripción:** Pantallas de administración para los nuevos maestros con atributos locales editables (no provenientes del ERP).
 
 **Pantallas:**
 - Maestro de Centros de Costo: configurar jefe de CC, asociar usuarios.
-- Maestro de Funcionarios: CRUD local, carga masiva Excel, desactivación automática.
-- Gestión de Inactividad de Aprobadores: registrar reemplazante + período (vacaciones, licencia, permiso).
-- Maestro de Perfiles de Usuarios: nuevos atributos `autorizareq`, `editarprecios`, `comprador`, `permitecreareditar`.
+- Gestión de Inactividad de Aprobadores: registrar reemplazante + período (vacaciones, licencia, permiso), idealmente reutilizando el componente transversal de funcionarios/vigencia.
+- Parametrización específica de Compras sobre perfiles existentes o sobre el componente transversal de permisos.
 
-**Estimación HH:** `25 – 35` hrs.
+**Estimación HH:** `15 – 20` hrs.
 
 ---
 
@@ -145,18 +147,20 @@
 
 | # | Componente | HH Mínimo | HH Máximo |
 |---|------------|:---------:|:---------:|
-| 1 | Maestros Base y Sincronización ERP | 40 | 55 |
-| 2 | Maestro de CC, Funcionarios y Perfiles | 25 | 35 |
+| 1 | Maestros Base y Sincronización ERP | 30 | 40 |
+| 2 | Maestro de CC y Configuración de Aprobación | 15 | 20 |
 | 3 | Módulo de Presupuesto de Compra | 30 | 45 |
 | 4 | Módulo REQ (Requerimiento de Compra) | 55 | 75 |
 | 5 | Pendientes de Compra (REQ → PreOC) | 20 | 30 |
 | 6 | Módulo de Pre Orden de Compra (PreOC) | 65 | 85 |
 | 7 | Integración con Finnegans | 35 | 55 |
-| | **TOTAL ESTIMADO** | **270** | **380** |
+| | **TOTAL ESTIMADO** | **250** | **350** |
 
 > [!NOTE]
 > El rango refleja la variabilidad natural de un proyecto de esta envergadura: complejidad de las reglas de negocio confirmadas, tiempo de respuesta de Finnegans, y ajustes durante el desarrollo iterativo.
 > No incluye: Testing QA formal, capacitación de usuarios, documentación técnica de entrega, ni gestión de proyecto.
+> Tampoco incluye la construcción base del Maestro de Ítems, Maestro de Funcionarios, permisos transversales ni infraestructura base reutilizable de integración ERP, si estos se abordan como proyecto separado.
+> Por lo mismo, las HH de los Componentes 1 y 2 fueron recalibradas respecto de una versión anterior del documento para reflejar solo el alcance específico del módulo de Compras.
 
 ---
 
@@ -225,14 +229,14 @@ El módulo tiene **7 componentes** de desarrollo, que se desglosan a continuaci�
 
 | Componente | HH Estimadas |
 |------------|:------------:|
-| Sincronización de maestros ERP (proveedores, CC, impuestos, etc.) | 40 – 55 hrs |
-| Maestro de Funcionarios, Centros de Costo y perfiles de usuario | 25 – 35 hrs |
+| Sincronización de maestros ERP (proveedores, CC, impuestos, etc.) | 30 – 40 hrs |
+| Maestro de Centros de Costo y configuración de aprobación | 15 – 20 hrs |
 | Módulo de Presupuesto de Compra (gestión y control) | 30 – 45 hrs |
 | Módulo de Requerimiento Interno (REQ) | 55 – 75 hrs |
 | Gestión de Pendientes de Compra (REQ → Pre OC) | 20 – 30 hrs |
 | Módulo de Pre Orden de Compra (PreOC) | 65 – 85 hrs |
 | **Integración con Finnegans** (creación automática de OC) | 35 – 55 hrs |
-| **TOTAL** | **270 – 380 hrs** |
+| **TOTAL** | **250 – 350 hrs** |
 
 ---
 
@@ -241,6 +245,8 @@ El módulo tiene **7 componentes** de desarrollo, que se desglosan a continuaci�
 La integración con el ERP es el componente más complejo del proyecto y tiene una **dependencia directa con el soporte técnico de Finnegans**. Para que el sistema pueda generar una OC correctamente en su plataforma, debemos coordinar con ellos la validación de varios puntos técnicos: campos obligatorios del API, codificación de dimensiones contables (partidas financieras), comportamiento de impuestos por tipo de proveedor, entre otros.
 
 Este proceso de coordinación e iteración con Finnegans puede afectar los plazos de entrega de este componente en particular, por lo que recomendamos iniciar ese contacto en paralelo con el desarrollo de los módulos anteriores.
+
+Además, para evitar duplicar desarrollo entre iniciativas, recomendamos tratar por separado los componentes transversales de **Maestro de Ítems**, **Maestro de Funcionarios**, **permisos globales** y **base reutilizable de integración ERP**. Si alguno de ellos se ejecuta primero como proyecto independiente, el módulo de Compras debe considerar solo su integración o adaptación.
 
 ---
 
