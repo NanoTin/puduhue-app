@@ -8,7 +8,7 @@ Definir la base documental de la API externa publica del proyecto Puduhue App We
 
 - `apps/api-php/` existe y hoy esta vacio: es el lugar natural para el punto de entrada publico de la API.
 - `src/` esta al mismo nivel que `apps/`, por lo que la API debe reutilizar esa capa compartida.
-- Ya existen capas reutilizables en `src/Controllers`, `src/Services`, `src/Core`, `src/Config`, `src/Auth`, `src/Middleware` y `src/Helpers`.
+- Ya existen capas reutilizables en `src/Controllers`, `src/Services`, `src/Config`, `src/Auth`, `src/Middleware` y `src/Helpers`.
 - El frontend interno sigue operando desde `apps/web-php/` con `src/Routes/web.php`.
 - El modelo actual de `usuarios` aun contiene columnas `usuarioapikey*`; esa implementacion no cumple el objetivo confirmado de multiples tokens por usuario y debe quedar relegada para compatibilidad interna durante la migracion.
 - Existe `usuariostokens`, pero su semantica actual es de tokens internos asociados a `tokentipos`; no debe reutilizarse para la API publica.

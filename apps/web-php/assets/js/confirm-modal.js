@@ -1,4 +1,7 @@
 (function () {
+  if (window.__confirmModalLoaded) return;
+  window.__confirmModalLoaded = true;
+
   let pendingForm = null;
   let modalInstance = null;
 
@@ -51,6 +54,11 @@
     }
 
     pendingForm.dataset.confirmed = '1';
+
+    const modal = getModal();
+    if (modal) {
+      modal.instance.hide();
+    }
 
     // Dispara submit real
     if (typeof pendingForm.requestSubmit === 'function') {

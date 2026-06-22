@@ -495,8 +495,6 @@ Servicios (src/Services)
 
 Modelos (src/Models)
 
-Núcleo (src/Core)
-
 Auth & Middleware (src/Auth, src/Middleware)
 
 Integraciones externas (src/api-external)

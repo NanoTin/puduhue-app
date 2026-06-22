@@ -51,7 +51,7 @@ if ($fechaHastaValue === '') {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Retiro de Leche</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -126,7 +126,7 @@ if ($fechaHastaValue === '') {
                     <th>T</th>
                     <th>Observacion</th>
                     <th>Imagen</th>
-                    <th style="width: 190px;">Acciones</th>
+                    <th class="col-actions-xl">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -167,9 +167,9 @@ if ($fechaHastaValue === '') {
                                     </a>
                                 <?php endif; ?>
                                 <?php if (!$isAnulada): ?>
-                                    <form action="?route=retiroleche/anular" method="POST" class="d-inline">
+                                    <form action="?route=retiroleche/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="Desea anular este registro?">
                                         <input type="hidden" name="retirolecheid" value="<?= htmlspecialchars($r['retirolecheid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Desea anular este registro?');" title="Anular" aria-label="Anular">
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Anular" aria-label="Anular">
                                             <i class="bi bi-x-circle"></i>
                                         </button>
                                     </form>

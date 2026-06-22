@@ -22,24 +22,24 @@ Estados usados:
 
 | Punto | Estado | Observacion |
 |---|---|---|
-| 1.1 | Vigente | No se encontro helper ni token CSRF en formularios/controladores. |
-| 1.2 | Vigente | `apps/web-php/login.php` sigue procesando POST, reCAPTCHA, sesion y rate limit. |
-| 1.3 | Parcial | `head.php` usa `AuthMiddleware::getUserContext()`, pero `menu.php`, `footer.php`, `index.php` y router aun leen/escriben `$_SESSION`. |
-| 1.4 | Vigente | `login.php` conserva `$_POST` en la vista para repoblar usuario/checkbox. |
-| 2.1 | Parcial | Existe `assets/js/toast.js`, pero quedan `alert()` en `prodleche_*`, `suplanimal_*` y `usuarios_crear.php`. |
-| 2.2 | Parcial | Existe `partials/modal_confirm.php` y `assets/js/confirm-modal.js`, pero muchos listados siguen usando `confirm()`. |
-| 2.3 | Parcial | `footer.php` muestra `$_SESSION['toast']` y varios controllers lo usan; falta documentar y homogeneizar. |
-| 4.1 | Probablemente resuelto | `head.php` tiene boton mobile, backdrop, CSS responsive y clases `sidebar-open/sidebar-collapsed`. |
-| 4.2 | Vigente | Formularios transaccionales usan tablas inline y requieren validacion mobile por formulario. |
-| 5.1 | Vigente | Persisten estilos inline en vistas y CSS embebido extenso en `head.php`. |
-| 5.2 | Vigente | Listados usan mayormente `.container mt-4`; formularios complejos usan variantes `container-fluid px-3 py-3`. |
-| 6.1 | Vigente | `ProdlecheService` y `SuplanimalService` duplican token ERP, cURL y manejo Finnegans. No existe `FinnegansClient.php`. |
-| 6.2 | Vigente | `usuariosempresas_editar.php` y `usuariosfundos_editar.php` siguen casi vacios. |
-| 6.3 | Vigente | Siguen `apps/web-php/prodleche_crear_bak_20251215.php` y `apps/web-php/dashboard copy.php`. |
-| 6.4 | Vigente | `src/Core/*` sigue presente; busqueda activa apunta a `src/Config/*`, salvo referencias documentales y archivos legacy mismos. |
-| 6.5 | Vigente | `AuthController.php` solo implementa logout. |
-| 6.6 | Probablemente resuelto | No se encontro carpeta `lib/` en el arbol actual. |
-| 7.1 | Vigente | Persisten archivos temporales y artefactos de cliente en la raiz del proyecto. |
+| 1.1 | Validado | Helper CSRF, token en layout/login y validacion router para POST mutativos validados; exportaciones POST quedan fuera por no mutativas. |
+| 1.2 | Resuelto | `login.php` quedo como vista/entrada publica; `AuthController` procesa login y `AuthService` concentra normalizacion/rate limit. |
+| 1.3 | Resuelto en vistas | `head.php` y `menu.php` usan `AuthMiddleware::getUserContext()`; `footer.php` usa helper flash. Quedan usos en infraestructura. |
+| 1.4 | Resuelto | `login.php` usa view model (`usernameValue`, `rememberUserChecked`) y ya no lee `$_POST`. |
+| 2.1 | Resuelto | `alert()` bloqueantes migrados a `ToastManager`; busqueda operativa sin `alert(` en vistas. |
+| 2.2 | Resuelto con excepcion | Acciones destructivas/sync/cargas Excel usan modal reusable; queda `window.confirm` solo para salir con datos sin guardar. |
+| 2.3 | Resuelto | Se agrego `FlashMessageHelper`, footer consume `pullToast()` y controllers delegan `setToast()` al helper; patron documentado. |
+| 4.1 | Validado | Sidebar responsive validado funcionalmente por usuario. |
+| 4.2 | Validado | Crear/editar en produccion leche, suplementacion animal y retiro leche validados; tablas quedan con scroll horizontal interno en mobile. |
+| 5.1 | Resuelto con excepciones | CSS global, loader ERP, anchos de columnas repetidos, gaps y campos ocultos tecnicos migrados a clases; quedan reportes con CSS propio documentado. |
+| 5.2 | Resuelto con excepciones | Listados `*_listar.php` normalizados a `container-fluid px-4 py-3`; dashboard/formularios/reportes quedan como excepciones documentadas. |
+| 6.1 | Validado | `FinnegansClient.php` centraliza token/envio; sync real ERP validado funcionalmente por usuario. |
+| 6.2 | Resuelto | Archivos placeholder de edicion N:M eliminados; no habia rutas/menu activos a editar. |
+| 6.3 | Resuelto | Backups PHP servibles eliminados tras comparar contra vistas activas. |
+| 6.4 | Resuelto | `src/Core/*` eliminado; documentacion operativa actualizada a `src/Config/*`. |
+| 6.5 | Resuelto | `AuthController` implementa `loginForm()` y `loginPost()` ademas de logout. |
+| 6.6 | Validado resuelto | `find lib` no encontro carpeta; sin referencias funcionales. |
+| 7.1 | Resuelto | Artefactos de cliente movidos a `docs/client/`, script auxiliar a `scripts/`, temporales retirados. |
 
 ## Dependencias recomendadas
 
@@ -54,7 +54,16 @@ Estados usados:
 
 ## 1.1. CSRF en formularios POST
 
-**Estado**: Vigente.
+**Estado**: Validado.
+
+**Avance 2026-06-22**
+
+- Creado `src/Helpers/CsrfHelper.php` con `generate()`, `validate()`, `input()` y lectura desde `_csrf`/`X-CSRF-Token`.
+- `head.php` expone token `web` en meta tag; `footer.php` agrega `_csrf` a formularios POST y `X-CSRF-Token` a `fetch` POST.
+- `src/Routes/web.php` valida CSRF antes de acciones mutativas (`crearPost`, `editarPost`, `anularPost`, `eliminarPost`, `syncPost`, `cargaMasivaPost`, cambio de clave, generar token API y cambio de empresa).
+- Login usa token `login` y limpia tokens al regenerar sesion.
+- Exportaciones `export_excel.php` permanecen sin validacion porque se clasifican como POST no mutativos.
+- Validado funcionalmente por usuario el 2026-06-22.
 
 **Agente revisor**
 
@@ -85,7 +94,13 @@ Estados usados:
 
 ## 1.2. Login fuera de la vista
 
-**Estado**: Vigente.
+**Estado**: Resuelto.
+
+**Avance 2026-06-22**
+
+- `login.php` conserva bootstrap de sesion y render, pero delega GET/POST en `AuthController`.
+- `AuthController::loginPost()` concentra validacion, reCAPTCHA, rate limit, sesion, remember cookie, logs y redirecciones.
+- `AuthService` recibio `normalizeUsernameInput()` y `checkAndRegisterRateLimit()`.
 
 **Agente revisor**
 
@@ -116,7 +131,13 @@ Estados usados:
 
 ## 1.3. Acceso directo a `$_SESSION` en vistas
 
-**Estado**: Parcial.
+**Estado**: Resuelto en vistas.
+
+**Avance 2026-06-22**
+
+- `menu.php` dejo de leer `$_SESSION` directamente y obtiene `perfilId` desde `AuthMiddleware::getUserContext()`.
+- `footer.php` ya consumia `FlashMessageHelper::pullToast()`.
+- Quedan usos de `$_SESSION` en `index.php`, router, middleware y controllers como infraestructura de autenticacion/orquestacion.
 
 **Agente revisor**
 
@@ -145,7 +166,12 @@ Estados usados:
 
 ## 1.4. `$_POST` directo en `login.php`
 
-**Estado**: Vigente.
+**Estado**: Resuelto.
+
+**Avance 2026-06-22**
+
+- `login.php` repuebla usuario y checkbox desde view model.
+- Validado con `rg '\$_POST' apps/web-php/login.php`: sin lecturas directas.
 
 **Agente revisor**
 
@@ -170,7 +196,12 @@ Estados usados:
 
 ## 2.1. Migrar `alert()` a toasts
 
-**Estado**: Parcial.
+**Estado**: Resuelto.
+
+**Avance 2026-06-22**
+
+- Reemplazados `alert()` de validacion en `prodleche_crear.php`, `prodleche_editar.php`, `suplanimal_crear.php`, `suplanimal_editar.php` y `usuarios_crear.php`.
+- Validado con `rg 'alert\s*\(' apps/web-php`: sin `alert()` operativo.
 
 **Agente revisor**
 
@@ -197,7 +228,15 @@ Estados usados:
 
 ## 2.2. Migrar `confirm()` a modal reusable
 
-**Estado**: Parcial.
+**Estado**: Resuelto con excepcion.
+
+**Avance 2026-06-22**
+
+- `footer.php` carga `partials/modal_confirm.php` y `assets/js/confirm-modal.js`.
+- `confirm-modal.js` quedo idempotente para evitar doble carga.
+- Listados, sync ERP y cargas Excel migrados a `data-confirm="1"`.
+- El loader de sync ERP se muestra solo despues de confirmar el modal; el primer submit interceptado ya no dispara el mensaje de sincronizacion.
+- Excepcion documentada: `window.confirm` de `prodleche_crear.php` para salir con datos sin guardar.
 
 **Agente revisor**
 
@@ -225,7 +264,14 @@ Estados usados:
 
 ## 2.3. Uso consistente de toasts
 
-**Estado**: Parcial.
+**Estado**: Resuelto.
+
+**Avance 2026-06-22**
+
+- Creado `src/Helpers/FlashMessageHelper.php` con `toast()` y `pullToast()`.
+- `setToast()` de controllers web delega al helper.
+- `footer.php` consume `FlashMessageHelper::pullToast()`.
+- `docs/playbooks/new_crud_module.md` documenta toasts y modal de confirmacion.
 
 **Agente revisor**
 
@@ -252,7 +298,12 @@ Estados usados:
 
 ## 4.1. Sidebar responsive mobile
 
-**Estado**: Probablemente resuelto.
+**Estado**: Validado.
+
+**Avance 2026-06-22**
+
+- Confirmado por inspeccion que existen `mobileMenuBtn`, `sidebarBackdrop`, `sidebar-open`, `sidebar-collapsed`, cierre por links y resize/Escape.
+- Validado funcionalmente por usuario el 2026-06-22.
 
 **Agente revisor**
 
@@ -278,7 +329,14 @@ Estados usados:
 
 ## 4.2. Formularios transaccionales responsive
 
-**Estado**: Vigente.
+**Estado**: Validado.
+
+**Avance 2026-06-22**
+
+- `prodleche_crear.php`, `prodleche_editar.php`, `suplanimal_crear.php` y `suplanimal_editar.php` usan `transaction-detail-wrap`.
+- Se movieron anchos de columnas detalle a clases reutilizables en `assets/css/layout.css`.
+- A partir de capturas mobile, se ajusto `layout.css` para que los listados no expandan el ancho global: la tabla queda con scroll interno en `.table-responsive`, las acciones se apilan en mobile y los filtros ocupan el viewport sin empujar el boton Crear fuera de pantalla.
+- Crear y editar en produccion leche, suplementacion animal y retiro leche validados funcionalmente por usuario el 2026-06-22.
 
 **Agente revisor**
 
@@ -306,7 +364,17 @@ Estados usados:
 
 ## 5.1. CSS inline y CSS embebido
 
-**Estado**: Vigente.
+**Estado**: Resuelto con excepciones.
+
+**Avance 2026-06-22**
+
+- Extraido CSS global de `head.php` a `apps/web-php/assets/css/layout.css`.
+- Logo de navbar usa clase `app-brand-logo`.
+- Estilos de loader ERP en listados de produccion/suplementacion se movieron a CSS global.
+- Anchos inline de columnas de acciones en listados migrados a clases `col-actions-*`.
+- Anchos de columnas de detalle y campos tecnicos ocultos de produccion/suplementacion migrados a clases CSS/Bootstrap.
+- Gap inline de filtros en empresas reemplazado por utilidad Bootstrap `gap-2`.
+- Remanentes justificados: `prodlechereporte.php` y `reporte_leche_bi.php` mantienen CSS especifico de reporte/BI hasta una revision visual dedicada.
 
 **Agente revisor**
 
@@ -334,7 +402,12 @@ Estados usados:
 
 ## 5.2. Estandarizar contenedores
 
-**Estado**: Vigente.
+**Estado**: Resuelto con excepciones.
+
+**Avance 2026-06-22**
+
+- Listados `apps/web-php/*_listar.php` normalizados a `container-fluid px-4 py-3`.
+- Dashboard, formularios y reportes se dejaron como excepciones por composicion propia o mayor superficie visual.
 
 **Agente revisor**
 
@@ -361,7 +434,15 @@ Estados usados:
 
 ## 6.1. Centralizar cliente Finnegans
 
-**Estado**: Vigente.
+**Estado**: Validado.
+
+**Avance 2026-06-22**
+
+- Creado `src/api-external/FinnegansClient.php`.
+- Centralizados token vigente, refresco, persistencia `sp_erptokenactivo_insertar`, POST JSON, errores cURL/HTTP, deteccion de token invalido y lectura de variables ERP.
+- `ProdlecheService` y `SuplanimalService` conservan armado de payload y delegan token/envio/reintento al cliente.
+- En `APP_ENV=development`, el cliente valida que `EmpresaID` del payload sea `ERP_DEV_EMPRESA_IDERP` o `PRUEBA39` por defecto, usando `empresaiderp`.
+- Sync real ERP validado funcionalmente por usuario el 2026-06-22.
 
 **Agente revisor**
 
@@ -395,7 +476,12 @@ Estados usados:
 
 ## 6.2. Archivos de edicion vacios
 
-**Estado**: Vigente.
+**Estado**: Resuelto.
+
+**Avance 2026-06-22**
+
+- Validado que `usuariosempresas_editar.php` y `usuariosfundos_editar.php` no tenian referencias activas fuera de docs.
+- Eliminados ambos placeholders; las relaciones N:M conservan flujos crear/eliminar.
 
 **Agente revisor**
 
@@ -422,7 +508,12 @@ Estados usados:
 
 ## 6.3. Archivos backup en `apps/web-php`
 
-**Estado**: Vigente.
+**Estado**: Resuelto.
+
+**Avance 2026-06-22**
+
+- Comparados `prodleche_crear_bak_20251215.php` y `dashboard copy.php` contra sus vistas activas.
+- Eliminados ambos backups PHP servibles.
 
 **Agente revisor**
 
@@ -446,7 +537,13 @@ Estados usados:
 
 ## 6.4. Retirar `src/Core/*` legacy
 
-**Estado**: Vigente.
+**Estado**: Resuelto.
+
+**Avance 2026-06-22**
+
+- Validado que no habia referencias runtime/autoload a `src/Core/*`.
+- Eliminados `src/Core/Database.php`, `src/Core/DBConfig.php` y `src/Core/Env.php`.
+- Actualizadas docs operativas para apuntar a `src/Config/*`.
 
 **Agente revisor**
 
@@ -473,7 +570,12 @@ Estados usados:
 
 ## 6.5. Completar `AuthController`
 
-**Estado**: Vigente.
+**Estado**: Resuelto.
+
+**Avance 2026-06-22**
+
+- `AuthController` implementa `loginForm()` y `loginPost()`.
+- `logout()` se mantiene compatible con `?route=auth/logout`.
 
 **Agente revisor**
 
@@ -498,7 +600,12 @@ Estados usados:
 
 ## 6.6. Carpeta `lib/` vacia
 
-**Estado**: Probablemente resuelto.
+**Estado**: Validado resuelto.
+
+**Avance 2026-06-22**
+
+- `find lib -maxdepth 2 -print` no encontro carpeta `lib/`.
+- No se aplicaron cambios de codigo.
 
 **Agente revisor**
 
@@ -520,7 +627,13 @@ Estados usados:
 
 ## 7.1. Ordenar archivos sueltos de raiz
 
-**Estado**: Vigente.
+**Estado**: Resuelto.
+
+**Avance 2026-06-22**
+
+- Movidos a `docs/client/`: capturas PNG/JPEG y `ProdLeche_Datos_Historicos_cargar_2024_S2.xlsx`.
+- Movido `files_create.bat` a `scripts/`.
+- Eliminados temporales `tmp_eval.php` y `tmp_output.html`.
 
 **Agente revisor**
 

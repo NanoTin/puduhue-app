@@ -28,9 +28,9 @@ La API debe reutilizar `src/` porque ya contiene:
 
 Observacion de auditoria:
 
-- `src/Core/Database.php`, `src/Core/DBConfig.php` y `src/Core/Env.php` no forman parte de la capa operativa vigente de la app.
+- La capa legacy `src/Core/` no forma parte de la capa operativa vigente de la app.
 - La referencia activa para runtime debe consolidarse en `src/Config/Database.php` y `src/Config/Env.php`.
-- Los archivos de `src/Core/*` quedan como candidatos a retiro posterior, una vez cerrada la limpieza.
+- Los archivos de `src/Core/*` ya fueron retirados; no crear nuevas dependencias contra esa ruta.
 
 ### 2.3. Componentes nuevos permitidos
 
@@ -273,7 +273,7 @@ No reutilizar directamente:
 - `AuthMiddleware` de sesion web para bearer auth
 - columnas `usuarioapikey*` de `usuarios` como modelo final
 - `usuariostokens` para tokens API publicos
-- `src/Core/Database.php` ni `src/Core/DBConfig.php` como capa DB del runtime
+- `src/Core/*` como capa DB del runtime
 
 ## 13. Checklist de implementacion
 

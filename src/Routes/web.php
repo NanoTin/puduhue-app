@@ -10,6 +10,8 @@ use App\Helpers\Logger;
 
 // Autoload Composer + App
 require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
+require_once dirname(__DIR__) . '/Helpers/CsrfHelper.php';
+require_once dirname(__DIR__) . '/Helpers/FlashMessageHelper.php';
 
 // Cargar helpers básicos si existen
 \Env::load();
@@ -222,6 +224,11 @@ function handleWebRequest(array $menuData = []): void
         return;
     }
 
+    if (isCsrfProtectedWebPost($method) && !CsrfHelper::validate(CsrfHelper::tokenFromRequest(), 'web')) {
+        handleCsrfFailure($module);
+        return;
+    }
+
     try {
         $partial = isset($_GET['partial']) ? true : false;
         $controller->$method($partial);
@@ -230,4 +237,43 @@ function handleWebRequest(array $menuData = []): void
         http_response_code(500);
         echo "<h2>Error interno del servidor</h2>";
     }
+}
+
+function isCsrfProtectedWebPost(string $method): bool
+{
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+        return false;
+    }
+
+    return in_array($method, [
+        'crearPost',
+        'editarPost',
+        'anularPost',
+        'eliminarPost',
+        'syncPost',
+        'cargaMasivaPost',
+        'cambioClaveGuardar',
+        'generarTokenApiPost',
+        'cambiarEmpresaPost',
+    ], true);
+}
+
+function handleCsrfFailure(string $module): void
+{
+    $isAjax = (($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest')
+        || str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
+
+    if ($isAjax) {
+        http_response_code(403);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'status' => 403,
+            'message' => 'Sesion expirada o token CSRF invalido.',
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        return;
+    }
+
+    FlashMessageHelper::toast('Sesion expirada o token CSRF invalido. Intente nuevamente.', 'danger');
+    $fallbackRoute = $module !== '' ? $module . '/listar' : 'dashboard';
+    header('Location: ?route=' . urlencode($fallbackRoute));
 }

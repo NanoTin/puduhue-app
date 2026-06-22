@@ -7,7 +7,7 @@ if (!$isPartial) {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Usuarios</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -91,7 +91,7 @@ if (!$isPartial) {
                     <th>Admin</th>
                     <th>Bloqueado</th>
                     <th>Activo</th>
-                    <th style="width: 260px;">Acciones</th>
+                    <th class="col-actions-xxl">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -132,9 +132,9 @@ if (!$isPartial) {
                                     >
                                         <i class="bi bi-key"></i> Token API
                                     </button>
-                                    <form action="?route=usuarios/anular" method="POST" class="d-inline">
+                                    <form action="?route=usuarios/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="Desea anular este usuario?">
                                         <input type="hidden" name="usuarioid" value="<?= htmlspecialchars($u['usuarioid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Desea anular este usuario?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="bi bi-x-circle"></i> Anular
                                         </button>
                                     </form>

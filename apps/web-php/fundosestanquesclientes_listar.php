@@ -7,7 +7,7 @@ if (!$isPartial) {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Fundos Estanques - Clientes</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -79,7 +79,7 @@ if (!$isPartial) {
                     <th>Cliente</th>
                     <th>Codigo Cliente</th>
                     <th>Activo</th>
-                    <th style="width: 180px;">Acciones</th>
+                    <th class="col-actions-lg">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -98,10 +98,10 @@ if (!$isPartial) {
                                     <i class="bi bi-pencil-square"></i> Editar
                                 </a>
                                 <?php if (!empty($fec['fndestcliactivo'])): ?>
-                                    <form action="?route=fundosestanquesclientes/anular" method="POST" class="d-inline">
+                                    <form action="?route=fundosestanquesclientes/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="Desea anular este registro?">
                                         <input type="hidden" name="fundoestanqueid" value="<?= htmlspecialchars($fec['fundoestanqueid'] ?? '') ?>">
                                         <input type="hidden" name="clienteid" value="<?= htmlspecialchars($fec['clienteid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Desea anular este registro?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="bi bi-x-circle"></i> Anular
                                         </button>
                                     </form>

@@ -116,11 +116,10 @@ Vista (form POST) → Router web.php → Controller → Service → Model → Da
 - Manejo de transacciones: `BEGIN` → SP → analizar `p_out_json` → `COMMIT` o `ROLLBACK`.
 - Los SP **nunca** contienen `BEGIN/COMMIT/ROLLBACK`.
 
-### 3.2. Legacy: `src/Core/` (NO usar)
-- `src/Core/Database.php` — duplicado, no activo.
-- `src/Core/DBConfig.php` — duplicado, no activo.
-- `src/Core/Env.php` — duplicado, no activo.
-- Documentado en `ADR-006` como candidato a retiro.
+### 3.2. Legacy retirado: `src/Core/`
+- La capa duplicada `src/Core/` fue retirada; no forma parte del runtime.
+- Usar `src/Config/Database.php` y `src/Config/Env.php` para acceso a datos y variables de entorno.
+- Documentado en `ADR-006` como legado no operativo.
 
 ---
 

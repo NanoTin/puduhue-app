@@ -7,7 +7,7 @@ if (!$isPartial) {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Unidades de Medida</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -64,7 +64,7 @@ if (!$isPartial) {
                     <th>Descripcion</th>
                     <th>Codigo ERP</th>
                     <th>Activo</th>
-                    <th style="width: 180px;">Acciones</th>
+                    <th class="col-actions-lg">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -82,9 +82,9 @@ if (!$isPartial) {
                                     <i class="bi bi-pencil-square"></i> Editar
                                 </a>
                                 <?php if (!empty($u['invunidmedactivo'])): ?>
-                                    <form action="?route=invunidmed/anular" method="POST" class="d-inline">
+                                    <form action="?route=invunidmed/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="Desea anular esta unidad?">
                                         <input type="hidden" name="invunidmedid" value="<?= htmlspecialchars($u['invunidmedid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Desea anular esta unidad?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="bi bi-x-circle"></i> Anular
                                         </button>
                                     </form>

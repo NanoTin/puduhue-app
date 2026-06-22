@@ -10,6 +10,45 @@ use App\Helpers\Logger;
 class AuthService
 {
     /**
+     * Normaliza el usuario (RUT) permitiendo ROOT como excepcion.
+     */
+    public function normalizeUsernameInput(string $username, \UsuariosService $usuariosService): string
+    {
+        $trimmed = trim($username);
+        if ($trimmed === '') {
+            throw new RuntimeException('Debe ingresar usuario y contrasena.');
+        }
+
+        if (strtoupper($trimmed) === 'ROOT') {
+            return 'ROOT';
+        }
+
+        return $usuariosService->normalizarRutParaLogin($trimmed);
+    }
+
+    /**
+     * Control simple de tasa por IP en una ventana de tiempo.
+     */
+    public function checkAndRegisterRateLimit(string $ip, int $limit, int $windowSeconds): bool
+    {
+        $now = time();
+        $data = $_SESSION['login_rate'] ?? ['ip' => $ip, 'count' => 0, 'start' => $now];
+
+        if (($data['ip'] ?? '') !== $ip || ($now - ($data['start'] ?? 0)) > $windowSeconds) {
+            $data = ['ip' => $ip, 'count' => 0, 'start' => $now];
+        }
+
+        if (($data['count'] ?? 0) >= $limit) {
+            $_SESSION['login_rate'] = $data;
+            return false;
+        }
+
+        $data['count'] = ($data['count'] ?? 0) + 1;
+        $_SESSION['login_rate'] = $data;
+        return true;
+    }
+
+    /**
      * Valida token de reCAPTCHA Enterprise contra Google.
      */
     public function verifyRecaptchaToken(string $token, array $config): void
@@ -49,7 +88,6 @@ class AuthService
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $curlError = curl_error($ch);
-        curl_close($ch);
 
         if ($response === false) {
             throw new RuntimeException('No se pudo validar reCAPTCHA: ' . ($curlError ?: 'error de conexion'));

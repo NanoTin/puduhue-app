@@ -7,7 +7,7 @@ if (!$isPartial) {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Tipos de Leche</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -74,7 +74,7 @@ if (!$isPartial) {
                     <th>Venta</th>
                     <th>Orden</th>
                     <th>Activo</th>
-                    <th style="width: 190px;">Acciones</th>
+                    <th class="col-actions-xl">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -94,9 +94,9 @@ if (!$isPartial) {
                                     <i class="bi bi-pencil-square"></i> Editar
                                 </a>
                                 <?php if (!empty($p['prodlecheactivo'])): ?>
-                                    <form action="?route=prodlechetipos/anular" method="POST" class="d-inline">
+                                    <form action="?route=prodlechetipos/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Desea anular este tipo?">
                                         <input type="hidden" name="prodlechetipoid" value="<?= htmlspecialchars($p['prodlechetipoid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Desea anular este tipo?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="bi bi-x-circle"></i> Anular
                                         </button>
                                     </form>

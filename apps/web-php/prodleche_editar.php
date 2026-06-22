@@ -50,7 +50,7 @@ if (!$isPartial) {
             <section class="mb-4">
                 <h5 class="section-title">Datos Generales</h5>
                 <div class="row g-3 align-items-end general-grid">
-                    <div class="col-12 col-lg-6" style="display: none;">
+                    <div class="col-12 col-lg-6 d-none">
                         <label for="empresaid" class="form-label">Empresa</label>
                         <select name="empresaid" id="empresaid" class="form-select" disabled>
                             <option value="">Seleccione</option>
@@ -155,14 +155,14 @@ if (!$isPartial) {
             <section class="mb-4">
                 <h5 class="section-title mb-3">Detalle</h5>
 
-                <div class="table-responsive">
+                <div class="table-responsive transaction-detail-wrap">
                     <table class="detail-table">
                         <thead>
                         <tr>
-                            <th style="width: 30%;">Tipo Leche</th>
-                            <th style="width: 20%;">Litros</th>
-                            <th style="width: 20%;">Vacas</th>
-                            <th style="width: 20%;">Lts x Vaca</th>
+                            <th class="col-detail-name">Tipo Leche</th>
+                            <th class="col-detail-number">Litros</th>
+                            <th class="col-detail-number">Vacas</th>
+                            <th class="col-detail-number">Lts x Vaca</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -505,7 +505,7 @@ if (!$isPartial) {
 
                 // Regla por fila: si uno tiene valor, el otro tambien debe ser > 0.
                 if ((litros > 0 && vacas <= 0) || (vacas > 0 && litros <= 0)) {
-                    alert('En cada fila, si ingresa litros debe ingresar vacas y viceversa (ambos mayores a cero).');
+                    window.ToastManager?.show('En cada fila, si ingresa litros debe ingresar vacas y viceversa (ambos mayores a cero).', 'warning');
                     if (litros > 0 && vacas <= 0) {
                         row.querySelector('.vacas-input')?.focus();
                     } else {
@@ -520,7 +520,7 @@ if (!$isPartial) {
             }
 
             if (!tieneDetalle) {
-                alert('Ingrese al menos un tipo de leche con litros y vacas mayores a cero.');
+                window.ToastManager?.show('Ingrese al menos un tipo de leche con litros y vacas mayores a cero.', 'warning');
                 return false;
             }
             return true;
@@ -537,7 +537,7 @@ if (!$isPartial) {
             const iniTotal = (iniParts[0] || 0) * 60 + (iniParts[1] || 0);
             const finTotal = (finParts[0] || 0) * 60 + (finParts[1] || 0);
             if (finTotal < iniTotal) {
-                alert('La hora término no puede ser menor a la hora inicio.');
+                window.ToastManager?.show('La hora término no puede ser menor a la hora inicio.', 'warning');
                 horaFinInput?.focus();
                 return false;
             }
@@ -606,7 +606,7 @@ if (!$isPartial) {
         }
         if (confirmSaveBtn) {
             confirmSaveBtn.addEventListener('click', () => {
-                document.getElementById('prodlecheForm')?.submit();
+                document.getElementById('prodlecheForm')?.requestSubmit();
             });
         }
 

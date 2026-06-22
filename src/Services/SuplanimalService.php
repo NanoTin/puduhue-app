@@ -2,6 +2,7 @@
 
 require_once dirname(__DIR__) . '/Config/Env.php';
 require_once dirname(__DIR__) . '/Helpers/Logger.php';
+require_once dirname(__DIR__) . '/api-external/FinnegansClient.php';
 require_once dirname(__DIR__) . '/api-external/DTOs/SuplementacionRequestDTO.php';
 require_once dirname(__DIR__) . '/api-external/DTOs/SuplementacionResponseDTO.php';
 
@@ -11,10 +12,10 @@ use App\Helpers\Logger;
 
 class SuplanimalService
 {
-    private const TOKEN_TTL_SECONDS = 240;
     private const ENTIDAD_CODE = 'SUPANML';
 
     private \Database $db;
+    private \FinnegansClient $finnegansClient;
 
     public function __construct()
     {
@@ -24,6 +25,7 @@ class SuplanimalService
         }
 
         $this->db = \Database::getInstance();
+        $this->finnegansClient = new \FinnegansClient($this->db);
     }
 
     public function listarSuplanimal(array $filtros, int $usuarioId, ?string $disp, ?string $ip): array
@@ -146,8 +148,8 @@ class SuplanimalService
                 throw new \RuntimeException('No hay grupos validos para integrar.');
             }
 
-            $token = $this->obtenerTokenVigente($usuarioId, $disp, $ip);
-            $apiUrl = $this->getEnvRequired(
+            $token = $this->finnegansClient->obtenerTokenVigente($usuarioId, $disp, $ip);
+            $apiUrl = $this->finnegansClient->getEnvRequired(
                 ['ERP_API_URL_SUPLANML', 'ERP_API_URL_SUPLANIMAL', 'erp_api_url_suplanml', 'erp_api_url_suplanimal'],
                 'URL de API de suplementacion'
             );
@@ -155,11 +157,11 @@ class SuplanimalService
             $grupoIndex = $this->obtenerGrupoIndexSincronizados($suplanimalId);
             foreach ($grupos as $grupo) {
                 $requestDto = $this->armarRequest($cabecera, $grupo, $grupoIndex);
-                $response = $this->enviarAErp($apiUrl, $token, $requestDto);
+                $response = $this->finnegansClient->postJsonWithToken($apiUrl, $token, $requestDto->toArray());
 
-                if ($this->esTokenInvalido($response['decoded'], $response['httpCode'])) {
-                    $token = $this->refrescarToken($usuarioId, $disp, $ip);
-                    $response = $this->enviarAErp($apiUrl, $token, $requestDto);
+                if ($this->finnegansClient->esTokenInvalido($response['decoded'], $response['httpCode'])) {
+                    $token = $this->finnegansClient->refrescarToken($usuarioId, $disp, $ip);
+                    $response = $this->finnegansClient->postJsonWithToken($apiUrl, $token, $requestDto->toArray());
                 }
 
                 $responseDto = SuplementacionResponseDTO::fromArray($response['decoded'] ?? []);
@@ -357,38 +359,6 @@ class SuplanimalService
         return sprintf('AppSupl-%06d-%02d', $suplanimalId, $grupoIndex);
     }
 
-    private function enviarAErp(string $apiUrl, string $token, SuplementacionRequestDTO $dto): array
-    {
-        $url = rtrim($apiUrl, '?');
-        $separator = str_contains($url, '?') ? '&' : '?';
-        $url .= $separator . 'ACCESS_TOKEN=' . rawurlencode($token);
-
-        $jsonBody = json_encode($dto->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonBody);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlError = curl_error($ch);
-        curl_close($ch);
-
-        if ($response === false) {
-            throw new \RuntimeException('No se pudo conectar con Finnegans: ' . ($curlError ?: 'error desconocido'));
-        }
-
-        $decoded = json_decode($response, true);
-        return [
-            'httpCode' => $httpCode,
-            'decoded' => $decoded,
-            'raw' => $response,
-        ];
-    }
-
     private function marcarGrupoIntegrado(int $suplanimalId, int $categoriaId, int $totalAnimales, SuplementacionResponseDTO $response): void
     {
         $codigoRespuesta = $response->documento ?? $response->id ?? 'OK';
@@ -470,106 +440,6 @@ class SuplanimalService
     {
         $tipo = strtoupper(trim((string)$tipoExec));
         return in_array($tipo, ['MANUAL', 'CRON'], true) ? $tipo : 'MANUAL';
-    }
-
-    private function obtenerTokenVigente(int $usuarioId, ?string $disp, ?string $ip): string
-    {
-        $rows = $this->db->select('SELECT access_token, generado FROM erptokenactivo ORDER BY generado DESC LIMIT 1');
-        $row = $rows[0] ?? null;
-        if ($row && !$this->tokenExpirado($row['generado'] ?? null)) {
-            return (string)$row['access_token'];
-        }
-
-        return $this->refrescarToken($usuarioId, $disp, $ip);
-    }
-
-    private function refrescarToken(int $usuarioId, ?string $disp, ?string $ip): string
-    {
-        $tokenData = $this->solicitarTokenApi();
-        $payload = [
-            'access_token' => $tokenData['token'],
-            'generado' => $tokenData['generado'],
-        ];
-        $this->db->callSpMaint('sp_erptokenactivo_insertar', $payload, $usuarioId, $disp, $ip);
-        return $tokenData['token'];
-    }
-
-    private function solicitarTokenApi(): array
-    {
-        $grantType = $this->getEnvRequired(['ERP_GRANT_TYPE', 'grant_type'], 'grant_type');
-        $clientId = $this->getEnvRequired(['ERP_CLIENT_ID', 'client_id'], 'client_id');
-        $clientSecret = $this->getEnvRequired(['ERP_CLIENT_SECRET', 'client_secret'], 'client_secret');
-        $authUrl = $this->getEnvRequired(['ERP_AUTH_URL', 'erp_auth_url'], 'URL de autenticacion ERP');
-
-        $query = http_build_query([
-            'grant_type' => $grantType,
-            'client_id' => $clientId,
-            'client_secret' => $clientSecret,
-        ], '', '&', PHP_QUERY_RFC3986);
-
-        $url = rtrim($authUrl, '?');
-        $url .= (str_contains($url, '?') ? '&' : '?') . $query;
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 20);
-        curl_setopt($ch, CURLOPT_HTTPGET, true);
-
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlError = curl_error($ch);
-        curl_close($ch);
-
-        if ($response === false) {
-            throw new \RuntimeException('No se pudo obtener token ERP: ' . ($curlError ?: 'error de conexion'));
-        }
-
-        $token = trim($response, " \t\n\r\0\x0B\"");
-        if ($httpCode < 200 || $httpCode >= 300 || $token === '') {
-            throw new \RuntimeException('Token ERP invalido o respuesta inesperada.');
-        }
-
-        return [
-            'token' => $token,
-            'generado' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
-        ];
-    }
-
-    private function tokenExpirado(?string $generado): bool
-    {
-        if (empty($generado)) {
-            return true;
-        }
-        try {
-            $dt = new \DateTimeImmutable($generado);
-        } catch (\Throwable $e) {
-            return true;
-        }
-        $now = new \DateTimeImmutable();
-        return ($now->getTimestamp() - $dt->getTimestamp()) >= self::TOKEN_TTL_SECONDS;
-    }
-
-    private function esTokenInvalido(?array $decoded, int $httpCode): bool
-    {
-        if (!is_array($decoded)) {
-            return false;
-        }
-        if ($httpCode === 400) {
-            $error = strtolower((string)($decoded['error'] ?? ''));
-            return $error === 'invalid token' || str_contains($error, 'invalid token');
-        }
-        return false;
-    }
-
-    private function getEnvRequired(array $keys, string $label): string
-    {
-        foreach ($keys as $key) {
-            $value = \Env::get($key);
-            if ($value !== null && $value !== '') {
-                return $value;
-            }
-        }
-        throw new \RuntimeException("Falta configuracion de {$label} en .env");
     }
 
     private function nullIfEmpty($value)
