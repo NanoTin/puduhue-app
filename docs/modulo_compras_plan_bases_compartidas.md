@@ -217,3 +217,54 @@ Prioridad: media-alta.
 - Construir impuestos/retenciones desde categoría fiscal.
 - Validar por temporada, subfamilia, centro de costo y fecha.
 - Registrar reserva, confirmación o reversa según estado.
+
+### 4.4 Presupuesto
+
+- Cargar por mes dentro de temporada.
+- Usar subfamilia y centro de costo como claves operativas.
+- Calcular saldos, consumos y reversas con movimientos.
+
+## 5. Orden sugerido de implementación
+
+### Fase 1 - Bases comunes de alto impacto
+
+1. Temporadas de presupuesto.
+2. Centros de costo.
+3. Usuarios y permisos globales.
+4. Funcionarios.
+5. Ítems / productos.
+6. Familias y subfamilias.
+
+### Fase 2 - Bases ERP para PreOC
+
+1. Proveedores.
+2. Condiciones de pago.
+3. Categorías fiscales e impuestos.
+4. Monedas.
+5. Cuentas contables.
+6. Workflows y provincias.
+7. Dimensiones ERP.
+
+### Fase 3 - Bases de proceso
+
+1. Validación informativa del REQ.
+2. Pendientes de compra.
+3. Presupuesto definitivo.
+4. PreOC y su compromiso presupuestario.
+
+## 6. Dependencias y alertas
+
+- Si `invitems` no tiene precio, el ítem no puede incorporarse al REQ.
+- Si un proveedor no está sincronizado, la PreOC no debe permitir continuar.
+- Si la condición de pago no existe, debe pre-cargarse desde el maestro o bloquearse con mensaje controlado.
+- Si no se resuelven las dimensiones ERP, la integración de PreOC queda bloqueada.
+- Si el presupuesto no existe para la combinación temporada + subfamilia + centro de costo, el REQ y la PreOC deben rechazar la operación según corresponda.
+
+## 7. Resultado esperado
+
+Al cerrar este plan, el proyecto queda listo para avanzar a:
+
+- definición final de REQ,
+- definición final de PreOC,
+- implementación por fases,
+- y pruebas de integración con ERP.

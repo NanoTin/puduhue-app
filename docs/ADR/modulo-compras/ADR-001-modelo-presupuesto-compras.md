@@ -51,3 +51,4 @@ Ademas:
 - La operacion diaria es simple para usuarios, pero auditable para el negocio.
 - Se evita mezclar validacion preventiva de REQ con el compromiso real de PreOC.
 - Las ediciones previas a aprobacion no contaminan el historial con reversas artificiales.
+

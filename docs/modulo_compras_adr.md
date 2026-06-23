@@ -113,3 +113,4 @@ El negocio pidio seguimiento completo del requerimiento, historial de cambios de
 ### Consecuencia
 
 El modulo habilita auditoria operativa real y metricas de mejora, no solo el registro transaccional minimo.
+

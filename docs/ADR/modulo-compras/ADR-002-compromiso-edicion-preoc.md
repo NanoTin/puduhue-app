@@ -40,3 +40,4 @@ Tambien se definio que una linea provisional eliminada antes de la primera aprob
 - El presupuesto refleja correctamente lo que esta en curso, lo que ya quedo confirmado y lo que fue revertido.
 - La edicion previa a aprobacion queda limpia y sin falsos reversos.
 - La aprobacion inicial marca la frontera entre borrado provisional y reversa historica.
+

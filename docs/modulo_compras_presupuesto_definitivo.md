@@ -218,3 +218,5 @@ La PreOC valida contra el saldo disponible operativo del presupuesto segun:
 - Requerimientos que descuenten presupuesto.
 - Edicion de PreOC despues de la primera aprobacion.
 - Lineas confirmadas que se borren en vez de revertirse.
+- Catalogos de transaccion numericos sin semantica funcional.
+

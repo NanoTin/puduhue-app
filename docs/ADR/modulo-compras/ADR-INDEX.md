@@ -10,3 +10,4 @@ Indice de ADRs especificos del modulo de Compras.
 ## Estado
 
 La carpeta queda preparada para alojar los ADR funcionales y tecnicos del modulo de Compras cuando los vayamos desglosando por tema.
+
