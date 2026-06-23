@@ -43,7 +43,7 @@ Antes de implementar o modificar la API externa se debe revisar en este orden:
 1. `docs/api-externa/api-externa-estandar.md`
 2. `docs/api-externa/api-externa-seguridad.md`
 3. `docs/api-externa/endpoints/{recurso}.md`
-4. `adr/ADR.md`
+4. `docs/ADR/ADR-INDEX.md`
 
 ## Decision de arquitectura
 
