@@ -168,7 +168,7 @@ Stored Procedures (MariaDB vía PDO — Database.php)
 - `PUDUHUE.agent` — 450 líneas de reglas backend/DB.
 - `PUDUHUE_FRONT.agent` — 720 líneas de reglas frontend.
 - `CHANGELOG.md` — Registro de cambios (versión Unreleased).
-- `adr/ADR.md` — 6 ADRs documentados.
+- `docs/ADR/ADR-INDEX.md` — indice central de ADRs.
 - `docs/api-externa/` — 4 documentos técnicos de la API externa.
 
 ### Hallazgos de la auditoría
