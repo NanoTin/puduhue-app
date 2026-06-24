@@ -160,17 +160,26 @@ if (!$isPartial) {
                                 $tipoId = htmlspecialchars($tipoIdRaw ?? '');
                                 $tipoDsc = htmlspecialchars($tipo['prodlechetipodsc'] ?? '');
                                 $esVenta = (int)($tipo['prodlecheventa'] ?? 0) === 1;
+                                $tipoActivo = (int)($tipo['prodlecheactivo'] ?? 1) === 1;
                                 $detalleInput = $detallesData[$index] ?? ($detallesPorTipo[(string)$tipoIdRaw] ?? []);
                                 $litrosDetalle = isset($detalleInput['pldetlitros']) ? (float)$detalleInput['pldetlitros'] : 0;
                                 $vacasDetalle = isset($detalleInput['pldetvacas']) ? (float)$detalleInput['pldetvacas'] : 0;
                                 $ltsxvacaDetalle = $detalleInput['pldetlitrosxvaca'] ?? ($vacasDetalle > 0 ? $litrosDetalle / $vacasDetalle : 0);
-                                $litrosVal = htmlspecialchars((string)($detalleInput['pldetlitros'] ?? '0'));
-                                $vacasVal = htmlspecialchars((string)($detalleInput['pldetvacas'] ?? '0'));
-                                $ltsxvacaVal = htmlspecialchars(is_numeric($ltsxvacaDetalle) ? number_format((float)$ltsxvacaDetalle, 2, '.', '') : '0');
+                                $litrosVal = $tipoActivo ? htmlspecialchars((string)($detalleInput['pldetlitros'] ?? '0')) : '0';
+                                $vacasVal = $tipoActivo ? htmlspecialchars((string)($detalleInput['pldetvacas'] ?? '0')) : '0';
+                                $ltsxvacaVal = $tipoActivo ? htmlspecialchars(is_numeric($ltsxvacaDetalle) ? number_format((float)$ltsxvacaDetalle, 2, '.', '') : '0') : '0.00';
                                 ?>
-                                <tr data-prodlecheventa="<?= $esVenta ? '1' : '0' ?>">
-                                    <td class="fw-semibold"><?= $tipoDsc ?></td>
+                                <tr data-prodlecheventa="<?= ($esVenta && $tipoActivo) ? '1' : '0' ?>" class="<?= $tipoActivo ? '' : 'text-muted table-secondary' ?>">
+                                    <td class="fw-semibold">
+                                        <?= $tipoDsc ?>
+                                        <?php if (!$tipoActivo): ?>
+                                            <span class="badge bg-secondary ms-1">Inactivo</span>
+                                        <?php endif; ?>
+                                    </td>
                                     <td>
+                                        <?php if (!$tipoActivo): ?>
+                                            <input type="hidden" name="detalles[<?= $index ?>][pldetlitros]" value="0">
+                                        <?php endif; ?>
                                         <input
                                             type="number"
                                             name="detalles[<?= $index ?>][pldetlitros]"
@@ -178,10 +187,14 @@ if (!$isPartial) {
                                             step="1"
                                             min="0"
                                             value="<?= $litrosVal ?>"
+                                            <?= $tipoActivo ? '' : 'disabled' ?>
                                         >
                                         <input type="hidden" name="detalles[<?= $index ?>][prodlechetipoid]" value="<?= $tipoId ?>">
                                     </td>
                                     <td>
+                                        <?php if (!$tipoActivo): ?>
+                                            <input type="hidden" name="detalles[<?= $index ?>][pldetvacas]" value="0">
+                                        <?php endif; ?>
                                         <input
                                             type="number"
                                             name="detalles[<?= $index ?>][pldetvacas]"
@@ -189,9 +202,13 @@ if (!$isPartial) {
                                             step="1"
                                             min="0"
                                             value="<?= $vacasVal ?>"
+                                            <?= $tipoActivo ? '' : 'disabled' ?>
                                         >
                                     </td>
                                     <td>
+                                        <?php if (!$tipoActivo): ?>
+                                            <input type="hidden" name="detalles[<?= $index ?>][pldetlitrosxvaca]" value="0">
+                                        <?php endif; ?>
                                         <input
                                             type="number"
                                             name="detalles[<?= $index ?>][pldetlitrosxvaca]"
@@ -200,6 +217,7 @@ if (!$isPartial) {
                                             min="0"
                                             value="<?= $ltsxvacaVal ?>"
                                             readonly
+                                            <?= $tipoActivo ? '' : 'disabled' ?>
                                         >
                                     </td>
                                 </tr>

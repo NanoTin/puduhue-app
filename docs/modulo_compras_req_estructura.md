@@ -389,7 +389,7 @@ Esta estructura permite al solicitante ver:
 | Columna                    | Tipo           | NULL | Descripción                                                                     |
 |----------------------------|----------------|------|---------------------------------------------------------------------------------|
 | `centrocostoid`            | INT PK AI      | NO   | PK interna                                                                      |
-| `empresaid`                | INT FK         | NO   | FK → `empresas`. Para inferir empresa en REQ                                    |
+| `empresaid`                | INT FK         | SÍ   | FK → `empresas`. Nullable hasta definir regla de asignación, porque el endpoint ERP no trae empresa |
 | `centrocostocod`           | VARCHAR(50)    | NO   | Código visible                                                                  |
 | `centrocostodsc`           | VARCHAR(100)   | NO   | Descripción (sync desde Finnegans)                                              |
 | `erpcentrocostocod`        | VARCHAR(50)    | NO   | Código en Finnegans (`DIMCTC`)                                                  |

@@ -18,6 +18,7 @@ if (!$isPartial) {
             <input type="hidden" name="filtroInvunidmedid" value="<?= htmlspecialchars($filtros['filtroInvunidmedid'] ?? '') ?>">
             <input type="hidden" name="filtroErpinvitemcod" value="<?= htmlspecialchars($filtros['filtroErpinvitemcod'] ?? '') ?>">
             <input type="hidden" name="filtroInvitemleche" value="<?= htmlspecialchars($filtros['filtroInvitemleche'] ?? '') ?>">
+            <input type="hidden" name="filtroInvitemusocodigo" value="<?= htmlspecialchars($filtros['filtroInvitemusocodigo'] ?? '') ?>">
             <input type="hidden" name="filtroInvitemactivo" value="<?= htmlspecialchars($filtros['filtroInvitemactivo'] ?? '') ?>">
             <button class="btn btn-success btn-sm">
                 <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
@@ -51,6 +52,15 @@ if (!$isPartial) {
             </select>
         </div>
         <div class="col-md-2">
+            <select name="filtroInvitemusocodigo" class="form-select">
+                <option value="">Uso</option>
+                <option value="BDG" <?= ($filtros['filtroInvitemusocodigo'] ?? '') === 'BDG' ? 'selected' : '' ?>>BDG</option>
+                <option value="LCH" <?= ($filtros['filtroInvitemusocodigo'] ?? '') === 'LCH' ? 'selected' : '' ?>>LCH</option>
+                <option value="ALM" <?= ($filtros['filtroInvitemusocodigo'] ?? '') === 'ALM' ? 'selected' : '' ?>>ALM</option>
+                <option value="CMB" <?= ($filtros['filtroInvitemusocodigo'] ?? '') === 'CMB' ? 'selected' : '' ?>>CMB</option>
+            </select>
+        </div>
+        <div class="col-md-2">
             <select name="filtroInvitemactivo" class="form-select">
                 <option value="">Estado</option>
                 <option value="1" <?= ($filtros['filtroInvitemactivo'] ?? '') === '1' ? 'selected' : '' ?>>Activo</option>
@@ -73,13 +83,18 @@ if (!$isPartial) {
                     <th>Unidad</th>
                     <th>ERP Código</th>
                     <th>Leche</th>
+                    <th>Uso</th>
+                    <th>Familia</th>
+                    <th>Subfamilia</th>
+                    <th>Compra</th>
+                    <th>Costo Est.</th>
                     <th>Activo</th>
                     <th class="col-actions-xl">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($invitems)): ?>
-                    <tr><td colspan="7" class="text-center text-muted">No se encontraron registros</td></tr>
+                    <tr><td colspan="12" class="text-center text-muted">No se encontraron registros</td></tr>
                 <?php else: ?>
                     <?php foreach ($invitems as $i): ?>
                         <tr>
@@ -88,6 +103,11 @@ if (!$isPartial) {
                             <td><?= htmlspecialchars($i['invunidmeddsc'] ?? '') ?></td>
                             <td><?= htmlspecialchars($i['erpinvitemcod'] ?? '') ?></td>
                             <td><?= !empty($i['invitemleche']) ? '<span class="badge bg-info">Sí</span>' : '<span class="badge bg-secondary">No</span>' ?></td>
+                            <td><span class="badge bg-dark"><?= htmlspecialchars($i['invitemusocodigo'] ?? 'BDG') ?></span></td>
+                            <td><?= htmlspecialchars($i['familiadsc'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($i['subfamiliadsc'] ?? '') ?></td>
+                            <td><?= !empty($i['invitemcompra']) ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-secondary">No</span>' ?></td>
+                            <td><?= htmlspecialchars(number_format((float)($i['invitemcostoestandar'] ?? 0), 4, ',', '.')) ?></td>
                             <td><?= !empty($i['invitemactivo']) ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-danger">No</span>' ?></td>
                             <td>
                                 <a class="btn btn-warning btn-sm" href="?route=invitems/editar&id=<?= urlencode($i['invitemid'] ?? '') ?>">

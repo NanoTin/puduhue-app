@@ -21,6 +21,7 @@ class InvitemsService
             'filtroInvunidmedid'  => $filtros['filtroInvunidmedid'] ?? null,
             'filtroErpinvitemcod' => $filtros['filtroErpinvitemcod'] ?? null,
             'filtroInvitemleche'  => $filtros['filtroInvitemleche'] ?? null,
+            'filtroInvitemusocodigo' => $filtros['filtroInvitemusocodigo'] ?? null,
             'filtroInvitemactivo' => $filtros['filtroInvitemactivo'] ?? null,
         ];
 
@@ -33,9 +34,9 @@ class InvitemsService
         );
     }
 
-    public function listarInvitemsFormSelect($itemlecheFilter = null, $itemStockeable = null, $activoFilter = null): array
+    public function listarInvitemsFormSelect($itemlecheFilter = null, $itemStockeable = null, $activoFilter = null, ?string $usoCodigo = null): array
     {
-        $sql = "SELECT invitems.invitemid, invitems.invitemdsc, invitems.erpinvitemcod, invitems.invunidmedid, invunidadesmedidas.invunidmeddsc, invunidadesmedidas.erpunidmedcod
+        $sql = "SELECT invitems.invitemid, invitems.invitemdsc, invitems.erpinvitemcod, invitems.invunidmedid, invitems.invitemusocodigo, invunidadesmedidas.invunidmeddsc, invunidadesmedidas.erpunidmedcod
                 FROM invitems
                 LEFT JOIN invunidadesmedidas ON invunidadesmedidas.invunidmedid = invitems.invunidmedid";
         $params = [];
@@ -43,12 +44,26 @@ class InvitemsService
             $sql .= " WHERE invitemactivo = ?";
             $params[] = (int)$activoFilter;
         }
-        if ($itemlecheFilter === '0' || $itemlecheFilter === 0 || $itemlecheFilter === '1' || $itemlecheFilter === 1) {
+        $usoCodigo = $this->normalizarUsoCodigo($usoCodigo);
+        if ($usoCodigo !== null) {
+            $sql .= empty($params) ? " WHERE " : " AND ";
+            $sql .= "(invitemusocodigo = ?";
+            $params[] = $usoCodigo;
+
+            if ($usoCodigo === 'LCH' && ($itemlecheFilter === '0' || $itemlecheFilter === 0 || $itemlecheFilter === '1' || $itemlecheFilter === 1)) {
+                $sql .= " OR (invitemusocodigo = 'BDG' AND invitemleche = ?)";
+                $params[] = (int)$itemlecheFilter;
+            } elseif ($usoCodigo === 'ALM' && ($itemStockeable === '0' || $itemStockeable === 0 || $itemStockeable === '1' || $itemStockeable === 1)) {
+                $sql .= " OR (invitemusocodigo = 'BDG' AND invitemstockeable = ?)";
+                $params[] = (int)$itemStockeable;
+            }
+
+            $sql .= ")";
+        } elseif ($itemlecheFilter === '0' || $itemlecheFilter === 0 || $itemlecheFilter === '1' || $itemlecheFilter === 1) {
             $sql .= empty($params) ? " WHERE " : " AND ";
             $sql .= "invitemleche = ?";
             $params[] = (int)$itemlecheFilter;
-        }
-        if ($itemStockeable === '0' || $itemStockeable === 0 || $itemStockeable === '1' || $itemStockeable === 1) {
+        } elseif ($itemStockeable === '0' || $itemStockeable === 0 || $itemStockeable === '1' || $itemStockeable === 1) {
             $sql .= empty($params) ? " WHERE " : " AND ";
             $sql .= "invitemstockeable = ?";
             $params[] = (int)$itemStockeable;
@@ -116,5 +131,55 @@ class InvitemsService
             'rows' => $filtered,
             'meta' => $result['meta'] ?? null,
         ];
+    }
+
+    public function listarFamiliasFormSelect(): array
+    {
+        return $this->db->select(
+            'SELECT familiaid, familiacod, familiadsc
+             FROM familias
+             WHERE familiaactivo = 1
+             ORDER BY familiadsc ASC'
+        );
+    }
+
+    public function listarSubfamiliasFormSelect(): array
+    {
+        return $this->db->select(
+            'SELECT subfamiliaid, subfamiliacod, subfamiliadsc, familiaid
+             FROM subfamilias
+             WHERE subfamiliaactivo = 1
+             ORDER BY subfamiliadsc ASC'
+        );
+    }
+
+    public function listarTasasImpositivasFormSelect(): array
+    {
+        return $this->db->select(
+            'SELECT erptasaimpositivaid, erptasaimpositivacod, erptasaimpositivadsc, erptasaimpositivaporcentaje
+             FROM erptasasimpositivas
+             WHERE erptasaimpositivaactivo = 1
+             ORDER BY erptasaimpositivadsc ASC'
+        );
+    }
+
+    public function listarPartidasFinancierasFormSelect(): array
+    {
+        return $this->db->select(
+            'SELECT erppartidafinancieraid, erppartidafinancieracod, erppartidafinancieradsc
+             FROM erppartidasfinancieras
+             WHERE erppartidafinancieraactivo = 1
+             ORDER BY erppartidafinancieradsc ASC'
+        );
+    }
+
+    private function normalizarUsoCodigo(?string $usoCodigo): ?string
+    {
+        $usoCodigo = strtoupper(trim((string)$usoCodigo));
+        if ($usoCodigo === '') {
+            return null;
+        }
+
+        return in_array($usoCodigo, ['BDG', 'LCH', 'ALM', 'CMB'], true) ? $usoCodigo : 'BDG';
     }
 }

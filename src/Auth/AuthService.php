@@ -131,7 +131,18 @@ class AuthService
             : ['sp_usuario_login_fallido', 'sp_user_login_failed'];
 
         try {
-            $this->callLoginProcedure($pdo, $procedures, $usuarioCod, $usuarioip, $usuariodispositivo);
+            $availableProcedures = $this->filterExistingProcedures($pdo, $procedures);
+            if (empty($availableProcedures)) {
+                return;
+            }
+
+            $this->callLoginProcedure(
+                $pdo,
+                $availableProcedures,
+                $usuarioCod,
+                $usuarioip,
+                $this->limitText($usuariodispositivo, 50)
+            );
         } catch (\Throwable $e) {
             Logger::error('No se pudo registrar intento de login: ' . $e->getMessage());
         }
@@ -180,6 +191,42 @@ class AuthService
         if ($lastException !== null) {
             throw $lastException;
         }
+    }
+
+    private function filterExistingProcedures(\PDO $pdo, array $spNames): array
+    {
+        if (empty($spNames)) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($spNames), '?'));
+        $stmt = $pdo->prepare("
+            SELECT ROUTINE_NAME
+            FROM INFORMATION_SCHEMA.ROUTINES
+            WHERE ROUTINE_SCHEMA = DATABASE()
+              AND ROUTINE_TYPE = 'PROCEDURE'
+              AND ROUTINE_NAME IN ({$placeholders})
+        ");
+        $stmt->execute($spNames);
+        $rows = $stmt->fetchAll(\PDO::FETCH_COLUMN) ?: [];
+        $stmt->closeCursor();
+
+        return array_values(array_filter($spNames, static function (string $spName) use ($rows): bool {
+            return in_array($spName, $rows, true);
+        }));
+    }
+
+    private function limitText(?string $text, int $max): string
+    {
+        $text = trim((string)$text);
+        if ($text === '') {
+            return '';
+        }
+        if (function_exists('mb_substr')) {
+            return mb_substr($text, 0, $max);
+        }
+
+        return substr($text, 0, $max);
     }
 
     private function base64UrlEncode(string $data): string

@@ -88,7 +88,7 @@ class SuplanimalController
         $fundosOptions = $this->usuariosfundosService->listarFundosPorUsuarioFormSelect(1, $user['usuarioId'], $user['empresaId']);
         $invbodegasOptions = $this->invbodegasService->listarInvbodegasPorFundoFormSelect(null, 1);
         $invcateganimalOptions = $this->invcateganimalService->listarInvcateganimalFormSelect(1);
-        $invitemsOptions = $this->invitemsService->listarInvitemsFormSelect(null, 1, 1);
+        $invitemsOptions = $this->invitemsService->listarInvitemsFormSelect(null, 1, 1, 'ALM');
         //Obtener Empresa/Fundo Global seleccionada
         $empresaIdWS = $user['empresaId'] ?? 0;
         $fundoIdWS = $user['fundoId'] ?? 0;
@@ -177,7 +177,7 @@ class SuplanimalController
             $fundosOptions = $this->usuariosfundosService->listarFundosPorUsuarioFormSelect(1, $user['usuarioId'], $user['empresaId']);
             $invbodegasOptions = $this->invbodegasService->listarInvbodegasPorFundoFormSelect(null, 1);
             $invcateganimalOptions = $this->invcateganimalService->listarInvcateganimalFormSelect(1);
-            $invitemsOptions = $this->invitemsService->listarInvitemsFormSelect(null, 1, 1);
+            $invitemsOptions = $this->invitemsService->listarInvitemsFormSelect(null, 1, 1, 'ALM');
             $detallesInput = is_array($postData['detalles'] ?? null) ? $postData['detalles'] : [];
             $formData['detalles'] = $this->mapDetallesParaVista($detallesInput);
 
@@ -202,7 +202,7 @@ class SuplanimalController
         $fundosOptions = $this->usuariosfundosService->listarFundosPorUsuarioFormSelect(1, $user['usuarioId'], $user['empresaId']);
         $invbodegasOptions = $this->invbodegasService->listarInvbodegasPorFundoFormSelect(null, 1);
         $invcateganimalOptions = $this->invcateganimalService->listarInvcateganimalFormSelect(1);
-        $invitemsOptions = $this->invitemsService->listarInvitemsFormSelect(null, 1, 1);
+        $invitemsOptions = $this->invitemsService->listarInvitemsFormSelect(null, 1, 1, 'ALM');
 
         $result = $this->service->consultarSuplanimalPorId(
             $id,
@@ -308,7 +308,7 @@ class SuplanimalController
             $fundosOptions = $this->usuariosfundosService->listarFundosPorUsuarioFormSelect(1, $user['usuarioId'], $user['empresaId']);
             $invbodegasOptions = $this->invbodegasService->listarInvbodegasPorFundoFormSelect(null, 1);
             $invcateganimalOptions = $this->invcateganimalService->listarInvcateganimalFormSelect(1);
-            $invitemsOptions = $this->invitemsService->listarInvitemsFormSelect(null, 1, 1);
+            $invitemsOptions = $this->invitemsService->listarInvitemsFormSelect(null, 1, 1, 'ALM');
 
             $viewFile = $this->viewPath('suplanimal_editar.php');
             require $viewFile;
@@ -331,7 +331,7 @@ class SuplanimalController
         $fundosOptions = $this->usuariosfundosService->listarFundosPorUsuarioFormSelect(1, $user['usuarioId'], $user['empresaId']);
         $invbodegasOptions = $this->invbodegasService->listarInvbodegasPorFundoFormSelect(null, 1);
         $invcateganimalOptions = $this->invcateganimalService->listarInvcateganimalFormSelect(1);
-        $invitemsOptions = $this->invitemsService->listarInvitemsFormSelect(null, 1, 1);
+        $invitemsOptions = $this->invitemsService->listarInvitemsFormSelect(null, 1, 1, 'ALM');
 
         $result = $this->service->consultarSuplanimalPorId(
             $id,
@@ -531,7 +531,7 @@ class SuplanimalController
     private function getItemsMap(): array
     {
         $map = [];
-        foreach ($this->invitemsService->listarInvitemsFormSelect(null, 1, 1) as $item) {
+        foreach ($this->invitemsService->listarInvitemsFormSelect(null, 1, 1, 'ALM') as $item) {
             $id = (int)($item['invitemid'] ?? 0);
             if ($id > 0) {
                 $map[$id] = $item;

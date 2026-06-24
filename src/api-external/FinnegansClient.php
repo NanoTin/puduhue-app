@@ -36,9 +36,7 @@ class FinnegansClient
     {
         $this->assertDevelopmentEmpresa($payload);
 
-        $url = rtrim($apiUrl, '?');
-        $separator = str_contains($url, '?') ? '&' : '?';
-        $url .= $separator . 'ACCESS_TOKEN=' . rawurlencode($token);
+        $url = $this->addAccessTokenToUrl($apiUrl, $token);
 
         $jsonBody = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
@@ -62,6 +60,52 @@ class FinnegansClient
             'decoded' => json_decode($response, true),
             'raw' => $response,
         ];
+    }
+
+    public function getJsonWithToken(string $apiUrl, string $token): array
+    {
+        $url = $this->addAccessTokenToUrl($apiUrl, $token);
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json']);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch);
+
+        if ($response === false) {
+            throw new \RuntimeException('No se pudo conectar con Finnegans: ' . ($curlError ?: 'error desconocido'));
+        }
+
+        return [
+            'httpCode' => $httpCode,
+            'decoded' => json_decode($response, true),
+            'raw' => $response,
+        ];
+    }
+
+    public function getBaseUrl(): string
+    {
+        return rtrim($this->getEnvRequired(
+            ['ERP_API_BASE_URL', 'erp_api_base_url', 'ERP_API_URL', 'erp_api_url'],
+            'URL base ERP'
+        ), '/');
+    }
+
+    public function buildUrlFromBaseAndResource(string $baseUrl, string $resource): string
+    {
+        $resource = trim($resource);
+        if ($resource === '') {
+            throw new \InvalidArgumentException('El recurso ERP es obligatorio.');
+        }
+        if (preg_match('/^https?:\/\//i', $resource) === 1) {
+            return $resource;
+        }
+
+        return rtrim($baseUrl, '/') . '/' . ltrim($resource, '/');
     }
 
     public function esTokenInvalido(?array $decoded, int $httpCode): bool
@@ -125,6 +169,13 @@ class FinnegansClient
             'token' => $token,
             'generado' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
         ];
+    }
+
+    private function addAccessTokenToUrl(string $apiUrl, string $token): string
+    {
+        $url = rtrim($apiUrl, '?&');
+        $separator = str_contains($url, '?') ? '&' : '?';
+        return $url . $separator . 'ACCESS_TOKEN=' . rawurlencode($token);
     }
 
     private function tokenExpirado(?string $generado): bool

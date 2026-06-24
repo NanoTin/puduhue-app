@@ -112,6 +112,7 @@ function handleWebRequest(array $menuData = []): void
         'users' => ['change-password'],
         'companies' => ['list-for-change'],
         'empresas' => ['cambiar-empresa'],
+        'erpendpoints' => ['diagnostico', 'ejecutar', 'log'],
         'auth' => ['logout'],
     ];
     $routeKey = "$module/$action";
@@ -149,6 +150,7 @@ function handleWebRequest(array $menuData = []): void
         'users'             => \UsuariosController::class,
         'companies'         => \EmpresasController::class,
         'auth'              => \AuthController::class,
+        'erpendpoints'      => \ErpEndpointsController::class,
         'fundos'            => \FundosController::class,
         'menus'             => \MenusController::class,
         'clientes'          => \ClientesController::class,
@@ -212,6 +214,9 @@ function handleWebRequest(array $menuData = []): void
         'list-for-change' => 'listForChange',
         'cambiar-empresa' => 'cambiarEmpresaPost',
         'logout' => 'logout',
+        'diagnostico' => 'diagnostico',
+        'ejecutar' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'ejecutarPost' : null,
+        'log' => 'logJson',
 
         // AJAX: cargar padres por nivel (solo Menus)
         'padres-por-nivel' => 'padresPorNivel',
@@ -255,6 +260,7 @@ function isCsrfProtectedWebPost(string $method): bool
         'cambioClaveGuardar',
         'generarTokenApiPost',
         'cambiarEmpresaPost',
+        'ejecutarPost',
     ], true);
 }
 

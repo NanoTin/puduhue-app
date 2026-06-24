@@ -63,6 +63,16 @@ El token:
 - se apoya en la logica existente de `FinnegansClient` y `erptokenactivo`,
 - se agrega a cada llamada como `?ACCESS_TOKEN={token}`.
 
+La URL base recomendada para estos endpoints GET es:
+
+- `ERP_API_BASE_URL`
+
+Compatibilidad temporal:
+
+- si `ERP_API_BASE_URL` no existe, la infraestructura puede leer `erp_api_base_url`, `ERP_API_URL` o `erp_api_url`;
+- los endpoints transaccionales actuales de Produccion de Leche y Suplementacion Animal mantienen sus variables especificas y no se migran en este corte;
+- no se debe guardar `ACCESS_TOKEN` ni URL con token en `erplistadoendpoints` ni en sus logs.
+
 No se migra inicialmente:
 
 - `ERP_API_URL_PRODLECH`,
@@ -360,30 +370,97 @@ Criterio preliminar:
 3. Sembrar endpoints levantados desde CSV/JSON.
 4. Crear servicio base de ejecucion GET con token dinamico.
 5. Crear logica de grupo, orden y endpoint hijo.
-6. Crear pantalla/listado de endpoints.
+6. Crear pantalla/listado de endpoints, partiendo por diagnostico dry-run sin llamada real al ERP.
 7. Agregar accion on-demand controlada por permisos.
+   - El primer corte de ejecucion manual solo realiza GET y registra log tecnico.
+   - No sincroniza tablas maestras finales.
+   - Los endpoints `DETALLE_GET` que requieren `{codigo}` quedan omitidos hasta que el sincronizador del maestro resuelva codigos desde la respuesta padre.
+   - La pantalla tecnica debe permitir consultar logs por endpoint, ordenados desde el mas actual al mas antiguo y filtrables por rango de fechas.
 
 ### Fase 2 - Maestros base de dependencias
 
 1. Dimensiones.
 2. Partidas financieras.
+   - Maestro espejo implementado en `erppartidasfinancieras`.
+   - Tabla log local: `erppartidasfinancieraslog`.
+   - Endpoint: `ERP_PARTIDAS_FINANCIERAS_LIST`.
+   - Uso futuro previsto: `DIMPARFIN`.
 3. Centros de costo.
+   - Maestro espejo/local implementado en `centroscosto`.
+   - Tabla log local: `centroscostolog`.
+   - Endpoint: `ERP_CENTROS_COSTOS_LIST`.
+   - La sincronizacion solo actualiza datos base ERP: codigo, nombre/descripcion, codigo ERP, activo y fecha de sync.
+   - Los atributos locales de aprobacion no se sobrescriben por sincronizacion ERP.
+   - `empresaid` queda nullable hasta definir regla de asociacion empresa/centro, porque el endpoint no trae empresa.
 4. Monedas.
+   - Primer maestro espejo implementado como patron de sincronizacion real.
+   - Tabla base: `erpmonedas`.
+   - Tabla log local: `erpmonedaslog`.
+   - Endpoint: `ERP_MONEDAS_LIST`.
+   - No habilita multi-moneda en Compras; solo deja disponible el catalogo ERP y mantiene `PES` como default operativo.
 5. Tasas impositivas list/detalle.
+   - Maestro espejo implementado en `erptasasimpositivas`.
+   - Tabla log local: `erptasasimpositivaslog`.
+   - Endpoint list: `ERP_TASAS_IMPOSITIVAS_LIST`.
+   - Endpoint detalle: `ERP_TASAS_IMPOSITIVAS_DETALLE`.
+   - El porcentaje se resuelve desde el endpoint de detalle por codigo.
 6. Unidades de medida.
+   - Reutiliza `invunidadesmedidas` e `invunidadesmedidaslog`.
+   - Endpoint: `ERP_UNIDADES_MEDIDA_LIST`.
+   - La sincronizacion usa `erpunidmedcod` como codigo ERP y no cambia pantallas actuales.
 7. Familias.
+   - Maestro espejo implementado en `familias`.
+   - Tabla log local: `familiaslog`.
+   - Endpoint: `ERP_FAMILIAS_LIST`.
 8. Subfamilias list/detalle.
+   - Maestro espejo implementado en `subfamilias`.
+   - Tabla log local: `subfamiliaslog`.
+   - Endpoint list: `ERP_SUBFAMILIAS_LIST`.
+   - Endpoint detalle: `ERP_SUBFAMILIAS_DETALLE`.
+   - La FK `familiaid` se resuelve desde `ProductoFamiliaCodigo` del detalle.
+
+Nota del corte pre-items: los maestros previos a items deben estar sincronizados antes de ejecutar `ERP_PRODUCTOS_LIST`, porque Productos resuelve unidad, familia, subfamilia, tasa compra y `DIMPARFIN` contra esas tablas locales.
 
 ### Fase 3 - Extension de items
 
 1. Crear catalogo de usos de item.
 2. Agregar `invitemusocodigo` a `invitems`.
+   - Implementado como columna local `varchar(10) NOT NULL DEFAULT 'BDG'`.
+   - Script incremental: `database/alter_table/06_invitems_usocodigo.sql`.
+   - Codigos iniciales: `BDG`, `LCH`, `ALM`, `CMB`.
 3. Agregar FKs/campos para familia, subfamilia, tasa compra, partida financiera y precio.
+   - Columnas implementadas en `invitems`:
+     - `familiaid`;
+     - `subfamiliaid`;
+     - `erptasaimpositivaid`;
+     - `erppartidafinancieraid`;
+     - `invitemcompra`;
+     - `invitemcostoestandar`;
+     - `invitemcostoestandarfechahora`.
+   - `erppartidafinancieraid` se alimenta desde Producto Detalle ERP, entidad `Dimensiones`, buscando `DimensionCodigo = DIMPARFIN`.
+   - `erppartidafinancieraid` se usa en PreOC para construir `DimensionDistribucion`; no se usa en Presupuesto.
+   - `invitemcompra` se resuelve desde `CheckSeCompra` cuando viene informado; si no viene, se infiere por presencia de datos de compra.
+   - Si `invitemcostoestandar` es cero o no viene desde ERP, puede editarse manualmente desde pantalla.
+   - Si `invitemcostoestandar` tiene valor mayor a cero, la pantalla bloquea la edicion manual.
 4. Crear migracion inicial compatible con `invitemleche`.
+   - `invitemleche` se mantiene temporalmente.
+   - Tipos de Leche usa `LCH` con fallback a `invitemleche = 1` para datos no migrados.
+   - Suplementacion Animal usa `ALM` con fallback a `invitemstockeable = 1` para datos no migrados.
 5. Ajustar SP/listados de `invitems`.
+   - `sp_invitems_insertar`, `sp_invitems_editar` y `sp_invitems_listar` incluyen `invitemusocodigo`.
+   - Pantallas de crear/editar/listar y exportacion muestran el uso funcional.
 6. Bloquear crear/editar base ERP en UI.
 7. Permitir editar solo atributos locales autorizados.
 8. Sincronizar productos list/detalle respetando dependencias.
+   - Servicio implementado: `ErpProductosSyncService`.
+   - Endpoint padre: `ERP_PRODUCTOS_LIST`.
+   - Endpoint detalle: `ERP_PRODUCTOS_DETALLE`.
+   - El match local se realiza por `invitems.erpinvitemcod`.
+   - En registros existentes no se sobrescriben `erpinvitemcod`, `invitemusocodigo` ni `invitemleche`.
+   - Productos nuevos se crean con `invitemusocodigo = BDG` e `invitemleche = 0`.
+   - Si un codigo ERP deja de venir en la lista, se marca `invitemactivo = 0`.
+   - Si un producto no puede resolverse por una dependencia faltante, por ejemplo unidad de medida ERP no sincronizada, se omite ese producto, la ejecucion queda `PARCIAL` y el detalle se guarda en `erplistadoendpointslog.erpendpointlogresponsejson`.
+   - La ejecucion registra conteos en `erplistadoendpointslog` y cambios locales en `invitemslog`.
 9. Migrar filtros de Produccion de Leche y Suplementacion Animal con cuidado.
 
 ### Fase 4 - Maestros PreOC

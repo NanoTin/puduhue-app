@@ -128,6 +128,12 @@ class ProdlecheController
                     continue;
                 }
 
+                if (empty($prodlecheTiposMap[$tipoId]['prodlecheactivo'])) {
+                    $litros = 0;
+                    $vacas = 0;
+                    $litrosxvaca = 0;
+                }
+
                 if ($litros > 0 && $vacas > 0) {
                     $detalleConCantidades = true;
                 }
@@ -318,6 +324,12 @@ class ProdlecheController
 
                 if ($tipoId <= 0) {
                     continue;
+                }
+
+                if (empty($prodlecheTiposMap[$tipoId]['prodlecheactivo'])) {
+                    $litros = 0;
+                    $vacas = 0;
+                    $litrosxvaca = 0;
                 }
 
                 if ($litros > 0 && $vacas > 0) {

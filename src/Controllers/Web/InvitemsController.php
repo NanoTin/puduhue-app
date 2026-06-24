@@ -30,6 +30,7 @@ class InvitemsController
             'filtroInvunidmedid'  => $_GET['filtroInvunidmedid'] ?? null,
             'filtroErpinvitemcod' => $_GET['filtroErpinvitemcod'] ?? null,
             'filtroInvitemleche'  => $_GET['filtroInvitemleche'] ?? null,
+            'filtroInvitemusocodigo' => $_GET['filtroInvitemusocodigo'] ?? null,
             'filtroInvitemactivo' => $_GET['filtroInvitemactivo'] ?? null,
         ];
 
@@ -53,6 +54,10 @@ class InvitemsController
         $errorMessage = null;
 
         $invunidmedOptions = $this->serviceInvunidmed->listarInvunidmedFormSelect(1);
+        $familiasOptions = $this->service->listarFamiliasFormSelect();
+        $subfamiliasOptions = $this->service->listarSubfamiliasFormSelect();
+        $tasasImpositivasOptions = $this->service->listarTasasImpositivasFormSelect();
+        $partidasFinancierasOptions = $this->service->listarPartidasFinancierasFormSelect();
 
         $viewFile = $this->viewPath('invitems_crear.php');
         require $viewFile;
@@ -79,6 +84,11 @@ class InvitemsController
         } catch (RuntimeException $e) {
             $errorMessage = $e->getMessage();
             $this->setToast($errorMessage, 'danger');
+            $invunidmedOptions = $this->serviceInvunidmed->listarInvunidmedFormSelect(1);
+            $familiasOptions = $this->service->listarFamiliasFormSelect();
+            $subfamiliasOptions = $this->service->listarSubfamiliasFormSelect();
+            $tasasImpositivasOptions = $this->service->listarTasasImpositivasFormSelect();
+            $partidasFinancierasOptions = $this->service->listarPartidasFinancierasFormSelect();
             $viewFile = $this->viewPath('invitems_crear.php');
             require $viewFile;
         }
@@ -109,6 +119,10 @@ class InvitemsController
 
         $errorMessage = null;
         $invunidmedOptions = $this->serviceInvunidmed->listarInvunidmedFormSelect(1);
+        $familiasOptions = $this->service->listarFamiliasFormSelect();
+        $subfamiliasOptions = $this->service->listarSubfamiliasFormSelect();
+        $tasasImpositivasOptions = $this->service->listarTasasImpositivasFormSelect();
+        $partidasFinancierasOptions = $this->service->listarPartidasFinancierasFormSelect();
         $viewFile = $this->viewPath('invitems_editar.php');
         require $viewFile;
     }
@@ -148,6 +162,11 @@ class InvitemsController
                 $user['ip']
             );
             $invitem = $result['rows'][0] ?? null;
+            $invunidmedOptions = $this->serviceInvunidmed->listarInvunidmedFormSelect(1);
+            $familiasOptions = $this->service->listarFamiliasFormSelect();
+            $subfamiliasOptions = $this->service->listarSubfamiliasFormSelect();
+            $tasasImpositivasOptions = $this->service->listarTasasImpositivasFormSelect();
+            $partidasFinancierasOptions = $this->service->listarPartidasFinancierasFormSelect();
             $viewFile = $this->viewPath('invitems_editar.php');
             require $viewFile;
         }

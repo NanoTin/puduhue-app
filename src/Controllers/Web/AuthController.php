@@ -103,7 +103,9 @@ class AuthController
             }
 
             $usuarioIp = $ip;
-            $usuarioDispositivo = $_SERVER['HTTP_USER_AGENT'] ?? '';
+            $usuarioDispositivo = class_exists('AuthMiddleware')
+                ? AuthMiddleware::normalizeDispositivo($_SERVER['HTTP_USER_AGENT'] ?? '')
+                : $this->normalizeDispositivo($_SERVER['HTTP_USER_AGENT'] ?? '');
 
             $hashDb = $userRow['usuariopwdhash'] ?? '';
             if (!password_verify($passwordInput, $hashDb)) {
@@ -207,5 +209,18 @@ class AuthController
         }
 
         return $this->usuariosService;
+    }
+
+    private function normalizeDispositivo(?string $dispositivo): string
+    {
+        $dispositivo = trim((string)$dispositivo);
+        if ($dispositivo === '') {
+            return '';
+        }
+        if (function_exists('mb_substr')) {
+            return mb_substr($dispositivo, 0, 50);
+        }
+
+        return substr($dispositivo, 0, 50);
     }
 }
