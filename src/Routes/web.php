@@ -113,6 +113,7 @@ function handleWebRequest(array $menuData = []): void
         'companies' => ['list-for-change'],
         'empresas' => ['cambiar-empresa'],
         'erpendpoints' => ['diagnostico', 'ejecutar', 'log'],
+        'pptocompra' => ['detalle', 'ajustar'],
         'auth' => ['logout'],
     ];
     $routeKey = "$module/$action";
@@ -172,6 +173,7 @@ function handleWebRequest(array $menuData = []): void
         'invunidmed'        => \InvunidmedController::class,
         'pptolechemensual'  => \PptolechemensualController::class,
         'proylechediaria'   => \ProylechediariaController::class,
+        'pptocompra'        => \PptocompraController::class,
     ];
 
     if (!isset($map[$module])) {
@@ -206,6 +208,7 @@ function handleWebRequest(array $menuData = []): void
         'anular'   => 'anularPost',
         'eliminar' => 'eliminarPost',
         'detalle'  => 'detalle',
+        'ajustar'  => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'ajustarPost' : 'ajustarForm',
         'sync'     => 'syncPost',
         'carga_masiva' => 'cargaMasivaPost',
         'change-password' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'cambioClaveGuardar' : 'cambioClaveForm',
