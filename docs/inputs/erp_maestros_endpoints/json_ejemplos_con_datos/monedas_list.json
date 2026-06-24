@@ -1,0 +1,206 @@
+[
+    {
+        "codigo": "PES",
+        "nombre": "PESOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "DOL",
+        "nombre": "DOLARES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "REAL",
+        "nombre": "REALES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "UTA",
+        "nombre": "UTA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "NOVKG",
+        "nombre": "NOVILLOS POR KILO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "TERXCAB",
+        "nombre": "TERNEROS POR CABEZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "VAQXCAB",
+        "nombre": "VAQUILLONAS POR CABEZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "PESOAJUS",
+        "nombre": "PESO AJUSTADO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "NOVCAB",
+        "nombre": "NOVILLOS POR CABEZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "TORCAB",
+        "nombre": "TOROS POR CABEZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "VACCAB",
+        "nombre": "VACAS POR CABEZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "OVICAB",
+        "nombre": "OVINOS POR CABEZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "OVIKG",
+        "nombre": "OVINOS POR KILO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "TERKG",
+        "nombre": "TERNEROS POR KILO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "TORKG",
+        "nombre": "TOROS POR KILO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "VAQKG",
+        "nombre": "VAQUILLONAS POR KILO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "VACKG",
+        "nombre": "VACAS POR KILO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "ORECAB",
+        "nombre": "OREJANOS POR CABEZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "NLLCAB",
+        "nombre": "NOVILLITOS POR CABEZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "NLLKG",
+        "nombre": "NOVILLITOS POR KILOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "EquinosCabeza",
+        "nombre": "EQUINOS POR CABEZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "Otros Animales por Cabeza",
+        "nombre": "OTROS ANIMALES POR CABEZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "PORXCAB",
+        "nombre": "PORCINOS POR CABEZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "EUR",
+        "nombre": "EURO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "PORKG",
+        "nombre": "PORCINOS POR KILOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "EURO",
+        "nombre": "Euro",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "Guarani",
+        "nombre": "Güaraní",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "INDICEAXI",
+        "nombre": "Indice ajuste por inflación",
+        "descripcion": "Para utilizar en los procesos de Ajuste por inflacion",
+        "activo": true
+    },
+    {
+        "codigo": "CLP",
+        "nombre": "Peso CLP",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "UF",
+        "nombre": "Unidad de Fomento",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "MEX",
+        "nombre": "Peso Mexicano",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BOL",
+        "nombre": "Boliviano",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "COL",
+        "nombre": "Peso Colombiano",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "URU",
+        "nombre": "Peso Uruguayo",
+        "descripcion": "",
+        "activo": false
+    }
+]

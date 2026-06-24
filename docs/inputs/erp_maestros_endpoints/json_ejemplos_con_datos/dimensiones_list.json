@@ -1,0 +1,100 @@
+[
+    {
+        "NOMBRE": "Legajo de Importacion",
+        "ACTIVO": false,
+        "CODIGO": "LEGIMPORTACION",
+        "DIMENSIONID": 999995,
+        "DICCIONARIOID": 50303
+    },
+    {
+        "NOMBRE": "Partida Financiera",
+        "ACTIVO": true,
+        "CODIGO": "DIMPARFIN",
+        "DIMENSIONID": 999996,
+        "DICCIONARIOID": 50091
+    },
+    {
+        "NOMBRE": "Obras En Curso",
+        "ACTIVO": true,
+        "CODIGO": "DIMOBRASENCURSO",
+        "DIMENSIONID": 999997,
+        "DICCIONARIOID": 50128
+    },
+    {
+        "NOMBRE": "Bienes de Uso",
+        "ACTIVO": true,
+        "CODIGO": "DIMBU",
+        "DIMENSIONID": 999998,
+        "DICCIONARIOID": 140
+    },
+    {
+        "NOMBRE": "Centros de Costo",
+        "ACTIVO": true,
+        "CODIGO": "DIMCTC",
+        "DIMENSIONID": 999999,
+        "DICCIONARIOID": 74
+    },
+    {
+        "NOMBRE": "Provincia",
+        "ACTIVO": false,
+        "CODIGO": "PROV",
+        "DIMENSIONID": 1000000,
+        "DICCIONARIOID": 52
+    },
+    {
+        "NOMBRE": "Permiso de Embarque",
+        "ACTIVO": false,
+        "CODIGO": "DIMPEM",
+        "DIMENSIONID": 1000003,
+        "DICCIONARIOID": 50107
+    },
+    {
+        "NOMBRE": "Persona",
+        "ACTIVO": false,
+        "CODIGO": "Persona",
+        "DIMENSIONID": 1000004,
+        "DICCIONARIOID": 41
+    },
+    {
+        "NOMBRE": "Establecimiento",
+        "ACTIVO": true,
+        "CODIGO": "EST",
+        "DIMENSIONID": 1000005,
+        "DICCIONARIOID": 72
+    },
+    {
+        "NOMBRE": "PRODUCTO",
+        "ACTIVO": true,
+        "CODIGO": "PRODUCTO",
+        "DIMENSIONID": 1000006,
+        "DICCIONARIOID": 47
+    },
+    {
+        "NOMBRE": "RUBRO",
+        "ACTIVO": true,
+        "CODIGO": "RUBRO",
+        "DIMENSIONID": 1000007,
+        "DICCIONARIOID": 50307
+    },
+    {
+        "NOMBRE": "Familia",
+        "ACTIVO": true,
+        "CODIGO": "Familia",
+        "DIMENSIONID": 1000008,
+        "DICCIONARIOID": 50295
+    },
+    {
+        "NOMBRE": "SubFamilia",
+        "ACTIVO": true,
+        "CODIGO": "SUBFAMILIA",
+        "DIMENSIONID": 1000009,
+        "DICCIONARIOID": 50308
+    },
+    {
+        "NOMBRE": "Siembra Asociada",
+        "ACTIVO": false,
+        "CODIGO": "SiembraAsociada",
+        "DIMENSIONID": 1000010,
+        "DICCIONARIOID": 50479
+    }
+]

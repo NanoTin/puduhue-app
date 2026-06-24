@@ -2,6 +2,8 @@
 
 > Derivado de `docs/modulo_compras_plan_bases_compartidas.md`.
 >
+> Plan tecnico complementario: `docs/modulo_compras_plan_tecnico_maestros_erp.md`.
+>
 > Objetivo: convertir el plan previo en una guia de ejecucion accionable, con prioridad, dependencias y responsable sugerido.
 
 ## 1. Criterio de uso
@@ -90,7 +92,7 @@
 | ID | Bloque | Tarea | Prioridad | Estado actual | Depende de | Responsable sugerido | Observacion tecnica | Resultado esperado |
 |---|---|---|---|---|---|---|---|---|
 | BC-01 | Temporadas | Reutilizar tabla `temporadas` para `PPTO_COMPRAS` | A | Validado | Ninguna | BE + DB | Reusar maestro existente y no duplicar temporadas. | Temporadas disponibles para presupuesto de compras. |
-| BC-02 | Temporadas | Agregar `temporadatipocodigo` y validacion por rango de fechas | A | Pendiente | BC-01 | BE + DB | Necesario para aislar temporadas de compras. | Temporadas clasificadas por tipo y listas para presupuesto. |
+| BC-02 | Temporadas | Agregar `temporadatipocodigo` y validacion por rango de fechas | A | Listo para integrar | BC-01 | BE + DB | Implementado en `database/tables/01_table_temporadas.sql`, incremental `database/alter_table/05_modulo_compras_bases.sql` y `src/Services/TemporadasService.php`. Pendiente ejecutar SQL en BD destino. | Temporadas clasificadas por tipo y listas para presupuesto. |
 | BC-03 | Centros de Costo | Sincronizacion ERP diaria + on-demand | A | Parcial | API ERP | BE + DB | Ya existe documentacion y parte de la logica. | Catalogo local consistente de centros de costo. |
 | BC-04 | Centros de Costo | Atributo local de jefe de CC y reglas de aprobacion | A | Parcial | BC-03 | BE + FE | Punto de aprobacion base para REQ y PreOC. | Aprobacion base disponible para REQ y PreOC. |
 | BC-05 | Funcionarios | Maestro compartido con carga inicial por Excel | A | Validado | Ninguna | BE + FE + DB | Reutilizable desde Compras y otros modulos. | Solicitantes/aprobadores disponibles. |

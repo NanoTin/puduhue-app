@@ -12,6 +12,7 @@
 > - `docs/propuesta_hh_consolidada_compras_combustible.md`
 > - `docs/modulo_compras_presupuesto_definitivo.md`
 > - `docs/modulo_compras_backlog_bases_compartidas.md`
+> - `docs/modulo_compras_plan_tecnico_maestros_erp.md`
 
 ## 1. Objetivo
 

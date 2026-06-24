@@ -1,0 +1,644 @@
+[
+    {
+        "codigo": "AZOXI",
+        "nombre": "AZOXISTROBINA",
+        "descripcion": "**FUNGICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "DIFEN",
+        "nombre": "DIFENOCONAZOL ",
+        "descripcion": "**FUNGICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "PIRID",
+        "nombre": "PIRIDABEN",
+        "descripcion": "**FUNGICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "ATRA",
+        "nombre": "ATRAZINA",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "CIPER",
+        "nombre": "CIPERMETRINA",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "FIPRO",
+        "nombre": "FIPRONIL",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "CLORM",
+        "nombre": "CLORMEFOS ",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "CLORPI",
+        "nombre": "CLORPIRIFOS ",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "DELTA",
+        "nombre": "DELTAMETRINA",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "DIMET",
+        "nombre": "DIMETOATO",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "ENDOS",
+        "nombre": "ENDOSULFAN",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "FONOF",
+        "nombre": "FONOFOS",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "LAMBA",
+        "nombre": "LAMBDACIALOTRINA",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "EPOXI",
+        "nombre": "EPOXICONAZOL",
+        "descripcion": "**FUNGICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "BIFEN",
+        "nombre": "BIFENTRIN",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "MET SODIO",
+        "nombre": "METAM SODIO",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "TRIFLOX",
+        "nombre": "TRIFLOXISTROBIN",
+        "descripcion": "**FUNGICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "2-4 D",
+        "nombre": "2-4 D",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "ACET",
+        "nombre": "ACETOCLOR ",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "DICAM",
+        "nombre": "DICAMBA",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "DIURON",
+        "nombre": "DIURON ",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "FLUMET",
+        "nombre": "FLUMETSULAM",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "HALOX",
+        "nombre": "HALOXYFOP",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "GLIFO",
+        "nombre": "GLIFOSATO",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "METAL",
+        "nombre": "METALACLOR",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "METRIB",
+        "nombre": "METRIBUZINA",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "METS",
+        "nombre": "METSULFURON",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "IMAZE",
+        "nombre": "IMAZETHAPYR",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "ACLON",
+        "nombre": "ACLONIFEN",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "PICLO",
+        "nombre": "PICLORAM",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "CLETHO",
+        "nombre": "CLETHODIM",
+        "descripcion": "**HERBICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "CIPER",
+        "nombre": "CIPERMETRINA",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "BRADY",
+        "nombre": "BRADYRIZOBIUM",
+        "descripcion": "**INSECTICIDA**",
+        "activo": true
+    },
+    {
+        "codigo": "CON000",
+        "nombre": "CONCENTRADOS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "FOR000",
+        "nombre": "FORRAJES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "MIN000",
+        "nombre": "MINERALES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "OAC000",
+        "nombre": "OTROS ALIMENTOS COMPRADOS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "AGR000",
+        "nombre": "AGROQUIMICOS ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "FER000",
+        "nombre": "FERTILIZANTES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "FOP000",
+        "nombre": "FORRAJES PROPIOS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "OAP000",
+        "nombre": "OTROS ALIMENTOS PROPIOS ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "SEM000",
+        "nombre": "SEMILLAS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "SMA000",
+        "nombre": "SERVICIOS MAQUINARIAS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "INL000",
+        "nombre": "INSUMOS LECHERIA ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "OLE000",
+        "nombre": "OTROS LECHERIA ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "RTL000",
+        "nombre": "ROPA TRABAJO ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "SOR000",
+        "nombre": "SALA DE ORDEÑA ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "CER000",
+        "nombre": "CERTIFICACIONES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "CLE000",
+        "nombre": "CONTROL LECHERO ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "ORE000",
+        "nombre": "OTROS REBAÑO",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "PSA000",
+        "nombre": "PLAN SANITARIO ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "REP000",
+        "nombre": "REPRODUCCION ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "SVE000",
+        "nombre": "SERVICIOS VETERIANIOS ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "TRT000",
+        "nombre": "TRATAMIENTOS ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "ARC000",
+        "nombre": "ARRIENDO DE CAMPOS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "VEH000",
+        "nombre": "ARRIENDO DE VEHICULOS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "COM000",
+        "nombre": "COMBUSTIBLES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "LUB000",
+        "nombre": "LUBRICANTES ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "ELE000",
+        "nombre": "ELECTRICIDAD",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "MCA000",
+        "nombre": "MANTENCIONES DE CAMINOS ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "MCE000",
+        "nombre": "MANTENCIONES DE CERCOS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "MES000",
+        "nombre": "MANTENCIONES DE INFRAESTRURAS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "MOM000",
+        "nombre": "MANTENCIONES DE OTRAS MAQUINARIAS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "MRA000",
+        "nombre": "MANTENCIONES DE REDES DE AGUA",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "MTR000",
+        "nombre": "MANTENCIONES DE TRACTORES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "OMA000",
+        "nombre": "OTRAS MANTENCIONES ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "CVA000",
+        "nombre": "COSTO VENTA DE ACTIVOS ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "CVG000",
+        "nombre": "COSTO DE VENTA GANADO ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "MAM000",
+        "nombre": "MEDIO AMBIENTE",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "SOC000",
+        "nombre": "SOCIAL ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "FGE000",
+        "nombre": "FLETES GENERALES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "BEN000",
+        "nombre": "BENEFICIOS AL PERSONAL ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "EPP000",
+        "nombre": "ELEMENTOS DE PROTECCION DE PERSONAL ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "GGE000",
+        "nombre": "GASTOS GENERALES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "IOP000",
+        "nombre": "INSUMOS Y OTROS PREVENCION ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "OGG000",
+        "nombre": "OTROS GASTOS GENERALES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "VYT000",
+        "nombre": "VIAJES Y TRASLADOS ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "REM000",
+        "nombre": "REMUNERACIONES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "SMC000",
+        "nombre": "SILO MAIZ COMPRADO",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "CTR000",
+        "nombre": "CONTRIBUCIONES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "TAS000",
+        "nombre": "TASACIONES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "AML000",
+        "nombre": "AMORTIZACIONES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "PPB000",
+        "nombre": "PRESTAMOS BANCARIOS ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "AAD000",
+        "nombre": "ASESORIAS DE ADMINISTRACION ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "AAU000",
+        "nombre": "ASESORIAS DE AUDITORIAS CONTABLES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "AGE000",
+        "nombre": "ASESORIAS DE GESTION",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "AGG000",
+        "nombre": "ASESORIAS DE GERENCIA GENERAL",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "ALE000",
+        "nombre": "ASESORIAS LEGALES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "PRI000",
+        "nombre": "ASESORIA DE PREVENCION DE RIESGOS ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "SEG000",
+        "nombre": "SEGUROS ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "FAC000",
+        "nombre": "FACTURACION.COM",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "FIN000",
+        "nombre": "FINNEGANS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "MIL000",
+        "nombre": "MILKTEK",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "OSI000",
+        "nombre": "OTROS SISTEMAS DE APOYO ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "SAA000",
+        "nombre": "AGROAPP",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "SFX000",
+        "nombre": "FX",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "TAL000",
+        "nombre": "TALANA ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "OIN000",
+        "nombre": "OTROS INGRESOS ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "VAC000",
+        "nombre": "VENTA DE ACTIVOS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "VGT000",
+        "nombre": "VENTA DE TERNERAS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "VVC000",
+        "nombre": "VENTA DE VACAS",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "VVQ000",
+        "nombre": "VENTA DE VAQUILLAS ",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "VGM000",
+        "nombre": "VENTA DE MACHOS (TERNEROS)",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "VGW000",
+        "nombre": "VENTA DE WAGYU",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "VLE000",
+        "nombre": "VENTA DE LECHE",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "CXN000",
+        "nombre": "CAPEX NO RECURRENTES",
+        "descripcion": "EERR 3",
+        "activo": true
+    },
+    {
+        "codigo": "CXR000",
+        "nombre": "CAPEX RECURRENTES ",
+        "descripcion": "EERR 3",
+        "activo": true
+    }
+]

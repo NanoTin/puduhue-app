@@ -1,0 +1,32 @@
+{
+    "Nombre": "COOPRINSEM",
+    "Codigo": "82392600-6",
+    "Activo": true,
+    "RazonSocial": "COOPRINSEM",
+    "Descripcion": "",
+    "Email": "",
+    "CategoriaFiscalCodigo": "1cat",
+    "IdentificacionTributariaCodigo": "RUT",
+    "IdentificacionTributariaNumero": "82.392.600-6",
+    "EsCliente": false,
+    "EsContratista": false,
+    "RestriccionCondPagos": false,
+    "CondicionesPago": [
+        {
+            "CondicionPagoCodigo": "30",
+            "Default": false
+        }
+    ],
+    "ConceptoProveedorCodigo": "PROV",
+    "CuentaProveedorCodigo": "210201",
+    "MonedaID_Pago_Codigo": null,
+    "USR_FPBCI": null,
+    "ScoringAcopiador": null,
+    "ScoringCorredor": null,
+    "ScoringProductor": "",
+    "AFIPDGI_NroONCAA": "",
+    "AFIPDGI_Rol": 0,
+    "FechaUltimaActualizacionScoring": null,
+    "BSAIdentificacionFiscal": null,
+    "USR_MedioPago": "00"
+}

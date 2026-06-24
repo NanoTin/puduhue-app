@@ -1,0 +1,21 @@
+{
+    "Codigo": "30",
+    "Activo": true,
+    "Nombre": "30 dias",
+    "Tipo": 3,
+    "EdicionFija": false,
+    "ExigeDocumentosDiferidos": false,
+    "PorcentajeInteres": 0.00,
+    "CtaProveedores": "210201",
+    "CtaDeudoresPorVentas": "CLI",
+    "CtaDisponibilidad": "110101",
+    "ETA/ETD": 0,
+    "CondicionPagoItems": [
+        {
+            "Fecha": null,
+            "Tipo": 0,
+            "Dias": 30,
+            "Porcentaje": 100.00
+        }
+    ]
+}

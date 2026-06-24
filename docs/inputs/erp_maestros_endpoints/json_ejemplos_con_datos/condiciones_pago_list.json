@@ -1,0 +1,151 @@
+[
+    {
+        "codigo": "Contado",
+        "nombre": "Contado",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "15",
+        "nombre": "15 días",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "30",
+        "nombre": "30 dias",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "60",
+        "nombre": "60 dias",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "10",
+        "nombre": "10 dias",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "90",
+        "nombre": "90 dias",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "10C",
+        "nombre": "10 Cuotas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "45",
+        "nombre": "45 dias",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "5 cuotas",
+        "nombre": "5 Cuotas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "30P",
+        "nombre": "30 Dias Presupuestados",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120",
+        "nombre": "120 dias",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "3 cuotas ",
+        "nombre": "3 cuotas ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "4 cuotas ",
+        "nombre": "4 Cuotas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "contp",
+        "nombre": "Contado Presupuestado",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "10DP",
+        "nombre": "10 dias Presupuestado",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "18 cuotas ",
+        "nombre": "18 Cuotas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "6C",
+        "nombre": "6 Cuotas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "2CU",
+        "nombre": "2 cuotas ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "150",
+        "nombre": "150 dias",
+        "activo": true
+    },
+    {
+        "codigo": "8c ",
+        "nombre": "8 Cuotas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "270",
+        "nombre": "270 días",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "180",
+        "nombre": "180 días",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "240",
+        "nombre": "240 días",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210",
+        "nombre": "210 días",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "12C",
+        "nombre": "12 Cuotas",
+        "descripcion": "",
+        "activo": true
+    }
+]
