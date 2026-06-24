@@ -22,9 +22,16 @@ if (!$isPartial) {
             </button>
         </form>
 
-        <a href="?route=invunidmed/crear" class="btn btn-primary btn-sm">
-            <i class="bi bi-plus-circle"></i> Crear Unidad
+        <a href="?route=erpendpoints/diagnostico&endpointCodigo=ERP_UNIDADES_MEDIDA_LIST" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-journal-text"></i> Ver logs
         </a>
+
+        <form action="?route=invunidmed/sync" method="POST" class="m-0 js-erp-sync-form" data-confirm="1" data-confirm-message="¿Desea sincronizar Unidades de Medida desde ERP?">
+            <?= CsrfHelper::input('web') ?>
+            <button type="submit" class="btn btn-primary btn-sm">
+                <i class="bi bi-arrow-repeat"></i> Sincronizar ERP
+            </button>
+        </form>
     </div>
 
     <form id="invunidmed-filter-form" action="?route=invunidmed/listar" method="GET" class="row g-2 mb-3">
@@ -78,17 +85,7 @@ if (!$isPartial) {
                             <td><?= htmlspecialchars($u['erpunidmedcod'] ?? '') ?></td>
                             <td><?= !empty($u['invunidmedactivo']) ? '<span class="badge bg-success">Si</span>' : '<span class="badge bg-danger">No</span>' ?></td>
                             <td>
-                                <a class="btn btn-warning btn-sm" href="?route=invunidmed/editar&id=<?= urlencode($u['invunidmedid'] ?? '') ?>">
-                                    <i class="bi bi-pencil-square"></i> Editar
-                                </a>
-                                <?php if (!empty($u['invunidmedactivo'])): ?>
-                                    <form action="?route=invunidmed/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="Desea anular esta unidad?">
-                                        <input type="hidden" name="invunidmedid" value="<?= htmlspecialchars($u['invunidmedid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="bi bi-x-circle"></i> Anular
-                                        </button>
-                                    </form>
-                                <?php endif; ?>
+                                <span class="text-muted">Bloqueado (ERP)</span>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -97,6 +94,16 @@ if (!$isPartial) {
         </table>
     </div>
 </div>
+
+<div id="erp-sync-loader" class="erp-sync-loader d-none" role="status" aria-live="polite" aria-busy="true">
+    <div class="erp-sync-card">
+        <div class="spinner-border text-primary" role="presentation"></div>
+        <span>Sincronizando con el ERP. Espere...</span>
+    </div>
+</div>
+
+<?php require __DIR__ . '/partials/modal_confirm.php'; ?>
+<script src="assets/js/confirm-modal.js"></script>
 
 <?php if (!$isPartial) { require 'footer.php'; } ?>
 <script>
@@ -121,5 +128,38 @@ if (!$isPartial) {
                 sessionStorage.removeItem(autokey);
             }
         }
+
+        const syncLoader = document.getElementById('erp-sync-loader');
+        const syncForms = document.querySelectorAll('.js-erp-sync-form');
+        let syncInProgress = false;
+
+        syncForms.forEach(function (syncForm) {
+            syncForm.addEventListener('submit', function () {
+                if (syncForm.dataset.confirmed !== '1') {
+                    return;
+                }
+
+                const submitButton = syncForm.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                }
+
+                if (syncLoader) {
+                    syncLoader.classList.remove('d-none');
+                }
+
+                syncInProgress = true;
+            });
+        });
+
+        window.addEventListener('beforeunload', function (event) {
+            if (!syncInProgress) {
+                return;
+            }
+
+            event.preventDefault();
+            event.returnValue = 'Hay una sincronización ERP en curso. Cerrar la ventana puede dejar la validación visual incompleta.';
+            return event.returnValue;
+        });
     });
 </script>

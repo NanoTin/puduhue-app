@@ -25,9 +25,16 @@ if (!$isPartial) {
             </button>
         </form>
 
-        <a href="?route=invitems/crear" class="btn btn-primary btn-sm">
-            <i class="bi bi-plus-circle"></i> Crear Ítem
+        <a href="?route=erpendpoints/diagnostico&endpointCodigo=ERP_PRODUCTOS_LIST" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-journal-text"></i> Ver logs
         </a>
+
+        <form action="?route=invitems/sync" method="POST" class="m-0 js-erp-sync-form" data-confirm="1" data-confirm-message="¿Desea sincronizar Productos desde ERP?">
+            <?= CsrfHelper::input('web') ?>
+            <button type="submit" class="btn btn-primary btn-sm">
+                <i class="bi bi-arrow-repeat"></i> Sincronizar ERP
+            </button>
+        </form>
     </div>
 
     <form action="?route=invitems/listar" method="GET" class="row g-2 mb-3">
@@ -129,5 +136,52 @@ if (!$isPartial) {
         </table>
     </div>
 </div>
+
+<div id="erp-sync-loader" class="erp-sync-loader d-none" role="status" aria-live="polite" aria-busy="true">
+    <div class="erp-sync-card">
+        <div class="spinner-border text-primary" role="presentation"></div>
+        <span>Sincronizando con el ERP. Espere...</span>
+    </div>
+</div>
+
+<?php require __DIR__ . '/partials/modal_confirm.php'; ?>
+<script src="assets/js/confirm-modal.js"></script>
+
+<script>
+    (function () {
+        const syncLoader = document.getElementById('erp-sync-loader');
+        const syncForms = document.querySelectorAll('.js-erp-sync-form');
+        let syncInProgress = false;
+
+        syncForms.forEach(function (syncForm) {
+            syncForm.addEventListener('submit', function () {
+                if (syncForm.dataset.confirmed !== '1') {
+                    return;
+                }
+
+                const submitButton = syncForm.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                }
+
+                if (syncLoader) {
+                    syncLoader.classList.remove('d-none');
+                }
+
+                syncInProgress = true;
+            });
+        });
+
+        window.addEventListener('beforeunload', function (event) {
+            if (!syncInProgress) {
+                return;
+            }
+
+            event.preventDefault();
+            event.returnValue = 'Hay una sincronización ERP en curso. Cerrar la ventana puede dejar la validación visual incompleta.';
+            return event.returnValue;
+        });
+    })();
+</script>
 
 <?php if (!$isPartial) { require 'footer.php'; } ?>
