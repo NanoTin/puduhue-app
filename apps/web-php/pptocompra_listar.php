@@ -41,9 +41,9 @@ $fmtMoney = static function ($value, int $decimals = 0): string {
     <?php endif; ?>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <a href="?route=pptocompra/crear" class="btn btn-primary btn-sm">
+        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#pptocompraCreateModeModal">
             <i class="bi bi-plus-circle"></i> Crear Presupuesto
-        </a>
+        </button>
     </div>
 
     <form id="pptocompra-filter-form" action="?route=pptocompra/listar" method="GET" class="row g-2 mb-3">
@@ -176,6 +176,34 @@ $fmtMoney = static function ($value, int $decimals = 0): string {
                 <?php endif; ?>
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="modal fade" id="pptocompraCreateModeModal" tabindex="-1" aria-labelledby="pptocompraCreateModeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pptocompraCreateModeModalLabel">Forma de carga</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-3">Seleccione como desea crear el presupuesto de compras.</p>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <a href="?route=pptocompra/crear" class="btn btn-outline-primary w-100 py-3">
+                            <i class="bi bi-pencil-square d-block fs-3 mb-2"></i>
+                            Manual
+                        </a>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="?route=pptocompra/carga_masiva" class="btn btn-outline-success w-100 py-3">
+                            <i class="bi bi-file-earmark-spreadsheet d-block fs-3 mb-2"></i>
+                            Excel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -317,6 +317,406 @@ class PptocompraController
         }
     }
 
+    public function cargaMasivaForm(bool $partial = false): void
+    {
+        AuthMiddleware::requireAuth();
+
+        $temporadas = $this->service->listarTemporadasCompras();
+        $formData = [];
+        $preview = null;
+        $errorMessage = null;
+
+        require $this->viewPath('pptocompra_carga_masiva.php');
+    }
+
+    public function cargaMasivaPost(bool $partial = false): void
+    {
+        AuthMiddleware::requireAuth();
+        $user = AuthMiddleware::getUserContext();
+
+        $temporadas = $this->service->listarTemporadasCompras();
+        $formData = $_POST;
+        unset($formData['_token'], $formData['action'], $formData['route']);
+        $preview = null;
+        $errorMessage = null;
+
+        try {
+            $excelAction = (string)($_POST['excel_action'] ?? 'preview');
+            $temporadaid = $this->normalizarEntero($_POST['temporadaid'] ?? null, 'Temporada');
+            $temporada = $this->buscarTemporada($temporadas, $temporadaid);
+
+            if ($excelAction === 'confirm') {
+                $previewPayload = $this->decodePreviewPayload((string)($_POST['preview_payload'] ?? ''));
+                $preview = $this->buildCargaMasivaPreview($previewPayload['rows'] ?? [], $temporada, $user);
+                if (empty($preview['payloads'])) {
+                    throw new \RuntimeException('No hay presupuestos nuevos para cargar. Todos los registros fueron omitidos.');
+                }
+                foreach ($preview['payloads'] as $payload) {
+                    $this->service->crearPptocompra($payload, $user['usuarioId'], $user['dispositivo'], $user['ip']);
+                }
+
+                $this->setToast(
+                    'Carga masiva realizada: ' . count($preview['payloads']) . ' presupuestos, ' . count($preview['detalle']) . ' líneas.',
+                    'success'
+                );
+                header('Location: ?route=pptocompra/listar&filtroTemporadaid=' . urlencode((string)$temporadaid));
+                exit;
+            }
+
+            if (!$this->isValidUpload($_FILES['pptocompra_excel'] ?? null)) {
+                throw new \RuntimeException('Debe seleccionar un archivo Excel valido.');
+            }
+
+            $rows = $this->leerExcelPptocompra($_FILES['pptocompra_excel']['tmp_name']);
+            $preview = $this->buildCargaMasivaPreview($rows, $temporada, $user);
+            $formData['preview_payload'] = base64_encode(json_encode([
+                'temporadaid' => $temporadaid,
+                'rows' => $preview['rows'],
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        } catch (\RuntimeException $e) {
+            $errorMessage = $e->getMessage();
+            $this->setToast($errorMessage, 'danger');
+        }
+
+        require $this->viewPath('pptocompra_carga_masiva.php');
+    }
+
+    private function buscarTemporada(array $temporadas, int $temporadaid): array
+    {
+        foreach ($temporadas as $temporada) {
+            if ((int)($temporada['temporadaid'] ?? 0) === $temporadaid) {
+                return $temporada;
+            }
+        }
+        throw new \RuntimeException('Debe seleccionar una temporada valida.');
+    }
+
+    private function isValidUpload(?array $file): bool
+    {
+        return is_array($file)
+            && (($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK)
+            && !empty($file['tmp_name'])
+            && is_uploaded_file($file['tmp_name']);
+    }
+
+    private function leerExcelPptocompra(string $filePath): array
+    {
+        if (!class_exists('PhpOffice\\PhpSpreadsheet\\IOFactory')) {
+            throw new \RuntimeException('No se encuentra disponible el lector de Excel.');
+        }
+
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($filePath);
+        $sheetRows = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+        if (empty($sheetRows)) {
+            throw new \RuntimeException('El archivo Excel no contiene datos.');
+        }
+
+        $headerRow = array_shift($sheetRows);
+        $headerMap = $this->buildPptocompraHeaderMap($headerRow);
+        $required = ['subfamiliacod', 'centrocostocod', 'ppoanio', 'ppomes', 'ppomontoppto'];
+        foreach ($required as $field) {
+            if (!isset($headerMap[$field])) {
+                throw new \RuntimeException('El Excel debe contener columnas: Subfamilia Codigo, Centro Costo Codigo, Anio, Mes y Monto.');
+            }
+        }
+
+        $rows = [];
+        $excelRowNumber = 2;
+        foreach ($sheetRows as $sheetRow) {
+            $row = $this->buildPptocompraExcelRow($sheetRow, $headerMap, $excelRowNumber);
+            if ($row !== null) {
+                $rows[] = $row;
+            }
+            $excelRowNumber++;
+        }
+
+        if (empty($rows)) {
+            throw new \RuntimeException('El Excel no contiene líneas de presupuesto para cargar.');
+        }
+
+        return $rows;
+    }
+
+    private function buildPptocompraHeaderMap(array $headerRow): array
+    {
+        $aliases = [
+            'subfamiliacod' => ['subfamiliacodigo', 'subfamiliacod', 'codigosubfamilia', 'subfamilia'],
+            'centrocostocod' => ['centrocostocodigo', 'centrocostocod', 'centrodecostocodigo', 'codigocentrocosto', 'centrocosto', 'cc', 'ceco'],
+            'ppoanio' => ['anio', 'ano', 'year'],
+            'ppomes' => ['mes', 'month'],
+            'ppomontoppto' => ['monto', 'montoppto', 'ppomontoppto', 'presupuesto'],
+            'ppoobservacion' => ['observacionmes', 'observacion', 'obs'],
+        ];
+
+        $map = [];
+        foreach ($headerRow as $column => $label) {
+            $normalized = $this->normalizeExcelHeader((string)$label);
+            if ($normalized === '') {
+                continue;
+            }
+            foreach ($aliases as $field => $fieldAliases) {
+                if (in_array($normalized, $fieldAliases, true)) {
+                    $map[$field] = $column;
+                    break;
+                }
+            }
+        }
+        return $map;
+    }
+
+    private function normalizeExcelHeader(string $value): string
+    {
+        $value = strtr(mb_strtolower(trim($value), 'UTF-8'), [
+            'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u',
+            'ä' => 'a', 'ë' => 'e', 'ï' => 'i', 'ö' => 'o', 'ü' => 'u',
+            'ñ' => 'n',
+        ]);
+        return preg_replace('/[^a-z0-9]+/', '', $value) ?? '';
+    }
+
+    private function buildPptocompraExcelRow(array $sheetRow, array $headerMap, int $excelRowNumber): ?array
+    {
+        $read = static function (string $field) use ($sheetRow, $headerMap) {
+            $column = $headerMap[$field] ?? null;
+            return $column !== null ? ($sheetRow[$column] ?? null) : null;
+        };
+
+        $subfamiliaCod = trim((string)$read('subfamiliacod'));
+        $centrocostoCod = trim((string)$read('centrocostocod'));
+        $anioRaw = $read('ppoanio');
+        $mesRaw = $read('ppomes');
+        $montoRaw = $read('ppomontoppto');
+        $observacion = trim((string)$read('ppoobservacion'));
+
+        if ($subfamiliaCod === '' && $centrocostoCod === '' && trim((string)$anioRaw) === '' && trim((string)$mesRaw) === '' && trim((string)$montoRaw) === '') {
+            return null;
+        }
+
+        return [
+            'excel_row' => $excelRowNumber,
+            'subfamiliacod' => $subfamiliaCod,
+            'centrocostocod' => $centrocostoCod,
+            'ppoanio' => $this->parseExcelInt($anioRaw, 'Año', $excelRowNumber),
+            'ppomes' => $this->parseExcelInt($mesRaw, 'Mes', $excelRowNumber),
+            'ppomontoppto' => $this->parseExcelFloat($montoRaw, 'Monto', $excelRowNumber),
+            'ppoobservacion' => $observacion,
+        ];
+    }
+
+    private function parseExcelInt($value, string $field, int $rowNumber): int
+    {
+        $text = trim((string)$value);
+        if ($text === '' || !is_numeric($text)) {
+            throw new \RuntimeException("Fila {$rowNumber}: {$field} debe ser numérico.");
+        }
+        return (int)$text;
+    }
+
+    private function parseExcelFloat($value, string $field, int $rowNumber): float
+    {
+        $text = trim((string)$value);
+        if (str_contains($text, ',') && str_contains($text, '.')) {
+            $lastComma = strrpos($text, ',');
+            $lastDot = strrpos($text, '.');
+            $text = $lastComma > $lastDot
+                ? str_replace(['.', ','], ['', '.'], $text)
+                : str_replace(',', '', $text);
+        } elseif (str_contains($text, ',')) {
+            $text = str_replace(['.', ','], ['', '.'], $text);
+        } elseif (substr_count($text, '.') >= 1) {
+            $parts = explode('.', $text);
+            $looksLikeThousands = count($parts) > 2 || (count($parts) === 2 && strlen(end($parts)) === 3 && strlen($parts[0]) <= 3);
+            if ($looksLikeThousands) {
+                $text = str_replace('.', '', $text);
+            }
+        }
+        if ($text === '' || !is_numeric($text)) {
+            throw new \RuntimeException("Fila {$rowNumber}: {$field} debe ser numérico.");
+        }
+        return (float)$text;
+    }
+
+    private function buildCargaMasivaPreview(array $rows, array $temporada, array $user): array
+    {
+        $subfamilias = $this->service->listarSubfamiliasFormSelect();
+        $centroscosto = $this->service->listarCentroscostoFormSelect();
+        $subfamiliasByCode = [];
+        $centrosByCode = [];
+        foreach ($subfamilias as $subfamilia) {
+            $subfamiliasByCode[mb_strtoupper(trim((string)($subfamilia['subfamiliacod'] ?? '')), 'UTF-8')] = $subfamilia;
+        }
+        foreach ($centroscosto as $centro) {
+            $centrosByCode[mb_strtoupper(trim((string)($centro['centrocostocod'] ?? '')), 'UTF-8')] = $centro;
+        }
+
+        $temporadaid = (int)($temporada['temporadaid'] ?? 0);
+        $existingRows = $this->service->listarPptocompra(['filtroTemporadaid' => $temporadaid], $user['usuarioId'], $user['dispositivo'], $user['ip'])['rows'] ?? [];
+        $existingCombos = [];
+        foreach ($existingRows as $existing) {
+            $existingCombos[(int)($existing['subfamiliaid'] ?? 0) . '|' . (int)($existing['centrocostoid'] ?? 0)] = $existing;
+        }
+
+        $temporadaInicio = new \DateTime((string)($temporada['temporadainicio'] ?? 'now'));
+        $temporadaFin = new \DateTime((string)($temporada['temporadafin'] ?? 'now'));
+        $seenPeriods = [];
+        $detalle = [];
+        $resumenSubfamilia = [];
+        $resumenCentro = [];
+        $omitidos = [];
+        $total = 0.0;
+
+        foreach ($rows as $row) {
+            $excelRow = (int)($row['excel_row'] ?? 0);
+            $subfamiliaKey = mb_strtoupper(trim((string)($row['subfamiliacod'] ?? '')), 'UTF-8');
+            $centroKey = mb_strtoupper(trim((string)($row['centrocostocod'] ?? '')), 'UTF-8');
+            $subfamilia = $subfamiliasByCode[$subfamiliaKey] ?? null;
+            $centro = $centrosByCode[$centroKey] ?? null;
+
+            if ($subfamilia === null) {
+                throw new \RuntimeException("Fila {$excelRow}: Subfamilia no encontrada o inactiva ({$row['subfamiliacod']}).");
+            }
+            if ($centro === null) {
+                throw new \RuntimeException("Fila {$excelRow}: Centro de costo no encontrado o inactivo ({$row['centrocostocod']}).");
+            }
+            if (($row['ppoanio'] ?? 0) < 2000 || ($row['ppoanio'] ?? 0) > 2200 || ($row['ppomes'] ?? 0) < 1 || ($row['ppomes'] ?? 0) > 12) {
+                throw new \RuntimeException("Fila {$excelRow}: Periodo invalido.");
+            }
+            if (($row['ppomontoppto'] ?? 0) < 0) {
+                throw new \RuntimeException("Fila {$excelRow}: El monto no puede ser negativo.");
+            }
+
+            $periodDate = \DateTime::createFromFormat('Y-m-d', sprintf('%04d-%02d-01', (int)$row['ppoanio'], (int)$row['ppomes']));
+            if (!$periodDate || $periodDate < $temporadaInicio || $periodDate > $temporadaFin) {
+                throw new \RuntimeException("Fila {$excelRow}: Periodo fuera del rango de la temporada seleccionada.");
+            }
+
+            $comboKey = (int)$subfamilia['subfamiliaid'] . '|' . (int)$centro['centrocostoid'];
+            if (isset($existingCombos[$comboKey])) {
+                $existing = $existingCombos[$comboKey];
+                $pptocompraidExistente = (int)($existing['pptocompraid'] ?? 0);
+                $tieneTransacciones = $pptocompraidExistente > 0 ? $this->tieneMovimientos($pptocompraidExistente, $user) : false;
+                $omitidos[] = [
+                    'excel_row' => $excelRow,
+                    'pptocompraid' => $pptocompraidExistente,
+                    'subfamiliacod' => (string)$subfamilia['subfamiliacod'],
+                    'subfamiliadsc' => (string)$subfamilia['subfamiliadsc'],
+                    'centrocostocod' => (string)$centro['centrocostocod'],
+                    'centrocostodsc' => (string)$centro['centrocostodsc'],
+                    'ppoanio' => (int)$row['ppoanio'],
+                    'ppomes' => (int)$row['ppomes'],
+                    'ppomontoppto' => (float)$row['ppomontoppto'],
+                    'motivo' => $tieneTransacciones
+                        ? 'Ya existe presupuesto con transacciones registradas.'
+                        : 'Ya existe presupuesto para esta temporada, subfamilia y centro de costo.',
+                ];
+                continue;
+            }
+
+            $periodKey = $comboKey . '|' . (int)$row['ppoanio'] . '|' . (int)$row['ppomes'];
+            if (isset($seenPeriods[$periodKey])) {
+                throw new \RuntimeException("Fila {$excelRow}: Existe un periodo repetido para la misma subfamilia y centro de costo.");
+            }
+            $seenPeriods[$periodKey] = true;
+
+            $monto = (float)$row['ppomontoppto'];
+            $total += $monto;
+            $detalleRow = [
+                'excel_row' => $excelRow,
+                'subfamiliaid' => (int)$subfamilia['subfamiliaid'],
+                'subfamiliacod' => (string)$subfamilia['subfamiliacod'],
+                'subfamiliadsc' => (string)$subfamilia['subfamiliadsc'],
+                'centrocostoid' => (int)$centro['centrocostoid'],
+                'centrocostocod' => (string)$centro['centrocostocod'],
+                'centrocostodsc' => (string)$centro['centrocostodsc'],
+                'ppoanio' => (int)$row['ppoanio'],
+                'ppomes' => (int)$row['ppomes'],
+                'ppomontoppto' => $monto,
+                'ppoobservacion' => (string)($row['ppoobservacion'] ?? ''),
+            ];
+            $detalle[] = $detalleRow;
+
+            $subKey = (string)$detalleRow['subfamiliaid'];
+            if (!isset($resumenSubfamilia[$subKey])) {
+                $resumenSubfamilia[$subKey] = [
+                    'subfamiliacod' => $detalleRow['subfamiliacod'],
+                    'subfamiliadsc' => $detalleRow['subfamiliadsc'],
+                    'total' => 0.0,
+                ];
+            }
+            $resumenSubfamilia[$subKey]['total'] += $monto;
+
+            $centroResumenKey = (string)$detalleRow['centrocostoid'];
+            if (!isset($resumenCentro[$centroResumenKey])) {
+                $resumenCentro[$centroResumenKey] = [
+                    'centrocostocod' => $detalleRow['centrocostocod'],
+                    'centrocostodsc' => $detalleRow['centrocostodsc'],
+                    'total' => 0.0,
+                    'subfamilias' => [],
+                ];
+            }
+            $resumenCentro[$centroResumenKey]['total'] += $monto;
+            if (!isset($resumenCentro[$centroResumenKey]['subfamilias'][$subKey])) {
+                $resumenCentro[$centroResumenKey]['subfamilias'][$subKey] = [
+                    'subfamiliacod' => $detalleRow['subfamiliacod'],
+                    'subfamiliadsc' => $detalleRow['subfamiliadsc'],
+                    'total' => 0.0,
+                ];
+            }
+            $resumenCentro[$centroResumenKey]['subfamilias'][$subKey]['total'] += $monto;
+        }
+
+        return [
+            'temporada' => $temporada,
+            'total' => $total,
+            'rows' => $rows,
+            'detalle' => $detalle,
+            'omitidos' => $omitidos,
+            'resumenSubfamilia' => array_values($resumenSubfamilia),
+            'resumenCentro' => array_values(array_map(static function (array $centro): array {
+                $centro['subfamilias'] = array_values($centro['subfamilias']);
+                return $centro;
+            }, $resumenCentro)),
+            'payloads' => $this->buildCargaMasivaPayloads($detalle, $temporadaid),
+        ];
+    }
+
+    private function buildCargaMasivaPayloads(array $detalle, int $temporadaid): array
+    {
+        $payloads = [];
+        foreach ($detalle as $line) {
+            $key = (int)$line['subfamiliaid'] . '|' . (int)$line['centrocostoid'];
+            if (!isset($payloads[$key])) {
+                $payloads[$key] = [
+                    'temporadaid' => $temporadaid,
+                    'subfamiliaid' => (int)$line['subfamiliaid'],
+                    'centrocostoid' => (int)$line['centrocostoid'],
+                    'pptocompraobservacion' => 'Carga masiva Excel',
+                    'mensual' => [],
+                ];
+            }
+            $payloads[$key]['mensual'][] = [
+                'ppoanio' => (int)$line['ppoanio'],
+                'ppomes' => (int)$line['ppomes'],
+                'ppomontoppto' => (float)$line['ppomontoppto'],
+                'ppoobservacion' => (string)$line['ppoobservacion'],
+            ];
+        }
+        return array_values($payloads);
+    }
+
+    private function decodePreviewPayload(string $payload): array
+    {
+        if ($payload === '') {
+            throw new \RuntimeException('No hay datos leidos desde Excel para confirmar.');
+        }
+        $decoded = base64_decode($payload, true);
+        $data = $decoded !== false ? json_decode($decoded, true) : null;
+        if (!is_array($data) || empty($data['rows']) || !is_array($data['rows'])) {
+            throw new \RuntimeException('Los datos de previsualizacion no son validos. Vuelva a leer el Excel.');
+        }
+        return $data;
+    }
+
     private function buildPayloadFromPost(array $post): array
     {
         return [

@@ -215,7 +215,7 @@ function handleWebRequest(array $menuData = []): void
         'ajustar'   => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'ajustarPost' : 'ajustarForm',
         'traspasar' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'traspasarPost' : 'traspasarForm',
         'sync'     => 'syncPost',
-        'carga_masiva' => 'cargaMasivaPost',
+        'carga_masiva' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'cargaMasivaPost' : 'cargaMasivaForm',
         'change-password' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'cambioClaveGuardar' : 'cambioClaveForm',
         'cambiopassword' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'cambioClaveGuardar' : 'cambioClaveForm',
         'generar-token-api' => 'generarTokenApiPost',
