@@ -14,7 +14,7 @@ if (!$isPartial) {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Empresas</h3>
 
     <!-- Barra de acciones -->
@@ -37,7 +37,7 @@ if (!$isPartial) {
     </div>
 
     <div class="mb-3">
-        <form action="?route=empresas/listar" method="GET" class="d-flex flex-wrap" style="gap: 10px;">
+        <form action="?route=empresas/listar" method="GET" class="d-flex flex-wrap gap-2">
             <input type="hidden" name="route" value="empresas/listar">
 
             <input type="text" name="filtroRazonsocial"
@@ -74,7 +74,7 @@ if (!$isPartial) {
                     <th>Contacto</th>
                     <th>Email</th>
                     <th>Activo</th>
-                    <th style="width: 180px;">Acciones</th>
+                    <th class="col-actions-lg">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,10 +108,9 @@ if (!$isPartial) {
                                 </a>
 
                                 <?php if (($e['empresaactivo'] ?? 0) == 1): ?>
-                                    <form action="?route=empresas/anular" method="POST" class="d-inline">
+                                    <form action="?route=empresas/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Desea anular esta empresa?">
                                         <input type="hidden" name="empresaid" value="<?= htmlspecialchars($e['empresaid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('¿Desea anular esta empresa?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="bi bi-x-circle"></i> Anular
                                         </button>
                                     </form>

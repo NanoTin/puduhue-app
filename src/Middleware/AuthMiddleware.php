@@ -69,7 +69,7 @@ class AuthMiddleware
         if ($usuarioId === 0 && class_exists('Env') && Env::get('AUTH_ALLOW_GUEST', '0') === '1') {
             $usuarioId = (int)Env::get('AUTH_GUEST_USER_ID', 0);
         }
-        $dispositivo = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $dispositivo = self::normalizeDispositivo($_SERVER['HTTP_USER_AGENT'] ?? '');
         $ip          = $_SERVER['REMOTE_ADDR'] ?? '';
 
         return [
@@ -98,5 +98,18 @@ class AuthMiddleware
             setcookie(session_name(), '', time() - 42000, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
         }
         session_destroy();
+    }
+
+    public static function normalizeDispositivo(?string $dispositivo): string
+    {
+        $dispositivo = trim((string)$dispositivo);
+        if ($dispositivo === '') {
+            return '';
+        }
+        if (function_exists('mb_substr')) {
+            return mb_substr($dispositivo, 0, 50);
+        }
+
+        return substr($dispositivo, 0, 50);
     }
 }

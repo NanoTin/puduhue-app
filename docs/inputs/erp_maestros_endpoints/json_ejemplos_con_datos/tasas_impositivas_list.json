@@ -1,0 +1,62 @@
+[
+    {
+        "codigo": "TASA21",
+        "nombre": "IVA 21%",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "TASA10.5",
+        "nombre": "IVA 10.5%",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "TASA0",
+        "nombre": "IVA 0%",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "TASA19c",
+        "nombre": "IVA 19% Compras",
+        "descripcion": "Tasa IVA CLP",
+        "activo": true
+    },
+    {
+        "codigo": "TASA12.25",
+        "nombre": "RETENCION 12.25%",
+        "descripcion": "IMP. RETENCION 12.25%",
+        "activo": true
+    },
+    {
+        "codigo": "TASA15.25",
+        "nombre": "RETENCION 15.25%",
+        "descripcion": "IMP. RETENCION 15.25%",
+        "activo": true
+    },
+    {
+        "codigo": "TASA13.75",
+        "nombre": "RETENCION 13.75%",
+        "descripcion": "IMP. RETENCION 13.75%",
+        "activo": true
+    },
+    {
+        "codigo": "TASA16.75",
+        "nombre": "RETENCION 16.75%",
+        "descripcion": "IMP. RETENCION 16.75%",
+        "activo": true
+    },
+    {
+        "codigo": "TASA19",
+        "nombre": "IVA 19% ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "TASA14.5",
+        "nombre": "RETENCION 14.5%",
+        "descripcion": "IMP. RETENCION 14.5%",
+        "activo": true
+    }
+]

@@ -102,6 +102,8 @@ Usar como referencia: `empresas_listar.php`, `empresas_crear.php`, `empresas_edi
 - No incluir campos de auditoría (`auditcreacion*`, `auditedicion*`).
 - Botones: Crear, Editar (por fila), Anular, Exportar a Excel.
 - Feedback con toasts (no alerts).
+- En controladores, usar `FlashMessageHelper::toast($message, $type)` o el método local `setToast()` que delega en ese helper. Tipos válidos: `success`, `danger`, `warning`, `info`.
+- En listados, las acciones destructivas o sensibles deben usar `data-confirm="1"` y `data-confirm-message="..."`; el modal común se carga desde `footer.php`.
 
 ---
 

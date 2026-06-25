@@ -1,0 +1,248 @@
+[
+    {
+        "codigo": "PRESI",
+        "nombre": "PRESIEMBRA",
+        "descripcion": "**APLICA A SUELO**",
+        "activo": false
+    },
+    {
+        "codigo": "POST EMERG",
+        "nombre": "POST-EMERGENTE",
+        "descripcion": "**APLICA A PLANTA**",
+        "activo": false
+    },
+    {
+        "codigo": "PREEMERG",
+        "nombre": "PRE-EMERGENTE",
+        "descripcion": "**APLICA AL SUELO**",
+        "activo": false
+    },
+    {
+        "codigo": "APLIC SEM FUNGI",
+        "nombre": "APLICACION A SEMILLAS FUNGI",
+        "descripcion": "**APLICA A SEMILLA**",
+        "activo": false
+    },
+    {
+        "codigo": "APLIC FOLIAR FUNGI",
+        "nombre": "APLICACION FOLIAR FUNGI",
+        "descripcion": "**APLICA A PLANTA**",
+        "activo": false
+    },
+    {
+        "codigo": "APLIC FOLIAR INSECT",
+        "nombre": "APLICACION FOLIAR INSECTI",
+        "descripcion": "**APLICA A PLANTA**",
+        "activo": false
+    },
+    {
+        "codigo": "APL SUEL INSECT",
+        "nombre": "APLICA A SUELO INSECTICIDA",
+        "descripcion": "**APLICA A SUELO**",
+        "activo": false
+    },
+    {
+        "codigo": "INOC SEMI",
+        "nombre": "APLICACION A SEMILLAS INOC",
+        "descripcion": "**APLICA A SEMILLA**",
+        "activo": false
+    },
+    {
+        "codigo": "LEGUM",
+        "nombre": "LEGUMINOSAS",
+        "descripcion": "**LEGUMINOSAS**",
+        "activo": false
+    },
+    {
+        "codigo": "GRAM",
+        "nombre": "GRAMINEAS",
+        "descripcion": "**GRAMINEAS**",
+        "activo": false
+    },
+    {
+        "codigo": "OTROS",
+        "nombre": "OTROS",
+        "descripcion": "**OTROS**",
+        "activo": false
+    },
+    {
+        "codigo": "NITRO",
+        "nombre": "NITROGENADOS",
+        "descripcion": "**NITROGENADOS**",
+        "activo": false
+    },
+    {
+        "codigo": "FOSF",
+        "nombre": "FOSFORADOS",
+        "descripcion": "**FOSFORADOS**",
+        "activo": false
+    },
+    {
+        "codigo": "CER",
+        "nombre": "CEREALES",
+        "descripcion": "**CEREALES**",
+        "activo": false
+    },
+    {
+        "codigo": "OLEA",
+        "nombre": "OLEAGINOSAS",
+        "descripcion": "**OLEAGINOSAS**",
+        "activo": false
+    },
+    {
+        "codigo": "OTRO",
+        "nombre": "OTROS",
+        "descripcion": "**OTROS**",
+        "activo": false
+    },
+    {
+        "codigo": "SILO",
+        "nombre": "SILO",
+        "descripcion": "**SILO**",
+        "activo": false
+    },
+    {
+        "codigo": "AP AGUA",
+        "nombre": "CORRECTOR DE PH",
+        "descripcion": "**APLICA AL AGUA**",
+        "activo": false
+    },
+    {
+        "codigo": "ACO000",
+        "nombre": "ALIMENTOS COMPRADOS",
+        "activo": true
+    },
+    {
+        "codigo": "APR000",
+        "nombre": "ALIMENTOS PROPIOS",
+        "activo": true
+    },
+    {
+        "codigo": "ARC000",
+        "nombre": "ARRIENDOS DE CAMPOS ",
+        "activo": true
+    },
+    {
+        "codigo": "CCL000",
+        "nombre": "COMBUSTIBLES Y LUBRICANTES ",
+        "activo": true
+    },
+    {
+        "codigo": "CCR000",
+        "nombre": "COSTOS CRIANZA",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CRM000",
+        "nombre": "COSTOS DE REPARACIONES Y MANTENCIONES ",
+        "activo": true
+    },
+    {
+        "codigo": "CVE000",
+        "nombre": "COTOS DE VENTAS ",
+        "activo": true
+    },
+    {
+        "codigo": "CXG000",
+        "nombre": "CAPEX GENERALES",
+        "activo": true
+    },
+    {
+        "codigo": "GFI000",
+        "nombre": "GASTOS FINACIEROS",
+        "activo": true
+    },
+    {
+        "codigo": "GGE000",
+        "nombre": "GASTOS GENERALES",
+        "activo": true
+    },
+    {
+        "codigo": "HAD000",
+        "nombre": "HONORARIOS DE ADMINISTRACION ",
+        "activo": true
+    },
+    {
+        "codigo": "LEC000",
+        "nombre": "LECHERIA",
+        "activo": true
+    },
+    {
+        "codigo": "MOB000",
+        "nombre": "MANO DE OBRA",
+        "activo": true
+    },
+    {
+        "codigo": "REB000",
+        "nombre": "REBAÑO",
+        "activo": true
+    },
+    {
+        "codigo": "GGP000",
+        "nombre": "GASTOS GENERALES DE PRODUCCION ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VLE000",
+        "nombre": "VENTA DE LECHE",
+        "activo": true
+    },
+    {
+        "codigo": "CEL000",
+        "nombre": "ENERGIA ELECTRICA",
+        "activo": true
+    },
+    {
+        "codigo": "SIS000",
+        "nombre": "SISTEMAS ERP",
+        "activo": true
+    },
+    {
+        "codigo": "FGE000",
+        "nombre": "FLETES GENERALES",
+        "activo": true
+    },
+    {
+        "codigo": "MOA",
+        "nombre": "MANO DE OBRA DE ADMINISTRACION ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "OIN000",
+        "nombre": "OTROS INGRESOS",
+        "activo": true
+    },
+    {
+        "codigo": "AVH000",
+        "nombre": "ARRIENDO VEHICULOS",
+        "activo": true
+    },
+    {
+        "codigo": "ESG000",
+        "nombre": "MEDIO AMBIENTE Y SOCIAL Y GOBERNANZA",
+        "activo": true
+    },
+    {
+        "codigo": "SEF000",
+        "nombre": "SEGURO FORRAJERO ",
+        "activo": true
+    },
+    {
+        "codigo": "GBR000",
+        "nombre": "GASTOS BIENES RAICES",
+        "activo": true
+    },
+    {
+        "codigo": "SEG000",
+        "nombre": "SEGUROS GENERALES",
+        "activo": true
+    },
+    {
+        "codigo": "VGA000",
+        "nombre": "VENTA DE GANADO ",
+        "activo": true
+    }
+]

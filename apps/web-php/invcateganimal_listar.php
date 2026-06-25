@@ -7,7 +7,7 @@ if (!$isPartial) {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Categorías de Animal</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -65,7 +65,7 @@ if (!$isPartial) {
                     <th>ERP Código</th>
                     <th>Kilos x Cab</th>
                     <th>Activo</th>
-                    <th style="width: 180px;">Acciones</th>
+                    <th class="col-actions-lg">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -84,9 +84,9 @@ if (!$isPartial) {
                                     <i class="bi bi-pencil-square"></i> Editar
                                 </a>
                                 <?php if (!empty($c['invcateganimalactivo'])): ?>
-                                    <form action="?route=invcateganimal/anular" method="POST" class="d-inline">
+                                    <form action="?route=invcateganimal/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Desea anular esta categoría?">
                                         <input type="hidden" name="invcateganimalid" value="<?= htmlspecialchars($c['invcateganimalid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Desea anular esta categoría?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="bi bi-x-circle"></i> Anular
                                         </button>
                                     </form>

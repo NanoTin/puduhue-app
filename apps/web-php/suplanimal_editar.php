@@ -36,7 +36,7 @@ if (!$isPartial) {
             <section class="mb-4">
                 <h5 class="section-title">Datos Generales</h5>
                 <div class="row g-3 align-items-end general-grid">
-                    <div class="col-12 col-lg-6" style="display: none;">
+                    <div class="col-12 col-lg-6 d-none">
                         <label for="empresaid" class="form-label">Empresa</label>
                         <select name="empresaid" id="empresaid" class="form-select" disabled>
                             <option value="">Seleccione</option>
@@ -181,12 +181,12 @@ if (!$isPartial) {
             </section>
             <section class="mb-4">
                 <h5 class="section-title mb-3">Detalle de registros</h5>
-                <div class="table-responsive">
+                <div class="table-responsive transaction-detail-wrap">
                     <table class="detail-table" id="detalleTable">
                         <thead>
                         <tr>
-                            <th style="width: 50px;"></th>
-                            <th style="width: 70px;">Linea</th>
+                            <th class="col-actions-xs"></th>
+                            <th class="col-line-sm">Linea</th>
                             <th>Categoria Animal</th>
                             <th>Producto</th>
                             <th>U.M</th>
@@ -367,8 +367,6 @@ if (!$isPartial) {
         function showToast(message, type = 'warning') {
             if (window.ToastManager) {
                 window.ToastManager.show(message, type);
-            } else {
-                alert(message);
             }
         }
 
@@ -634,7 +632,7 @@ if (!$isPartial) {
 
         if (confirmSaveBtn) {
             confirmSaveBtn.addEventListener('click', () => {
-                document.getElementById('suplanimalForm')?.submit();
+                document.getElementById('suplanimalForm')?.requestSubmit();
             });
         }
 

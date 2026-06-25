@@ -1,0 +1,19 @@
+Descripción;Observación;EndPoint;Tipo EndPoint;Frecuencia Sync;Grupo;Orden Secuencia Dentro del Grupo;Formulario Web;Json Ejemplo
+Dimensiones;Ej: DIMPARFIN - Partida Financiera;https://api.finneg.com/api/reports/DIMENSIONES;Report/Viewer;Mensual;0;1;Falta Crear;dimensiones_list.json
+Partidas Financieras;Ej: ACO000 - ALIMENTOS COMPRADOS;https://api.finneg.com/api/partidafinanciera/list;Base ERP;Mensual;0;2;Falta Crear;partidas_financieras_list.json
+Centros de Costos;;https://api.finneg.com/api/PDHCentroCosto/list;Custom;Mensual;0;3;Falta Crear;centros_costos_list.json
+Monedas;Se referencia al crear una OC o PreOC;https://api.finneg.com/api/moneda/list;Base ERP;Mensual;0;4;Falta Crear;monedas_list.json
+Tasas Impositivas;Se referencia en la configuración de un Producto (TasaImpositivaCodigoCompra);https://api.finneg.com/api/tasaImpositiva/list;Base ERP;Mensual;1;1;Falta Crear;tasas_impositivas_list.json
+Tasas Impositivas Consulta por Código;Contiene el valor numérico del porcentaje. Ej: 19.00 para actualizar una Tasa Impositiva creada, pues, requiere el código como parámetro de entrada;https://api.finneg.com/api/tasaImpositiva/{reemplazar por código};Base ERP;Mensual;1;2;No Aplica;tasas_impositivas_cod_TASA19c.json
+Unidades de Medida;;https://api.finneg.com/api/unidad/list;Base ERP;Mensual;1;3;invunidmed_listar.php;unidades_medidas_list.json
+Familias;;https://api.finneg.com/api/productoFamilia/list;Base ERP;Mensual;1;4;Falta Crear;familias_list.json
+Sub Familias;;https://api.finneg.com/api/productoSubfamilia/list;Base ERP;Mensual;1;5;Falta Crear;sub_familias_list.json
+Sub Familias Consulta por Código;Contiene el código de la Familia: “ProductoFamiliaCodigo” para actualizar una Sub Familia creada, pues, requiere el código como parámetro de entrada;https://api.finneg.com/api/productoSubfamilia/{reemplazar por código};Base ERP;Mensual;1;6;No Aplica;sub_familias_cod_AZOXI.json
+Productos;Solo contiene unos pocos atributos;https://api.finneg.com/api/producto/list;Base ERP;Mensual;1;7;invitems_listar.php;productos_list.json
+Productos Consulta por Código;Para complementar el “listado”. Solo actualiza atributos de un producto creado, pues, requiere el código como parámetro de entrada.;https://api.finneg.com/api/producto/{reemplazar por código};Base ERP;Mensual;1;8;No Aplica;productos_cod_CON004.json
+Conceptos;Se referencia en la configuración de un Proveedor;https://api.finneg.com/api/Concepto/list;Base ERP;Mensual;2;1;Falta Crear;conceptos_list.json
+Cuentas Contables;Se referencia en la configuración de un Proveedor;https://api.finneg.com/api/cuenta/list;Base ERP;Mensual;2;2;Falta Crear;cuentas_contables_list.json
+Condiciones de Pago;Se referencia en la configuración de un Proveedor, pero como Entidad “CondicionesPago: []”;https://api.finneg.com/api/condicionPago/list;Base ERP;Mensual;2;3;Falta Crear;condiciones_pago_list.json
+Condiciones de Pago Consulta por Código;Contiene la entidad “CondicionPagoItems: []” donde dentro de ella tiene el valor numérico de días en el atributo “Dias”.;https://api.finneg.com/api/condicionPago/{reemplazar por código};Base ERP;Mensual;2;4;No Aplica;condiciones_pago_cod_30.json
+Proveedores;Solo contiene unos pocos atributos;https://api.finneg.com/api/PDHProveedor/list;Custom;Mensual;2;5;Falta Crear;proveedores_list.json
+Proveedores Consulta por Código;Para complementar el “listado”. Solo actualiza atributos de un proveedor creado, pues, requiere el código como parámetro de entrada.;https://api.finneg.com/api/PDHProveedor/{reemplazar por código};Custom;Mensual;2;6;No Aplica;proveedores_cod_82392600-6.json

@@ -12,160 +12,21 @@ $rootPath = dirname(__DIR__, 2);
 require_once $rootPath . '/src/Config/Env.php';
 Env::load();
 
-require_once $rootPath . '/src/Config/Database.php';
-require_once $rootPath . '/src/Helpers/Logger.php';
-require_once $rootPath . '/src/Services/UsuariosService.php';
-require_once $rootPath . '/src/Auth/AuthService.php';
+require_once $rootPath . '/src/Controllers/Web/AuthController.php';
 
-use App\Helpers\Logger;
+$authController = new AuthController();
+$viewModel = $_SERVER['REQUEST_METHOD'] === 'POST'
+    ? $authController->loginPost()
+    : $authController->loginForm();
 
-// Si ya existe sesion, redirigir directo al dashboard.
-if (!empty($_SESSION['usuarioId'])) {
-    header('Location: index.php?route=dashboard');
-    exit;
-}
-
-$toastMessage = null;
-$toastType = 'danger';
-$recaptchaSiteKey = Env::get('RECAPTCHA_SITE_KEY', '');
-$recaptchaApiKey = Env::get('RECAPTCHA_API_KEY', '');
-$recaptchaProjectId = Env::get('RECAPTCHA_PROJECT_ID', '');
-$recaptchaMinScore = (float)Env::get('RECAPTCHA_MIN_SCORE', 0.5);
-$rememberedUserCookie = $_COOKIE['remember_user'] ?? '';
-$usuariosService = new \UsuariosService();
-$authService = new \AuthService();
-
-/**
- * Normaliza el usuario (RUT) permitiendo ROOT como excepcion.
- */
-function normalizeUsernameInput(string $username, \UsuariosService $usuariosService): string
-{
-    $trimmed = trim($username);
-    if ($trimmed === '') {
-        throw new RuntimeException('Debe ingresar usuario y contrasena.');
-    }
-
-    if (strtoupper($trimmed) === 'ROOT') {
-        return 'ROOT';
-    }
-
-    return $usuariosService->normalizarRutParaLogin($trimmed);
-}
-
-/**
- * Control simple de tasa por IP en una ventana de tiempo.
- */
-function checkAndRegisterRateLimit(string $ip, int $limit, int $windowSeconds): bool
-{
-    $now = time();
-    $data = $_SESSION['login_rate'] ?? ['ip' => $ip, 'count' => 0, 'start' => $now];
-
-    if (($data['ip'] ?? '') !== $ip || ($now - ($data['start'] ?? 0)) > $windowSeconds) {
-        $data = ['ip' => $ip, 'count' => 0, 'start' => $now];
-    }
-
-    if (($data['count'] ?? 0) >= $limit) {
-        $_SESSION['login_rate'] = $data;
-        return false;
-    }
-
-    $data['count'] = ($data['count'] ?? 0) + 1;
-    $_SESSION['login_rate'] = $data;
-    return true;
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $usernameInput = $_POST['username'] ?? '';
-    $passwordInput = $_POST['password'] ?? '';
-    $rememberUser = !empty($_POST['remember_user']);
-    $recaptchaToken = $_POST['recaptcha_token'] ?? '';
-    $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
-
-    if ($usernameInput === '' || $passwordInput === '') {
-        $toastMessage = 'Debe ingresar usuario y contrasena.';
-    } elseif (!checkAndRegisterRateLimit($ip, 10, 600)) {
-        $toastMessage = 'Demasiados intentos. Espere unos minutos antes de reintentar.';
-        Logger::error('Login rate limit alcanzado para IP ' . $ip);
-    } else {
-        try {
-            $usuarioCod = normalizeUsernameInput($usernameInput, $usuariosService);
-
-            $authService->verifyRecaptchaToken($recaptchaToken, [
-                'apiKey' => $recaptchaApiKey,
-                'projectId' => $recaptchaProjectId,
-                'siteKey' => $recaptchaSiteKey,
-                'minScore' => $recaptchaMinScore,
-            ]);
-
-            $db = \Database::getInstance();
-            $pdo = $db->getPdo();
-            $userRow = $authService->fetchUserRow($pdo, $usuarioCod);
-
-            if (empty($userRow)) {
-                throw new RuntimeException('Usuario no existe');
-            }
-
-            if ((int)($userRow['usuarioactivo'] ?? 0) !== 1) {
-                throw new RuntimeException('Usuario inactivo');
-            }
-
-            if ((int)($userRow['usuariobloqueado'] ?? 0) === 1) {
-                throw new RuntimeException('Usuario bloqueado');
-            }
-
-            $perfilId = (int)($userRow['perfilid'] ?? 0);
-            if ($perfilId === 0) {
-                throw new RuntimeException('Usuario sin perfil asignado');
-            }
-
-            $empresaDefault = (int)($userRow['empresaiddefault'] ?? 0);
-            if ($empresaDefault === 0) {
-                throw new RuntimeException('Usuario no tiene una empresa predeterminada asignada');
-            }
-
-            $fundoDefault = (int)($userRow['fundoiddefault'] ?? 0);
-            if ($fundoDefault === 0) {
-                throw new RuntimeException('Usuario no tiene un fundo predeterminado asignado');
-            }
-
-            $usuarioip = $ip;
-            $usuariodispositivo = $_SERVER['HTTP_USER_AGENT'] ?? '';
-
-            $hashDb = $userRow['usuariopwdhash'] ?? '';
-            if (!password_verify($passwordInput, $hashDb)) {
-                $authService->registerLoginAttempt($pdo, $usuarioCod, $usuarioip, $usuariodispositivo, false);
-                throw new RuntimeException('Credenciales incorrectas');
-            }
-
-            $authService->registerLoginAttempt($pdo, $usuarioCod, $usuarioip, $usuariodispositivo, true);
-            session_regenerate_id(true);
-
-            $_SESSION['usuarioId'] = (int)($userRow['usuarioid'] ?? 0);
-            $_SESSION['usuarioCodSession'] = $usuarioCod;
-            $_SESSION['usuarioNombreSession'] = $userRow['usuarionombre'] ?? '';
-            $_SESSION['perfilIdSession'] = $perfilId;
-            $_SESSION['empresaIdSession'] = $empresaDefault;
-            $_SESSION['fundoIdSession'] = $fundoDefault;
-            $_SESSION['esRootSession'] = (int)($userRow['usuarioesroot'] ?? 0);
-            $_SESSION['esAdminSession'] = (int)($userRow['usuarioesadmin'] ?? 0);
-            $_SESSION['last_route'] = 'dashboard';
-            $_SESSION['login_rate'] = ['ip' => $ip, 'count' => 0, 'start' => time()];
-
-            if ($rememberUser) {
-                setcookie('remember_user', $usuarioCod, time() + (30 * 24 * 60 * 60), '/', '', false, true);
-            } else {
-                setcookie('remember_user', '', time() - 3600, '/', '', false, true);
-            }
-
-            header('Location: index.php?route=dashboard');
-            exit;
-        } catch (Throwable $e) {
-            $toastMessage = 'No se pudo iniciar sesion. Credenciales incorrectas o reCAPTCHA invalido.';
-            $toastType = 'danger';
-            Logger::error('Login fallido: ' . $e->getMessage() . ' | usuario=' . ($usernameInput ?: 'vacio') . ' | ip=' . $ip);
-        }
-    }
-}
+$toastMessage = $viewModel['toastMessage'] ?? null;
+$toastType = $viewModel['toastType'] ?? 'danger';
+$recaptchaSiteKey = $viewModel['recaptchaSiteKey'] ?? '';
+$recaptchaEnabled = (bool)($viewModel['recaptchaEnabled'] ?? true);
+$csrfToken = $viewModel['csrfToken'] ?? '';
+$rememberedUserCookie = $viewModel['rememberedUserCookie'] ?? '';
+$usernameValue = $viewModel['usernameValue'] ?? '';
+$rememberUserChecked = (bool)($viewModel['rememberUserChecked'] ?? false);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -186,7 +47,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="glass-container">
         <h2>Ingreso al sistema</h2>
-        <form id="loginForm" method="post" autocomplete="on" action="" data-sitekey="<?php echo htmlspecialchars($recaptchaSiteKey); ?>">
+        <form
+            id="loginForm"
+            method="post"
+            autocomplete="on"
+            action=""
+            data-sitekey="<?php echo htmlspecialchars($recaptchaSiteKey); ?>"
+            data-recaptcha-enabled="<?php echo $recaptchaEnabled ? '1' : '0'; ?>"
+        >
+            <input type="hidden" name="_csrf" value="<?php echo htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" id="recaptcha_token" name="recaptcha_token" value="">
             <div class="input-group">
                 <input
@@ -195,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     name="username"
                     autocomplete="username"
                     required
-                    value="<?php echo htmlspecialchars($_POST['username'] ?? $rememberedUserCookie, ENT_QUOTES, 'UTF-8'); ?>"
+                    value="<?php echo htmlspecialchars($usernameValue, ENT_QUOTES, 'UTF-8'); ?>"
                 >
                 <label for="username">Usuario (RUT sin puntos 12345678-K)</label>
             </div>
@@ -226,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         type="checkbox"
                         id="remember_user"
                         name="remember_user"
-                        <?php echo !empty($_POST['remember_user']) || $rememberedUserCookie !== '' ? 'checked' : ''; ?>
+                        <?php echo $rememberUserChecked ? 'checked' : ''; ?>
                     >
                     Recordar usuario
                 </label>
@@ -236,7 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 
+    <?php if ($recaptchaEnabled): ?>
     <script src="https://www.google.com/recaptcha/enterprise.js?render=<?php echo htmlspecialchars($recaptchaSiteKey); ?>"></script>
+    <?php endif; ?>
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -253,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const recaptchaInput = document.getElementById('recaptcha_token');
             const loginBtn = document.getElementById('loginBtn');
             const siteKey = form?.dataset.sitekey || '';
+            const recaptchaEnabled = form?.dataset.recaptchaEnabled !== '0';
             const remembered = localStorage.getItem('pdh_remember_user') || '<?php echo htmlspecialchars($rememberedUserCookie, ENT_QUOTES, 'UTF-8'); ?>';
 
             if (remembered && usernameInput) {
@@ -308,6 +180,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             async function fetchRecaptchaToken() {
+                if (!recaptchaEnabled) {
+                    return 'local-dev-recaptcha-disabled';
+                }
                 if (!siteKey || !(window.grecaptcha && window.grecaptcha.enterprise)) {
                     throw new Error('reCAPTCHA no configurado.');
                 }
@@ -355,13 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         localStorage.removeItem('pdh_remember_user');
                     }
 
-                     // Importante: requestSubmit mantiene mejor la heurística del navegador que form.submit()
-                    if (form.requestSubmit) {
-                        form.requestSubmit(loginBtn);
-                    } else {
-                        // fallback
-                        form.submit();
-                    }
+                    form.submit();
                 } catch (err) {
                     showToast(err?.message || 'No se pudo validar reCAPTCHA.');
                     resetButton();

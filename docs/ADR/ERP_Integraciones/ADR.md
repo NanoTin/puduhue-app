@@ -102,3 +102,4 @@ La auditoria del repositorio muestra duplicidad de clases entre `src/Core/*` y `
 ### Consecuencia
 
 Se reduce ambiguedad de clases globales `Database` y `Env`, y la implementacion de la API externa queda anclada a la capa efectiva del proyecto.
+

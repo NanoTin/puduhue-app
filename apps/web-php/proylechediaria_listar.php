@@ -38,11 +38,11 @@ $formatFloatCl = static function ($value, int $decimals = 2): string {
 };
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Proyeccion de Leche - Consolidado</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <form id="proyleche-excel-form" action="?route=proylechediaria/crear" method="POST" enctype="multipart/form-data" class="m-0">
+        <form id="proyleche-excel-form" action="?route=proylechediaria/crear" method="POST" enctype="multipart/form-data" class="m-0" data-confirm="1" data-confirm-message="Desea cargar el archivo Excel seleccionado?">
             <input type="file" name="proyleche_excel" id="proyleche_excel" class="d-none" accept=".xlsx,.xls,.csv">
             <button type="button" id="btn-proyleche-excel" class="btn btn-success btn-sm">
                 <i class="bi bi-file-earmark-excel"></i> Carga masiva Excel
@@ -92,7 +92,7 @@ $formatFloatCl = static function ($value, int $decimals = 2): string {
                     <th>Litros</th>
                     <th>Vacas</th>
                     <th>Lts x Vaca</th>
-                    <th style="width: 180px;">Acciones</th>
+                    <th class="col-actions-lg">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -111,9 +111,9 @@ $formatFloatCl = static function ($value, int $decimals = 2): string {
                                 <a class="btn btn-warning btn-sm" href="?route=proylechediaria/editar&fecha=<?= urlencode($p['proylechefecha'] ?? '') ?>">
                                     <i class="bi bi-pencil-square"></i> Editar
                                 </a>
-                                <form action="?route=proylechediaria/anular" method="POST" class="d-inline">
+                                <form action="?route=proylechediaria/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="Desea eliminar el registro?">
                                     <input type="hidden" name="proylechefecha" value="<?= htmlspecialchars($p['proylechefecha'] ?? '') ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Desea eliminar el registro?');">
+                                    <button type="submit" class="btn btn-danger btn-sm">
                                         <i class="bi bi-x-circle"></i> Eliminar
                                     </button>
                                 </form>
@@ -151,9 +151,7 @@ $formatFloatCl = static function ($value, int $decimals = 2): string {
             });
             excelInput.addEventListener('change', function () {
                 if (excelInput.files && excelInput.files.length > 0) {
-                    if (confirm('Desea cargar el archivo Excel seleccionado?')) {
-                        excelForm.submit();
-                    }
+                    excelForm.requestSubmit();
                 }
             });
         }

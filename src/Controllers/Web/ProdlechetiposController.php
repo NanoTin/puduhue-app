@@ -51,7 +51,7 @@ class ProdlechetiposController
         AuthMiddleware::requireAuth();
         $errorMessage = null;
 
-        $invitemsOptions = $this->serviceInvitems->listarInvitemsFormSelect(1, null, 1);
+        $invitemsOptions = $this->serviceInvitems->listarInvitemsFormSelect(1, null, 1, 'LCH');
 
         $viewFile = $this->viewPath('prodlechetipos_crear.php');
         require $viewFile;
@@ -109,7 +109,7 @@ class ProdlechetiposController
 
         $errorMessage = null;
 
-        $invitemsOptions = $this->serviceInvitems->listarInvitemsFormSelect(1, null, 1);
+        $invitemsOptions = $this->serviceInvitems->listarInvitemsFormSelect(1, null, 1, 'LCH');
 
         $viewFile = $this->viewPath('prodlechetipos_editar.php');
         require $viewFile;
@@ -189,9 +189,7 @@ class ProdlechetiposController
 
     private function setToast(string $message, string $type = 'info'): void
     {
-        $_SESSION['toast'] = [
-            'message' => $message,
-            'type'    => $type,
-        ];
+        require_once dirname(__DIR__, 2) . '/Helpers/FlashMessageHelper.php';
+        FlashMessageHelper::toast($message, $type);
     }
 }

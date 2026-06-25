@@ -1,0 +1,632 @@
+[
+    {
+        "codigo": "AJSTOCK",
+        "nombre": "Ajuste de stock",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "EMPMAQ",
+        "nombre": "Empresa Maquinaria",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LCO-0002",
+        "nombre": "Coipomo-Lechería ",
+        "descripcion": "SALA - NO CENTRO",
+        "activo": true
+    },
+    {
+        "codigo": "ADM01",
+        "nombre": "Administración General",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ADM02",
+        "nombre": "Administración Coipomo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ADM03",
+        "nombre": "Administración San Miguel",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ADM04",
+        "nombre": "Administración Mi Tierra",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ADM05",
+        "nombre": "Administración Bellavista",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ADM06",
+        "nombre": "Administración Radales",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LE01",
+        "nombre": "Lechería Coipomo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LE02",
+        "nombre": "Lechería San Miguel",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LE03",
+        "nombre": "Lechería Mi Tierra",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LE04",
+        "nombre": "Lechería Bellavista",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LE05",
+        "nombre": "Lechería Radales",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CI03",
+        "nombre": "San Francisco",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CI04",
+        "nombre": "Paillaco",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CI05",
+        "nombre": "Corte Alto",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CI06",
+        "nombre": "Ternerera Radales",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CI07",
+        "nombre": "Ternerera Bellavista",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CI08",
+        "nombre": "Ternerera Mi Tierra",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CI09",
+        "nombre": "Ternerera Coipomo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CI10",
+        "nombre": "Ternerera San Miguel",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "103",
+        "nombre": "GANADERIA ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "104",
+        "nombre": "EMPRESA MAQUINARIA ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "105",
+        "nombre": "ADMINISTRACION ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LBV-0002",
+        "nombre": "Bellavista-Lechería ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "LMT-0002",
+        "nombre": "Mi tierra-Lechería ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CSF-RECRIA",
+        "nombre": "San Francisco -Recria",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LSM-0002",
+        "nombre": "San Miguel-Lechería ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "LRD-0002",
+        "nombre": "RADALES-Lechería ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "1-1-2-01",
+        "nombre": "Coipomo - Lechería ** NO USAR**",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "2-1-2-01",
+        "nombre": "San Miguel - Lechería **NO USAR**",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "2-2-2-01",
+        "nombre": "Radales - Lechería **NO USAR**",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "3-1-2-02",
+        "nombre": "Bellavista - Lechería  **NO USAR** ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "3-1-2-01",
+        "nombre": "Mi Tierra - Lechería **NO USAR**",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "9-0-2-90",
+        "nombre": "INDIRECTOS LECHE",
+        "activo": true
+    },
+    {
+        "codigo": "1-1-3-01",
+        "nombre": "Quichitue - REPOSICION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "2-3-3-01",
+        "nombre": "CORTE ALTO REPOSICION",
+        "activo": true
+    },
+    {
+        "codigo": "3-1-3-01",
+        "nombre": "San Francisco - REPOSICION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "3-2-3-01",
+        "nombre": "Paillaco - REPOSICION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "9-0-3-90",
+        "nombre": "INDIRECTOS REPOSICION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "1-1-4-01",
+        "nombre": "COIPOMO TERNERERA",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "2-1-4-01",
+        "nombre": "SAN MIGUEL TERNERERA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "3-1-4-01",
+        "nombre": "MI TIERRA TERNERERA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "9-0-4-90",
+        "nombre": "INDIRECTOS TERNERERA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "9-0-8-90",
+        "nombre": "INDIRECTOS ADMINISTRACION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "9-0-0-90",
+        "nombre": "INDIRECTOS DISTRIBUCION",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "2-2-4-01",
+        "nombre": "RADALES TERNERERA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "1-1-3-02",
+        "nombre": "COGOMO REPOSICION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "LMT-MAIZSILO-MAIZ 2022-2023",
+        "nombre": "Mi tierra-Maiz Silo-MAIZ PARA SILO 22-23",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "1-1-2-02",
+        "nombre": "CARDENAS Y SIEGEL",
+        "descripcion": "ANEXO LECHERIA COIPOMO",
+        "activo": true
+    },
+    {
+        "codigo": "2-2-2-02",
+        "nombre": "AMPUERO ",
+        "descripcion": "ANEXO RADALES",
+        "activo": true
+    },
+    {
+        "codigo": "3-1-2-03",
+        "nombre": "BIZARRI ",
+        "descripcion": "ANEXO MI TIERRA",
+        "activo": true
+    },
+    {
+        "codigo": "9-0-3-91",
+        "nombre": "CRIANZA  WAGYU",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LBV-PRADERAS -PRADERAS ",
+        "nombre": "Bellavista-ESTABLECIMIENTO PRADERAS -ESTABLECIMIENTOS PRADERAS  23-24",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "pp101-ALFALFA",
+        "nombre": "Prueba-Alfalfa",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "pp101-PROD",
+        "nombre": "Prueba- Lechería",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "pp101-pp102-P101",
+        "nombre": "Prueba-BV 1 Limones-Citrus-Limon",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "Ejemplo-P101",
+        "nombre": "Ejemplo-Citrus-Limon",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BELEJE-PROD",
+        "nombre": "Bellavista Ejemplo- Lechería",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BELEJE-P101",
+        "nombre": "Bellavista Ejemplo-Citrus-Limon",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BELEJE-L1-P101",
+        "nombre": "Bellavista Ejemplo-LOTE 1-Citrus-Limon",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PAILLACO-RECRIA",
+        "nombre": "Paillaco-Recria",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "Cogomo-RECRIA",
+        "nombre": "Cogomo-Recria",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "Quichitue-RECRIA",
+        "nombre": "Quichitue-Recria",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "1-1-3-05",
+        "nombre": "Paillaco-REPOSICION",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "Cogomo-Reposición",
+        "nombre": "Cogomo-REPOSICION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "Quichitue-Reposición",
+        "nombre": "Quichitue-REPOSICION",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CSF-Reposición",
+        "nombre": "San Francisco -REPOSICION",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LBV-Reposición",
+        "nombre": "Bellavista-REPOSICION",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LCO-Reposición",
+        "nombre": "Coipomo-REPOSICION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "LMT-Reposición",
+        "nombre": "Mi tierra-REPOSICION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "LRD-Reposición",
+        "nombre": "RADALES-REPOSICION",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LSM-Reposición",
+        "nombre": "San Miguel-REPOSICION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "2-2-2-03",
+        "nombre": "Ciruelillo - Lechería **NO USAR**",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LSM-N-03-G",
+        "nombre": "San Miguel-Crianza Wagyu",
+        "activo": true
+    },
+    {
+        "codigo": "LMT-N-03-G",
+        "nombre": "Mi tierra-Crianza Wagyu",
+        "activo": true
+    },
+    {
+        "codigo": "LRD-N-03-G",
+        "nombre": "Radales-Crianza Wagyu",
+        "activo": true
+    },
+    {
+        "codigo": "LCO-N-03-G",
+        "nombre": "Coipomo-Crianza Wagyu",
+        "activo": true
+    },
+    {
+        "codigo": "Cogomo-N-03-G",
+        "nombre": "Cogomo-Crianza Wagyu",
+        "activo": true
+    },
+    {
+        "codigo": "Quichitue-N-03-G",
+        "nombre": "Quichitue-Crianza Wagyu",
+        "activo": true
+    },
+    {
+        "codigo": "pp101-MAIZ DE PRIMERA-C2425",
+        "nombre": "Prueba-Maiz 1°-CAMPAÑA 24-25",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "2-4-2-01",
+        "nombre": "CASA ANITA - LECHERIA **NO USAR**",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "2-4-2-02",
+        "nombre": "CADENASSO - LECHERIA **NO USAR**",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "2-4-4-01",
+        "nombre": "CASA ANITA - TERNERERA ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CIRUELILLO-0002",
+        "nombre": "Ciruelillo-Neg Lechería ",
+        "activo": true
+    },
+    {
+        "codigo": "CIRUELILLO-Reposición",
+        "nombre": "Ciruelillo-Neg Reposición",
+        "activo": true
+    },
+    {
+        "codigo": "CIRUELILLO-N-03-G",
+        "nombre": "Ciruelillo-NEG Crianza Wagyu",
+        "activo": true
+    },
+    {
+        "codigo": "CASA ANITA-0002",
+        "nombre": "Casa Anita -Neg Lechería ",
+        "activo": true
+    },
+    {
+        "codigo": "CASA ANITA-Reposición",
+        "nombre": "Casa Anita -Neg Reposición",
+        "activo": true
+    },
+    {
+        "codigo": "CASA ANITA-N-03-G",
+        "nombre": "Casa Anita -NEG Crianza Wagyu",
+        "activo": true
+    },
+    {
+        "codigo": "CADENASSO-0002",
+        "nombre": "Cadenasso-Neg Lechería ",
+        "activo": true
+    },
+    {
+        "codigo": "CADENASSO-Reposición",
+        "nombre": "Cadenasso-Neg Reposición",
+        "activo": true
+    },
+    {
+        "codigo": "CADENASSO-N-03-G",
+        "nombre": "Cadenasso-NEG Crianza Wagyu",
+        "activo": true
+    },
+    {
+        "codigo": "2-3-3-02",
+        "nombre": "VESPERINAS REPOSICION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "Ejemplo-MAIZ DE PRIMERA-CAMP25",
+        "nombre": "Ejemplo-Maiz 1° 2025",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VESPERINAS-Reposición",
+        "nombre": "Vesperinas-Neg Reposición",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "VESPERINAS-0002",
+        "nombre": "Vesperinas-Neg Lechería NoUSAR**",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "TRADICIONAL-0002",
+        "nombre": "TRADICIONAL -Neg Lechería ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "TRADICIONAL-Reposición",
+        "nombre": "TRADICIONAL -Neg Reposición",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "TRADICIONAL-N-03-G",
+        "nombre": "TRADICIONAL -NEG Crianza Wagyu",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ROTATI-0002",
+        "nombre": "Tronador-Neg Lechería ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CSF-MAIZ DE PRIMERA-CA2026",
+        "nombre": "San Francisco-Maiz 1°-Campaña 2026",
+        "activo": true
+    },
+    {
+        "codigo": "LMT-MAIZ DE PRIMERA-SM-26",
+        "nombre": "Mi tierra-Maiz 1°-SILO MAIZ 2025-2026",
+        "activo": true
+    },
+    {
+        "codigo": "CASA ANITA-MAIZSILO-SM-26",
+        "nombre": "Casa Anita -Maiz Silo-SILO MAIZ 2025-2026",
+        "activo": true
+    },
+    {
+        "codigo": "CIRUELILLO-MAIZSILO-SM-26",
+        "nombre": "Ciruelillo-Maiz Silo-SILO MAIZ 2025-2026",
+        "activo": true
+    },
+    {
+        "codigo": "TRADICIONAL-MAIZSILO-SM-26",
+        "nombre": "Tradicional-Maiz Silo-SILO MAIZ 2025-2026",
+        "activo": true
+    },
+    {
+        "codigo": "ROTATI-MAIZSILO-SM-26",
+        "nombre": "TRONADOR-Maiz Silo-SILO MAIZ 2025-2026",
+        "activo": true
+    },
+    {
+        "codigo": "LRD-MAIZSILO-SM-26",
+        "nombre": "Radales-Maiz Silo-SILO MAIZ 2025-2026",
+        "activo": true
+    }
+]

@@ -101,8 +101,10 @@ if (!$isPartial) {
     const errorBox = document.getElementById('formError');
 
     const showError = (msg) => {
+        if (window.ToastManager) {
+            window.ToastManager.show(msg, 'warning');
+        }
         if (!errorBox) {
-            alert(msg);
             return;
         }
         errorBox.textContent = msg;

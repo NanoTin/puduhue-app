@@ -5,9 +5,10 @@ if (!$isPartial) {
     require 'menu.php';
 }
 ?>
+<link rel="stylesheet" href="assets/css/frm_mstr.css">
 
-<div class="container mt-4">
-    <h3 class="mb-3">Crear Ítem</h3>
+<div class="form-responsive-container">
+    <h3 class="page-title">Crear Ítem</h3>
 
     <?php if (!empty($errorMessage)): ?>
         <div class="alert alert-danger" role="alert">
@@ -15,53 +16,126 @@ if (!$isPartial) {
         </div>
     <?php endif; ?>
 
-    <form method="POST" action="?route=invitems/crear" class="row g-3">
-        <div class="col-4">
-            <label class="form-label">Descripción</label>
-            <input type="text" name="invitemdsc" class="form-control" required maxlength="50">
-        </div>
-        <div class="col-4">
-            <label class="form-label">Unidad Medida ID</label>
-            <select name="invunidmedid" class="form-select" required>
-                <option value="">Seleccione...</option>
-                <?php foreach (($invunidmedOptions ?? []) as $unidmedOpt): ?>
-                    <option value="<?= htmlspecialchars($unidmedOpt['invunidmedid']) ?>">
-                        <?= htmlspecialchars($unidmedOpt['invunidmeddsc']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <div class="col-4">
-            <label class="form-label">ERP Ítem Código</label>
-            <input type="text" name="erpinvitemcod" class="form-control" required maxlength="50">
-        </div>
-        <div class="col-4">
-            <label class="form-label" for="invitemleche">Para módulo Leche</label>
-            <select class="form-select" id="invitemleche" name="invitemleche">
-                <option value="1">Sí</option>
-                <option value="0" selected>No</option>
-            </select>
-        </div>
-        <div class="col-4">
-            <label class="form-label" for="invitemstockeable">Stockeable</label>
-            <select class="form-select" id="invitemstockeable" name="invitemstockeable">
-                <option value="1" selected>Sí</option>
-                <option value="0">No</option>
-            </select>
-        </div>
-        <div class="col-4">
-            <label class="form-label" for="invitemactivo">Activo</label>
-            <select class="form-select" id="invitemactivo" name="invitemactivo">
-                <option value="1" selected>Sí</option>
-                <option value="0">No</option>
-            </select>
+    <form method="POST"
+          action="?route=invitems/crear"
+          autocomplete="off"
+          data-confirm="1"
+          data-confirm-message="¿Desea confirmar los datos ingresados?">
+        <div class="form-grid-4">
+            <div class="form-field form-field-half">
+                <label class="form-label" for="invitemdsc">Descripción</label>
+                <input type="text" name="invitemdsc" id="invitemdsc" class="form-control" required maxlength="50">
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="invunidmedid">Unidad Medida</label>
+                <select name="invunidmedid" id="invunidmedid" class="form-select" required>
+                    <option value="">Seleccione...</option>
+                    <?php foreach (($invunidmedOptions ?? []) as $unidmedOpt): ?>
+                        <option value="<?= htmlspecialchars($unidmedOpt['invunidmedid']) ?>">
+                            <?= htmlspecialchars($unidmedOpt['invunidmeddsc']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="erpinvitemcod">ERP Ítem Código</label>
+                <input type="text" name="erpinvitemcod" id="erpinvitemcod" class="form-control" required maxlength="50">
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="invitemusocodigo">Uso funcional</label>
+                <select class="form-select" id="invitemusocodigo" name="invitemusocodigo">
+                    <option value="BDG" selected>BDG - Bodega/Base</option>
+                    <option value="LCH">LCH - Leche</option>
+                    <option value="ALM">ALM - Suplementación Animal</option>
+                    <option value="CMB">CMB - Combustible</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="familiaid">Familia</label>
+                <select name="familiaid" id="familiaid" class="form-select">
+                    <option value="">Sin familia</option>
+                    <?php foreach (($familiasOptions ?? []) as $familiaOpt): ?>
+                        <option value="<?= htmlspecialchars($familiaOpt['familiaid']) ?>">
+                            <?= htmlspecialchars(($familiaOpt['familiacod'] ?? '') . ' - ' . ($familiaOpt['familiadsc'] ?? '')) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="subfamiliaid">Subfamilia</label>
+                <select name="subfamiliaid" id="subfamiliaid" class="form-select">
+                    <option value="">Sin subfamilia</option>
+                    <?php foreach (($subfamiliasOptions ?? []) as $subfamiliaOpt): ?>
+                        <option value="<?= htmlspecialchars($subfamiliaOpt['subfamiliaid']) ?>">
+                            <?= htmlspecialchars(($subfamiliaOpt['subfamiliacod'] ?? '') . ' - ' . ($subfamiliaOpt['subfamiliadsc'] ?? '')) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="erptasaimpositivaid">Tasa compra</label>
+                <select name="erptasaimpositivaid" id="erptasaimpositivaid" class="form-select">
+                    <option value="">Sin tasa</option>
+                    <?php foreach (($tasasImpositivasOptions ?? []) as $tasaOpt): ?>
+                        <option value="<?= htmlspecialchars($tasaOpt['erptasaimpositivaid']) ?>">
+                            <?= htmlspecialchars(($tasaOpt['erptasaimpositivacod'] ?? '') . ' - ' . ($tasaOpt['erptasaimpositivadsc'] ?? '')) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="erppartidafinancieraid">Partida financiera</label>
+                <select name="erppartidafinancieraid" id="erppartidafinancieraid" class="form-select">
+                    <option value="">Sin partida</option>
+                    <?php foreach (($partidasFinancierasOptions ?? []) as $partidaOpt): ?>
+                        <option value="<?= htmlspecialchars($partidaOpt['erppartidafinancieraid']) ?>">
+                            <?= htmlspecialchars(($partidaOpt['erppartidafinancieracod'] ?? '') . ' - ' . ($partidaOpt['erppartidafinancieradsc'] ?? '')) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="invitemleche">Para módulo Leche</label>
+                <select class="form-select" id="invitemleche" name="invitemleche">
+                    <option value="1">Sí</option>
+                    <option value="0" selected>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="invitemstockeable">Stockeable</label>
+                <select class="form-select" id="invitemstockeable" name="invitemstockeable">
+                    <option value="1" selected>Sí</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="invitemcompra">Es compra</label>
+                <select class="form-select" id="invitemcompra" name="invitemcompra">
+                    <option value="1">Sí</option>
+                    <option value="0" selected>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="invitemcostoestandar">Costo estándar</label>
+                <input type="number" name="invitemcostoestandar" id="invitemcostoestandar" class="form-control" step="0.0001" min="0" value="0">
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="invitemactivo">Activo</label>
+                <select class="form-select" id="invitemactivo" name="invitemactivo">
+                    <option value="1" selected>Sí</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
         </div>
 
-        <div class="col-4 d-flex gap-2">
-            <button class="btn btn-primary">Guardar</button>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Guardar</button>
             <a href="?route=invitems/listar" class="btn btn-secondary">Volver</a>
         </div>
     </form>
 </div>
+
+<?php require __DIR__ . '/partials/modal_confirm.php'; ?>
+<script src="assets/js/confirm-modal.js"></script>
 
 <?php if (!$isPartial) { require 'footer.php'; } ?>

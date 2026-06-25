@@ -1,11 +1,20 @@
 <?php
 // menu.php
 
-$perfilId = $_SESSION['perfilIdSession'] ?? 0;
+$rootPath = dirname(__DIR__, 2);
+if (!class_exists('AuthMiddleware')) {
+    $authPath = $rootPath . '/src/Middleware/AuthMiddleware.php';
+    if (file_exists($authPath)) {
+        require_once $authPath;
+    }
+}
+
+$menuUserContext = class_exists('AuthMiddleware') ? AuthMiddleware::getUserContext() : [];
+$perfilId = (int)($menuUserContext['perfilId'] ?? 0);
 $menuItems = [];
 
 try {
-    require_once dirname(__DIR__, 2) . '/src/Controllers/Web/PerfilesmenusController.php';
+    require_once $rootPath . '/src/Controllers/Web/PerfilesmenusController.php';
     $perfilController = new \PerfilesmenusController();
     $menuResponse = $perfilController->listarMenusPorPerfil((int)$perfilId);
     $menuItems = $menuResponse['rows'] ?? $menuResponse ?? [];

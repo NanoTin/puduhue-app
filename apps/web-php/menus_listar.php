@@ -7,7 +7,7 @@ if (!$isPartial) {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Menús</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -67,7 +67,7 @@ if (!$isPartial) {
                     <th>Orden</th>
                     <th>Icono</th>
                     <th>Activo</th>
-                    <th style="width: 170px;">Acciones</th>
+                    <th class="col-actions-md">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -90,9 +90,9 @@ if (!$isPartial) {
                                     <i class="bi bi-pencil-square"></i> Editar
                                 </a>
                                 <?php if (!empty($m['menuactivo'])): ?>
-                                    <form action="?route=menus/anular" method="POST" class="d-inline">
+                                    <form action="?route=menus/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Desea anular este menú?">
                                         <input type="hidden" name="menuid" value="<?= htmlspecialchars($m['menuid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Desea anular este menú?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="bi bi-x-circle"></i> Anular
                                         </button>
                                     </form>

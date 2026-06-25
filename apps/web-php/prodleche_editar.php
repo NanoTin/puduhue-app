@@ -50,7 +50,7 @@ if (!$isPartial) {
             <section class="mb-4">
                 <h5 class="section-title">Datos Generales</h5>
                 <div class="row g-3 align-items-end general-grid">
-                    <div class="col-12 col-lg-6" style="display: none;">
+                    <div class="col-12 col-lg-6 d-none">
                         <label for="empresaid" class="form-label">Empresa</label>
                         <select name="empresaid" id="empresaid" class="form-select" disabled>
                             <option value="">Seleccione</option>
@@ -155,14 +155,14 @@ if (!$isPartial) {
             <section class="mb-4">
                 <h5 class="section-title mb-3">Detalle</h5>
 
-                <div class="table-responsive">
+                <div class="table-responsive transaction-detail-wrap">
                     <table class="detail-table">
                         <thead>
                         <tr>
-                            <th style="width: 30%;">Tipo Leche</th>
-                            <th style="width: 20%;">Litros</th>
-                            <th style="width: 20%;">Vacas</th>
-                            <th style="width: 20%;">Lts x Vaca</th>
+                            <th class="col-detail-name">Tipo Leche</th>
+                            <th class="col-detail-number">Litros</th>
+                            <th class="col-detail-number">Vacas</th>
+                            <th class="col-detail-number">Lts x Vaca</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -177,17 +177,26 @@ if (!$isPartial) {
                                 $tipoId = htmlspecialchars($tipoIdRaw ?? '');
                                 $tipoDsc = htmlspecialchars($tipo['prodlechetipodsc'] ?? '');
                                 $esVenta = (int)($tipo['prodlecheventa'] ?? 0) === 1;
+                                $tipoActivo = (int)($tipo['prodlecheactivo'] ?? 1) === 1;
                                 $detalleInput = $detallesData[$index] ?? ($detallesPorTipo[(string)$tipoIdRaw] ?? []);
                                 $litrosDetalle = isset($detalleInput['pldetlitros']) ? (float)$detalleInput['pldetlitros'] : 0;
                                 $vacasDetalle = isset($detalleInput['pldetvacas']) ? (float)$detalleInput['pldetvacas'] : 0;
                                 $ltsxvacaDetalle = $detalleInput['pldetlitrosxvaca'] ?? ($vacasDetalle > 0 ? $litrosDetalle / $vacasDetalle : 0);
-                                $litrosVal = htmlspecialchars((string)($detalleInput['pldetlitros'] ?? '0'));
-                                $vacasVal = htmlspecialchars((string)($detalleInput['pldetvacas'] ?? '0'));
-                                $ltsxvacaVal = htmlspecialchars(is_numeric($ltsxvacaDetalle) ? number_format((float)$ltsxvacaDetalle, 2, '.', '') : '0');
+                                $litrosVal = $tipoActivo ? htmlspecialchars((string)($detalleInput['pldetlitros'] ?? '0')) : '0';
+                                $vacasVal = $tipoActivo ? htmlspecialchars((string)($detalleInput['pldetvacas'] ?? '0')) : '0';
+                                $ltsxvacaVal = $tipoActivo ? htmlspecialchars(is_numeric($ltsxvacaDetalle) ? number_format((float)$ltsxvacaDetalle, 2, '.', '') : '0') : '0.00';
                                 ?>
-                                <tr data-prodlecheventa="<?= $esVenta ? '1' : '0' ?>">
-                                    <td class="fw-semibold"><?= $tipoDsc ?></td>
+                                <tr data-prodlecheventa="<?= ($esVenta && $tipoActivo) ? '1' : '0' ?>" class="<?= $tipoActivo ? '' : 'text-muted table-secondary' ?>">
+                                    <td class="fw-semibold">
+                                        <?= $tipoDsc ?>
+                                        <?php if (!$tipoActivo): ?>
+                                            <span class="badge bg-secondary ms-1">Inactivo</span>
+                                        <?php endif; ?>
+                                    </td>
                                     <td>
+                                        <?php if (!$tipoActivo): ?>
+                                            <input type="hidden" name="detalles[<?= $index ?>][pldetlitros]" value="0">
+                                        <?php endif; ?>
                                         <input
                                             type="number"
                                             name="detalles[<?= $index ?>][pldetlitros]"
@@ -195,10 +204,14 @@ if (!$isPartial) {
                                             step="1"
                                             min="0"
                                             value="<?= $litrosVal ?>"
+                                            <?= $tipoActivo ? '' : 'disabled' ?>
                                         >
                                         <input type="hidden" name="detalles[<?= $index ?>][prodlechetipoid]" value="<?= $tipoId ?>">
                                     </td>
                                     <td>
+                                        <?php if (!$tipoActivo): ?>
+                                            <input type="hidden" name="detalles[<?= $index ?>][pldetvacas]" value="0">
+                                        <?php endif; ?>
                                         <input
                                             type="number"
                                             name="detalles[<?= $index ?>][pldetvacas]"
@@ -206,9 +219,13 @@ if (!$isPartial) {
                                             step="1"
                                             min="0"
                                             value="<?= $vacasVal ?>"
+                                            <?= $tipoActivo ? '' : 'disabled' ?>
                                         >
                                     </td>
                                     <td>
+                                        <?php if (!$tipoActivo): ?>
+                                            <input type="hidden" name="detalles[<?= $index ?>][pldetlitrosxvaca]" value="0">
+                                        <?php endif; ?>
                                         <input
                                             type="number"
                                             name="detalles[<?= $index ?>][pldetlitrosxvaca]"
@@ -217,6 +234,7 @@ if (!$isPartial) {
                                             min="0"
                                             value="<?= $ltsxvacaVal ?>"
                                             readonly
+                                            <?= $tipoActivo ? '' : 'disabled' ?>
                                         >
                                     </td>
                                 </tr>
@@ -505,7 +523,7 @@ if (!$isPartial) {
 
                 // Regla por fila: si uno tiene valor, el otro tambien debe ser > 0.
                 if ((litros > 0 && vacas <= 0) || (vacas > 0 && litros <= 0)) {
-                    alert('En cada fila, si ingresa litros debe ingresar vacas y viceversa (ambos mayores a cero).');
+                    window.ToastManager?.show('En cada fila, si ingresa litros debe ingresar vacas y viceversa (ambos mayores a cero).', 'warning');
                     if (litros > 0 && vacas <= 0) {
                         row.querySelector('.vacas-input')?.focus();
                     } else {
@@ -520,7 +538,7 @@ if (!$isPartial) {
             }
 
             if (!tieneDetalle) {
-                alert('Ingrese al menos un tipo de leche con litros y vacas mayores a cero.');
+                window.ToastManager?.show('Ingrese al menos un tipo de leche con litros y vacas mayores a cero.', 'warning');
                 return false;
             }
             return true;
@@ -537,7 +555,7 @@ if (!$isPartial) {
             const iniTotal = (iniParts[0] || 0) * 60 + (iniParts[1] || 0);
             const finTotal = (finParts[0] || 0) * 60 + (finParts[1] || 0);
             if (finTotal < iniTotal) {
-                alert('La hora término no puede ser menor a la hora inicio.');
+                window.ToastManager?.show('La hora término no puede ser menor a la hora inicio.', 'warning');
                 horaFinInput?.focus();
                 return false;
             }
@@ -606,7 +624,7 @@ if (!$isPartial) {
         }
         if (confirmSaveBtn) {
             confirmSaveBtn.addEventListener('click', () => {
-                document.getElementById('prodlecheForm')?.submit();
+                document.getElementById('prodlecheForm')?.requestSubmit();
             });
         }
 

@@ -128,6 +128,12 @@ class ProdlecheController
                     continue;
                 }
 
+                if (empty($prodlecheTiposMap[$tipoId]['prodlecheactivo'])) {
+                    $litros = 0;
+                    $vacas = 0;
+                    $litrosxvaca = 0;
+                }
+
                 if ($litros > 0 && $vacas > 0) {
                     $detalleConCantidades = true;
                 }
@@ -318,6 +324,12 @@ class ProdlecheController
 
                 if ($tipoId <= 0) {
                     continue;
+                }
+
+                if (empty($prodlecheTiposMap[$tipoId]['prodlecheactivo'])) {
+                    $litros = 0;
+                    $vacas = 0;
+                    $litrosxvaca = 0;
                 }
 
                 if ($litros > 0 && $vacas > 0) {
@@ -691,10 +703,8 @@ class ProdlecheController
 
     private function setToast(string $message, string $type = 'info'): void
     {
-        $_SESSION['toast'] = [
-            'message' => $message,
-            'type'    => $type,
-        ];
+        require_once dirname(__DIR__, 2) . '/Helpers/FlashMessageHelper.php';
+        FlashMessageHelper::toast($message, $type);
     }
 
     private function isValidUpload(?array $file): bool

@@ -43,7 +43,7 @@ if (!$isPartial) {
             <section class="mb-4">
                 <h5 class="section-title">Datos Generales</h5>
                 <div class="row g-3 align-items-end general-grid">
-                    <div class="col-12 col-lg-6" style="display: none;">
+                    <div class="col-12 col-lg-6 d-none">
                         <label for="empresaid" class="form-label">Empresa</label>
                         <select name="empresaid" id="empresaid" class="form-select" disabled>
                             <option value="">Seleccione</option>
@@ -151,10 +151,10 @@ if (!$isPartial) {
                     <table class="detail-table">
                         <thead>
                         <tr>
-                            <th style="width: 30%;">Tipo Leche</th>
-                            <th style="width: 20%;">Litros</th>
-                            <th style="width: 20%;">Vacas</th>
-                            <th style="width: 20%;">Lts x Vaca</th>
+                            <th class="col-detail-name">Tipo Leche</th>
+                            <th class="col-detail-number">Litros</th>
+                            <th class="col-detail-number">Vacas</th>
+                            <th class="col-detail-number">Lts x Vaca</th>
                         </tr>
                         </thead>
                         <tbody>

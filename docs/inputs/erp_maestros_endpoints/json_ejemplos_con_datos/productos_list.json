@@ -1,0 +1,6674 @@
+[
+    {
+        "codigo": "GM",
+        "nombre": "Grano Ma?Oleico",
+        "descripcion": "** DUPLICAR PARA AGREGAR Y CONFIGURAR SOLAPA GRANOS **",
+        "activo": false
+    },
+    {
+        "codigo": "CH",
+        "nombre": "Cosecha",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "SC",
+        "nombre": "Siembra",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "LB",
+        "nombre": "Labor (Ha)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "DIFCAM",
+        "nombre": "Diferencia De Cambio",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GSj",
+        "nombre": "Grano Soja",
+        "descripcion": "** DUPLICAR PARA AGREGAR Y CONFIGURAR SOLAPA GRANOS **",
+        "activo": false
+    },
+    {
+        "codigo": "GSorgo",
+        "nombre": "Grano Sorgo",
+        "descripcion": "** DUPLICAR PARA AGREGAR Y CONFIGURAR SOLAPA GRANOS **",
+        "activo": false
+    },
+    {
+        "codigo": "GTrigo",
+        "nombre": "Grano Trigo",
+        "descripcion": "** DUPLICAR PARA AGREGAR Y CONFIGURAR SOLAPA GRANOS **",
+        "activo": false
+    },
+    {
+        "codigo": "MAIZ SILO",
+        "nombre": "Maiz Silo",
+        "descripcion": "** PARA ENSILAJES TIPO: GRANO **",
+        "activo": true
+    },
+    {
+        "codigo": "RA",
+        "nombre": "Raciones De Alfalfa",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "REPAR",
+        "nombre": "Reparaciones Y Mantenimientos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RDM",
+        "nombre": "Roundup Ultramax",
+        "descripcion": "** HERBICIDA **",
+        "activo": false
+    },
+    {
+        "codigo": "VACA",
+        "nombre": "** NO USAR **  VACA VACIA ",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": false
+    },
+    {
+        "codigo": "TORO",
+        "nombre": "** NO USAR ** Toro",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": false
+    },
+    {
+        "codigo": "RECRIA TERNERA",
+        "nombre": "**NO USA** Ternera Recria",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": false
+    },
+    {
+        "codigo": "TERNERO RECRIA",
+        "nombre": "** NO USAR ** Ternero Recria",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": false
+    },
+    {
+        "codigo": "GrM",
+        "nombre": "Grano Ma?",
+        "descripcion": "** DUPLICAR PARA AGREGAR Y CONFIGURAR SOLAPA GRANOS **",
+        "activo": false
+    },
+    {
+        "codigo": "GranoGirasol",
+        "nombre": "Grano Girasol",
+        "descripcion": "** DUPLICAR PARA AGREGAR Y CONFIGURAR SOLAPA GRANOS **",
+        "activo": false
+    },
+    {
+        "codigo": "GTrigoPan",
+        "nombre": "Grano Trigo Pan",
+        "descripcion": "** DUPLICAR PARA AGREGAR Y CONFIGURAR SOLAPA GRANOS **",
+        "activo": false
+    },
+    {
+        "codigo": "LBBHOR",
+        "nombre": "Labor (Hs)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "FER",
+        "nombre": "Fertilizacion",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "PULV",
+        "nombre": "Pulverizaciones",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VCPRE",
+        "nombre": "** NO USAR ** VACA PREÑADA ",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": false
+    },
+    {
+        "codigo": "TRI",
+        "nombre": "** NO USAR** Torito",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": false
+    },
+    {
+        "codigo": "A101",
+        "nombre": "ASESORIAS ADMINISTRATIVAS",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "G101",
+        "nombre": "INSUMOS CAFETERIA",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "G102",
+        "nombre": "INSUMOS PAPELERIA",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "A102",
+        "nombre": "HONORARIOS 12.25%",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "A103",
+        "nombre": "HONORARIOS 15.25%",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PS107",
+        "nombre": "Compost ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "F102",
+        "nombre": "SEMILLA DE TAMA",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PS103",
+        "nombre": "Pulverizadora ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PS104",
+        "nombre": "Tolva",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PS108",
+        "nombre": "Urea smart ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IN 001",
+        "nombre": "PELON DE ALMENDRA",
+        "descripcion": "SUPLEMENTO ",
+        "activo": false
+    },
+    {
+        "codigo": "PREV002",
+        "nombre": "SE?LETICA SEGURIDAD",
+        "descripcion": "PREV RIESGOS",
+        "activo": false
+    },
+    {
+        "codigo": "TERNERO ",
+        "nombre": "TERNERO ",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "VACA EN LECHE ",
+        "nombre": "VACA EN LECHE ",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "VACA SECA ",
+        "nombre": "VACA SECA PRENADA ",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "VAQUILLAS ",
+        "nombre": "VAQUILLAS ENCASTE",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "AFI001",
+        "nombre": "BASTON LECTOR",
+        "descripcion": "BASTON LECTOR",
+        "activo": true
+    },
+    {
+        "codigo": "AFI002",
+        "nombre": "BOMBA 1 HP",
+        "descripcion": "BOMBA 1 HP",
+        "activo": true
+    },
+    {
+        "codigo": "AFI003",
+        "nombre": "COMPRESOR",
+        "descripcion": "COMPRESOR",
+        "activo": true
+    },
+    {
+        "codigo": "AFI004",
+        "nombre": "PLATO DETER.MATERIA SECA",
+        "descripcion": "PLATO DETER.MATERIA SECA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI005",
+        "nombre": "TESTER GALLAGHER",
+        "descripcion": "TESTER GALLAGHER",
+        "activo": true
+    },
+    {
+        "codigo": "AFI006",
+        "nombre": "BOMBA DE PETROLEO V",
+        "descripcion": "BOMBA DE PETROLEO V",
+        "activo": true
+    },
+    {
+        "codigo": "AFI007",
+        "nombre": "BOMBA GRAN CAUDAL ",
+        "descripcion": "BOMBA GRAN CAUDAL ",
+        "activo": true
+    },
+    {
+        "codigo": "AFI008",
+        "nombre": "BOMBA PURINERA",
+        "descripcion": "BOMBA PURINERA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI009",
+        "nombre": "BOMBA SOLAR",
+        "descripcion": "BOMBA SOLAR",
+        "activo": true
+    },
+    {
+        "codigo": "AFI010",
+        "nombre": "CABESTRILLO LEVANTA VACAS",
+        "descripcion": "CABESTRILLO LEVANTA VACAS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI011",
+        "nombre": "ESTANQUE 10.000 LTS",
+        "descripcion": "ESTANQUE 10.000 LTS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI012",
+        "nombre": "ESTANQUE DE AGUA 1200 LTS",
+        "descripcion": "ESTANQUE DE AGUA 1200 LTS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI013",
+        "nombre": "ESTANQUE DE PETROLEO",
+        "descripcion": "ESTANQUE DE PETROLEO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI014",
+        "nombre": "CALEFONT",
+        "descripcion": "CALEFONT",
+        "activo": true
+    },
+    {
+        "codigo": "AFI015",
+        "nombre": "COCINA A GAS",
+        "descripcion": "COCINA A GAS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI016",
+        "nombre": "COMBUSTION LENTA",
+        "descripcion": "COMBUSTION LENTA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI017",
+        "nombre": "COMPUTADOR",
+        "descripcion": "COMPUTADOR",
+        "activo": true
+    },
+    {
+        "codigo": "AFI018",
+        "nombre": "LAVADORA",
+        "descripcion": "LAVADORA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI019",
+        "nombre": "REFRIGERADOR",
+        "descripcion": "REFRIGERADOR",
+        "activo": true
+    },
+    {
+        "codigo": "AFI020",
+        "nombre": "BEBEDERO",
+        "descripcion": "BEBEDERO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI021",
+        "nombre": "BOMBA POZO PROFUNDO",
+        "descripcion": "BOMBA POZO PROFUNDO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI022",
+        "nombre": "MOTOBOMBA",
+        "descripcion": "MOTOBOMBA",
+        "activo": true
+    },
+    {
+        "codigo": "AGR001",
+        "nombre": "ALIADO",
+        "descripcion": "ALIADO",
+        "activo": true
+    },
+    {
+        "codigo": "AGR002",
+        "nombre": "ALSYSTIN",
+        "descripcion": "ALSYSTIN",
+        "activo": true
+    },
+    {
+        "codigo": "AGR003",
+        "nombre": "AMINTEC",
+        "descripcion": "AMINTEC",
+        "activo": true
+    },
+    {
+        "codigo": "AGR004",
+        "nombre": "CAIMAN (AGROQUIM.)",
+        "descripcion": "CAIMAN (AGROQUIM.)",
+        "activo": true
+    },
+    {
+        "codigo": "AGR005",
+        "nombre": "CREDIT FULL",
+        "descripcion": "CREDIT FULL",
+        "activo": true
+    },
+    {
+        "codigo": "AGR006",
+        "nombre": "CYPERKILL 2,5EC ENV 100ML",
+        "descripcion": "CYPERKILL 2,5EC ENV 100ML",
+        "activo": true
+    },
+    {
+        "codigo": "AGR007",
+        "nombre": "DINAMIC",
+        "descripcion": "DINAMIC",
+        "activo": true
+    },
+    {
+        "codigo": "AGR008",
+        "nombre": "DISPEN AG",
+        "descripcion": "DISPEN AG",
+        "activo": true
+    },
+    {
+        "codigo": "AGR009",
+        "nombre": "ESTERON TEN-TEN",
+        "descripcion": "ESTERON TEN-TEN",
+        "activo": true
+    },
+    {
+        "codigo": "AGR010",
+        "nombre": "GALIGAN",
+        "descripcion": "GALIGAN",
+        "activo": true
+    },
+    {
+        "codigo": "AGR011",
+        "nombre": "GARLON 4",
+        "descripcion": "GARLON 4",
+        "activo": true
+    },
+    {
+        "codigo": "AGR012",
+        "nombre": "KARATE",
+        "descripcion": "KARATE",
+        "activo": true
+    },
+    {
+        "codigo": "AGR013",
+        "nombre": "MCPA 750 SL",
+        "descripcion": "MCPA 750 SL",
+        "activo": true
+    },
+    {
+        "codigo": "AGR014",
+        "nombre": "METAPLEX",
+        "descripcion": "METAPLEX",
+        "activo": true
+    },
+    {
+        "codigo": "AGR015",
+        "nombre": "PANZER GOLD",
+        "descripcion": "PANZER GOLD",
+        "activo": true
+    },
+    {
+        "codigo": "AGR016",
+        "nombre": "PRESIDE 80 WDG",
+        "descripcion": "PRESIDE 80 WDG",
+        "activo": true
+    },
+    {
+        "codigo": "AGR017",
+        "nombre": "RANGO FULL",
+        "descripcion": "RANGO FULL",
+        "activo": true
+    },
+    {
+        "codigo": "AGR018",
+        "nombre": "RIPPER FULL",
+        "descripcion": "RIPPER FULL",
+        "activo": true
+    },
+    {
+        "codigo": "AGR019",
+        "nombre": "SILWET",
+        "descripcion": "SILWET",
+        "activo": true
+    },
+    {
+        "codigo": "AGR020",
+        "nombre": "STARANE XTRA",
+        "descripcion": "STARANE XTRA",
+        "activo": true
+    },
+    {
+        "codigo": "AGR021",
+        "nombre": "TIGER",
+        "descripcion": "TIGER",
+        "activo": true
+    },
+    {
+        "codigo": "AGR022",
+        "nombre": "TORDON 101",
+        "descripcion": "TORDON 101",
+        "activo": true
+    },
+    {
+        "codigo": "AGR023",
+        "nombre": "TRIFLUREX",
+        "descripcion": "TRIFLUREX",
+        "activo": true
+    },
+    {
+        "codigo": "AGR024",
+        "nombre": "VENCEWEED",
+        "descripcion": "VENCEWEED",
+        "activo": true
+    },
+    {
+        "codigo": "ACO001",
+        "nombre": "BOLO HENO DE ALFALFA COMPRADO",
+        "descripcion": "BOLO HENO DE ALFALFA COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "ACO003",
+        "nombre": "BOLOS DE PAJA COMPRADO",
+        "descripcion": "BOLOS DE PAJA COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "ACO004",
+        "nombre": "BOLOS DE PASTO COMPRADO",
+        "descripcion": "BOLOS DE PASTO COMPRADO",
+        "activo": false
+    },
+    {
+        "codigo": "ACO005",
+        "nombre": "BOLOS TREBOL COMPRADO",
+        "descripcion": "BOLOS TREBOL COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "ACO006",
+        "nombre": "FARDO PAJA COMPRADO",
+        "descripcion": "FARDO PAJA COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "ACO008",
+        "nombre": "FARDOS DE ALFALFA COMPRADO",
+        "descripcion": "FARDOS DE ALFALFA COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "ACO010",
+        "nombre": "FARDOS DE PASTO COMPRADO",
+        "descripcion": "FARDOS DE PASTO COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "ACO012",
+        "nombre": "FARDOS MIX BALLICA TREBOL COMPRADO",
+        "descripcion": "FARDOS MIX BALLICA TREBOL COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "ACO013",
+        "nombre": "MAXIFARDOS PASTO SECO COMPRADO",
+        "descripcion": "MAXIFARDOS PASTO SECO COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "ACO015",
+        "nombre": "MELAZA",
+        "descripcion": "MELAZA",
+        "activo": true
+    },
+    {
+        "codigo": "ACO016",
+        "nombre": "ORUJO DE CEBADA",
+        "descripcion": "ORUJO DE CEBADA",
+        "activo": true
+    },
+    {
+        "codigo": "ACO017",
+        "nombre": "PELON DE ALMENDRA",
+        "descripcion": "PELON DE ALMENDRA",
+        "activo": true
+    },
+    {
+        "codigo": "ACO018",
+        "nombre": "ROLLO HENO ALFALFA COMPRADO",
+        "descripcion": "ROLLO HENO ALFALFA COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "ACO019",
+        "nombre": "ROLLOS DE PAJA COMPRADO",
+        "descripcion": "ROLLOS DE PAJA COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "APR001",
+        "nombre": "FORRAJEO",
+        "descripcion": "FORRAJEO",
+        "activo": true
+    },
+    {
+        "codigo": "APR002",
+        "nombre": " SERVICIO DE SIEMBRA ESTABLECIMIENTO AVENA-TAMA ",
+        "descripcion": " SERVICIO DE SIEMBRA ESTABLECIMIENTO AVENA-TAMA ",
+        "activo": true
+    },
+    {
+        "codigo": "APR003",
+        "nombre": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO AVENA-TAMA ",
+        "descripcion": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO AVENA-TAMA ",
+        "activo": true
+    },
+    {
+        "codigo": "APR004",
+        "nombre": "SERVICIO FUMIGACION AVENA-TAMA",
+        "descripcion": "SERVICIO FUMIGACION AVENA-TAMA",
+        "activo": true
+    },
+    {
+        "codigo": "APR005",
+        "nombre": " SERVICIO DE SIEMBRA ESTABLECIMIENTO BALLICA HIBRIDA OTOÑO",
+        "descripcion": " SERVICIO DE SIEMBRA ESTABLECIMIENTO BALLICA HIBRIDA OTOÑO",
+        "activo": true
+    },
+    {
+        "codigo": "APR006",
+        "nombre": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO BALLICA HIBRIDA OTOÑO",
+        "descripcion": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO BALLICA HIBRIDA OTOÑO",
+        "activo": true
+    },
+    {
+        "codigo": "APR007",
+        "nombre": "SERVICIO FUMIGACION BALLICA HIBRIDA OTOÑO",
+        "descripcion": "SERVICIO FUMIGACION BALLICA HIBRIDA OTOÑO",
+        "activo": true
+    },
+    {
+        "codigo": "APR008",
+        "nombre": " SERVICIO DE SIEMBRA ESTABLECIMIENTO DE AVENA OTOÑO",
+        "descripcion": " SERVICIO DE SIEMBRA ESTABLECIMIENTO DE AVENA OTOÑO",
+        "activo": true
+    },
+    {
+        "codigo": "APR009",
+        "nombre": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO DE AVENA OTOÑO",
+        "descripcion": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO DE AVENA OTOÑO",
+        "activo": true
+    },
+    {
+        "codigo": "APR010",
+        "nombre": "SERVICIO FUMIGACION AVENA OTOÑO",
+        "descripcion": "SERVICIO FUMIGACION AVENA OTOÑO",
+        "activo": true
+    },
+    {
+        "codigo": "APR011",
+        "nombre": " SERVICIO DE SIEMBRA ESTABLECIMIENTO DE MAIZ",
+        "descripcion": " SERVICIO DE SIEMBRA ESTABLECIMIENTO DE MAIZ",
+        "activo": true
+    },
+    {
+        "codigo": "APR012",
+        "nombre": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO DE MAIZ",
+        "descripcion": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO DE MAIZ",
+        "activo": true
+    },
+    {
+        "codigo": "APR013",
+        "nombre": "SERVICIO FUMIGACION MAIZ",
+        "descripcion": "SERVICIO FUMIGACION MAIZ",
+        "activo": true
+    },
+    {
+        "codigo": "APR014",
+        "nombre": " SERVICIO DE SIEMBRA ESTABLECIMIENTO DE RAPS FORRAJERO",
+        "descripcion": " SERVICIO DE SIEMBRA ESTABLECIMIENTO DE RAPS FORRAJERO",
+        "activo": true
+    },
+    {
+        "codigo": "APR015",
+        "nombre": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO DE RAPS FORRAJERO",
+        "descripcion": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO DE RAPS FORRAJERO",
+        "activo": true
+    },
+    {
+        "codigo": "APR016",
+        "nombre": "SERVICIO FUMIGACION RAPS FORRAJERO",
+        "descripcion": "SERVICIO FUMIGACION RAPS FORRAJERO",
+        "activo": true
+    },
+    {
+        "codigo": "APR017",
+        "nombre": " SERVICIO DE SIEMBRA ESTABLECIMIENTO PRADERA HIBRIDA",
+        "descripcion": " SERVICIO DE SIEMBRA ESTABLECIMIENTO PRADERA HIBRIDA",
+        "activo": true
+    },
+    {
+        "codigo": "APR018",
+        "nombre": "SERVICIO DE FUMIGACION PRADERA HIBRIDA",
+        "descripcion": "SERVICIO DE FUMIGACION PRADERA HIBRIDA",
+        "activo": true
+    },
+    {
+        "codigo": "APR019",
+        "nombre": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO PRADERA HIBRIDA",
+        "descripcion": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO PRADERA HIBRIDA",
+        "activo": true
+    },
+    {
+        "codigo": "APR020",
+        "nombre": " SERVICIO DE SIEMBRA ESTABLECIMIENTO PRADERA PERMANENTE",
+        "descripcion": " SERVICIO DE SIEMBRA ESTABLECIMIENTO PRADERA PERMANENTE",
+        "activo": true
+    },
+    {
+        "codigo": "APR021",
+        "nombre": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO PRADERA PERMANENTE",
+        "descripcion": "SERVICIO DE INCORPORADOR / RASTRA ESTABLECIMIENTO PRADERA PERMANENTE",
+        "activo": true
+    },
+    {
+        "codigo": "APR022",
+        "nombre": "SERVICIO FUMIGACION PRADERA PERMANENTE",
+        "descripcion": "SERVICIO FUMIGACION PRADERA PERMANENTE",
+        "activo": true
+    },
+    {
+        "codigo": "APR023",
+        "nombre": "FLETE FORRAJE  (CONF. PROPIA)",
+        "descripcion": "FLETE FORRAJE  (CONF. PROPIA)",
+        "activo": true
+    },
+    {
+        "codigo": "APR024",
+        "nombre": "SILO DE MAIZ (CONF. PROPIA)",
+        "descripcion": "SILO DE MAIZ (CONF. PROPIA)",
+        "activo": true
+    },
+    {
+        "codigo": "APR025",
+        "nombre": "SILO PARVA (CONF. PROPIA)",
+        "descripcion": "SILO PARVA (CONF. PROPIA)",
+        "activo": true
+    },
+    {
+        "codigo": "APR026",
+        "nombre": "SERV FUMIGACION REGENERACION AVENA / TRITICALE-BALLICA",
+        "descripcion": "SERV FUMIGACION REGENERACION AVENA / TRITICALE-BALLICA",
+        "activo": true
+    },
+    {
+        "codigo": "APR027",
+        "nombre": "SERVICIO DE INCORPORADOR / RASTRA REGENERACION AVENA / TRITICALE-BALLICA",
+        "descripcion": "SERVICIO DE INCORPORADOR / RASTRA REGENERACION AVENA / TRITICALE-BALLICA",
+        "activo": true
+    },
+    {
+        "codigo": "APR028",
+        "nombre": "SERVICIO DE SIEMBRA REGENERACION AVENA / TRITICALE-BALLICA",
+        "descripcion": "SERVICIO DE SIEMBRA REGENERACION AVENA / TRITICALE-BALLICA",
+        "activo": true
+    },
+    {
+        "codigo": "APR029",
+        "nombre": "SERV FUMIGACION REGENERACION PRADERA BALLICA (ACHICORIA)",
+        "descripcion": "SERV FUMIGACION REGENERACION PRADERA BALLICA (ACHICORIA)",
+        "activo": true
+    },
+    {
+        "codigo": "APR030",
+        "nombre": "SERVICIO DE INCORPORADOR / RASTRA REGENERACION PRADERA BALLICA (ACHICORIA)",
+        "descripcion": "SERVICIO DE INCORPORADOR / RASTRA REGENERACION PRADERA BALLICA (ACHICORIA)",
+        "activo": true
+    },
+    {
+        "codigo": "APR031",
+        "nombre": "SERVICIO DE SIEMBRA REGENERACION PRADERA BALLICA (ACHICORIA)",
+        "descripcion": "SERVICIO DE SIEMBRA REGENERACION PRADERA BALLICA (ACHICORIA)",
+        "activo": true
+    },
+    {
+        "codigo": "APR032",
+        "nombre": "SAL PARA SILOS",
+        "descripcion": "SAL PARA SILOS",
+        "activo": true
+    },
+    {
+        "codigo": "ANA001",
+        "nombre": "PAQUETE ANALISIS SIRD S SUELO",
+        "descripcion": "PAQUETE ANALISIS SIRD S SUELO",
+        "activo": true
+    },
+    {
+        "codigo": "ANA002",
+        "nombre": "ANALISIS LABORATORIO ANIMALES",
+        "descripcion": "ANALISIS LABORATORIO",
+        "activo": true
+    },
+    {
+        "codigo": "APO001",
+        "nombre": "APORTE GREMIAL ",
+        "descripcion": "APORTE GREMIAL",
+        "activo": true
+    },
+    {
+        "codigo": "ARR001",
+        "nombre": "RENTA DE ARRENDAMIENTO LEASING",
+        "descripcion": "RENTA DE ARRENDAMIENTO LEASING",
+        "activo": true
+    },
+    {
+        "codigo": "ARR002",
+        "nombre": "ARRIENDO CAMPO",
+        "descripcion": "ARRIENDO CAMPO",
+        "activo": true
+    },
+    {
+        "codigo": "ARR003",
+        "nombre": "ARRIENDO OFICINA",
+        "descripcion": "ARRIENDO OFICINA",
+        "activo": true
+    },
+    {
+        "codigo": "ARR004",
+        "nombre": "ARRIENDO VEHICULO (CON IVA)",
+        "descripcion": "ARRIENDO VEHICULO (CON IVA)",
+        "activo": true
+    },
+    {
+        "codigo": "ARR005",
+        "nombre": "ARRIENDO CASA",
+        "descripcion": "ARRIENDO CASA",
+        "activo": true
+    },
+    {
+        "codigo": "ARR006",
+        "nombre": "ARRIENDO ANTICIPADO",
+        "descripcion": "ARRIENDO ANTICIPADO",
+        "activo": true
+    },
+    {
+        "codigo": "ASE001",
+        "nombre": "ASESORIA EN AGRONOMIA",
+        "descripcion": "ASESORIA EN AGRONOMIA",
+        "activo": true
+    },
+    {
+        "codigo": "ASE002",
+        "nombre": "ASESORIAS CONTABLES Y TRIBUTARIAS",
+        "descripcion": "ASESORIAS CONTABLES Y TRIBUTARIAS",
+        "activo": true
+    },
+    {
+        "codigo": "ASE003",
+        "nombre": "ASESORIAS GESTION",
+        "descripcion": "ASESORIAS GESTION",
+        "activo": true
+    },
+    {
+        "codigo": "ASE004",
+        "nombre": "ASESORIAS LEGALES",
+        "descripcion": "ASESORIAS LEGALES",
+        "activo": true
+    },
+    {
+        "codigo": "ASE005",
+        "nombre": "ASESORIA EN ADMINISTRACION",
+        "descripcion": "ASESORIA EN ADMINISTRACION",
+        "activo": true
+    },
+    {
+        "codigo": "BPE001",
+        "nombre": "ARNES DE SEGURIDAD",
+        "descripcion": "ARNES DE SEGURIDAD",
+        "activo": true
+    },
+    {
+        "codigo": "BPE002",
+        "nombre": "ANTIPARRA",
+        "descripcion": "ANTIPARRA",
+        "activo": true
+    },
+    {
+        "codigo": "BPE003",
+        "nombre": "CASCO INTEGRAL MOTO",
+        "descripcion": "CASCO INTEGRAL MOTO",
+        "activo": true
+    },
+    {
+        "codigo": "BPE004",
+        "nombre": "GUANTE CABRITILLA",
+        "descripcion": "GUANTE CABRITILLA",
+        "activo": true
+    },
+    {
+        "codigo": "BPE005",
+        "nombre": "MASCARILLA 3 PLIEGUES 50 UNID",
+        "descripcion": "MASCARILLA 3 PLIEGUES 50 UNID",
+        "activo": true
+    },
+    {
+        "codigo": "BPE006",
+        "nombre": "PARKA",
+        "descripcion": "PARKA",
+        "activo": true
+    },
+    {
+        "codigo": "BPE007",
+        "nombre": "PROTECTOR DE OIDOS TIPO FONO",
+        "descripcion": "PROTECTOR DE OIDOS TIPO FONO",
+        "activo": true
+    },
+    {
+        "codigo": "BPE008",
+        "nombre": "TRAJE AGUA",
+        "descripcion": "TRAJE AGUA",
+        "activo": true
+    },
+    {
+        "codigo": "BPE009",
+        "nombre": "ZAPATO SEGURIDAD",
+        "descripcion": "ZAPATO SEGURIDAD",
+        "activo": true
+    },
+    {
+        "codigo": "BPE010",
+        "nombre": "BOTA  BEKINA",
+        "descripcion": "BOTA  BEKINA",
+        "activo": true
+    },
+    {
+        "codigo": "BPE011",
+        "nombre": "BOTA DUNLOP",
+        "descripcion": "BOTA DUNLOP",
+        "activo": true
+    },
+    {
+        "codigo": "BPE012",
+        "nombre": "BOTA STEPLITE",
+        "descripcion": "BOTA STEPLITE",
+        "activo": true
+    },
+    {
+        "codigo": "BPE013",
+        "nombre": "CHALECO REFLECTANTE",
+        "descripcion": "CHALECO REFLECTANTE",
+        "activo": true
+    },
+    {
+        "codigo": "BPE014",
+        "nombre": "LINTERNA TIPO CASCO",
+        "descripcion": "LINTERNA TIPO CASCO",
+        "activo": true
+    },
+    {
+        "codigo": "BPE015",
+        "nombre": "OVEROL DESECHABLE",
+        "descripcion": "OVEROL DESECHABLE",
+        "activo": true
+    },
+    {
+        "codigo": "BPE016",
+        "nombre": "OVEROL PILOTO",
+        "descripcion": "OVEROL PILOTO",
+        "activo": true
+    },
+    {
+        "codigo": "COM001",
+        "nombre": "ACEITE",
+        "descripcion": "ACEITE",
+        "activo": true
+    },
+    {
+        "codigo": "COM002",
+        "nombre": "ACEITE 10W40",
+        "descripcion": "ACEITE 10W40",
+        "activo": true
+    },
+    {
+        "codigo": "COM003",
+        "nombre": "ACEITE DE MOTOS",
+        "descripcion": "ACEITE DE MOTOS",
+        "activo": true
+    },
+    {
+        "codigo": "COM004",
+        "nombre": "ACEITE HIDRAULICO",
+        "descripcion": "ACEITE HIDRAULICO",
+        "activo": true
+    },
+    {
+        "codigo": "COM005",
+        "nombre": "ACEITE MEZCLA MOTOSIERRA",
+        "descripcion": "ACEITE MEZCLA MOTOSIERRA",
+        "activo": true
+    },
+    {
+        "codigo": "COM006",
+        "nombre": "ACEITE MOTOR 15W/40",
+        "descripcion": "ACEITE MOTOR 15W/40",
+        "activo": true
+    },
+    {
+        "codigo": "COM007",
+        "nombre": "BENCINA",
+        "descripcion": "BENCINA",
+        "activo": true
+    },
+    {
+        "codigo": "COM008",
+        "nombre": "PETROLEO DIESEL",
+        "descripcion": "PETROLEO DIESEL",
+        "activo": true
+    },
+    {
+        "codigo": "CON001",
+        "nombre": "AFRECHO RAPS",
+        "descripcion": "AFRECHO RAPS",
+        "activo": true
+    },
+    {
+        "codigo": "CON002",
+        "nombre": "CASCARA DE SOYA",
+        "descripcion": "CASCARA DE SOYA",
+        "activo": true
+    },
+    {
+        "codigo": "CON003",
+        "nombre": "CONCENTRADO CRIANZA ",
+        "descripcion": "CONCENTRADO CRIANZA ",
+        "activo": true
+    },
+    {
+        "codigo": "CON004",
+        "nombre": "CONCENTRADO LACTANCIA (GRANEL)",
+        "descripcion": "CONCENTRADO LACTANCIA (GRANEL)",
+        "activo": true
+    },
+    {
+        "codigo": "CON005",
+        "nombre": "CONCENTRADO PREPARTO ",
+        "descripcion": "CONCENTRADO PREPARTO ",
+        "activo": true
+    },
+    {
+        "codigo": "CON006",
+        "nombre": "CONCENTRADO TERNERO INICIAL",
+        "descripcion": "CONCENTRADO TERNERO INICIAL",
+        "activo": true
+    },
+    {
+        "codigo": "CON007",
+        "nombre": "COSETAN",
+        "descripcion": "COSETAN",
+        "activo": true
+    },
+    {
+        "codigo": "CON008",
+        "nombre": "MAIZ MOLIDO",
+        "descripcion": "MAIZ MOLIDO",
+        "activo": true
+    },
+    {
+        "codigo": "CON009",
+        "nombre": "SL SWEET",
+        "descripcion": "SL SWEET",
+        "activo": true
+    },
+    {
+        "codigo": "CON010",
+        "nombre": "SUSTITUTO LACTEO",
+        "descripcion": "SUSTITUTO LACTEO",
+        "activo": true
+    },
+    {
+        "codigo": "CON011",
+        "nombre": "TORTA DE RAPS",
+        "descripcion": "TORTA DE RAPS",
+        "activo": true
+    },
+    {
+        "codigo": "CVE001",
+        "nombre": "FLETE ANIMALES (PARA VENTA)",
+        "descripcion": "FLETE ANIMALES (PARA VENTA)",
+        "activo": true
+    },
+    {
+        "codigo": "FER001",
+        "nombre": "BIOSOLIDO",
+        "descripcion": "BIOSOLIDO",
+        "activo": true
+    },
+    {
+        "codigo": "FER002",
+        "nombre": "BIOTRON PLUS",
+        "descripcion": "BIOTRON PLUS",
+        "activo": true
+    },
+    {
+        "codigo": "FER003",
+        "nombre": "CAL",
+        "descripcion": "CAL",
+        "activo": true
+    },
+    {
+        "codigo": "FER004",
+        "nombre": "FERTILIZANTE SULPOMAG",
+        "descripcion": "FERTILIZANTE SULPOMAG",
+        "activo": true
+    },
+    {
+        "codigo": "FER005",
+        "nombre": "FERTIYESO",
+        "descripcion": "FERTIYESO",
+        "activo": true
+    },
+    {
+        "codigo": "FER006",
+        "nombre": "MEZCLA 15-18-15 MG5 S5",
+        "descripcion": "MEZCLA 15-18-15 MG5 S5",
+        "activo": true
+    },
+    {
+        "codigo": "FER007",
+        "nombre": "MEZCLA 5-33-14",
+        "descripcion": "MEZCLA 5-33-14",
+        "activo": true
+    },
+    {
+        "codigo": "FER008",
+        "nombre": "MEZCLA MICROESSENTIAL 9-23-12-12",
+        "descripcion": "MEZCLA MICROESSENTIAL 9-23-12-12",
+        "activo": true
+    },
+    {
+        "codigo": "FER009",
+        "nombre": "MICROSTAR",
+        "descripcion": "MICROSTAR",
+        "activo": true
+    },
+    {
+        "codigo": "FER010",
+        "nombre": "MURIATO DE POTASIO",
+        "descripcion": "MURIATO DE POTASIO",
+        "activo": true
+    },
+    {
+        "codigo": "FER011",
+        "nombre": "MZ 0-31-20",
+        "descripcion": "MZ 0-31-20",
+        "activo": true
+    },
+    {
+        "codigo": "FER012",
+        "nombre": "MZ 5-24-24-1-1 ZN0,1",
+        "descripcion": "MZ 5-24-24-1-1 ZN0,1",
+        "activo": true
+    },
+    {
+        "codigo": "FER013",
+        "nombre": "PENERGETIC B",
+        "descripcion": "PENERGETIC B",
+        "activo": true
+    },
+    {
+        "codigo": "FER014",
+        "nombre": "PENERGETIC P",
+        "descripcion": "PENERGETIC P",
+        "activo": true
+    },
+    {
+        "codigo": "FER015",
+        "nombre": "SUPER FOSFATO TRIPLE",
+        "descripcion": "SUPER FOSFATO TRIPLE",
+        "activo": true
+    },
+    {
+        "codigo": "FER016",
+        "nombre": "SUPER MG",
+        "descripcion": "SUPER MG",
+        "activo": true
+    },
+    {
+        "codigo": "FER017",
+        "nombre": "TWIN N",
+        "descripcion": "TWIN N",
+        "activo": true
+    },
+    {
+        "codigo": "FER018",
+        "nombre": "UREA GRANULADA",
+        "descripcion": "UREA GRANULADA",
+        "activo": true
+    },
+    {
+        "codigo": "FER019",
+        "nombre": "UREA SMART",
+        "descripcion": "UREA SMART",
+        "activo": true
+    },
+    {
+        "codigo": "FER020",
+        "nombre": "VITATRUST",
+        "descripcion": "VITATRUST",
+        "activo": true
+    },
+    {
+        "codigo": "FLE001",
+        "nombre": "FLETE TRASLADO ANIMALES (NO VENTA)",
+        "descripcion": "FLETE TRASLADO ANIMALES (NO VENTA)",
+        "activo": true
+    },
+    {
+        "codigo": "FLE002",
+        "nombre": "FLETES GENERALES",
+        "descripcion": "FLETES GENERALES",
+        "activo": true
+    },
+    {
+        "codigo": "GFI001",
+        "nombre": "GASTOS BANCARIOS",
+        "descripcion": "GASTOS BANCARIOS",
+        "activo": true
+    },
+    {
+        "codigo": "GGE001",
+        "nombre": "CERTIFICADOS DIGITALES (EXENTO)",
+        "descripcion": "CERTIFICADOS DIGITALES (EXENTO)",
+        "activo": true
+    },
+    {
+        "codigo": "GGE002",
+        "nombre": "ARTICULOS Y SERVICIOS DE OFICINA",
+        "descripcion": "ARTICULOS Y SERVICIOS DE OFICINA",
+        "activo": true
+    },
+    {
+        "codigo": "GGE003",
+        "nombre": "INSUMOS DE ASEO ",
+        "descripcion": "INSUMOS DE ASEO ",
+        "activo": true
+    },
+    {
+        "codigo": "GGE004",
+        "nombre": "PERMISO CIRCULACION",
+        "descripcion": "PERMISO CIRCULACION",
+        "activo": true
+    },
+    {
+        "codigo": "GGE005",
+        "nombre": "GASTOS NOTARIALES Y LEGALES",
+        "descripcion": "GASTOS NOTARIALES Y LEGALES",
+        "activo": true
+    },
+    {
+        "codigo": "GGE006",
+        "nombre": "ABASTECIMIENTO DE AGUA POTABLE",
+        "descripcion": "ABASTECIMIENTO DE AGUA POTABLE",
+        "activo": true
+    },
+    {
+        "codigo": "GGE007",
+        "nombre": "CERTIFICADOS (CON IVA)",
+        "descripcion": "CERTIFICADOS (CON IVA)",
+        "activo": true
+    },
+    {
+        "codigo": "IMP001",
+        "nombre": "CONTRIBUCIONES",
+        "descripcion": "CONTRIBUCIONES",
+        "activo": true
+    },
+    {
+        "codigo": "IMC001",
+        "nombre": "AISLADOR",
+        "descripcion": "AISLADOR",
+        "activo": true
+    },
+    {
+        "codigo": "IMC002",
+        "nombre": "ALAMBRE PUA",
+        "descripcion": "ALAMBRE PUA",
+        "activo": true
+    },
+    {
+        "codigo": "IMC003",
+        "nombre": "CABLE SUBTERRANEO",
+        "descripcion": "CABLE SUBTERRANEO",
+        "activo": true
+    },
+    {
+        "codigo": "IMC004",
+        "nombre": "CARBONILEO",
+        "descripcion": "CARBONILEO",
+        "activo": true
+    },
+    {
+        "codigo": "IMC005",
+        "nombre": "CARRETE",
+        "descripcion": "CARRETE",
+        "activo": true
+    },
+    {
+        "codigo": "IMC006",
+        "nombre": "CERCO PEL",
+        "descripcion": "CERCO PEL",
+        "activo": true
+    },
+    {
+        "codigo": "IMC007",
+        "nombre": "CORDON CERCO ELECTRICO",
+        "descripcion": "CORDON CERCO ELECTRICO",
+        "activo": true
+    },
+    {
+        "codigo": "IMC008",
+        "nombre": "ESTACA",
+        "descripcion": "ESTACA",
+        "activo": true
+    },
+    {
+        "codigo": "IMC009",
+        "nombre": "ESTACA PLASTICA",
+        "descripcion": "ESTACA PLASTICA",
+        "activo": true
+    },
+    {
+        "codigo": "IMC010",
+        "nombre": "MANILLA CERCO ELECTRICO",
+        "descripcion": "MANILLA CERCO ELECTRICO",
+        "activo": true
+    },
+    {
+        "codigo": "IMC011",
+        "nombre": "POLIN IMPREGNADO",
+        "descripcion": "POLIN IMPREGNADO",
+        "activo": true
+    },
+    {
+        "codigo": "IMC012",
+        "nombre": "ROLLO CABLE ELECTRICO",
+        "descripcion": "ROLLO CABLE ELECTRICO",
+        "activo": true
+    },
+    {
+        "codigo": "IMC013",
+        "nombre": "ROLLO DE ALAMBRE LISO",
+        "descripcion": "ROLLO DE ALAMBRE LISO",
+        "activo": true
+    },
+    {
+        "codigo": "IMC014",
+        "nombre": "CINTA ELECTRICA",
+        "descripcion": "CINTA ELECTRICA",
+        "activo": true
+    },
+    {
+        "codigo": "IMR001",
+        "nombre": "FLOTADOR",
+        "descripcion": "FLOTADOR",
+        "activo": true
+    },
+    {
+        "codigo": "IMR002",
+        "nombre": "MANGA DE RIEGO 30 CM DIAM.",
+        "descripcion": "MANGA DE RIEGO 30 CM DIAM.",
+        "activo": true
+    },
+    {
+        "codigo": "IMR003",
+        "nombre": "MANGUERA NEGRA 100MT",
+        "descripcion": "MANGUERA NEGRA 100MT",
+        "activo": true
+    },
+    {
+        "codigo": "IMG001",
+        "nombre": "CONCHILLA",
+        "descripcion": "CONCHILLA",
+        "activo": true
+    },
+    {
+        "codigo": "IMC015",
+        "nombre": "TENSOR",
+        "descripcion": "TENSOR",
+        "activo": true
+    },
+    {
+        "codigo": "IMC016",
+        "nombre": "TENSOR CON AISLADOR",
+        "descripcion": "TENSOR CON AISLADOR",
+        "activo": true
+    },
+    {
+        "codigo": "IMG002",
+        "nombre": "CARDAN",
+        "descripcion": "CARDAN",
+        "activo": true
+    },
+    {
+        "codigo": "IMG003",
+        "nombre": "REPUESTOS/ INSUMOS MAQUINARIA",
+        "descripcion": "REPUESTOS/ INSUMOS MAQUINARIA",
+        "activo": true
+    },
+    {
+        "codigo": "IMG004",
+        "nombre": "ASERRIN",
+        "descripcion": "ASERRIN",
+        "activo": true
+    },
+    {
+        "codigo": "IMG005",
+        "nombre": "CHIP",
+        "descripcion": "CHIP",
+        "activo": true
+    },
+    {
+        "codigo": "IMG006",
+        "nombre": "CORDON",
+        "descripcion": "CORDON",
+        "activo": true
+    },
+    {
+        "codigo": "IMG007",
+        "nombre": "ESCOBILLA ACERO FINA",
+        "descripcion": "ESCOBILLA ACERO FINA",
+        "activo": true
+    },
+    {
+        "codigo": "IMG008",
+        "nombre": "PERNOS",
+        "descripcion": "PERNOS",
+        "activo": true
+    },
+    {
+        "codigo": "IMG009",
+        "nombre": "VIRUTA",
+        "descripcion": "VIRUTA",
+        "activo": true
+    },
+    {
+        "codigo": "IMG010",
+        "nombre": "VALVULA BEBEDERO",
+        "descripcion": "VALVULA BEBEDERO",
+        "activo": true
+    },
+    {
+        "codigo": "OIV001",
+        "nombre": "ALIMENTADOR PARA 10 TERNEROS",
+        "descripcion": "BALDE ALIMENTADOR PARA 10 TERNEROS",
+        "activo": true
+    },
+    {
+        "codigo": "OIV002",
+        "nombre": "BIBERON TERNERO CON CHUPO",
+        "descripcion": "BIBERON TERNERO CON CHUPO",
+        "activo": true
+    },
+    {
+        "codigo": "OIV003",
+        "nombre": "CHUPOS",
+        "descripcion": "CHUPOS",
+        "activo": true
+    },
+    {
+        "codigo": "OIV004",
+        "nombre": "PINTURA SPRAY",
+        "descripcion": "PINTURA SPRAY",
+        "activo": true
+    },
+    {
+        "codigo": "OIV005",
+        "nombre": "PINZA QUIRURJICA",
+        "descripcion": "PINZA QUIRURJICA",
+        "activo": true
+    },
+    {
+        "codigo": "OIV006",
+        "nombre": "SONDA ALIMENTACION",
+        "descripcion": "SONDA ALIMENTACION",
+        "activo": true
+    },
+    {
+        "codigo": "OIV007",
+        "nombre": "TERMOMETRO",
+        "descripcion": "TERMOMETRO",
+        "activo": true
+    },
+    {
+        "codigo": "OIV008",
+        "nombre": "TIJERA ESQUILAR OVEJA",
+        "descripcion": "TIJERA ESQUILAR OVEJA",
+        "activo": true
+    },
+    {
+        "codigo": "OST001",
+        "nombre": "PLASTICO SILO PARVA (COMPRADO)",
+        "descripcion": "PLASTICO SILO PARVA (COMPRADO)",
+        "activo": true
+    },
+    {
+        "codigo": "PSA001",
+        "nombre": "AGUJA DESECHABLE",
+        "descripcion": "AGUJA DESECHABLE",
+        "activo": true
+    },
+    {
+        "codigo": "PSA002",
+        "nombre": "ANTIPARASITARIO SOLUTION 500 CC",
+        "descripcion": "ANTIPARASITARIO SOLUTION 500 CC",
+        "activo": true
+    },
+    {
+        "codigo": "PSA003",
+        "nombre": "ARETE EXPERT PLUS 20 UNID",
+        "descripcion": "ARETE EXPERT PLUS 20 UNID",
+        "activo": true
+    },
+    {
+        "codigo": "PSA004",
+        "nombre": "ARETEADORA DIIO",
+        "descripcion": "ARETEADORA DIIO",
+        "activo": true
+    },
+    {
+        "codigo": "PSA005",
+        "nombre": "CEPRAVIN",
+        "descripcion": "CEPRAVIN",
+        "activo": true
+    },
+    {
+        "codigo": "PSA006",
+        "nombre": "DECTOMAX",
+        "descripcion": "DECTOMAX",
+        "activo": true
+    },
+    {
+        "codigo": "PSA007",
+        "nombre": "DIIO FDX",
+        "descripcion": "DIIO FDX",
+        "activo": true
+    },
+    {
+        "codigo": "PSA008",
+        "nombre": "DIIO HDX",
+        "descripcion": "DIIO HDX",
+        "activo": true
+    },
+    {
+        "codigo": "PSA009",
+        "nombre": "EPRINEX POUR ON LT (EPRINOMECTINA)",
+        "descripcion": "EPRINEX POUR ON LT (EPRINOMECTINA)",
+        "activo": true
+    },
+    {
+        "codigo": "PSA010",
+        "nombre": "MAMYZIN",
+        "descripcion": "MAMYZIN",
+        "activo": true
+    },
+    {
+        "codigo": "PSA011",
+        "nombre": "MOSKIMIC FORTE",
+        "descripcion": "MOSKIMIC FORTE",
+        "activo": true
+    },
+    {
+        "codigo": "PSA012",
+        "nombre": "UBRISEC",
+        "descripcion": "UBRISEC",
+        "activo": true
+    },
+    {
+        "codigo": "PSA013",
+        "nombre": "VACUNA CATTLEMASTER GOLD",
+        "descripcion": "VACUNA CATTLEMASTER GOLD",
+        "activo": true
+    },
+    {
+        "codigo": "PSA014",
+        "nombre": "VACUNA CLOSTRIBAC 9P 50 DOSIS",
+        "descripcion": "VACUNA CLOSTRIBAC 9P 50 DOSIS",
+        "activo": true
+    },
+    {
+        "codigo": "PSA015",
+        "nombre": "VACUNA CLOSTRIBAC-8 GOLD",
+        "descripcion": "VACUNA CLOSTRIBAC-8 GOLD",
+        "activo": true
+    },
+    {
+        "codigo": "PSA016",
+        "nombre": "VACUNA FORTRESS",
+        "descripcion": "VACUNA FORTRESS",
+        "activo": true
+    },
+    {
+        "codigo": "PSA017",
+        "nombre": "VACUNA LEPTOFERM 5 50 DOSIS",
+        "descripcion": "VACUNA LEPTOFERM 5 50 DOSIS",
+        "activo": true
+    },
+    {
+        "codigo": "PSA018",
+        "nombre": "VACUNA LEPTOSPIRA 50 DS",
+        "descripcion": "VACUNA LEPTOSPIRA 50 DS",
+        "activo": true
+    },
+    {
+        "codigo": "PSA019",
+        "nombre": "VACUNA RB51",
+        "descripcion": "VACUNA RB51",
+        "activo": true
+    },
+    {
+        "codigo": "PSA020",
+        "nombre": "VACUNA ROTAVEC",
+        "descripcion": "VACUNA ROTAVEC",
+        "activo": true
+    },
+    {
+        "codigo": "PSA021",
+        "nombre": "VACUNA SCOURGUARD",
+        "descripcion": "VACUNA SCOURGUARD",
+        "activo": true
+    },
+    {
+        "codigo": "PSA022",
+        "nombre": "VACUNA TUBERCULINA 50 DOSIS",
+        "descripcion": "VACUNA TUBERCULINA 50 DOSIS",
+        "activo": true
+    },
+    {
+        "codigo": "PSA023",
+        "nombre": "VACUNA TUBERTEST",
+        "descripcion": "VACUNA TUBERTEST",
+        "activo": true
+    },
+    {
+        "codigo": "PSA024",
+        "nombre": "VACUNA VISION 8 ",
+        "descripcion": "VACUNA VISION 8 ",
+        "activo": true
+    },
+    {
+        "codigo": "PSA025",
+        "nombre": "VITAMINA ADE ",
+        "descripcion": "VITAMINA ADE ",
+        "activo": true
+    },
+    {
+        "codigo": "PSA026",
+        "nombre": "VITAMINA B12",
+        "descripcion": "VITAMINA B12",
+        "activo": true
+    },
+    {
+        "codigo": "PRI001",
+        "nombre": "INSUMOS PREVENCION DE RIESGOS",
+        "descripcion": "INSUMOS PREVENCION DE RIESGOS",
+        "activo": true
+    },
+    {
+        "codigo": "PRI002",
+        "nombre": "SEÑALETICA SEGURIDAD",
+        "descripcion": "SEÑALETICA SEGURIDAD",
+        "activo": true
+    },
+    {
+        "codigo": "PRI003",
+        "nombre": "ASESORIA EN PREVENCION DE RIESGOS (CON IVA)",
+        "descripcion": "ASESORIA EN PREVENCION DE RIESGOS (CON IVA)",
+        "activo": true
+    },
+    {
+        "codigo": "REP001",
+        "nombre": "PINTURA DETECTAR CELO",
+        "descripcion": "PINTURA DETECTAR CELO",
+        "activo": true
+    },
+    {
+        "codigo": "REP002",
+        "nombre": "APLICADOR HORMONA CIDR BOVINO",
+        "descripcion": "APLICADOR HORMONA CIDR BOVINO",
+        "activo": true
+    },
+    {
+        "codigo": "REP003",
+        "nombre": "BENZOATO DE ESTRADIOL",
+        "descripcion": "BENZOATO DE ESTRADIOL",
+        "activo": true
+    },
+    {
+        "codigo": "REP004",
+        "nombre": "ECP",
+        "descripcion": "ECP",
+        "activo": true
+    },
+    {
+        "codigo": "REP005",
+        "nombre": "ESTRUMATE",
+        "descripcion": "ESTRUMATE",
+        "activo": true
+    },
+    {
+        "codigo": "REP006",
+        "nombre": "HORMONA CIDR BOVINO",
+        "descripcion": "HORMONA CIDR BOVINO",
+        "activo": true
+    },
+    {
+        "codigo": "REP007",
+        "nombre": "INYECTOR UNIVERSAL",
+        "descripcion": "INYECTOR UNIVERSAL",
+        "activo": true
+    },
+    {
+        "codigo": "REP008",
+        "nombre": "LUTALYSE ",
+        "descripcion": "LUTALYSE ",
+        "activo": true
+    },
+    {
+        "codigo": "REP009",
+        "nombre": "LUTEOSYL ",
+        "descripcion": "LUTEOSYL ",
+        "activo": true
+    },
+    {
+        "codigo": "REP010",
+        "nombre": "MANGA INSEMINACION ",
+        "descripcion": "MANGA INSEMINACION",
+        "activo": true
+    },
+    {
+        "codigo": "REP011",
+        "nombre": "NITROGENO",
+        "descripcion": "NITROGENO",
+        "activo": true
+    },
+    {
+        "codigo": "REP012",
+        "nombre": "NOVORMON",
+        "descripcion": "NOVORMON",
+        "activo": true
+    },
+    {
+        "codigo": "REP013",
+        "nombre": "OVOLUTE",
+        "descripcion": "OVOLUTE",
+        "activo": true
+    },
+    {
+        "codigo": "REP014",
+        "nombre": "PARCHE DETECTOR CELOS",
+        "descripcion": "PARCHE DETECTOR CELOS",
+        "activo": true
+    },
+    {
+        "codigo": "REP015",
+        "nombre": "PIPETA  ESPIRAL 50 UU",
+        "descripcion": "PIPETA  ESPIRAL 50 UU",
+        "activo": true
+    },
+    {
+        "codigo": "REP016",
+        "nombre": "REGLA PARA MEDIR NITROGENO",
+        "descripcion": "REGLA PARA MEDIR NITROGENO",
+        "activo": true
+    },
+    {
+        "codigo": "REP017",
+        "nombre": "SEMEN CARNE",
+        "descripcion": "SEMEN CARNE",
+        "activo": true
+    },
+    {
+        "codigo": "REP018",
+        "nombre": "SEMEN LECHE",
+        "descripcion": "SEMEN LECHE",
+        "activo": true
+    },
+    {
+        "codigo": "RTL001",
+        "nombre": "MASCARILLA KN95 (UNIDAD)",
+        "descripcion": "MASCARILLA KN95 (UNIDAD)",
+        "activo": true
+    },
+    {
+        "codigo": "RTL002",
+        "nombre": "GUANTE ORDEÑA",
+        "descripcion": "GUANTE ORDEÑA",
+        "activo": true
+    },
+    {
+        "codigo": "RTL003",
+        "nombre": "MANGAS DE ORDEÑA",
+        "descripcion": "MANGAS DE ORDEÑA",
+        "activo": true
+    },
+    {
+        "codigo": "RTL004",
+        "nombre": "OVEROL HIPORA",
+        "descripcion": "OVEROL HIPORA",
+        "activo": true
+    },
+    {
+        "codigo": "RTL005",
+        "nombre": "PECHERA",
+        "descripcion": "PECHERA",
+        "activo": true
+    },
+    {
+        "codigo": "RRH001",
+        "nombre": "CAPACITACIONES -CURSOS Y SEMINARIOS",
+        "descripcion": "CAPACITACIONES -CURSOS Y SEMINARIOS",
+        "activo": true
+    },
+    {
+        "codigo": "SOR001",
+        "nombre": "ESCOBILLON MUNICIPAL",
+        "descripcion": "ESCOBILLON MUNICIPAL",
+        "activo": true
+    },
+    {
+        "codigo": "SOR002",
+        "nombre": "AC. PIEDRA DE LECHE",
+        "descripcion": "AC. PIEDRA DE LECHE",
+        "activo": true
+    },
+    {
+        "codigo": "SOR003",
+        "nombre": "ACID",
+        "descripcion": "ACID",
+        "activo": true
+    },
+    {
+        "codigo": "SOR004",
+        "nombre": "ACID DELLA EXTRA",
+        "descripcion": "ACID DELLA EXTRA",
+        "activo": true
+    },
+    {
+        "codigo": "SOR005",
+        "nombre": "ACIDO PERACETICO",
+        "descripcion": "ACIDO PERACETICO",
+        "activo": true
+    },
+    {
+        "codigo": "SOR006",
+        "nombre": "AGRO CIP",
+        "descripcion": "AGRO CIP",
+        "activo": true
+    },
+    {
+        "codigo": "SOR007",
+        "nombre": "CLORO LIQUIDO",
+        "descripcion": "CLORO LIQUIDO",
+        "activo": true
+    },
+    {
+        "codigo": "SOR008",
+        "nombre": "CUERDA RETIRADOR AUTOMATICO",
+        "descripcion": "CUERDA RETIRADOR AUTOMATICO",
+        "activo": true
+    },
+    {
+        "codigo": "SOR009",
+        "nombre": "DELLA SUPER ",
+        "descripcion": "DELLA SUPER ",
+        "activo": true
+    },
+    {
+        "codigo": "SOR010",
+        "nombre": "DETERGENTE ALCALINO",
+        "descripcion": "DETERGENTE ALCALINO",
+        "activo": true
+    },
+    {
+        "codigo": "SOR011",
+        "nombre": "DOSIFICADOR",
+        "descripcion": "DOSIFICADOR",
+        "activo": true
+    },
+    {
+        "codigo": "SOR012",
+        "nombre": "ESCOBILLAS ",
+        "descripcion": "ESCOBILLAS",
+        "activo": true
+    },
+    {
+        "codigo": "SOR013",
+        "nombre": "FILTRO PARA LECHE",
+        "descripcion": "FILTRO PARA LECHE",
+        "activo": true
+    },
+    {
+        "codigo": "SOR014",
+        "nombre": "JARRA PRUEBA CON MANGO",
+        "descripcion": "JARRA PRUEBA CON MANGO",
+        "activo": true
+    },
+    {
+        "codigo": "SOR015",
+        "nombre": "MANGUERA AZUL LAVADO PATIO",
+        "descripcion": "MANGUERA AZUL LAVADO PATIO",
+        "activo": true
+    },
+    {
+        "codigo": "SOR016",
+        "nombre": "MANGUERA DE GOMA",
+        "descripcion": "MANGUERA DE GOMA",
+        "activo": true
+    },
+    {
+        "codigo": "SOR017",
+        "nombre": "PALETA CMT",
+        "descripcion": "PALETA CMT",
+        "activo": true
+    },
+    {
+        "codigo": "SOR018",
+        "nombre": "PERAC",
+        "descripcion": "PERAC",
+        "activo": true
+    },
+    {
+        "codigo": "SOR019",
+        "nombre": "PEZONERA",
+        "descripcion": "PEZONERA",
+        "activo": true
+    },
+    {
+        "codigo": "SOR020",
+        "nombre": "TAPA DE COLECTOR",
+        "descripcion": "TAPA DE COLECTOR",
+        "activo": true
+    },
+    {
+        "codigo": "SOR021",
+        "nombre": "TEST TWINSENSOR",
+        "descripcion": "TEST TWINSENSOR",
+        "activo": true
+    },
+    {
+        "codigo": "SOR022",
+        "nombre": "TIRAS PH",
+        "descripcion": "TIRAS PH",
+        "activo": true
+    },
+    {
+        "codigo": "SOR023",
+        "nombre": "TOALLA",
+        "descripcion": "TOALLA",
+        "activo": true
+    },
+    {
+        "codigo": "SOR024",
+        "nombre": "TUBO CORTO PULSACION",
+        "descripcion": "TUBO CORTO PULSACION",
+        "activo": true
+    },
+    {
+        "codigo": "SOR025",
+        "nombre": "ULTIMATE",
+        "descripcion": "ULTIMATE",
+        "activo": true
+    },
+    {
+        "codigo": "SMC001",
+        "nombre": "SAL MINERAL CRIANZA",
+        "descripcion": "SAL MINERAL CRIANZA",
+        "activo": true
+    },
+    {
+        "codigo": "SML001",
+        "nombre": "SAL MINERAL LACTANCIA",
+        "descripcion": "SAL MINERAL LACTANCIA",
+        "activo": true
+    },
+    {
+        "codigo": "SMP001",
+        "nombre": "SAL MINERAL PREPARTO COL PLUS",
+        "descripcion": "SAL MINERAL PREPARTO",
+        "activo": true
+    },
+    {
+        "codigo": "SMV001",
+        "nombre": "SAL MINERAL VACA SECA",
+        "descripcion": "SAL MINERAL VACA SECA",
+        "activo": true
+    },
+    {
+        "codigo": "SEG001",
+        "nombre": "SEGUROS (NO USAR)",
+        "descripcion": "SEGUROS",
+        "activo": false
+    },
+    {
+        "codigo": "SEM001",
+        "nombre": "SEMILLA AVENA STRIGOSA DESINFECTADA",
+        "descripcion": "SEMILLA AVENA STRIGOSA DESINFECTADA",
+        "activo": true
+    },
+    {
+        "codigo": "SEM002",
+        "nombre": "SEMILLA AVENA URANO SIN DESINFECTAR",
+        "descripcion": "SEMILLA AVENA URANO SIN DESINFECTAR",
+        "activo": true
+    },
+    {
+        "codigo": "SEM003",
+        "nombre": "SEMILLA BALLICA",
+        "descripcion": "SEMILLA BALLICA",
+        "activo": true
+    },
+    {
+        "codigo": "SEM004",
+        "nombre": "SEMILLA BALLICA BIANUAL BARMULTRA",
+        "descripcion": "SEMILLA BALLICA BIANUAL BARMULTRA",
+        "activo": true
+    },
+    {
+        "codigo": "SEM005",
+        "nombre": "SEMILLA BALLICA HIBRIDA ",
+        "descripcion": "SEMILLA BALLICA HIBRIDA ",
+        "activo": true
+    },
+    {
+        "codigo": "SEM006",
+        "nombre": "SEMILLA BALLICA PERENNE ",
+        "descripcion": "SEMILLA BALLICA PERENNE ",
+        "activo": true
+    },
+    {
+        "codigo": "SEM007",
+        "nombre": "SEMILLA BALLICA SHOGUN",
+        "descripcion": "SEMILLA BALLICA SHOGUN",
+        "activo": true
+    },
+    {
+        "codigo": "SEM008",
+        "nombre": "SEMILLA BALLICA TAMA DESINFECTADA",
+        "descripcion": "SEMILLA BALLICA TAMA DESINFECTADA",
+        "activo": true
+    },
+    {
+        "codigo": "SEM009",
+        "nombre": "SEMILLA BARPOWER",
+        "descripcion": "SEMILLA BARPOWER",
+        "activo": true
+    },
+    {
+        "codigo": "SEM010",
+        "nombre": "SEMILLA ACHICORIA",
+        "descripcion": "SEMILLA ACHICORIA",
+        "activo": true
+    },
+    {
+        "codigo": "SEM011",
+        "nombre": "SEMILLA DE AVENA",
+        "descripcion": "SEMILLA DE AVENA",
+        "activo": true
+    },
+    {
+        "codigo": "SEM012",
+        "nombre": "SEMILLA DE RAPS INTERVAL",
+        "descripcion": "SEMILLA DE RAPS INTERVAL",
+        "activo": true
+    },
+    {
+        "codigo": "SEM013",
+        "nombre": "SEMILLA EXPO/BASE",
+        "descripcion": "SEMILLA EXPO/BASE",
+        "activo": true
+    },
+    {
+        "codigo": "SEM014",
+        "nombre": "SEMILLA MAIZ KWS",
+        "descripcion": "SEMILLA MAIZ KWS",
+        "activo": true
+    },
+    {
+        "codigo": "SEM015",
+        "nombre": "SEMILLA TREBOL BLANCO ",
+        "descripcion": "SEMILLA TREBOL BLANCO ",
+        "activo": true
+    },
+    {
+        "codigo": "SEM016",
+        "nombre": "SEMILLA TREBOL BLANCO HUIA",
+        "descripcion": "SEMILLA TREBOL BLANCO HUIA",
+        "activo": true
+    },
+    {
+        "codigo": "SEM017",
+        "nombre": "SEMILLA TREBOL ROSADO KIMGCLOVER",
+        "descripcion": "SEMILLA TREBOL ROSADO KIMGCLOVER",
+        "activo": true
+    },
+    {
+        "codigo": "SEM018",
+        "nombre": "SEMILLA TREBOL ROSADO REDQUELI",
+        "descripcion": "SEMILLA TREBOL ROSADO REDQUELI",
+        "activo": true
+    },
+    {
+        "codigo": "SEM019",
+        "nombre": "SEMILLA VIBE",
+        "descripcion": "SEMILLA VIBE",
+        "activo": true
+    },
+    {
+        "codigo": "SMA001",
+        "nombre": "MANTENCION SALA DE ORDEÑA",
+        "descripcion": "MANTENCION SALA DE ORDEÑA",
+        "activo": true
+    },
+    {
+        "codigo": "SMA002",
+        "nombre": "MANTENCION CAMINOS",
+        "descripcion": "MANTENCION CAMINOS",
+        "activo": true
+    },
+    {
+        "codigo": "SMA003",
+        "nombre": "MANTENCION GENERADOR GRUPO ELECTROGENO",
+        "descripcion": "MANTENCION GENERADOR GRUPO ELECTROGENO",
+        "activo": true
+    },
+    {
+        "codigo": "SMA004",
+        "nombre": "MANTENCION MAQUINARIA",
+        "descripcion": "MANTENCION MAQUINARIA",
+        "activo": true
+    },
+    {
+        "codigo": "SMA005",
+        "nombre": "MANTENCION ELECTRICA",
+        "descripcion": "MANTENCION ELECTRICA",
+        "activo": true
+    },
+    {
+        "codigo": "SMA006",
+        "nombre": "SERVICIO DE GASFITERIA",
+        "descripcion": "SERVICIO DE GASFITERIA",
+        "activo": true
+    },
+    {
+        "codigo": "SMA007",
+        "nombre": "SERVICIO DE LIMPIEZA FOSAS",
+        "descripcion": "SERVICIO DE LIMPIEZA FOSAS",
+        "activo": true
+    },
+    {
+        "codigo": "SMA008",
+        "nombre": "MANTENCION REDES DE AGUA",
+        "descripcion": "MANTENCION REDES DE AGUA",
+        "activo": true
+    },
+    {
+        "codigo": "SMA009",
+        "nombre": "MANTENCION TRACTOR",
+        "descripcion": "MANTENCION TRACTOR",
+        "activo": true
+    },
+    {
+        "codigo": "SMA010",
+        "nombre": "MANTENCION CAMIONETA",
+        "descripcion": "MANTENCION CAMIONETA",
+        "activo": true
+    },
+    {
+        "codigo": "SMA011",
+        "nombre": "LIMPIEZA Y RETIRO DE FOSAS",
+        "descripcion": "LIMPIEZA Y RETIRO DE FOSAS",
+        "activo": true
+    },
+    {
+        "codigo": "SMA012",
+        "nombre": "CONFECCION CERCO PERIMETRAL",
+        "descripcion": "CONFECCION CERCO PERIMETRAL",
+        "activo": true
+    },
+    {
+        "codigo": "SER001",
+        "nombre": "FLETES FORRAJE COMPRADO",
+        "descripcion": "FLETES FORRAJE COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "SER002",
+        "nombre": "PARCHES P/FILM",
+        "descripcion": "PARCHES P/FILM",
+        "activo": true
+    },
+    {
+        "codigo": "SER003",
+        "nombre": "CERTIFICACIONES PABCO",
+        "descripcion": "CERTIFICACIONES PABCO",
+        "activo": true
+    },
+    {
+        "codigo": "SER004",
+        "nombre": "CONTROL LECHERO",
+        "descripcion": "CONTROL LECHERO",
+        "activo": true
+    },
+    {
+        "codigo": "SER005",
+        "nombre": "LEÑA (ADM)",
+        "descripcion": "LEÑA (ADM)",
+        "activo": true
+    },
+    {
+        "codigo": "SER006",
+        "nombre": "LEÑA (OPEX)",
+        "descripcion": "LEÑA (OPEX)",
+        "activo": true
+    },
+    {
+        "codigo": "SER007",
+        "nombre": "SERVICIO INTERNET ",
+        "descripcion": "SERVICIO INTERNET (ADM)",
+        "activo": false
+    },
+    {
+        "codigo": "SER008",
+        "nombre": "SERVICIOS TELECOMUNICACION (ADM)",
+        "descripcion": "SERVICIOS TELECOMUNICACION (ADM)",
+        "activo": true
+    },
+    {
+        "codigo": "SER009",
+        "nombre": "SERVICIO CONTROL PLAGAS",
+        "descripcion": "SERVICIO CONTROL PLAGAS",
+        "activo": true
+    },
+    {
+        "codigo": "SER010",
+        "nombre": "TALAJE GANADO BOVINO",
+        "descripcion": "TALAJE GANADO BOVINO",
+        "activo": true
+    },
+    {
+        "codigo": "SER011",
+        "nombre": "ENERGIA ELECTRICA",
+        "descripcion": "ENERGIA ELECTRICA",
+        "activo": true
+    },
+    {
+        "codigo": "SER012",
+        "nombre": "SERVICIO RIEGO DE PURINES",
+        "descripcion": "SERVICIO RIEGO DE PURINES",
+        "activo": true
+    },
+    {
+        "codigo": "SER013",
+        "nombre": "CILINDRO GAS",
+        "descripcion": "CILINDRO GAS",
+        "activo": true
+    },
+    {
+        "codigo": "SER014",
+        "nombre": "SERVICIO DE PERFORACION POZO AGRICOLA",
+        "descripcion": "SERVICIO DE PERFORACION POZO AGRICOLA",
+        "activo": true
+    },
+    {
+        "codigo": "SER015",
+        "nombre": "SERVICIO DE INSEMINACION",
+        "descripcion": "SERVICIO DE INSEMINACION",
+        "activo": true
+    },
+    {
+        "codigo": "SER016",
+        "nombre": "SERVICIO VETERINARIO (CON IVA)",
+        "descripcion": "SERVICIO VETERINARIO (CON IVA)",
+        "activo": true
+    },
+    {
+        "codigo": "SER017",
+        "nombre": "SISTEMA METEOROLOGICO",
+        "descripcion": "SISTEMA METEOROLOGICO",
+        "activo": true
+    },
+    {
+        "codigo": "SER018",
+        "nombre": "MILKTEK",
+        "descripcion": "MILKTEK",
+        "activo": true
+    },
+    {
+        "codigo": "SER019",
+        "nombre": "FINNEGANS",
+        "descripcion": "FINNEGANS",
+        "activo": true
+    },
+    {
+        "codigo": "SER020",
+        "nombre": "SERVICIO AGROAPP",
+        "descripcion": "SERVICIO AGROAPP",
+        "activo": true
+    },
+    {
+        "codigo": "SER021",
+        "nombre": "SERVICIO FX",
+        "descripcion": "SERVICIO FX",
+        "activo": true
+    },
+    {
+        "codigo": "SER022",
+        "nombre": "SERVICIO SOPORTE IT",
+        "descripcion": "SERVICIO SOPORTE IT",
+        "activo": true
+    },
+    {
+        "codigo": "SER023",
+        "nombre": "SUBSCRIPCIONES Y APLICACIONES",
+        "descripcion": "SUBSCRIPCIONES Y APLICACIONES",
+        "activo": true
+    },
+    {
+        "codigo": "SER024",
+        "nombre": "SISTEMA REMUNERACIONES ",
+        "descripcion": "SISTEMA REMUNERACIONES ",
+        "activo": true
+    },
+    {
+        "codigo": "SER025",
+        "nombre": "SERVICIO DE PENSION Y VIVERES (CON IVA)",
+        "descripcion": "SERVICIO DE PENSION Y VIVERES",
+        "activo": true
+    },
+    {
+        "codigo": "SER026",
+        "nombre": "VIAJES Y HOSPEDAJE",
+        "descripcion": "VIAJES Y HOSPEDAJE",
+        "activo": true
+    },
+    {
+        "codigo": "TRA001",
+        "nombre": "CARBON (CRIANZA)",
+        "descripcion": "CARBON (CRIANZA)",
+        "activo": true
+    },
+    {
+        "codigo": "TRA002",
+        "nombre": "ACONDICIONADOR PEZUÑAS",
+        "descripcion": "ACONDICIONADOR PEZUÑAS",
+        "activo": true
+    },
+    {
+        "codigo": "TRA003",
+        "nombre": "ADVOCIN 180 FCO",
+        "descripcion": "ADVOCIN 180 FCO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA004",
+        "nombre": "AGRO GEL",
+        "descripcion": "AGRO GEL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA005",
+        "nombre": "AGRO GEL 5000 SANIYOD",
+        "descripcion": "AGRO GEL 5000 SANIYOD",
+        "activo": true
+    },
+    {
+        "codigo": "TRA006",
+        "nombre": "AGUA OXIGENADA",
+        "descripcion": "AGUA OXIGENADA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA007",
+        "nombre": "AGUJA SUTURA",
+        "descripcion": "AGUJA SUTURA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA008",
+        "nombre": "ALCOHOL",
+        "descripcion": "ALCOHOL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA009",
+        "nombre": "AUT FELIXCAN",
+        "descripcion": "AUT FELIXCAN",
+        "activo": true
+    },
+    {
+        "codigo": "TRA010",
+        "nombre": "AZOVETRIL",
+        "descripcion": "AZOVETRIL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA011",
+        "nombre": "BANDA ADHESIVA MARCADORA",
+        "descripcion": "BANDA ADHESIVA MARCADORA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA012",
+        "nombre": "BAYCOX 5%",
+        "descripcion": "BAYCOX 5%",
+        "activo": true
+    },
+    {
+        "codigo": "TRA013",
+        "nombre": "BAYTRIL MAX. 10%",
+        "descripcion": "BAYTRIL MAX. 10%",
+        "activo": true
+    },
+    {
+        "codigo": "TRA014",
+        "nombre": "BICARBONATO DE SODIO",
+        "descripcion": "BICARBONATO DE SODIO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA015",
+        "nombre": "BIOPECT",
+        "descripcion": "BIOPECT",
+        "activo": true
+    },
+    {
+        "codigo": "TRA016",
+        "nombre": "BIOSUSPEN",
+        "descripcion": "BIOSUSPEN",
+        "activo": true
+    },
+    {
+        "codigo": "TRA017",
+        "nombre": "BISOLVON",
+        "descripcion": "BISOLVON",
+        "activo": true
+    },
+    {
+        "codigo": "TRA018",
+        "nombre": "BOVICAL",
+        "descripcion": "BOVICAL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA019",
+        "nombre": "BUSCAPINA",
+        "descripcion": "BUSCAPINA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA020",
+        "nombre": "CALFODEX 500",
+        "descripcion": "CALFODEX 500",
+        "activo": true
+    },
+    {
+        "codigo": "TRA021",
+        "nombre": "CALFOMA",
+        "descripcion": "CALFOMA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA022",
+        "nombre": "CARDIOTONICO (VIVEFORT) CAJA",
+        "descripcion": "CARDIOTONICO (VIVEFORT) CAJA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA023",
+        "nombre": "CLINEXIN",
+        "descripcion": "CLINEXIN",
+        "activo": true
+    },
+    {
+        "codigo": "TRA024",
+        "nombre": "CLORAFUR 50%",
+        "descripcion": "CLORAFUR 50%",
+        "activo": true
+    },
+    {
+        "codigo": "TRA025",
+        "nombre": "COBACTAN  INYECTABLE",
+        "descripcion": "COBACTAN  INYECTABLE",
+        "activo": true
+    },
+    {
+        "codigo": "TRA026",
+        "nombre": "COBACTAN LC",
+        "descripcion": "COBACTAN LC",
+        "activo": true
+    },
+    {
+        "codigo": "TRA027",
+        "nombre": "COLIMIC ",
+        "descripcion": "COLIMIC ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA028",
+        "nombre": "COLIPRIM",
+        "descripcion": "COLIPRIM",
+        "activo": true
+    },
+    {
+        "codigo": "TRA029",
+        "nombre": "CONCEPTAL",
+        "descripcion": "CONCEPTAL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA030",
+        "nombre": "CORTIDRAG",
+        "descripcion": "CORTIDRAG",
+        "activo": true
+    },
+    {
+        "codigo": "TRA031",
+        "nombre": "COW GUARD GEL",
+        "descripcion": "COW GUARD GEL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA032",
+        "nombre": "COW GUARD VACAS SECA",
+        "descripcion": "COW GUARD VACAS SECA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA033",
+        "nombre": "CREMA ANTIFLAMATORIA",
+        "descripcion": "CREMA ANTIFLAMATORIA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA034",
+        "nombre": "DELLA CARE",
+        "descripcion": "DELLA CARE",
+        "activo": true
+    },
+    {
+        "codigo": "TRA035",
+        "nombre": "DESCORNADOR",
+        "descripcion": "DESCORNADOR",
+        "activo": true
+    },
+    {
+        "codigo": "TRA036",
+        "nombre": "DESPALMADOR",
+        "descripcion": "DESPALMADOR",
+        "activo": true
+    },
+    {
+        "codigo": "TRA037",
+        "nombre": "DEVAN",
+        "descripcion": "DEVAN",
+        "activo": true
+    },
+    {
+        "codigo": "TRA038",
+        "nombre": "DEXABIOPEN 100 CC",
+        "descripcion": "DEXABIOPEN 100 CC",
+        "activo": true
+    },
+    {
+        "codigo": "TRA039",
+        "nombre": "DIARREVET",
+        "descripcion": "DIARREVET",
+        "activo": true
+    },
+    {
+        "codigo": "TRA040",
+        "nombre": "DIGESTIVO RUMINAL  BILIFAR 120 GRS",
+        "descripcion": "DIGESTIVO RUMINAL  BILIFAR 120 GRS",
+        "activo": true
+    },
+    {
+        "codigo": "TRA041",
+        "nombre": "DIPINERA",
+        "descripcion": "DIPINERA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA042",
+        "nombre": "DISCO ABRASIVO PODAL",
+        "descripcion": "DISCO ABRASIVO PODAL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA043",
+        "nombre": "DRAXXIN 50 CC",
+        "descripcion": "DRAXXIN 50 CC",
+        "activo": true
+    },
+    {
+        "codigo": "TRA044",
+        "nombre": "DUPLALIM",
+        "descripcion": "DUPLALIM",
+        "activo": true
+    },
+    {
+        "codigo": "TRA045",
+        "nombre": "ENROMIX 10% SOLUCION ORAL",
+        "descripcion": "ENROMIX 10% SOLUCION ORAL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA046",
+        "nombre": "ESTREPTOZOL",
+        "descripcion": "ESTREPTOZOL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA047",
+        "nombre": "EXCEDE 200",
+        "descripcion": "EXCEDE 200",
+        "activo": true
+    },
+    {
+        "codigo": "TRA048",
+        "nombre": "FANTETRA",
+        "descripcion": "FANTETRA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA049",
+        "nombre": "FEBRECTAL",
+        "descripcion": "FEBRECTAL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA050",
+        "nombre": "FORMALINA 25 KL",
+        "descripcion": "FORMALINA 25 KL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA051",
+        "nombre": "GAS DESCORNE",
+        "descripcion": "GAS DESCORNE",
+        "activo": true
+    },
+    {
+        "codigo": "TRA052",
+        "nombre": "GLUTELLAC",
+        "descripcion": "GLUTELLAC",
+        "activo": true
+    },
+    {
+        "codigo": "TRA053",
+        "nombre": "GORBAN 24% ",
+        "descripcion": "GORBAN 24% ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA054",
+        "nombre": "HALOCUR",
+        "descripcion": "HALOCUR",
+        "activo": true
+    },
+    {
+        "codigo": "TRA055",
+        "nombre": "HASYUN (DEXAMETASONA)",
+        "descripcion": "HASYUN (DEXAMETASONA)",
+        "activo": true
+    },
+    {
+        "codigo": "TRA056",
+        "nombre": "HEMATON-B 12 ",
+        "descripcion": "HEMATON-B 12 ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA057",
+        "nombre": "HEMODRAG",
+        "descripcion": "HEMODRAG",
+        "activo": true
+    },
+    {
+        "codigo": "TRA058",
+        "nombre": "HEPROTEC (PROTECTOR HEPATICO)",
+        "descripcion": "HEPROTEC (PROTECTOR HEPATICO)",
+        "activo": true
+    },
+    {
+        "codigo": "TRA059",
+        "nombre": "HILO SUTURA",
+        "descripcion": "HILO SUTURA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA060",
+        "nombre": "HISTOCREM",
+        "descripcion": "HISTOCREM",
+        "activo": true
+    },
+    {
+        "codigo": "TRA061",
+        "nombre": "HOJA BISTURI",
+        "descripcion": "HOJA BISTURI",
+        "activo": true
+    },
+    {
+        "codigo": "TRA062",
+        "nombre": "INVEADE",
+        "descripcion": "INVEADE",
+        "activo": true
+    },
+    {
+        "codigo": "TRA063",
+        "nombre": "INVESPAS",
+        "descripcion": "INVESPAS",
+        "activo": true
+    },
+    {
+        "codigo": "TRA064",
+        "nombre": "INYECTORAS CALCIO DESECHABLES",
+        "descripcion": "INYECTORAS CALCIO DESECHABLES",
+        "activo": true
+    },
+    {
+        "codigo": "TRA065",
+        "nombre": "JERINGAS DESECHABLES",
+        "descripcion": "JERINGAS DESECHABLES",
+        "activo": true
+    },
+    {
+        "codigo": "TRA066",
+        "nombre": "KAUPOL",
+        "descripcion": "KAUPOL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA067",
+        "nombre": "KENOCOX ",
+        "descripcion": "KENOCOX ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA068",
+        "nombre": "KET-10 ",
+        "descripcion": "KET-10 ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA069",
+        "nombre": "LAZO OBSTRETICO",
+        "descripcion": "LAZO OBSTRETICO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA070",
+        "nombre": "LIDOCALM",
+        "descripcion": "LIDOCALM",
+        "activo": true
+    },
+    {
+        "codigo": "TRA071",
+        "nombre": "LIQUAMICINA LA",
+        "descripcion": "LIQUAMICINA LA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA072",
+        "nombre": "MAGNEKAL (CLORURO DE MG)",
+        "descripcion": "MAGNEKAL (CLORURO DE MG)",
+        "activo": true
+    },
+    {
+        "codigo": "TRA073",
+        "nombre": "MASTILAC INYECTABLE 12JGAS",
+        "descripcion": "MASTILAC INYECTABLE 12JGAS",
+        "activo": true
+    },
+    {
+        "codigo": "TRA074",
+        "nombre": "METRICURE",
+        "descripcion": "METRICURE",
+        "activo": true
+    },
+    {
+        "codigo": "TRA075",
+        "nombre": "MILKEEPER",
+        "descripcion": "MILKEEPER",
+        "activo": true
+    },
+    {
+        "codigo": "TRA076",
+        "nombre": "MOBEXVET ",
+        "descripcion": "MOBEXVET ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA077",
+        "nombre": "NAQUASONE SOLUCION INYECTABLE 20CC",
+        "descripcion": "NAQUASONE SOLUCION INYECTABLE 20CC",
+        "activo": true
+    },
+    {
+        "codigo": "TRA078",
+        "nombre": "NUFLOR",
+        "descripcion": "NUFLOR",
+        "activo": true
+    },
+    {
+        "codigo": "TRA079",
+        "nombre": "OXIDO MAGNESIO",
+        "descripcion": "OXIDO MAGNESIO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA080",
+        "nombre": "OXITOCINA",
+        "descripcion": "OXITOCINA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA081",
+        "nombre": "PANACUR",
+        "descripcion": "PANACUR",
+        "activo": true
+    },
+    {
+        "codigo": "TRA082",
+        "nombre": "PEDEROL 2%",
+        "descripcion": "PEDEROL 2%",
+        "activo": true
+    },
+    {
+        "codigo": "TRA083",
+        "nombre": "PEGAMENTO PARA TACOS",
+        "descripcion": "PEGAMENTO PARA TACOS",
+        "activo": true
+    },
+    {
+        "codigo": "TRA084",
+        "nombre": "PENICILINA VET SODICA",
+        "descripcion": "PENICILINA VET SODICA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA085",
+        "nombre": "PIRSUE",
+        "descripcion": "PIRSUE",
+        "activo": true
+    },
+    {
+        "codigo": "TRA086",
+        "nombre": "PLANIPART",
+        "descripcion": "PLANIPART",
+        "activo": true
+    },
+    {
+        "codigo": "TRA087",
+        "nombre": "CMT REACTIVO",
+        "descripcion": "CMT REACTIVO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA088",
+        "nombre": "POMADA",
+        "descripcion": "POMADA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA089",
+        "nombre": "POVIDONA YODADA",
+        "descripcion": "POVIDONA YODADA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA090",
+        "nombre": "PRINACID",
+        "descripcion": "PRINACID",
+        "activo": true
+    },
+    {
+        "codigo": "TRA091",
+        "nombre": "RESFLOR",
+        "descripcion": "RESFLOR",
+        "activo": true
+    },
+    {
+        "codigo": "TRA092",
+        "nombre": "RIDAVET ",
+        "descripcion": "RIDAVET ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA093",
+        "nombre": "RIMADYL INYECTABLE ",
+        "descripcion": "RIMADYL INYECTABLE ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA094",
+        "nombre": "SALES REHIDRATANTES",
+        "descripcion": "SALES REHIDRATANTES",
+        "activo": true
+    },
+    {
+        "codigo": "TRA095",
+        "nombre": "SELLADOR DELLA BARRERA",
+        "descripcion": "SELLADOR DELLA BARRERA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA096",
+        "nombre": "SONDA UTERINA",
+        "descripcion": "SONDA UTERINA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA097",
+        "nombre": "SPECTRAMAST",
+        "descripcion": "SPECTRAMAST",
+        "activo": true
+    },
+    {
+        "codigo": "TRA098",
+        "nombre": "SUERO",
+        "descripcion": "SUERO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA099",
+        "nombre": "SULFATO DE COBRE",
+        "descripcion": "SULFATO DE COBRE",
+        "activo": true
+    },
+    {
+        "codigo": "TRA100",
+        "nombre": "SULFATO DE MAGNESIO",
+        "descripcion": "SULFATO DE MAGNESIO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA101",
+        "nombre": "TACO DE MADERA",
+        "descripcion": "TACO DE MADERA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA102",
+        "nombre": "TACO GOMA",
+        "descripcion": "TACO GOMA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA103",
+        "nombre": "TENAZA CORTA PEZUÑA",
+        "descripcion": "TENAZA CORTA PEZUÑA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA104",
+        "nombre": "TERIL",
+        "descripcion": "TERIL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA105",
+        "nombre": "TILAN",
+        "descripcion": "TILAN",
+        "activo": true
+    },
+    {
+        "codigo": "TRA106",
+        "nombre": "TILOSINA 200 MG",
+        "descripcion": "TILOSINA 200 MG",
+        "activo": true
+    },
+    {
+        "codigo": "TRA107",
+        "nombre": "TINTURA DE YODO",
+        "descripcion": "TINTURA DE YODO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA108",
+        "nombre": "TOCOPER ",
+        "descripcion": "TOCOPER ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA109",
+        "nombre": "TONIMAG  (CLORURO DE MG)",
+        "descripcion": "TONIMAG  (CLORURO DE MG)",
+        "activo": true
+    },
+    {
+        "codigo": "REP020",
+        "nombre": "VASELINA LIQUIDA",
+        "descripcion": "VASELINA LIQUIDA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA111",
+        "nombre": "VENDA",
+        "descripcion": "VENDA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA112",
+        "nombre": "VENDA COAHESIVA",
+        "descripcion": "VENDA COAHESIVA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA113",
+        "nombre": "VIDATOL",
+        "descripcion": "VIDATOL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA114",
+        "nombre": "VIGANTOL",
+        "descripcion": "VIGANTOL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA115",
+        "nombre": "VITALTRUNK",
+        "descripcion": "VITALTRUNK",
+        "activo": true
+    },
+    {
+        "codigo": "TRA116",
+        "nombre": "VITAMINA E + SELENIO",
+        "descripcion": "VITAMINA E + SELENIO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA117",
+        "nombre": "VITAMINA TRIPLE",
+        "descripcion": "VITAMINA TRIPLE",
+        "activo": true
+    },
+    {
+        "codigo": "TRA118",
+        "nombre": "XILACINA 10%",
+        "descripcion": "XILACINA 10%",
+        "activo": true
+    },
+    {
+        "codigo": "TRA119",
+        "nombre": "ZANIL POLVO 80%",
+        "descripcion": "ZANIL POLVO 80%",
+        "activo": true
+    },
+    {
+        "codigo": "TRA120",
+        "nombre": "DIPPING",
+        "descripcion": "DIPPING",
+        "activo": true
+    },
+    {
+        "codigo": "VGA001",
+        "nombre": "TOROS VENTA",
+        "descripcion": "TOROS VENTA",
+        "activo": true
+    },
+    {
+        "codigo": "VLE001",
+        "nombre": "LECHE FRESCA",
+        "descripcion": "LECHE FRESCA",
+        "activo": true
+    },
+    {
+        "codigo": "VLECHE01",
+        "nombre": "** NO USAR** Vaca en leche ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "FER021",
+        "nombre": "BIOESTABILIZADO LIQUIDO",
+        "descripcion": "BIOESTABILIZADO LIQUIDO",
+        "activo": false
+    },
+    {
+        "codigo": "IN338",
+        "nombre": "ACID DELLA EXTRA (60 LITROS) - SAN MIGUEL",
+        "descripcion": "ACID DELLA EXTRA (60 LITROS) - SAN MIGUEL",
+        "activo": false
+    },
+    {
+        "codigo": "EA094",
+        "nombre": "ADHESIVO   BOVIBOND",
+        "descripcion": "ADHESIVO   BOVIBOND",
+        "activo": false
+    },
+    {
+        "codigo": "AG002",
+        "nombre": "AGUA OFICINA",
+        "descripcion": "AGUA OFICINA",
+        "activo": false
+    },
+    {
+        "codigo": "ALIM60",
+        "nombre": "BOLOS DE PAJA",
+        "descripcion": "BOLOS DE PAJA",
+        "activo": false
+    },
+    {
+        "codigo": "ALIM58",
+        "nombre": "BOLOS DE PASTO",
+        "descripcion": "BOLOS DE PASTO",
+        "activo": false
+    },
+    {
+        "codigo": "GM074",
+        "nombre": "CAMARA 14,9 -24 TR 218-A",
+        "descripcion": "CAMARA 14,9 -24 TR 218-A",
+        "activo": false
+    },
+    {
+        "codigo": "GM091",
+        "nombre": "CAMARA ARO 15(CARRO)",
+        "descripcion": "CAMARA ARO 15(CARRO)",
+        "activo": false
+    },
+    {
+        "codigo": "EA373",
+        "nombre": "CINTA PARA JUNTURAS",
+        "descripcion": "CINTA PARA JUNTURAS",
+        "activo": false
+    },
+    {
+        "codigo": "IN128",
+        "nombre": "CMT REACTIVO",
+        "descripcion": "CMT REACTIVO",
+        "activo": false
+    },
+    {
+        "codigo": "IN137",
+        "nombre": "COLIMIC",
+        "descripcion": "COLIMIC",
+        "activo": false
+    },
+    {
+        "codigo": "ALIM46",
+        "nombre": "CONCENTRADO ALISUR HARINADO (GRANEL)",
+        "descripcion": "CONCENTRADO ALISUR HARINADO (GRANEL)",
+        "activo": false
+    },
+    {
+        "codigo": "IN459",
+        "nombre": "DELLA SAN",
+        "descripcion": "DELLA SAN",
+        "activo": false
+    },
+    {
+        "codigo": "IN185",
+        "nombre": "DISPOSITIVO CIDR BOVINO",
+        "descripcion": "DISPOSITIVO CIDR BOVINO",
+        "activo": false
+    },
+    {
+        "codigo": "AG140",
+        "nombre": "ELEMENTOS DE SEGURIDAD PERSONAL",
+        "descripcion": "ELEMENTOS DE SEGURIDAD PERSONAL",
+        "activo": false
+    },
+    {
+        "codigo": "SV50",
+        "nombre": "EXAMENES DE LABORATORIO",
+        "descripcion": "EXAMENES DE LABORATORIO",
+        "activo": false
+    },
+    {
+        "codigo": "LE012",
+        "nombre": "FAST CLEAN",
+        "descripcion": "FAST CLEAN",
+        "activo": false
+    },
+    {
+        "codigo": "IN800",
+        "nombre": "FILM",
+        "descripcion": "FILM",
+        "activo": false
+    },
+    {
+        "codigo": "IN116",
+        "nombre": "FILTRO 125 MM X 850 MM",
+        "descripcion": "FILTRO 125 MM X 850 MM",
+        "activo": true
+    },
+    {
+        "codigo": "SV11",
+        "nombre": "FLETE  TRASLADO DE MAQUINARIA",
+        "descripcion": "FLETE  TRASLADO DE MAQUINARIA",
+        "activo": false
+    },
+    {
+        "codigo": "SV32",
+        "nombre": "FLETE TRASLADO ANIMALES",
+        "descripcion": "FLETE TRASLADO ANIMALES",
+        "activo": false
+    },
+    {
+        "codigo": "ALIM37",
+        "nombre": "GOLDEN JOSERA (SUSTITUTO LACTEO)",
+        "descripcion": "GOLDEN JOSERA (SUSTITUTO LACTEO)",
+        "activo": false
+    },
+    {
+        "codigo": "IN195",
+        "nombre": "GONASYL 20 ML",
+        "descripcion": "GONASYL 20 ML",
+        "activo": false
+    },
+    {
+        "codigo": "AG160",
+        "nombre": "GUANTE NITRILO (NO USAR)",
+        "descripcion": "GUANTE NITRILO (NO USAR)",
+        "activo": false
+    },
+    {
+        "codigo": "ACF54",
+        "nombre": "IMPRESORA",
+        "descripcion": "IMPRESORA",
+        "activo": false
+    },
+    {
+        "codigo": "EA755",
+        "nombre": "LETREROS",
+        "descripcion": "LETREROS",
+        "activo": false
+    },
+    {
+        "codigo": "IN69",
+        "nombre": "LUTALYSE 100CC",
+        "descripcion": "LUTALYSE 100CC",
+        "activo": false
+    },
+    {
+        "codigo": "ALIM78",
+        "nombre": "MAIZ ROLEADO",
+        "descripcion": "MAIZ ROLEADO",
+        "activo": false
+    },
+    {
+        "codigo": "IN343",
+        "nombre": "MALLA P/FILM",
+        "descripcion": "MALLA P/FILM",
+        "activo": false
+    },
+    {
+        "codigo": "IN175",
+        "nombre": "MANGAS DE ORDE?",
+        "descripcion": "MANGAS DE ORDE?",
+        "activo": false
+    },
+    {
+        "codigo": "IN525",
+        "nombre": "MANIJA",
+        "descripcion": "MANIJA",
+        "activo": false
+    },
+    {
+        "codigo": "EA847",
+        "nombre": "MANTENCION EXTINTOR",
+        "descripcion": "MANTENCION EXTINTOR",
+        "activo": false
+    },
+    {
+        "codigo": "IN302",
+        "nombre": "MATERIALES DE  MANTENCION",
+        "descripcion": "MATERIALES DE  MANTENCION",
+        "activo": false
+    },
+    {
+        "codigo": "ACF706",
+        "nombre": "Monocular Vision noctura 5 x 40",
+        "descripcion": "Monocular Vision noctura 5 x 40",
+        "activo": false
+    },
+    {
+        "codigo": "ACF705",
+        "nombre": "MOTO TAKASAKI TK150 GY",
+        "descripcion": "MOTO TAKASAKI TK150 GY",
+        "activo": false
+    },
+    {
+        "codigo": "SV1000",
+        "nombre": "MULTAS",
+        "descripcion": "MULTAS",
+        "activo": false
+    },
+    {
+        "codigo": "GM189",
+        "nombre": "NEUMATICO 18 x 9.5 - 8",
+        "descripcion": "NEUMATICO 18 x 9.5 - 8",
+        "activo": false
+    },
+    {
+        "codigo": "LE09",
+        "nombre": "PEZONERA MAGNUM",
+        "descripcion": "PEZONERA MAGNUM",
+        "activo": false
+    },
+    {
+        "codigo": "IN51",
+        "nombre": "PITON AGUA",
+        "descripcion": "PITON AGUA",
+        "activo": false
+    },
+    {
+        "codigo": "IN127",
+        "nombre": "PLASTICO SILO",
+        "descripcion": "PLASTICO SILO",
+        "activo": false
+    },
+    {
+        "codigo": "AQ563",
+        "nombre": "RAINGREEN",
+        "descripcion": "RAINGREEN",
+        "activo": true
+    },
+    {
+        "codigo": "EA869",
+        "nombre": "REPARACION NEUMATICO",
+        "descripcion": "REPARACION NEUMATICO",
+        "activo": false
+    },
+    {
+        "codigo": "SV190",
+        "nombre": "REPARACION TRACTOR COIPOMO",
+        "descripcion": "REPARACION TRACTOR COIPOMO",
+        "activo": false
+    },
+    {
+        "codigo": "SV188",
+        "nombre": "REPARACION TRACTOR SAN MIGUEL",
+        "descripcion": "REPARACION TRACTOR SAN MIGUEL",
+        "activo": false
+    },
+    {
+        "codigo": "IN358",
+        "nombre": "RIDAVET LITRO",
+        "descripcion": "RIDAVET LITRO",
+        "activo": false
+    },
+    {
+        "codigo": "IN311",
+        "nombre": "SAL",
+        "descripcion": "SAL",
+        "activo": false
+    },
+    {
+        "codigo": "SV1004",
+        "nombre": "SERVICIO CONFECCION SILO PARVA",
+        "descripcion": "SERVICIO CONFECCION SILO PARVA",
+        "activo": false
+    },
+    {
+        "codigo": "IN210",
+        "nombre": "SERVICIO DE CONEXION A INTERNET",
+        "descripcion": "SERVICIO DE CONEXION A INTERNET",
+        "activo": false
+    },
+    {
+        "codigo": "SV1005",
+        "nombre": "SERVICIO DE CONFECION DE BOLO DE PASTO",
+        "descripcion": "SERVICIO DE CONFECION DE BOLO DE PASTO",
+        "activo": false
+    },
+    {
+        "codigo": "SV35",
+        "nombre": "SERVICIO DE FERTILIZACION",
+        "descripcion": "SERVICIO DE FERTILIZACION",
+        "activo": false
+    },
+    {
+        "codigo": "SV73",
+        "nombre": "SERVICIO DE MANTENCIONES",
+        "descripcion": "SERVICIO DE MANTENCIONES",
+        "activo": false
+    },
+    {
+        "codigo": "SV12",
+        "nombre": "SERVICIO DE PREPARACION SUELO",
+        "descripcion": "SERVICIO DE PREPARACION SUELO",
+        "activo": false
+    },
+    {
+        "codigo": "SV1003",
+        "nombre": "SERVICIO DE SIEMBRA",
+        "descripcion": "SERVICIO DE SIEMBRA",
+        "activo": false
+    },
+    {
+        "codigo": "SV87",
+        "nombre": "SERVICIO MANTENCION SALA DE ORDE?",
+        "descripcion": "SERVICIO MANTENCION SALA DE ORDE?",
+        "activo": false
+    },
+    {
+        "codigo": "APR033",
+        "nombre": "SERVICIOS FUMIGACION",
+        "descripcion": "SERVICIOS FUMIGACION",
+        "activo": true
+    },
+    {
+        "codigo": "AG003",
+        "nombre": "SERVICIOS TELECOMUNICACION OFICINA",
+        "descripcion": "SERVICIOS TELECOMUNICACION OFICINA",
+        "activo": false
+    },
+    {
+        "codigo": "IN200",
+        "nombre": "TERNERO CRECIMIENTO 25 KG",
+        "descripcion": "TERNERO CRECIMIENTO 25 KG",
+        "activo": false
+    },
+    {
+        "codigo": "SV17",
+        "nombre": "VARIOS OFICINA (CORRESPONDENCIA, GASTOS SERVICIOS)",
+        "descripcion": "VARIOS OFICINA (CORRESPONDENCIA, GASTOS SERVICIOS)",
+        "activo": false
+    },
+    {
+        "codigo": "IN60",
+        "nombre": "ZZ NO USAR PECHERA",
+        "descripcion": "ZZ NO USAR PECHERA",
+        "activo": false
+    },
+    {
+        "codigo": "PRI004",
+        "nombre": "LETREROS",
+        "descripcion": "LETREROS",
+        "activo": true
+    },
+    {
+        "codigo": "pte001",
+        "nombre": "Traspaso de Informacion",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "FLE003",
+        "nombre": "CARGA Y DESCARGA ",
+        "descripcion": "CARGA Y DESCARGA ",
+        "activo": true
+    },
+    {
+        "codigo": "BP001",
+        "nombre": "ARRIENDO CANCHA ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BPE017",
+        "nombre": "DETERGENTE LAVADO DE ROPA ",
+        "descripcion": "DETERGENTE LAVADO DE ROPA ",
+        "activo": true
+    },
+    {
+        "codigo": "IMC017",
+        "nombre": "ACTIVADOR TRANCA PEL",
+        "descripcion": "TENSOR",
+        "activo": true
+    },
+    {
+        "codigo": "SMA013",
+        "nombre": "MANTENCION TRACTOR JD 6155J PATENTE GFKF62",
+        "descripcion": "MANTENCION TRACTOR JD 6155J PATENTE GFKF62",
+        "activo": true
+    },
+    {
+        "codigo": "SMA014",
+        "nombre": "REPARACION TRACTOR JD 6155J PATENTE GFKF62",
+        "descripcion": "REPARACION TRACTOR JD 6155J PATENTE GFKF62",
+        "activo": true
+    },
+    {
+        "codigo": "SMA015",
+        "nombre": "MANTENCION TRACTOR JD 6110 D PATENTE FYGY44",
+        "descripcion": "MANTENCION TRACTOR JD 6110 D PATENTE FYGY44",
+        "activo": true
+    },
+    {
+        "codigo": "SMA016",
+        "nombre": "REPARACION TRACTOR JD 6110 D PATENTE FYGY44",
+        "descripcion": "REPARACION TRACTOR JD 6110 D PATENTE FYGY44",
+        "activo": true
+    },
+    {
+        "codigo": "OST002",
+        "nombre": "BIDON DE COMBUSTIBLE",
+        "descripcion": "BIDON DE COMBUSTIBLE",
+        "activo": true
+    },
+    {
+        "codigo": "SMA017",
+        "nombre": "MANTENCION TRACTOR JOHN DEERE 5090E 4X4 PATENTE KDLD17-6 (COIPOMO)",
+        "descripcion": "MANTENCION TRACTOR JOHN DEERE 5090E 4X4 PATENTE KDLD17-6 (RADALES)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA018",
+        "nombre": "REPARACION TRACTOR JOHN DEERE 5090E 4X4 PATENTE KDLD17-6 (COIPOMO)",
+        "descripcion": "MANTENCION TRACTOR JOHN DEERE 5090E 4X4 PATENTE KDLD17-6 (RADALES)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA019",
+        "nombre": "MANTENCION TRACTOR MASSEY FERGUSON MF4299T4K 4 X4 PATENTE KGBY 21-5 (COIPOMO)",
+        "descripcion": "MANTENCION TRACTOR MASSEY FERGUSON MF4299T4K 4 X4 PATENTE KGBY 21-5 (COIPOMO)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA020",
+        "nombre": "REPARACION TRACTOR MASSEY FERGUSON MF4299T4K 4 X4 PATENTE KGBY 21-5 (COIPOMO)",
+        "descripcion": "REPARACION TRACTOR MASSEY FERGUSON MF4299T4K 4 X4 PATENTE KGBY 21-5 (COIPOMO)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA021",
+        "nombre": "MANTENCION TRACTOR JOHN DEERE JD 6920 PATENTE GFKF62 (RADALES)",
+        "descripcion": "MANTENCION TRACTOR JOHN DEERE JD 6920 PATENTE GFKF62 (RADALES)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA022",
+        "nombre": "REPARACION TRACTOR JOHN DEERE JD 6920 PATENTE GFKF62 (RADALES)",
+        "descripcion": "REPARACION TRACTOR JOHN DEERE JD 6920 PATENTE GFKF62 (RADALES)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA023",
+        "nombre": "MANTENCION TRACTOR JOHN DEERE RD01 6110D PATENTE FYGY42 (RADALES)",
+        "descripcion": "MANTENCION TRACTOR JOHN DEERE RD01 6110D PATENTE FYGY42 (RADALES)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA024",
+        "nombre": "REPARACION TRACTOR JOHN DEERE RD01 6110D PATENTE FYGY42 (RADALES)",
+        "descripcion": "REPARACION TRACTOR JOHN DEERE RD01 6110D PATENTE FYGY42 (RADALES)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA025",
+        "nombre": "MANTENCION CERCOS ",
+        "descripcion": "MANTENCION CERCOS",
+        "activo": true
+    },
+    {
+        "codigo": "SMA026",
+        "nombre": "SERVICIO CORTE Y LIMPIEZA DE  CAMINOS Y CERCOS",
+        "descripcion": "SERVICIO CORTE Y LIMPIEZA ",
+        "activo": true
+    },
+    {
+        "codigo": "FER022",
+        "nombre": "RAIGREEN ",
+        "descripcion": "RAIGREEN ",
+        "activo": true
+    },
+    {
+        "codigo": "REP019",
+        "nombre": "GONASYL",
+        "descripcion": "GONASYL",
+        "activo": true
+    },
+    {
+        "codigo": "APR034",
+        "nombre": "BOLOS  (CONF. PROPIA)",
+        "descripcion": "SERVICIO CONFECCION BOLOS",
+        "activo": false
+    },
+    {
+        "codigo": "APR035",
+        "nombre": "SERVICIO MANTENCION DE PRADERAS ",
+        "descripcion": "SERVICIO MANTENCION PRADERAS ",
+        "activo": true
+    },
+    {
+        "codigo": "FER023",
+        "nombre": "NITROVIT",
+        "descripcion": "NITROVIT",
+        "activo": true
+    },
+    {
+        "codigo": "OST003",
+        "nombre": "NYLON DE BOLOS ",
+        "descripcion": "NYLON BOLOS ",
+        "activo": true
+    },
+    {
+        "codigo": "RTL006",
+        "nombre": "GUANTE NITRILO",
+        "descripcion": "GUANTE NITRILO",
+        "activo": true
+    },
+    {
+        "codigo": "SOR026",
+        "nombre": "FAST CLEAN ",
+        "descripcion": "FAST CLEAN ",
+        "activo": true
+    },
+    {
+        "codigo": "FER024",
+        "nombre": "ALGAMAR ",
+        "descripcion": "ALGAMAR ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA121",
+        "nombre": "HORNEX",
+        "descripcion": "HORNEX",
+        "activo": true
+    },
+    {
+        "codigo": "TRA122",
+        "nombre": "FINADYNE",
+        "descripcion": "FINADYNE",
+        "activo": true
+    },
+    {
+        "codigo": "SOR027",
+        "nombre": "DELLA SAN ",
+        "descripcion": "DELLA SAN ",
+        "activo": true
+    },
+    {
+        "codigo": "SER027",
+        "nombre": "FACTURACION ",
+        "descripcion": "FACTURACION",
+        "activo": true
+    },
+    {
+        "codigo": "FER025",
+        "nombre": "GRUINDAG 8-24-0",
+        "descripcion": "GRUINDAG 8-24-0",
+        "activo": true
+    },
+    {
+        "codigo": "OST004",
+        "nombre": "PULVERIZADOR (BOMBA ESPALDA)",
+        "descripcion": "PULVERIZADOR (BOMBA ESPALDA)",
+        "activo": true
+    },
+    {
+        "codigo": "FER026",
+        "nombre": "G-ACTIV ",
+        "descripcion": "G-ACTIV ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA123",
+        "nombre": "MULTIPROTEC",
+        "descripcion": "MULTIPROTEC",
+        "activo": true
+    },
+    {
+        "codigo": "AFI023",
+        "nombre": "GALLETERO",
+        "descripcion": "GALLETERO",
+        "activo": true
+    },
+    {
+        "codigo": "BPE018",
+        "nombre": "CASCO MOTOSIERRA",
+        "descripcion": "CASCO MOTOSIERRA",
+        "activo": true
+    },
+    {
+        "codigo": "AGR025",
+        "nombre": "FAST PLUS",
+        "descripcion": "FAST PLUS",
+        "activo": true
+    },
+    {
+        "codigo": "CVE002",
+        "nombre": "COMISION POR VENTA ANIMALES",
+        "descripcion": "COMISION POR VENTA ANIMALES",
+        "activo": true
+    },
+    {
+        "codigo": "ACO020",
+        "nombre": "TRIGO APLASTADO",
+        "descripcion": "TRIGO APLASTADO",
+        "activo": true
+    },
+    {
+        "codigo": "CON012",
+        "nombre": "MAIZ ROLEADO",
+        "descripcion": "MAIZ ROLEADO",
+        "activo": true
+    },
+    {
+        "codigo": "SMA027",
+        "nombre": "MANTENCION TRACTOR SAME (CORTE ALTO)",
+        "descripcion": "MANTENCION TRACTOR SAME (CORTE ALTO)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA028",
+        "nombre": "REPARACION TRACTOR SAME (CORTE ALTO)",
+        "descripcion": "REPARACION TRACTOR SAME (CORTE ALTO)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA029",
+        "nombre": "MANTENCION CASAS (GASTOS MENORES)",
+        "descripcion": "MANTENCION CASAS (GASTOS MENORES)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI024",
+        "nombre": "PINZA PARA TRACTOR",
+        "descripcion": "PINZA PARA TRACTOR",
+        "activo": true
+    },
+    {
+        "codigo": "AFI025",
+        "nombre": "ESTANQUE DE AGUA 2400 LTS",
+        "descripcion": "ESTANQUE DE AGUA 2400 LTS",
+        "activo": true
+    },
+    {
+        "codigo": "BPE019",
+        "nombre": "GUANTES PARA MOTO",
+        "descripcion": "GUANTES PARA MOTO",
+        "activo": true
+    },
+    {
+        "codigo": "BPE020",
+        "nombre": "RODILLERAS PARA MOTO",
+        "descripcion": "RODILLERAS PARA MOTO",
+        "activo": true
+    },
+    {
+        "codigo": "BPE021",
+        "nombre": "MICA PARA CASCO MOTO",
+        "descripcion": "MICA PARA CASCO MOTO",
+        "activo": true
+    },
+    {
+        "codigo": "BPE022",
+        "nombre": "JOCKEY LEGIONARIO",
+        "descripcion": "JOCKEY LEGIONARIO",
+        "activo": true
+    },
+    {
+        "codigo": "BPE023",
+        "nombre": "LENTES",
+        "descripcion": "LENTES",
+        "activo": true
+    },
+    {
+        "codigo": "GGE008",
+        "nombre": "SERVICIO DE ESTAMPADO",
+        "descripcion": "SERVICIO DE ESTAMPADO",
+        "activo": true
+    },
+    {
+        "codigo": "SER028",
+        "nombre": "COMISION POR COMPRA ALIMENTO",
+        "descripcion": "COMISION POR COMPRA ALIMENTO",
+        "activo": true
+    },
+    {
+        "codigo": "RRH002",
+        "nombre": "APOYO PREDIOS AGRICOLAS (con retencion BH)",
+        "descripcion": "APOYO PREDIOS AGRICOLAS (con retencion BH)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA030",
+        "nombre": "MANTENCION CARRO FORRAJERO",
+        "descripcion": "MANTENCION CARRO FORRAJERO",
+        "activo": true
+    },
+    {
+        "codigo": "PRI005",
+        "nombre": "CUMPLIMIENTO NORMATIVAS MEDIOAMBIENTALES",
+        "descripcion": "CUMPLIMIENTO NORMATIVAS MEDIOAMBIENTALES",
+        "activo": true
+    },
+    {
+        "codigo": "SMA031",
+        "nombre": "MANTENCION TRACTOR JOHN DEERE 6110 D (SAN MIGUEL)",
+        "descripcion": "MANTENCION TRACTOR JOHN DEERE 6110 D (SAN MIGUEL)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI026",
+        "nombre": "HIDROLAVADORA",
+        "descripcion": "HIDROLAVADORA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI027",
+        "nombre": "BARRAS PESAJE",
+        "descripcion": "BARRAS PESAJE",
+        "activo": true
+    },
+    {
+        "codigo": "CVE003",
+        "nombre": "COMISION POR VENTA ACTIVO FIJO (CON IVA)",
+        "descripcion": "COMISION POR VENTA ACTIVO FIJO (CON IVA)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI067",
+        "nombre": "COMEDEROS",
+        "descripcion": "COMEDEROS",
+        "activo": true
+    },
+    {
+        "codigo": "SMA032",
+        "nombre": "MANTENCION MOTOS",
+        "descripcion": "MANTENCION MOTOS",
+        "activo": true
+    },
+    {
+        "codigo": "SMA033",
+        "nombre": "REPARACION TRACTOR JOHN DEERE 6110 FY GY 43 (SAN MIGUEL)",
+        "descripcion": "REPARACION TRACTOR JOHN DEERE 6110 FY GY 43 (SAN MIGUEL)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA034",
+        "nombre": "MANTENCION TRACTOR MASSEY FERGUSON TR110 (SAN FRANCISCO)",
+        "descripcion": "MANTENCION TRACTOR MASSEY FERGUSON TR110 (SAN FRANCISCO)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA035",
+        "nombre": "REPARACION TRACTOR MASSEY FERGUSON TR110 (SAN FRANCISCO)",
+        "descripcion": "REPARACION TRACTOR MASSEY FERGUSON TR110 (SAN FRANCISCO)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI028",
+        "nombre": "MANIPULADOR TELESCOPICO CAT",
+        "descripcion": "MANIPULADOR TELESCOPICO CAT",
+        "activo": true
+    },
+    {
+        "codigo": "TRA124",
+        "nombre": "BLOWSTOP",
+        "descripcion": "BLOWSTOP",
+        "activo": true
+    },
+    {
+        "codigo": "TRA125",
+        "nombre": "PROPILENGLICOL",
+        "descripcion": "PROPILENGLICOL",
+        "activo": true
+    },
+    {
+        "codigo": "SER029",
+        "nombre": "INVERSION PROYECTO DE RIEGO",
+        "descripcion": "INVERSION PROYECTO DE RIEGO",
+        "activo": true
+    },
+    {
+        "codigo": "OST005",
+        "nombre": "MALETA DE DADOS",
+        "descripcion": "MALETA DE DADOS",
+        "activo": true
+    },
+    {
+        "codigo": "ACO021",
+        "nombre": "MALLA PARA BOLOS",
+        "descripcion": "MALLA PARA BOLOS",
+        "activo": true
+    },
+    {
+        "codigo": "ACO022",
+        "nombre": "FILM PARA BOLOS",
+        "descripcion": "FILM PARA BOLOS",
+        "activo": true
+    },
+    {
+        "codigo": "ARR007",
+        "nombre": "ARRIENDO VEHICULO (CON RETENCION BH)",
+        "descripcion": "ARRIENDO VEHICULO (CON RETENCION BH)",
+        "activo": true
+    },
+    {
+        "codigo": "COM009",
+        "nombre": "INTERESES NOTAS DEBITO X FACTURAS COMBUSTIBLE",
+        "descripcion": "INTERESES NOTAS DEBITO",
+        "activo": true
+    },
+    {
+        "codigo": "PRI006",
+        "nombre": "ASESORIA EN PREVENCION DE RIESGOS (CON RETENCION BH)",
+        "descripcion": "ASESORIA EN PREVENCION DE RIESGOS (CON RETENCION BH)",
+        "activo": true
+    },
+    {
+        "codigo": "SER030",
+        "nombre": "SERVICIO VETERINARIO (CON RETENCION 16.75 %BH)",
+        "descripcion": "SERVICIO VETERINARIO (CON RETENCION BH)",
+        "activo": true
+    },
+    {
+        "codigo": "COM010",
+        "nombre": "ADMINISTRACION DIESEL",
+        "descripcion": "ADMINISTRACION DIESEL",
+        "activo": true
+    },
+    {
+        "codigo": "REM001",
+        "nombre": "REMUNERACIONES",
+        "descripcion": "REMUNERACIONES",
+        "activo": true
+    },
+    {
+        "codigo": "REM002",
+        "nombre": "REMUNERACIONES (CON RETENCION BH)",
+        "descripcion": "REMUNERACIONES (CON RETENCION BH)",
+        "activo": true
+    },
+    {
+        "codigo": "SER031",
+        "nombre": "SERVICIO DE PENSION Y VIVERES (CON RETENCION BH)",
+        "descripcion": "SERVICIO DE PENSION Y VIVERES (CON RETENCION BH)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA036",
+        "nombre": "MANTENCION CARGADOR FRONTAL CAT",
+        "descripcion": "MANTENCION CARGADOR FRONTAL CAT",
+        "activo": true
+    },
+    {
+        "codigo": "SMA037",
+        "nombre": "REPARACION CARGADOR FRONTAL CAT",
+        "descripcion": "REPARACION CARGADOR FRONTAL CAT",
+        "activo": true
+    },
+    {
+        "codigo": "FER027",
+        "nombre": "HIDROCAL SIN SULFATO DE CALCIO",
+        "descripcion": "HIDRO CAL SIN SULFATO DE CALCIO",
+        "activo": true
+    },
+    {
+        "codigo": "SEM020",
+        "nombre": "SEMILLA DE TREBOL LASER",
+        "descripcion": "SEMILLA DE TREBOL LASER",
+        "activo": true
+    },
+    {
+        "codigo": "SEM021",
+        "nombre": "SEMILLA CENTENO FOR BARPOWER C/BALLICA",
+        "descripcion": "SEMILLA CENTENO FOR BARPOWER C/BALLICA",
+        "activo": true
+    },
+    {
+        "codigo": "FER028",
+        "nombre": "MEZCLA FERTILIZANTE ",
+        "descripcion": "MEZCLA FERTILIZANTE ",
+        "activo": true
+    },
+    {
+        "codigo": "VGA003",
+        "nombre": "VACAS (VENTAS)",
+        "descripcion": "VACAS DESECHO",
+        "activo": true
+    },
+    {
+        "codigo": "VGA002",
+        "nombre": "TERNERAS (VENTAS)",
+        "descripcion": "TERNERAS",
+        "activo": true
+    },
+    {
+        "codigo": "VGA005",
+        "nombre": "TERNEROS (VENTAS)",
+        "descripcion": "TERNEROS",
+        "activo": true
+    },
+    {
+        "codigo": "VGA004",
+        "nombre": "VAQUILLAS (VENTAS)",
+        "descripcion": "VAQUILLAS",
+        "activo": true
+    },
+    {
+        "codigo": "VAC001",
+        "nombre": "VENTA ACTIVOS ",
+        "descripcion": "VENTA ACTIVO FIJO ",
+        "activo": true
+    },
+    {
+        "codigo": "PSA027",
+        "nombre": "ARETES ROJOS ",
+        "descripcion": "ARETES ROJOS ",
+        "activo": true
+    },
+    {
+        "codigo": "FER029",
+        "nombre": "NITROFIX ",
+        "descripcion": "NITROFIX",
+        "activo": true
+    },
+    {
+        "codigo": "TRA126",
+        "nombre": "YODO SPRAY ",
+        "descripcion": "YODO SPRAY ",
+        "activo": true
+    },
+    {
+        "codigo": "AFI029",
+        "nombre": "CARRO FORRAJERO HUND",
+        "descripcion": "CARRO FORRAJERO HUND",
+        "activo": true
+    },
+    {
+        "codigo": "FER030",
+        "nombre": "DOLOMITA",
+        "descripcion": "DOLOMITA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA127",
+        "nombre": "PISTOLA APLICADORA DIPPING",
+        "descripcion": "PISTOLA APLICADORA DIPPING",
+        "activo": true
+    },
+    {
+        "codigo": "ACO023",
+        "nombre": "PAJA CEBADA ",
+        "descripcion": "PAJA CEBADA CONSUMO ANIMAL ",
+        "activo": true
+    },
+    {
+        "codigo": "CVE004",
+        "nombre": "COMISION POR VENTA ACTIVO FIJO (CON RETENCION BH)",
+        "descripcion": "COMISION POR VENTA ACTIVO FIJO (CON RETENCION BH)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA038",
+        "nombre": "MANTENCION TRACTOR CAPTAIN (SAN MIGUEL)",
+        "descripcion": "MANTENCION TRACTOR CAPTAIN (SAN MIGUEL)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA039",
+        "nombre": "REPARACION TRACTOR CAPTAIN (SAN MIGUEL)",
+        "descripcion": "REPARACION TRACTOR CAPTAIN (SAN MIGUEL)",
+        "activo": true
+    },
+    {
+        "codigo": "APR036",
+        "nombre": "ADITIVO MAIZ",
+        "descripcion": "ADITIVO MAIZ",
+        "activo": true
+    },
+    {
+        "codigo": "AGR026",
+        "nombre": "N. NITROSLOW FEED",
+        "descripcion": "N. NITROSLOW FEED",
+        "activo": true
+    },
+    {
+        "codigo": "TRA128",
+        "nombre": "TROCAR OVINOS",
+        "descripcion": "TROCAR OVINOS",
+        "activo": true
+    },
+    {
+        "codigo": "OIV009",
+        "nombre": "OTROS INSUMOS VETERINARIOS MENORES",
+        "descripcion": "OTROS INSUMOS VETERINARIOS MENORES",
+        "activo": true
+    },
+    {
+        "codigo": "SMA044",
+        "nombre": "REPARACION CARRO FORRAJERO (COIPOMO)",
+        "descripcion": "REPARACION CARRO FORRAJERO (COIPOMO)",
+        "activo": true
+    },
+    {
+        "codigo": "ASE006",
+        "nombre": "ASESORIA EN ADMINISTRACION (CON RETENCION BH)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "SMA041",
+        "nombre": "MANTENCION TRACTOR FORD 5600 (MI TIERRA)",
+        "descripcion": "MANTENCION TRACTOR FORD 5600 (MI TIERRA)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA042",
+        "nombre": "REPARACION TRACTOR FORD 5600 (MI TIERRA)",
+        "descripcion": "REPARACION TRACTOR FORD 5600 (MI TIERRA)",
+        "activo": true
+    },
+    {
+        "codigo": "GGE009",
+        "nombre": "APORTES A LA COMUNIDAD",
+        "descripcion": "APORTES A LA COMUNIDAD",
+        "activo": true
+    },
+    {
+        "codigo": "AFI030",
+        "nombre": "CARRETILLA",
+        "descripcion": "CARRETILLA",
+        "activo": true
+    },
+    {
+        "codigo": "AGR027",
+        "nombre": "INSECTICIDA ORTHENE",
+        "descripcion": "INSECTICIDA ORTHENE",
+        "activo": true
+    },
+    {
+        "codigo": "SEM022",
+        "nombre": "SEMILLA BALLICA BIANUAL",
+        "descripcion": "SEMILLA BALLICA BIANUAL",
+        "activo": true
+    },
+    {
+        "codigo": "SEM025",
+        "nombre": "SEMILLA SIETE VENAS",
+        "descripcion": "SEMILLA SIETE VENAS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI031",
+        "nombre": "ANILLO PARA BOLOS",
+        "descripcion": "ANILLO PARA BOLOS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI032",
+        "nombre": "PORTON GALVANIZADO ",
+        "descripcion": "PORTON GALVANIZADO ",
+        "activo": true
+    },
+    {
+        "codigo": "ASE007",
+        "nombre": "ASESORIA GERENCIA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "SER032",
+        "nombre": "SERVICIO VETERINARIO (CON RETENCION 15.25 %BH)",
+        "descripcion": "SERVICIO VETERINARIO (CON RETENCION BH 15.25%)",
+        "activo": true
+    },
+    {
+        "codigo": "SMA043",
+        "nombre": "MANTENCION CASAS (GASTOS MENORES) (CON RETENCION 16.75% BH)",
+        "descripcion": "MANTENCION CASAS (GASTOS MENORES) (CON RETENCION 16.75% BH)",
+        "activo": true
+    },
+    {
+        "codigo": "OIN001",
+        "nombre": "OTROS INGRESOS",
+        "descripcion": "OTROS INGRESOS",
+        "activo": true
+    },
+    {
+        "codigo": "AGR028",
+        "nombre": "TOUCH DOWN ",
+        "descripcion": "TOUCH DOWN ",
+        "activo": true
+    },
+    {
+        "codigo": "AFI033",
+        "nombre": "CONFECCION MANGA VETERINARIA",
+        "descripcion": "CONFECCION MANGA VETERINARIA",
+        "activo": true
+    },
+    {
+        "codigo": "RTL007",
+        "nombre": "GORROS DE POLAR",
+        "descripcion": "GORROS DE POLAR",
+        "activo": true
+    },
+    {
+        "codigo": "BPE024",
+        "nombre": "BOTA POLLYBOOT",
+        "descripcion": "BOTA POLLYBOOT",
+        "activo": true
+    },
+    {
+        "codigo": "TRA110",
+        "nombre": "RECARGA GAS 500 CC",
+        "descripcion": "RECARGA GAS 500 CC",
+        "activo": true
+    },
+    {
+        "codigo": "SER033",
+        "nombre": "SERVICIO DE ASERRADERO Y CARPINTERIA",
+        "descripcion": "SERVICIO DE ASERRADERO Y CARPINTERIA",
+        "activo": true
+    },
+    {
+        "codigo": "SOR028",
+        "nombre": "DELLA WASH POLVO",
+        "descripcion": "DELLA WASH POLVO",
+        "activo": true
+    },
+    {
+        "codigo": "AGR029",
+        "nombre": "PARAQUAT",
+        "descripcion": "PARAQUAT",
+        "activo": true
+    },
+    {
+        "codigo": "SMA063",
+        "nombre": "MANTENCION SISTEMA DE PURINES",
+        "descripcion": "MANTENCION SISTEMA DE PURINES",
+        "activo": true
+    },
+    {
+        "codigo": "AGR030",
+        "nombre": "KEEP",
+        "descripcion": "KEEP",
+        "activo": true
+    },
+    {
+        "codigo": "AGR031",
+        "nombre": "LONTREL",
+        "descripcion": "LONTREL",
+        "activo": true
+    },
+    {
+        "codigo": "SMA046",
+        "nombre": "REPARACION TRACTOR",
+        "descripcion": "REPARACION TRACTOR",
+        "activo": true
+    },
+    {
+        "codigo": "SMA047",
+        "nombre": "REPARACION MOTOS",
+        "descripcion": "REPARACION MOTOS",
+        "activo": true
+    },
+    {
+        "codigo": "ACO024",
+        "nombre": "FLETE PELON DE ALMENDRA ",
+        "descripcion": "FLETE PELON DE ALMENDRA ",
+        "activo": true
+    },
+    {
+        "codigo": "ACO025",
+        "nombre": "FLETE BOLO DE PASTO PROPIO",
+        "descripcion": "FLETE BOLO DE PASTO",
+        "activo": true
+    },
+    {
+        "codigo": "ACO026",
+        "nombre": "FLETE PAJA",
+        "descripcion": "FLETE PAJA",
+        "activo": true
+    },
+    {
+        "codigo": "ACO027",
+        "nombre": "FLETE SILO MAIZ",
+        "descripcion": "FLETE SILO MAIZ",
+        "activo": true
+    },
+    {
+        "codigo": "APR037",
+        "nombre": "FLETE BIOSOLIDO",
+        "descripcion": "FLETE BIOSOLIDO",
+        "activo": true
+    },
+    {
+        "codigo": "APR038",
+        "nombre": "FLETE COMPOST",
+        "descripcion": "FLETE COMPOST",
+        "activo": true
+    },
+    {
+        "codigo": "IMC018",
+        "nombre": "CABLE POLY",
+        "descripcion": "CABLE POLY",
+        "activo": true
+    },
+    {
+        "codigo": "AFI034",
+        "nombre": "ALICATE",
+        "descripcion": "ALICATE",
+        "activo": true
+    },
+    {
+        "codigo": "PRI007",
+        "nombre": "RETIRO DE RESIDUOS",
+        "descripcion": "RETIRO DE RESIDUOS",
+        "activo": true
+    },
+    {
+        "codigo": "SMA048",
+        "nombre": "REPARACION PLATO MEDICION PASTO",
+        "descripcion": "REPARACION PLATO MEDICION PASTO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI035",
+        "nombre": "ENERGIZADOR SOLAR S20",
+        "descripcion": "ENERGIZADOR SOLAR S20",
+        "activo": true
+    },
+    {
+        "codigo": "BPE025",
+        "nombre": "LINTERNA FOCO",
+        "descripcion": "LINTERNA FOCO",
+        "activo": true
+    },
+    {
+        "codigo": "SEG002",
+        "nombre": "SEGUROS ",
+        "descripcion": "SEGUROS",
+        "activo": true
+    },
+    {
+        "codigo": "SMA049",
+        "nombre": "REPARACION BASTON LECTOR",
+        "descripcion": "REPARACION BASTON LECTOR",
+        "activo": true
+    },
+    {
+        "codigo": "TERNERA ",
+        "nombre": "** NO USAR **  TERNERA VENTA",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": false
+    },
+    {
+        "codigo": "VQ_PREÑADAS",
+        "nombre": "VAQUILLAS PREÑADAS",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "GGE010",
+        "nombre": "HERRADURAS Y CLAVOS",
+        "descripcion": "HERRADURAS Y CLAVOS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI036",
+        "nombre": "SECADORA",
+        "descripcion": "SECADORA",
+        "activo": true
+    },
+    {
+        "codigo": "BPE026",
+        "nombre": "ROPA PRIMERA CAPA",
+        "descripcion": "ROPA PRIMERA CAPA",
+        "activo": true
+    },
+    {
+        "codigo": "BP027",
+        "nombre": "SEGUROS PERSONAL ",
+        "descripcion": "SEGUROS PERSONAL ",
+        "activo": true
+    },
+    {
+        "codigo": "SMA050",
+        "nombre": "MANTENCION CERCOS (CON RETENCION BH)",
+        "descripcion": "MANTENCION CERCOS (CON RETENCION BH)",
+        "activo": true
+    },
+    {
+        "codigo": "SER034",
+        "nombre": "DEPORTES  Y RECREACION ",
+        "descripcion": "DEPORTES ",
+        "activo": true
+    },
+    {
+        "codigo": "1",
+        "nombre": "Activo",
+        "descripcion": "ZZ NO USAR PECHERA",
+        "activo": false
+    },
+    {
+        "codigo": "Cuenta de Nombre",
+        "nombre": "Etiquetas de fila",
+        "descripcion": "ZZ NO USAR PECHERA",
+        "activo": false
+    },
+    {
+        "codigo": "451",
+        "nombre": "CED000",
+        "descripcion": "ZZ NO USAR PECHERA",
+        "activo": false
+    },
+    {
+        "codigo": "90",
+        "nombre": "CGE000",
+        "descripcion": "ZZ NO USAR PECHERA",
+        "activo": false
+    },
+    {
+        "codigo": "36",
+        "nombre": "GAD000",
+        "descripcion": "ZZ NO USAR PECHERA",
+        "activo": false
+    },
+    {
+        "codigo": "2",
+        "nombre": "REP000",
+        "descripcion": "ZZ NO USAR PECHERA",
+        "activo": false
+    },
+    {
+        "codigo": "40",
+        "nombre": "INV000",
+        "descripcion": "ZZ NO USAR PECHERA",
+        "activo": false
+    },
+    {
+        "codigo": "15",
+        "nombre": "(en blanco)",
+        "descripcion": "ZZ NO USAR PECHERA",
+        "activo": false
+    },
+    {
+        "codigo": "636",
+        "nombre": "Total general",
+        "descripcion": "ZZ NO USAR PECHERA",
+        "activo": false
+    },
+    {
+        "codigo": "Nombre de la familia",
+        "nombre": "Codigos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ALIMENTOS COMPRADOS ",
+        "nombre": "ACO000",
+        "descripcion": "AAD000",
+        "activo": false
+    },
+    {
+        "codigo": "ALIMENTOS PROPIOS ",
+        "nombre": "APR000",
+        "descripcion": "AAU000",
+        "activo": false
+    },
+    {
+        "codigo": "ARRIENDO DE CAMPOS",
+        "nombre": "ARC000",
+        "descripcion": "AGE000",
+        "activo": false
+    },
+    {
+        "codigo": "COSTOS COMBUSTIBLES Y LUBRICANTES",
+        "nombre": "CCL000",
+        "descripcion": "AGG000",
+        "activo": false
+    },
+    {
+        "codigo": "COSTO REPARACION Y MANTENCION ",
+        "nombre": "CRM000",
+        "descripcion": "ALE000",
+        "activo": false
+    },
+    {
+        "codigo": "COSTO VENTA",
+        "nombre": "CVE000",
+        "descripcion": "AML000",
+        "activo": false
+    },
+    {
+        "codigo": "CAPEX",
+        "nombre": "CXG000",
+        "descripcion": "AOA000",
+        "activo": false
+    },
+    {
+        "codigo": "GASTOS FINANCIEROS ",
+        "nombre": "GFI000",
+        "descripcion": "ARC000",
+        "activo": false
+    },
+    {
+        "codigo": "GASTOS GENERALES",
+        "nombre": "GGE000",
+        "descripcion": "COM000",
+        "activo": false
+    },
+    {
+        "codigo": "HONORARIOS DE ADMINISTRACION ",
+        "nombre": "HAD000",
+        "descripcion": "CON000",
+        "activo": false
+    },
+    {
+        "codigo": "COSTOS LECHERIA ",
+        "nombre": "LEC000",
+        "descripcion": "CVA000",
+        "activo": false
+    },
+    {
+        "codigo": "MANO DE OBRA ",
+        "nombre": "MOB000",
+        "descripcion": "CVG000",
+        "activo": false
+    },
+    {
+        "codigo": "REBAÑO",
+        "nombre": "REB000",
+        "descripcion": "CXR000",
+        "activo": false
+    },
+    {
+        "codigo": "GASTOS GENERALES DE PRODUCCION ",
+        "nombre": "GGP000",
+        "descripcion": "EPP000",
+        "activo": false
+    },
+    {
+        "codigo": "VENTA DE LECHE",
+        "nombre": "VLE000",
+        "descripcion": "FER000",
+        "activo": false
+    },
+    {
+        "codigo": "COSTO ELECTRICO",
+        "nombre": "CEL000",
+        "descripcion": "FOR000",
+        "activo": false
+    },
+    {
+        "codigo": "SISTEMAS",
+        "nombre": "SIS000",
+        "descripcion": "GOA000",
+        "activo": false
+    },
+    {
+        "codigo": "FLETES GENERALES",
+        "nombre": "FGE000",
+        "descripcion": "IBA000",
+        "activo": false
+    },
+    {
+        "codigo": "MANO DE OBRA DE ADMINISTRACION ",
+        "nombre": "MOA",
+        "descripcion": "INL000",
+        "activo": false
+    },
+    {
+        "codigo": "OTROS INGRESOS",
+        "nombre": "OIN000",
+        "descripcion": "LUB000",
+        "activo": false
+    },
+    {
+        "codigo": "TRA129",
+        "nombre": "PULSERA MARCADORA",
+        "descripcion": "PULSERA MARCADORA",
+        "activo": true
+    },
+    {
+        "codigo": "SMP002",
+        "nombre": "SAL MINERAL PREPARTO ANIONICA",
+        "descripcion": "SAL MINERAL PREPARTO ANIONICA",
+        "activo": true
+    },
+    {
+        "codigo": "OST006",
+        "nombre": "PATO ACEITERO PROFESIONAL",
+        "descripcion": "PLATO ACEITERO PROFESIONAL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA130",
+        "nombre": "CYDECTIN ",
+        "descripcion": "CYDECTIN (ANTIPARASITARIO)",
+        "activo": true
+    },
+    {
+        "codigo": "TRA131",
+        "nombre": "SPRAY REPIDERMA",
+        "descripcion": "SPRAY REPIDERMA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA132",
+        "nombre": "SORBATO DE POTASIO",
+        "descripcion": "SORBATO DE POTASIO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA133",
+        "nombre": "AGUA DESTILADA",
+        "descripcion": "AGUA DESTILADA",
+        "activo": true
+    },
+    {
+        "codigo": "SOR029",
+        "nombre": "PULVERIZADOR (BOTELLA)",
+        "descripcion": "PULVERIZADOR (BOTELLA)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI037",
+        "nombre": "CONSTRUCCION CASETA GENERADOR",
+        "descripcion": "CONSTRUCCION CASETA GENERADOR",
+        "activo": true
+    },
+    {
+        "codigo": "CON013",
+        "nombre": "FLETE TORTA DE RAPS",
+        "descripcion": "FLETE TORTA DE RAPS",
+        "activo": true
+    },
+    {
+        "codigo": "SOR030",
+        "nombre": "BALDE TRANSPARENTE CALOSTRERO",
+        "descripcion": "BALDE TRANSPARENTE CALOSTRERO",
+        "activo": true
+    },
+    {
+        "codigo": "SER035",
+        "nombre": "SERVICIO INTERNET",
+        "descripcion": "SERVICIO INTERNET (PRODUCCION)",
+        "activo": true
+    },
+    {
+        "codigo": "SER036",
+        "nombre": "SERVICIOS TELECOMUNICACION (PRODUCCION)",
+        "descripcion": "SERVICIOS TELECOMUNICACION (PRODUCCION)",
+        "activo": true
+    },
+    {
+        "codigo": "PSA028",
+        "nombre": "EPRIJECT",
+        "descripcion": "EPRIJECT",
+        "activo": true
+    },
+    {
+        "codigo": "APR039",
+        "nombre": "ANALISIS FORRAJE",
+        "descripcion": "ANALISIS FORRAJE",
+        "activo": true
+    },
+    {
+        "codigo": "AFI038",
+        "nombre": "TRACTOR KUBOTA",
+        "descripcion": "TRACTOR KUBOTA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI039",
+        "nombre": "ESTANQUE DE AGUA 3000 LTS",
+        "descripcion": "ESTANQUE DE AGUA 3000 LTS",
+        "activo": true
+    },
+    {
+        "codigo": "TRA134",
+        "nombre": "PROPIONATO DE CALCIO",
+        "descripcion": "PROPIONATO DE CALCIO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA135",
+        "nombre": "PEDILUVIO COPPER GUARD",
+        "descripcion": "PEDILUVIO COPPER GUARD",
+        "activo": true
+    },
+    {
+        "codigo": "PRI008",
+        "nombre": "CONOS DE SEÑALIZACION",
+        "descripcion": "CONOS DE SEÑALIZACION",
+        "activo": true
+    },
+    {
+        "codigo": "PRI009",
+        "nombre": "ESCALERA ARTICULADA DE ALUMINIO",
+        "descripcion": "ESCALERA ARTICULADA DE ALUMINIO",
+        "activo": true
+    },
+    {
+        "codigo": "OIV010",
+        "nombre": "MOCHETA HARMS",
+        "descripcion": "MOCHETA HARMS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI040",
+        "nombre": "GENERADOR GASOLINA KOLVOK (POZO PROFUNDO)",
+        "descripcion": "GENERADOR GASOLINA KOLVOK (POZO PROFUNDO)",
+        "activo": true
+    },
+    {
+        "codigo": "FER031",
+        "nombre": "UREA PROTEGIDA",
+        "descripcion": "UREA PROTEGIDA",
+        "activo": true
+    },
+    {
+        "codigo": "BPE027",
+        "nombre": "BOTA SEKUR",
+        "descripcion": "BOTA SEKUR",
+        "activo": true
+    },
+    {
+        "codigo": "SMA051",
+        "nombre": "MANTENCIONES (CON RETENCION 15.25% BH)",
+        "descripcion": "MANTENCIONES (CON RETENCION 15.25 %BH)",
+        "activo": true
+    },
+    {
+        "codigo": "OIV011",
+        "nombre": "METRICHECK",
+        "descripcion": "METRICHECK",
+        "activo": true
+    },
+    {
+        "codigo": "FER032",
+        "nombre": "ACADIAN",
+        "descripcion": "ACADIAN",
+        "activo": true
+    },
+    {
+        "codigo": "TRA136",
+        "nombre": "SECUESTRANTE DE MICROTOXINAS",
+        "descripcion": "SECUESTRANTE DE MICROTOXINAS",
+        "activo": true
+    },
+    {
+        "codigo": "SEM024",
+        "nombre": "MEZCLA SEMILLAS",
+        "descripcion": "MEZCLA SEMILLAS",
+        "activo": true
+    },
+    {
+        "codigo": "VLE002",
+        "nombre": "LECHE DESCARTE",
+        "descripcion": "LECHE DESCARTE",
+        "activo": true
+    },
+    {
+        "codigo": "VLE003",
+        "nombre": "LECHE TERNEROS ",
+        "descripcion": "LECHE TERNEROS ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA137",
+        "nombre": "PHAGEIN",
+        "descripcion": "PHAGEIN",
+        "activo": true
+    },
+    {
+        "codigo": "TRA138",
+        "nombre": "ZUPREVO (TILDIPIROSINA)",
+        "descripcion": "ZUPREVO (TILDIPIROSINA)",
+        "activo": true
+    },
+    {
+        "codigo": "TRA139",
+        "nombre": "PAROFOR",
+        "descripcion": "PAROFOR",
+        "activo": true
+    },
+    {
+        "codigo": "AFI041",
+        "nombre": "MOTOSIERRA",
+        "descripcion": "MOTOSIERRA",
+        "activo": true
+    },
+    {
+        "codigo": "SOR031",
+        "nombre": "BRAKE STONE",
+        "descripcion": "BRAKE STONE",
+        "activo": true
+    },
+    {
+        "codigo": "SOR032",
+        "nombre": "PACIFIC CHLOR 10",
+        "descripcion": "PACIFIC CHLOR 10",
+        "activo": true
+    },
+    {
+        "codigo": "SOR033",
+        "nombre": "CIRCUIT LINE",
+        "descripcion": "CIRCUIT LINE",
+        "activo": true
+    },
+    {
+        "codigo": "AFI042",
+        "nombre": "RED DE PURINES",
+        "descripcion": "RED DE PURINES",
+        "activo": true
+    },
+    {
+        "codigo": "TRA140",
+        "nombre": "BEWITAL SAN DIATMIX",
+        "descripcion": "BEWITAL SAN DIATMIX",
+        "activo": true
+    },
+    {
+        "codigo": "TRA141",
+        "nombre": "BEWITAL SAN BEWILYT",
+        "descripcion": "BEWITAL SAN BEWILYT",
+        "activo": true
+    },
+    {
+        "codigo": "RTL008",
+        "nombre": "COFIA",
+        "descripcion": "COFIA",
+        "activo": true
+    },
+    {
+        "codigo": "RTL009",
+        "nombre": "CUBRECALZADO",
+        "descripcion": "CUBRECALZADO",
+        "activo": true
+    },
+    {
+        "codigo": "PRI010",
+        "nombre": "MANTENCION EXTINTORES",
+        "descripcion": "MANTENCION EXTINTORES",
+        "activo": true
+    },
+    {
+        "codigo": "BPE028",
+        "nombre": "GASTOS REUNION PRODUCCION (CON RET. HONORARIOS)",
+        "descripcion": "GASTOS REUNION PRODUCCION",
+        "activo": true
+    },
+    {
+        "codigo": "RTL010",
+        "nombre": "GORROS DE VERANO",
+        "descripcion": "GORROS DE VERANO",
+        "activo": true
+    },
+    {
+        "codigo": "PSA029",
+        "nombre": "VACUNA CATTLEMASTER L5",
+        "descripcion": "VACUNA CATTLEMASTER L5",
+        "activo": true
+    },
+    {
+        "codigo": "VC_PREPARTO",
+        "nombre": "VACA PREPARTO",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "VLE005",
+        "nombre": "LECHE CALOSTRO ",
+        "descripcion": "LECHE CALOSTRO ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA142",
+        "nombre": "BOFOSCAL",
+        "descripcion": "BOFOSCAL",
+        "activo": true
+    },
+    {
+        "codigo": "MAM050",
+        "nombre": "SISTEMA DE GESTION DE MEDIO AMBIENTE ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "BPE029",
+        "nombre": "GASTOS FESTIVIDADES",
+        "descripcion": "GASTOS FESTIVIDADES",
+        "activo": true
+    },
+    {
+        "codigo": "REP021",
+        "nombre": "OVALYSE ",
+        "descripcion": "OVALYSE ",
+        "activo": true
+    },
+    {
+        "codigo": "REP026",
+        "nombre": "SEMEN SEXADO",
+        "descripcion": "SEMEN SEXADO",
+        "activo": true
+    },
+    {
+        "codigo": "ASE008",
+        "nombre": "HONORARIOS INFORMATICA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "PRI011",
+        "nombre": "EXTINTORES",
+        "descripcion": "EXTINTORES",
+        "activo": true
+    },
+    {
+        "codigo": "TRA143",
+        "nombre": "CAL VIVA",
+        "descripcion": "CAL VIVA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI043",
+        "nombre": "CASILLEROS",
+        "descripcion": "CASILLEROS",
+        "activo": true
+    },
+    {
+        "codigo": "GFI002",
+        "nombre": "PAGO DE PRESTAMOS BANCARIOS",
+        "descripcion": "PAGO DE PRESTAMOS BANCARIOS",
+        "activo": true
+    },
+    {
+        "codigo": "SOR034",
+        "nombre": "TOALLA MICROFIBRA",
+        "descripcion": "TOALLA MICROFIBRA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA144",
+        "nombre": "AMPLIFORT",
+        "descripcion": "AMPLIFORT",
+        "activo": true
+    },
+    {
+        "codigo": "BPE030",
+        "nombre": "POLERAS",
+        "descripcion": "POLERAS",
+        "activo": true
+    },
+    {
+        "codigo": "SOR035",
+        "nombre": "BATIDOR DE LECHE",
+        "descripcion": "BATIDOR DE LECHE",
+        "activo": true
+    },
+    {
+        "codigo": "TRA145",
+        "nombre": "BEWITAL SAN PULMO",
+        "descripcion": "BEWITAL SAN PULMO",
+        "activo": true
+    },
+    {
+        "codigo": "SML002",
+        "nombre": "FLETE SAL MINERAL LACTANCIA",
+        "descripcion": "FLETE SAL MINERAL LACTANCIA",
+        "activo": true
+    },
+    {
+        "codigo": "SER037",
+        "nombre": "LEÑA (OPEX) (CON RETENCION BH)",
+        "descripcion": "LEÑA (OPEX) (CON RETENCION BH)",
+        "activo": true
+    },
+    {
+        "codigo": "RRH003",
+        "nombre": "LICENCIA CONDUCIR",
+        "descripcion": "LICENCIA CONDUCIR",
+        "activo": true
+    },
+    {
+        "codigo": "AFI044",
+        "nombre": "CONSTRUCCION CAMARINES",
+        "descripcion": "CONSTRUCCION CAMARINES",
+        "activo": true
+    },
+    {
+        "codigo": "TRA146",
+        "nombre": "LIQUAMICINA 100ML",
+        "descripcion": "TRA146",
+        "activo": true
+    },
+    {
+        "codigo": "TRA147",
+        "nombre": "BISOLVON 100 ML",
+        "descripcion": "BISOLVON 100 ML",
+        "activo": true
+    },
+    {
+        "codigo": "PRI012",
+        "nombre": "CONFECCION SEÑALETICA PARA POTREROS ( CON RETENCION BH)",
+        "descripcion": "CONFECCION SEÑALETICA PARA POTREROS ( CON RETENCION BH)",
+        "activo": true
+    },
+    {
+        "codigo": "OIV012",
+        "nombre": "PARAPATADAS GALVANIZADO ",
+        "descripcion": "PARAPATADAS GALVANIZADO ",
+        "activo": true
+    },
+    {
+        "codigo": "SMA052",
+        "nombre": "MANTENCIONES (CON RETENCION 16.75% BH)",
+        "descripcion": "MANTENCIONES (CON RETENCION 16.75 %BH)",
+        "activo": true
+    },
+    {
+        "codigo": "TRA148",
+        "nombre": "CARBOVET ANTIDIARREICO",
+        "descripcion": "CARBOVET ANTIDIARREICO",
+        "activo": true
+    },
+    {
+        "codigo": "BPE031",
+        "nombre": "REGALOS AL PERSONAL",
+        "descripcion": "REGALOS AL PERSONAL ",
+        "activo": true
+    },
+    {
+        "codigo": "SOR036",
+        "nombre": "PITON LAVADO PATIOS",
+        "descripcion": "PITON LAVADO PATIOS",
+        "activo": true
+    },
+    {
+        "codigo": "OIV013",
+        "nombre": "CORREA DE VIENTRE",
+        "descripcion": "CORREA DE VIENTRE",
+        "activo": true
+    },
+    {
+        "codigo": "SER038",
+        "nombre": "RECARGA DE GAS 45",
+        "descripcion": "RECARGA DE GAS 45",
+        "activo": true
+    },
+    {
+        "codigo": "AFI045",
+        "nombre": "DESBROZADORA",
+        "descripcion": "DESBROZADORA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI046",
+        "nombre": "TROMPO ABONADOR",
+        "descripcion": "TROMPO ABONADOR",
+        "activo": true
+    },
+    {
+        "codigo": "AFI047",
+        "nombre": "ESTANQUE DE AGUA 1000 LTS",
+        "descripcion": "ESTANQUE DE AGUA 1000 LTS",
+        "activo": true
+    },
+    {
+        "codigo": "APR040",
+        "nombre": "SERVICIOS EXTRAS EN BOLOS CONF. PROPIA",
+        "descripcion": "SERVICIOS EXTRAS EN BOLOS CONF. PROPIA",
+        "activo": false
+    },
+    {
+        "codigo": "IMR004",
+        "nombre": "PLUVIOMETRO",
+        "descripcion": "PLUVIOMETRO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI048",
+        "nombre": "SEGADORA SIMPLE",
+        "descripcion": "SEGADORA SIMPLE",
+        "activo": true
+    },
+    {
+        "codigo": "AFI049",
+        "nombre": "SISTEMA DE CAMARAS",
+        "descripcion": "SISTEMAS DE CAMARAS",
+        "activo": true
+    },
+    {
+        "codigo": "ABI001",
+        "nombre": "BURROS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "GGE011",
+        "nombre": "ENCOMIENDAS",
+        "descripcion": "ENCOMIENDAS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI050",
+        "nombre": "TRACTOR LANDINI",
+        "descripcion": "TRACTOR LANDINI MODELO LANDPOWER 2018",
+        "activo": true
+    },
+    {
+        "codigo": "OST007",
+        "nombre": "PALA",
+        "descripcion": "PALA",
+        "activo": true
+    },
+    {
+        "codigo": "OST008",
+        "nombre": "ORQUETA",
+        "descripcion": "ORQUETA",
+        "activo": true
+    },
+    {
+        "codigo": "BPE032",
+        "nombre": "POLAR",
+        "descripcion": "POLAR",
+        "activo": true
+    },
+    {
+        "codigo": "OIN002",
+        "nombre": "VENTA CHATARRA",
+        "descripcion": "VENTA CHATARRA",
+        "activo": true
+    },
+    {
+        "codigo": "CON014",
+        "nombre": "SOYA",
+        "descripcion": "SOYA",
+        "activo": true
+    },
+    {
+        "codigo": "GGE012",
+        "nombre": "TASACIONES",
+        "descripcion": "TASACIONES",
+        "activo": true
+    },
+    {
+        "codigo": "SERV-EJ",
+        "nombre": "SERVICIOS VARIOS ",
+        "descripcion": "SERVICIOS VARIOS EJEMPLO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI051",
+        "nombre": "BODEGAS",
+        "descripcion": "BODEGAS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI052",
+        "nombre": "PROYECTO INSTALACION REDES DE AGUA (SOLAR)",
+        "descripcion": "PROYECTO INSTALACION REDES DE AGUA (SOLAR)",
+        "activo": true
+    },
+    {
+        "codigo": "CON015",
+        "nombre": "CONCENTRADO VERANO 90/10",
+        "descripcion": "CONCENTRADO VERANO 90/10",
+        "activo": true
+    },
+    {
+        "codigo": "BPE033",
+        "nombre": "CASCO EQUESTRE",
+        "descripcion": "CASCO EQUESTRE",
+        "activo": true
+    },
+    {
+        "codigo": "TRA149",
+        "nombre": "BOMBA PARA DIPPING",
+        "descripcion": "BOMBA PARA DIPPING",
+        "activo": true
+    },
+    {
+        "codigo": "LIMPRU",
+        "nombre": "LIMONES PRUEBA",
+        "descripcion": "LIMONES PRUEBA",
+        "activo": true
+    },
+    {
+        "codigo": "PSA030",
+        "nombre": "TRUCID (ANTIPARASITARIO)",
+        "descripcion": "TRUCID (ANTIPARASITARIO)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI080",
+        "nombre": "TELEVISOR SMART TV",
+        "descripcion": "TELEVISOR SMART TV",
+        "activo": true
+    },
+    {
+        "codigo": "SER039",
+        "nombre": "INVERSION PROYECTO DE RIEGO (CON RETENCION BH 16.75%)",
+        "descripcion": "INVERSION PROYECTO DE RIEGO (CON RETENCION BH)",
+        "activo": true
+    },
+    {
+        "codigo": "ACO028",
+        "nombre": "CONFECCION SILO MAIZ COMPRADO",
+        "descripcion": "CONFECCION SILO MAIZ COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "ACO029",
+        "nombre": "SILO MAIZ COMPRADO",
+        "descripcion": "SILO MAIZ COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI053",
+        "nombre": "GENERADOR GASOLINA FLOWMAK",
+        "descripcion": "GENERADOR GASOLINA FLOWMAK",
+        "activo": true
+    },
+    {
+        "codigo": "AFI054",
+        "nombre": "BOMBA REGGIO 7.5 HP 380 V",
+        "descripcion": "BOMBA REGGIO 7.5 HP 380 V",
+        "activo": true
+    },
+    {
+        "codigo": "VACA EN ENGORDA ",
+        "nombre": "VACA ENGORDA ",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "BPE034",
+        "nombre": "MONTURAS",
+        "descripcion": "MONTURAS",
+        "activo": true
+    },
+    {
+        "codigo": "SMA053",
+        "nombre": "REPARACION INFRAESTRUCTURA",
+        "descripcion": "REPARACION INFRAESTRUCTURA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI055",
+        "nombre": "TIJERA PARA MANGA",
+        "descripcion": "TIJERA PARA MANGA",
+        "activo": true
+    },
+    {
+        "codigo": "TERNEROS ",
+        "nombre": "TERNEROS WAGYU",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "VACA SECA PREÑADA",
+        "nombre": "VACA SECA  REPOSICION ",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "TERN ",
+        "nombre": "TERNERAS RECRIA ",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "BPE035",
+        "nombre": "GUANTES TERMICOS",
+        "descripcion": "GUANTES TERMICOS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI056",
+        "nombre": "SILLAS OFICINA ",
+        "descripcion": "SILLAS OFICINA",
+        "activo": true
+    },
+    {
+        "codigo": "FER033",
+        "nombre": "PROGIBB",
+        "descripcion": "PROGIBB",
+        "activo": true
+    },
+    {
+        "codigo": "ASE009",
+        "nombre": "ASESORIA EN AGRONOMIA (CON RETENCION BH 15.25%)",
+        "descripcion": "ASESORIA EN AGRONOMIA (CON RETENCION BH 13.75%)",
+        "activo": true
+    },
+    {
+        "codigo": "FER034",
+        "nombre": "GIBERPLUS LIQUIDO",
+        "descripcion": "GIBERPLUS LIQUIDO",
+        "activo": true
+    },
+    {
+        "codigo": "FER035",
+        "nombre": "PROTAC",
+        "descripcion": "PROTAC",
+        "activo": true
+    },
+    {
+        "codigo": "OST009",
+        "nombre": "AZADON",
+        "descripcion": "AZADON",
+        "activo": true
+    },
+    {
+        "codigo": "CON016",
+        "nombre": "INTERESES NOTAS DEBITO POR FACTURAS DE CONCENTRADO",
+        "descripcion": "INTERESES NOTAS DEBITO POR FACTURAS DE CONCENTRADO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI057",
+        "nombre": "BALANZA DIGITAL 45 X 55 300 KG",
+        "descripcion": "BALANZA DIGITAL 45 X 55 300 KG",
+        "activo": true
+    },
+    {
+        "codigo": "REBA?",
+        "nombre": "REB000",
+        "descripcion": "CXR000",
+        "activo": false
+    },
+    {
+        "codigo": "VACA SECA PRE?DA",
+        "nombre": "VACA SECA  RECRIA ",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "VQ_PRE?DAS",
+        "nombre": "VAQUILLAS PRE?DAS",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "AFI058",
+        "nombre": "CALEFACTOR ELECTRICO",
+        "descripcion": "CALEFACTOR ELECTRICO",
+        "activo": true
+    },
+    {
+        "codigo": "maiz2",
+        "nombre": "maiz2",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "OST010",
+        "nombre": "MANGUERA TRANSPARENTE 1 \"",
+        "descripcion": "MANGUERA TRANSPARENTE 1 \"",
+        "activo": true
+    },
+    {
+        "codigo": "OST011",
+        "nombre": "MURRERA",
+        "descripcion": "MURRERA",
+        "activo": true
+    },
+    {
+        "codigo": "OIV014",
+        "nombre": "ALIMENTADOR PARA 5 TERNEROS",
+        "descripcion": "BALDE ALIMENTADOR PARA 5 TERNEROS",
+        "activo": true
+    },
+    {
+        "codigo": "OST012",
+        "nombre": "JUEGO DE LLAVES PUNTA CORONA",
+        "descripcion": "JUEGO DE LLAVES PUNTA CORONA",
+        "activo": true
+    },
+    {
+        "codigo": "OIV015",
+        "nombre": "PINTACAL",
+        "descripcion": "PINTACAL",
+        "activo": true
+    },
+    {
+        "codigo": "SOR037",
+        "nombre": "JUEGO REPARACION COLECTOR BOUMATIC",
+        "descripcion": "JUEGO REPARACION COLECTOR BOUMATIC",
+        "activo": true
+    },
+    {
+        "codigo": "TRA150",
+        "nombre": "CONFORTA",
+        "descripcion": "CONFORTA",
+        "activo": true
+    },
+    {
+        "codigo": "TRA151",
+        "nombre": "SECURE CATTLE",
+        "descripcion": "SECURE CATTLE",
+        "activo": true
+    },
+    {
+        "codigo": "SMA054",
+        "nombre": "MANTENCION CAMINOS (CON RETENCION 15.25%)",
+        "descripcion": "MANTENCION CAMINOS (CON RETENCION 15.25%)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI059",
+        "nombre": "TRACTOR SAME EXPLORER CORTE ALTO",
+        "descripcion": "TRACTOR SAME EXPLORER CORTE ALTO",
+        "activo": true
+    },
+    {
+        "codigo": "PRI013",
+        "nombre": "MEDIDOR DE CLORO RESIDUAL",
+        "descripcion": "MEDIDOR DE CLORO RESIDUAL",
+        "activo": true
+    },
+    {
+        "codigo": "CON017",
+        "nombre": "AFRECHO DE SOYA",
+        "descripcion": "AFRECHO DE SOYA",
+        "activo": true
+    },
+    {
+        "codigo": "CON018",
+        "nombre": "GLUTEN MEAL",
+        "descripcion": "GLUTEN MEAL",
+        "activo": true
+    },
+    {
+        "codigo": "AFI060",
+        "nombre": "BOMBA DE  VACIO LOBULAR",
+        "descripcion": "BOMBA DE  VACIO LOBULAR",
+        "activo": true
+    },
+    {
+        "codigo": "VC_PREPARTOreposicion",
+        "nombre": "VACA PREPARTO REPOSICION",
+        "descripcion": "** CONTROLAR ACT / MON /  CTA DE COMPRAS  / VALORIZACION **",
+        "activo": true
+    },
+    {
+        "codigo": "VENL",
+        "nombre": "** NO USAR ** VACA EN LECHE",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PRI014",
+        "nombre": "DECLARACION VENTANILLA UNICA (FACTURAS VANESSA)",
+        "descripcion": "DECLARACION VENTANILLA UNICA (BOLETAS DE VANESSA)",
+        "activo": true
+    },
+    {
+        "codigo": "SEG003",
+        "nombre": "SEGUROS INFRAESTRUCTURA",
+        "descripcion": "SEGUROS INFRAESTRUCTURA",
+        "activo": true
+    },
+    {
+        "codigo": "SEG004",
+        "nombre": "SEGUROS MAQUINARIA Y VEHICULOS",
+        "descripcion": "SEGUROS MAQUINARIA Y VEHICULOS",
+        "activo": true
+    },
+    {
+        "codigo": "SMA055",
+        "nombre": "SERVICIO DE ASTILLADO",
+        "descripcion": "SERVICIO DE ASTILLADO",
+        "activo": true
+    },
+    {
+        "codigo": "LEY001",
+        "nombre": "IMPOSICIONES",
+        "descripcion": "IMPOSICIONES",
+        "activo": true
+    },
+    {
+        "codigo": "IMP002",
+        "nombre": "IVA DEBITO FISCAL",
+        "descripcion": "IVA DEBITO FISCAL",
+        "activo": true
+    },
+    {
+        "codigo": "IMP003",
+        "nombre": "RETENCION PROFESIONALES",
+        "descripcion": "RETENCION PROFESIONALES",
+        "activo": true
+    },
+    {
+        "codigo": "IMP004",
+        "nombre": "IMPUESTO UNICO TRABAJADORES",
+        "descripcion": "IMPUESTO UNICO TRABAJADORES",
+        "activo": true
+    },
+    {
+        "codigo": "IMP005",
+        "nombre": "REAJUSTES IPC",
+        "descripcion": "REAJUSTES IPC",
+        "activo": true
+    },
+    {
+        "codigo": "CON019",
+        "nombre": "CALOSTRO BOVINO 470 GRS",
+        "descripcion": "CALOSTRO BOVINO 470 GRS",
+        "activo": true
+    },
+    {
+        "codigo": "IMC019",
+        "nombre": "ROLLO DE MALLA",
+        "descripcion": "ROLLO DE MALLA",
+        "activo": true
+    },
+    {
+        "codigo": "FER036",
+        "nombre": "ROCA FOSFORICA",
+        "descripcion": "ROCA FOSFORICA",
+        "activo": true
+    },
+    {
+        "codigo": "FER037",
+        "nombre": "VERVACTOR",
+        "descripcion": "VERVACTOR",
+        "activo": true
+    },
+    {
+        "codigo": "SMA056",
+        "nombre": "MANTENCION CAMARAS DE SEGURIDAD",
+        "descripcion": "MANTENCION CAMARAS DE SEGURIDAD",
+        "activo": true
+    },
+    {
+        "codigo": "FER038",
+        "nombre": "KORU",
+        "descripcion": "KORU",
+        "activo": true
+    },
+    {
+        "codigo": "FER039",
+        "nombre": "NITROPLUS",
+        "descripcion": "NITROPLUS",
+        "activo": true
+    },
+    {
+        "codigo": "FER040",
+        "nombre": "FOLIPLUS",
+        "descripcion": "FOLIPLUS",
+        "activo": true
+    },
+    {
+        "codigo": "REM003",
+        "nombre": "SUELDO POR PAGAR (solo lo usa dpto contable)",
+        "descripcion": "SUELDO POR PAGAR (solo lo usa dpto contable)",
+        "activo": true
+    },
+    {
+        "codigo": "PSA031",
+        "nombre": "INTERESES NOTA DEBITO POR FACTURAS DE PRODUCTOS VETERINARIOS",
+        "descripcion": "INTERESES NOTA DEBITO POR FACTURAS DE PRODUCTOS VETERINARIOS",
+        "activo": true
+    },
+    {
+        "codigo": "SMA057",
+        "nombre": "VELADORES",
+        "descripcion": "VELADORES",
+        "activo": true
+    },
+    {
+        "codigo": "SMA058",
+        "nombre": "CAMAROTES",
+        "descripcion": "CAMAROTES",
+        "activo": true
+    },
+    {
+        "codigo": "SEM026",
+        "nombre": "SEMILLA TREBOL QUIÑEQUELI",
+        "descripcion": "SEMILLA TREBOL QUIÑEQUELI",
+        "activo": true
+    },
+    {
+        "codigo": "SEM027",
+        "nombre": "SEMILLA BALLICA BARBARA",
+        "descripcion": "SEMILLA BALLICA BARBARA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI061",
+        "nombre": "PINCHO PARA BOLOS TIPUNTAL ",
+        "descripcion": "PINCHO PARA BOLOS TIPUNTAL ",
+        "activo": true
+    },
+    {
+        "codigo": "REP022",
+        "nombre": "SINCRODIOL",
+        "descripcion": "SINCRODIOL",
+        "activo": true
+    },
+    {
+        "codigo": "REP023",
+        "nombre": "SINCROCIO",
+        "descripcion": "SINCROCIO",
+        "activo": true
+    },
+    {
+        "codigo": "REP024",
+        "nombre": "SINCROP",
+        "descripcion": "SINCROP",
+        "activo": true
+    },
+    {
+        "codigo": "REP025",
+        "nombre": "SINCROFORTE",
+        "descripcion": "SINCROFORTE",
+        "activo": true
+    },
+    {
+        "codigo": "AGR032",
+        "nombre": "AGROSILLI",
+        "descripcion": "AGROSILLI",
+        "activo": true
+    },
+    {
+        "codigo": "PSA032",
+        "nombre": "ANTIPARACITARIO DORACTINA 500 CC",
+        "descripcion": "ANTIPARACITARIO DORACTINA 500 CC",
+        "activo": true
+    },
+    {
+        "codigo": "IMG012",
+        "nombre": "PORTA ESTACAS",
+        "descripcion": "PORTA ESTACAS",
+        "activo": true
+    },
+    {
+        "codigo": "BPE036",
+        "nombre": "CASCO PARA SOLDAR",
+        "descripcion": "CASCO PARA SOLDAR",
+        "activo": true
+    },
+    {
+        "codigo": "FER041",
+        "nombre": "MASNITRO",
+        "descripcion": "MASNITRO",
+        "activo": true
+    },
+    {
+        "codigo": "SER040",
+        "nombre": "COMISIÓN POR COMPRA DE ACTIVO FIJO (FACTURA PROVEEDORES)",
+        "descripcion": "COMISIÓN POR COMPRA DE ACTIVO FIJO (FACTURA PROVEEDORES)",
+        "activo": true
+    },
+    {
+        "codigo": "PRI016",
+        "nombre": "RADIOTRANSMISORES",
+        "descripcion": "RADIOTRANSMISORES",
+        "activo": true
+    },
+    {
+        "codigo": "AFI062",
+        "nombre": "MANIPULADOR TELESCOPICO MANITOU MLTX732 COLOR ROJO AÑO 2018-PATENTE KCTH66",
+        "descripcion": "MANIPULADOR TELESCOPICO MANITOU MLTX732 COLOR ROJO AÑO 2018-PATENTE KCTH66",
+        "activo": true
+    },
+    {
+        "codigo": "AFI063",
+        "nombre": "POZO PURINERO",
+        "descripcion": "POZO PURINERO",
+        "activo": true
+    },
+    {
+        "codigo": "REP027",
+        "nombre": "LUBRICANTE OBSTÉTRICO",
+        "descripcion": "LUBRICANTE OBSTÉTRICO",
+        "activo": true
+    },
+    {
+        "codigo": "FLE004",
+        "nombre": "TRASLADO DE LECHE",
+        "descripcion": "CARGA Y DESCARGA ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA152",
+        "nombre": "MEFLOSYL 50 CC",
+        "descripcion": "MEFLOSYL 50 CC",
+        "activo": true
+    },
+    {
+        "codigo": "AFI064",
+        "nombre": "ESTANQUE DE LECHE 3500 LTS MODELO CES",
+        "descripcion": "ESTANQUE DE LECHE 3500 LTS MODELO CES",
+        "activo": true
+    },
+    {
+        "codigo": "AGR033",
+        "nombre": "REGLONE",
+        "descripcion": "REGLONE",
+        "activo": true
+    },
+    {
+        "codigo": "ACO050",
+        "nombre": "SILO PARVA PASTO COMPRADO",
+        "descripcion": "SILO PARVA PASTO COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "FER042",
+        "nombre": "BIOLIQUIDO",
+        "descripcion": "BIOLIQUIDO",
+        "activo": true
+    },
+    {
+        "codigo": "SMA059",
+        "nombre": "REPARACION PINZA BOLOS",
+        "descripcion": "REPARACION PINZA BOLOS",
+        "activo": true
+    },
+    {
+        "codigo": "REP028",
+        "nombre": "DESCONGELADOR DE SEMEN",
+        "descripcion": "DESCONGELADOR DE SEMEN",
+        "activo": true
+    },
+    {
+        "codigo": "ACO030",
+        "nombre": "CONFECCION SILO PARVA PASTO COMPRADO",
+        "descripcion": "CONFECCION SILO PARVA PASTO COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA153",
+        "nombre": "MASTIPLAN",
+        "descripcion": "MEFLOSYL 50 CC",
+        "activo": true
+    },
+    {
+        "codigo": "APR041",
+        "nombre": "CORTE DE PASTO PARA SILO Y BOLOS PROPIOS",
+        "descripcion": "CORTE DE PASTO PARA SILO Y BOLOS PROPIOS",
+        "activo": true
+    },
+    {
+        "codigo": "TRA154",
+        "nombre": "ABAXTION",
+        "descripcion": "ABAXTION",
+        "activo": true
+    },
+    {
+        "codigo": "SOR038",
+        "nombre": "VACUOMETRO",
+        "descripcion": "VACUOMETRO",
+        "activo": true
+    },
+    {
+        "codigo": "SMA060",
+        "nombre": "HECHURA FOSAS",
+        "descripcion": "HECHURA FOSAS",
+        "activo": true
+    },
+    {
+        "codigo": "TRA155",
+        "nombre": "COMMANDER",
+        "descripcion": "COMMANDER",
+        "activo": true
+    },
+    {
+        "codigo": "AFI065",
+        "nombre": "CASETA ESTANQUE PETROLEO",
+        "descripcion": "CASETA ESTANQUE PETROLEO",
+        "activo": true
+    },
+    {
+        "codigo": "BPE037",
+        "nombre": "CAJAS NAVIDEÑAS",
+        "descripcion": "CAJAS NAVIDEÑAS",
+        "activo": true
+    },
+    {
+        "codigo": "APR042",
+        "nombre": "SERVICIOS ASOCIADOS AL SILO PARVA (CONF. PROPIA)",
+        "descripcion": "SERVICIOS ASOCIADOS AL SILO PARVA (CONF. PROPIA)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI066",
+        "nombre": "CARRO MARCA HUND PARA TRANSPORTAR ESTANQUE",
+        "descripcion": "CARRO MARCA HUND PARA TRANSPORTAR ESTANQUE",
+        "activo": true
+    },
+    {
+        "codigo": "CON020",
+        "nombre": "CONCENTRADO VERANO 2025",
+        "descripcion": "CONCENTRADO VERANO 2025",
+        "activo": true
+    },
+    {
+        "codigo": "AFI068",
+        "nombre": "PROYECTO AGUA POTABLE EN CASAS",
+        "descripcion": "PROYECTO AGUA POTABLE EN CASAS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI069",
+        "nombre": "BICICLETAS",
+        "descripcion": "BICICLETAS",
+        "activo": true
+    },
+    {
+        "codigo": "TRA156",
+        "nombre": "TERRACORTRIL",
+        "descripcion": "TERRACORTRIL",
+        "activo": true
+    },
+    {
+        "codigo": "ACO100",
+        "nombre": "BOLOS DE PASTO COMPRADO KG",
+        "descripcion": "BOLOS DE PASTO COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "APR101",
+        "nombre": "BOLOS  (CONF. PROPIA) KG",
+        "descripcion": "SERVICIO CONFECCION BOLOS",
+        "activo": true
+    },
+    {
+        "codigo": "ARR0024",
+        "nombre": "ARRIENDO TRACTOR",
+        "descripcion": "ARRIENDO TRACTOR",
+        "activo": true
+    },
+    {
+        "codigo": "CON050",
+        "nombre": "CONCENTRADO MOLIDO LACTANCIA",
+        "descripcion": "CONCENTRADO MOLIDO LACTANCIA",
+        "activo": true
+    },
+    {
+        "codigo": "PS110",
+        "nombre": "Guano de pollo",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "AFI070",
+        "nombre": "EQUIPO COMPACTO DE MEDICA ECM",
+        "descripcion": "EQUIPO COMPACTO DE MEDICA ECM",
+        "activo": true
+    },
+    {
+        "codigo": "FER050",
+        "nombre": "MEZCLA SIEMBRA FERTILIZANTE ",
+        "descripcion": "MEZCLA SIEMBRA FERTILIZANTE ",
+        "activo": true
+    },
+    {
+        "codigo": "AFI085",
+        "nombre": "INCUBADORA HEATSENSOR",
+        "descripcion": "INCUBADORA HEATSENSOR",
+        "activo": true
+    },
+    {
+        "codigo": "AC101",
+        "nombre": "BOLOS DE PASTO SECO KG",
+        "descripcion": "BOLOS DE PASTO SECO KG",
+        "activo": true
+    },
+    {
+        "codigo": "AC102",
+        "nombre": "BOLOS DE PASTO SECO CONFECCIÓN PROPIA KG",
+        "descripcion": "BOLOS DE PASTO SECO CONFECCIÓN PROPIA KG",
+        "activo": true
+    },
+    {
+        "codigo": "CON0003",
+        "nombre": "AFRECHILLO DE TRIGO",
+        "descripcion": "AFRECHILLO DE TRIGO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI081",
+        "nombre": "FUMIGADORA ELECTRICA 100L",
+        "descripcion": "FUMIGADORA ELECTRICA 100L",
+        "activo": true
+    },
+    {
+        "codigo": "AFI071",
+        "nombre": "GARRA SILERA (TRONADOR)",
+        "descripcion": "GARRA SILERA (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI0505",
+        "nombre": "BOMBA DOSIFICADORA CLORO 632",
+        "descripcion": "BOMBA DOSIFICADORA CLORO 632",
+        "activo": true
+    },
+    {
+        "codigo": "TRA157",
+        "nombre": "SELLADOR DE PEZON",
+        "descripcion": "SELLADOR DE PEZON",
+        "activo": true
+    },
+    {
+        "codigo": "TRA158",
+        "nombre": "SUSPENSION INTRAMAMARIA PARA TERAPIA DE SECADO",
+        "descripcion": "SUSPENSION INTRAMAMARIA PARA TERAPIA DE SECADO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI072",
+        "nombre": "MAQUINA SOLDADORA INVERTIG INDURA 200 PRO VERDE (TRONADOR)",
+        "descripcion": "MAQUINA SOLDADORA INVERTIG INDURA 200 PRO VERDE (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI073",
+        "nombre": "PALA CARGADORA FRONTAL MF (TRONADOR)",
+        "descripcion": "PALA CARGADORA FRONTAL MF (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI074",
+        "nombre": "TRACTOR JOHN DEERE 6170 J (TRONADOR)",
+        "descripcion": "TRACTOR JOHN DEERE 6170 J (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI075",
+        "nombre": "TRACTOR MASSEY FERGUSON 6711 N1 PATENTE LLLF71 (TRONADOR)",
+        "descripcion": "TRACTOR MASSEY FERGUSON 6711 N1 PATENTE LLLF71 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI076",
+        "nombre": "CARRO MIXER TRIOLIET (TRONADOR)",
+        "descripcion": "CARRO MIXER TRIOLIET (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI077",
+        "nombre": "DESMENUZADOR DE BOLOS GILTRAP G2X2 (TRONADOR)",
+        "descripcion": "DESMENUZADOR DE BOLOS GILTRAP G2X2 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI078",
+        "nombre": "TOLVA DE VOLTEO (TRONADOR)",
+        "descripcion": "TOLVA DE VOLTEO (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI079",
+        "nombre": "CARRO DE CAMION (TRONADOR)",
+        "descripcion": "CARRO DE CAMION (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI082",
+        "nombre": "TRACTOR KUBOTA B2401 (TRONADOR)",
+        "descripcion": "TRACTOR KUBOTA B2401 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI083",
+        "nombre": "MOTOR PURINERO JOHN DEERE 4045 (TRONADOR)",
+        "descripcion": "MOTOR PURINERO JOHN DEERE 4045 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI084",
+        "nombre": "ISLA TANQUE TANK 1000 LITROS DE PETROLEO (TRONADOR)",
+        "descripcion": "ISLA TANQUE TANK 1000 LITROS DE PETROLEO (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI086",
+        "nombre": "TRACTOR MASSEY FERGUSON 6711 N2 PATENTE LLLD87 (TRONADOR)",
+        "descripcion": "TRACTOR MASSEY FERGUSON 6711 N2 PATENTE LLLD87 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI087",
+        "nombre": "COLOSO TORNAMESA N2 (TRONADOR)",
+        "descripcion": "COLOSO TORNAMESA N2 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI088",
+        "nombre": "TRACTOR JOHN DEERE 6150 J (TRONADOR)",
+        "descripcion": "TRACTOR JOHN DEERE 6150 J (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI089",
+        "nombre": "COLOSO TORNAMESA N1 (TRONADOR)",
+        "descripcion": "COLOSO TORNAMESA N1 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI090",
+        "nombre": "TRACTOR MASSEY FERGUSON 6711 (QUITAHUE-TRONADOR)",
+        "descripcion": "TRACTOR MASSEY FERGUSON 6711 (QUITAHUE-TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI091",
+        "nombre": "CARRO ALJIBE N0 (QUITRAHUE-TRONADOR)",
+        "descripcion": "CARRO ALJIBE N0 (QUITRAHUE-TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI092",
+        "nombre": "CARRO ALJIBE N1 (TRONADOR)",
+        "descripcion": "CARRO ALJIBE N1 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI093",
+        "nombre": "CARRO ALJIBE N6 (QUITRAHUE-TRONADOR)",
+        "descripcion": "CARRO ALJIBE N6 (QUITRAHUE-TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI094",
+        "nombre": "CARRO ALJIBE N3 (QUITRAHUE-TRONADOR)",
+        "descripcion": "CARRO ALJIBE N3 (QUITRAHUE-TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI095",
+        "nombre": "CARRO ALJIBE N2 (TRONADOR)",
+        "descripcion": "CARRO ALJIBE N2 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI096",
+        "nombre": "CARRO ALJIBE N4 (TRONADOR)",
+        "descripcion": "CARRO ALJIBE N4 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI097",
+        "nombre": "CARRO EMERGENCIA N1 (TRONADOR)",
+        "descripcion": "CARRO EMERGENCIA N1 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI098",
+        "nombre": "CARRO ARRASTRE TERNEROS (TRONADOR)",
+        "descripcion": "CARRO ARRASTRE TERNEROS (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI099",
+        "nombre": "MAMADERA MECANICA (TRONADOR)",
+        "descripcion": "MAMADERA MECANICA (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI100",
+        "nombre": "PINZA BOLOS ROTATIVA (TRONADOR)",
+        "descripcion": "PINZA BOLOS ROTATIVA (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI101",
+        "nombre": "PINZA BOLOS HUSTLER (CASA ANITA-TRONADOR)",
+        "descripcion": "PINZA BOLOS HUSTLER (CASA ANITA-TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI102",
+        "nombre": "HIDROLAVADORA AMARILLA GRANDE (TRONADOR)",
+        "descripcion": "HIDROLAVADORA AMARILLA GRANDE (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI103",
+        "nombre": "CARRO DE ARRASTRE CALOSTRO (TRONADOR)",
+        "descripcion": "CARRO DE ARRASTRE CALOSTRO (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI104",
+        "nombre": "DESBROZADORA DE MALEZA STIHL 250 (TRONADOR)",
+        "descripcion": "DESBROZADORA DE MALEZA STIHL 250 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI105",
+        "nombre": "DESMALEZADORA AGRICOLA (TRONADOR)",
+        "descripcion": "DESMALEZADORA AGRICOLA (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI106",
+        "nombre": "MOTOBOMBA HONDA ",
+        "descripcion": "MOTOBOMBA HONDA ",
+        "activo": true
+    },
+    {
+        "codigo": "AFI107",
+        "nombre": "DESBROZADORA DE MALEZAS STIHL FS 120 (TRONADOR)",
+        "descripcion": "DESBROZADORA DE MALEZAS STIHL FS 120 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI0017",
+        "nombre": "IMPRESORA EPSON",
+        "descripcion": "IMPRESORA EPSON",
+        "activo": true
+    },
+    {
+        "codigo": "BP0001",
+        "nombre": "ARRIENDO BAÑO QUIMICO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "SMA061",
+        "nombre": "MANTENCION SISTEMA DE ALIMENTACION TERNEROS",
+        "descripcion": "MANTENCION SISTEMA DE ALIMENTACION TERNEROS",
+        "activo": true
+    },
+    {
+        "codigo": "AGR034",
+        "nombre": "INTERESES NOTAS DEBITO POR FACTURAS COAGRA",
+        "descripcion": "INTERESES NOTAS DEBITO POR FACTURAS COAGRA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI108",
+        "nombre": "REDUCTOR JAYLOR 5425 ",
+        "descripcion": "REDUCTOR JAYLOR 5425 ",
+        "activo": true
+    },
+    {
+        "codigo": "ABI002",
+        "nombre": "VACAS EN LECHE",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "ABI003",
+        "nombre": "VAQUILLAS ENCASTE",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "ABI004",
+        "nombre": "VAQUILLAS PREÑADAS",
+        "descripcion": "VAQUILLAS PREÑADAS",
+        "activo": true
+    },
+    {
+        "codigo": "ABI005",
+        "nombre": "TERNERAS RECRIA",
+        "descripcion": "TERNERAS RECRIA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI109",
+        "nombre": "COLOSO TORNAMESA N3 (TRONADOR)",
+        "descripcion": "COLOSO TORNAMESA N3 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI110",
+        "nombre": "CARRO FORRAJERO BREUER",
+        "descripcion": "CARRO FORRAJERO BREUER",
+        "activo": true
+    },
+    {
+        "codigo": "AFI111",
+        "nombre": "MOTOR ESTACIONARIO JOHN DEERE 4045 (TRONADOR)",
+        "descripcion": "MOTOR ESTACIONARIO JOHN DEERE 4045 (TRONADOR)",
+        "activo": true
+    },
+    {
+        "codigo": "APR043",
+        "nombre": "COLES",
+        "descripcion": "COLES",
+        "activo": true
+    },
+    {
+        "codigo": "IMG013",
+        "nombre": "POLVO MISTRAL",
+        "descripcion": "POLVO MISTRAL",
+        "activo": true
+    },
+    {
+        "codigo": "GGE013",
+        "nombre": "BASUREROS",
+        "descripcion": "BASUREROS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI112",
+        "nombre": "MUEBLE BLANCO 3 PUERTAS",
+        "descripcion": "MUEBLE BLANCO 3 PUERTAS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI0018",
+        "nombre": "MICROONDAS",
+        "descripcion": "MICROONDAS",
+        "activo": true
+    },
+    {
+        "codigo": "SOR039",
+        "nombre": "PEZON ARTIFICIAL",
+        "descripcion": "PEZON ARTIFICIAL",
+        "activo": true
+    },
+    {
+        "codigo": "SMA062",
+        "nombre": "SERVICIO ASEO PROFUNDO EN INSTALACIONES",
+        "descripcion": "SERVICIO ASEO PROFUNDO EN INSTALACIONES",
+        "activo": true
+    },
+    {
+        "codigo": "AFI113",
+        "nombre": "TRACTOR KUBOTA UTV FARM BOSS 25 HP 4X4",
+        "descripcion": "TRACTOR KUBOTA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI114",
+        "nombre": "ENERGIZADOR DE CERCO ELECTRICO 46000W",
+        "descripcion": "ENERGIZADOR DE CERCO ELECTRICO 46000W",
+        "activo": true
+    },
+    {
+        "codigo": "AFI115",
+        "nombre": "CONSTRUCCION BAÑOS",
+        "descripcion": "CONSTRUCCION BAÑOS",
+        "activo": true
+    },
+    {
+        "codigo": "AGR035",
+        "nombre": "METSURAM 60WG",
+        "descripcion": "METSURAM 60WG",
+        "activo": true
+    },
+    {
+        "codigo": "IMG014",
+        "nombre": "ROLLOS DE MALLA RASHEL",
+        "descripcion": "ROLLOS DE MALLA RASHEL",
+        "activo": true
+    },
+    {
+        "codigo": "ANA0010",
+        "nombre": "ANALISIS DE AGUA",
+        "descripcion": "ANALISIS DE AGUA",
+        "activo": true
+    },
+    {
+        "codigo": "SER041",
+        "nombre": "TRANSPORTE TRABAJADORES ( CON IVA)",
+        "descripcion": "TRANSPORTE TRABAJADORES ( CON IVA)",
+        "activo": true
+    },
+    {
+        "codigo": "SER042",
+        "nombre": "TRANSPORTE TRABAJADORES ( CON RETENCION BH)",
+        "descripcion": "TRANSPORTE TRABAJADORES ( CON RETENCION BH)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI116",
+        "nombre": "CARRO ALIMENTADOR MAINERO MODELO 2518 VERTICAL AÑO 2025",
+        "descripcion": "CARRO ALIMENTADOR MAINERO MODELO 2518 VERTICAL AÑO 2025",
+        "activo": true
+    },
+    {
+        "codigo": "SER043",
+        "nombre": "SERVICIOS AGRICOLAS Y MANTENCION DE MAQUINARIAS CON SERV DE VEHICULO INCLUIDO",
+        "descripcion": "SERVICIOS AGRICOLAS Y MANTENCION DE MAQUINARIAS CON SERV DE VEHICULO INCLUIDO",
+        "activo": true
+    },
+    {
+        "codigo": "SER044",
+        "nombre": "SERVICIO REACONDICIONAMIENTO POZO PROFUNDO Y RED DE AGUA",
+        "descripcion": "SERVICIO REACONDICIONAMIENTO POZO PROFUNDO Y RED DE AGUA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI117",
+        "nombre": "MAQUINA DE ORDEÑA PORTATIL",
+        "descripcion": "MAQUINA DE ORDEÑA PORTATIL",
+        "activo": true
+    },
+    {
+        "codigo": "ARRBR",
+        "nombre": "Arriendo Terrenos",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CC",
+        "nombre": "Cultivo Comprado",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "AFI118",
+        "nombre": "CONTENEDORES",
+        "descripcion": "CONTENEDORES",
+        "activo": true
+    },
+    {
+        "codigo": "OIV16",
+        "nombre": "MARCADOR GANADO",
+        "descripcion": "MARCADOR GANADO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI119",
+        "nombre": "COCINA A LEÑA",
+        "descripcion": "COCINA A LEÑA",
+        "activo": true
+    },
+    {
+        "codigo": "SML003",
+        "nombre": "NUCLEO POSTPARTO",
+        "descripcion": "NUCLEO POSTPARTO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA159",
+        "nombre": "GENTAMICINA 100 CC",
+        "descripcion": "GENTAMICINA 100 CC",
+        "activo": true
+    },
+    {
+        "codigo": "PRI015",
+        "nombre": "EXAMENES PREOCUPACIONALES",
+        "descripcion": "EXAMENES PREOCUPACIONALES",
+        "activo": true
+    },
+    {
+        "codigo": "TRA160",
+        "nombre": "SOLUCION ORAL PARA EUTANASIA ANIMAL",
+        "descripcion": "SOLUCION ORAL PARA EUTANASIA ANIMAL",
+        "activo": true
+    },
+    {
+        "codigo": "TRA161",
+        "nombre": "CARBONATO DE CALCIO",
+        "descripcion": "CARBONATO DE CALCIO",
+        "activo": true
+    },
+    {
+        "codigo": "RTL011",
+        "nombre": "PANTALON",
+        "descripcion": "PANTALON",
+        "activo": true
+    },
+    {
+        "codigo": "RTL012",
+        "nombre": "CHAQUETAS",
+        "descripcion": "CHAQUETAS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI120",
+        "nombre": "COMPRESOR ESTANQUE DE FRIO ",
+        "descripcion": "COMPRESOR ESTANQUE DE FRIO ",
+        "activo": true
+    },
+    {
+        "codigo": "FER043",
+        "nombre": "FERTILIZANTE FOLIAR VALVOX",
+        "descripcion": "FERTILIZANTE FOLIAR VALVOX",
+        "activo": true
+    },
+    {
+        "codigo": "IMC020",
+        "nombre": "CIERRE TRANCA BUNGY",
+        "descripcion": "CIERRE TRANCA BUNGY",
+        "activo": true
+    },
+    {
+        "codigo": "AFI121",
+        "nombre": "RASPADOR",
+        "descripcion": "RASPADOR",
+        "activo": true
+    },
+    {
+        "codigo": "AFI122",
+        "nombre": "CARRO ALIMENTADOR CON 50 CHUPOS",
+        "descripcion": "CARRO ALIMENTADOR CON 50 CHUPOS",
+        "activo": true
+    },
+    {
+        "codigo": "TRA162",
+        "nombre": "FACILPART",
+        "descripcion": "FACILPART",
+        "activo": true
+    },
+    {
+        "codigo": "BPE038",
+        "nombre": "SERVICIO DE SALA CUNA",
+        "descripcion": "SERVICIO DE SALA CUNA",
+        "activo": true
+    },
+    {
+        "codigo": "PSA033",
+        "nombre": "NEOPRINIL (ANTIPARASITARIO)",
+        "descripcion": "NEOPRINIL (ANTIPARASITARIO)",
+        "activo": true
+    },
+    {
+        "codigo": "PRI017",
+        "nombre": "GABINETES PARA EXTINTOR",
+        "descripcion": "GABINETES PARA EXTINTOR",
+        "activo": true
+    },
+    {
+        "codigo": "AFI123",
+        "nombre": "ESTUFA MICROBIOLÓGICA CON CABINA DE INOCULACIÓN",
+        "descripcion": "ESTUFA MICROBIOLÓGICA CON CABINA DE INOCULACIÓN",
+        "activo": true
+    },
+    {
+        "codigo": "TRA163",
+        "nombre": "PLACAS DE CULTIVO ONFARM",
+        "descripcion": "PLACAS DE CULTIVO ONFARM",
+        "activo": true
+    },
+    {
+        "codigo": "RRH004",
+        "nombre": "APOYO ADMINISTRATIVO (CON RETENCION BH)",
+        "descripcion": "APOYO ADMINISTRATIVO (CON RETENCION BH)",
+        "activo": true
+    },
+    {
+        "codigo": "TRA164",
+        "nombre": "CEPO PARA DESCORNAR TERNEROS",
+        "descripcion": "CEPO PARA DESCORNAR TERNEROS",
+        "activo": true
+    },
+    {
+        "codigo": "SOR040",
+        "nombre": "ESPUMA CLORADA",
+        "descripcion": "ESPUMA CLORADA",
+        "activo": true
+    },
+    {
+        "codigo": "OST013",
+        "nombre": "REGADOR K LINE CON ASPERSOR",
+        "descripcion": "REGADOR K LINE CON ASPERSOR",
+        "activo": true
+    },
+    {
+        "codigo": "REP029",
+        "nombre": "TERMO ALMACENADOR DE DOSIS",
+        "descripcion": "TERMO ALMACENADOR DE DOSIS",
+        "activo": true
+    },
+    {
+        "codigo": "APR1011",
+        "nombre": "BOLOS DE AVENA  (CONF. PROPIA) KG",
+        "descripcion": "SERVICIO CONFECCION BOLOS",
+        "activo": true
+    },
+    {
+        "codigo": "AFI124",
+        "nombre": "TALADRO PERCUTOR ELECTRICO 750 W BOSCH",
+        "descripcion": "TALADRO PERCUTOR ELECTRICO 750 W BOSCH",
+        "activo": true
+    },
+    {
+        "codigo": "BPE040",
+        "nombre": "MESA PING PONG Y SET DE PALETAS",
+        "descripcion": "MESA PING PONG Y SET DE PALETAS",
+        "activo": true
+    },
+    {
+        "codigo": "PRD_TST",
+        "nombre": "Producto de Test",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "PRI018",
+        "nombre": "SERVICIOS DE SEGURIDAD (CON RETENCION HONORARIOS)",
+        "descripcion": "SERVICIOS DE SEGURIDAD (CON RETENCION HONORARIOS)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI125",
+        "nombre": "ESCRITORIO DE OFICINA",
+        "descripcion": "ESCRITORIO DE OFICINA",
+        "activo": true
+    },
+    {
+        "codigo": "CON021",
+        "nombre": "LECHE LIQUIDA PARA TERNEROS",
+        "descripcion": "LECHE LIQUIDA PARA TERNEROS",
+        "activo": true
+    },
+    {
+        "codigo": "SER045",
+        "nombre": "MANTENCION SISTEMA DE RIEGO",
+        "descripcion": "MANTENCION SISTEMA DE RIEGO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI126",
+        "nombre": "MUEBLE A MEDIDA",
+        "descripcion": "MUEBLE A MEDIDA",
+        "activo": true
+    },
+    {
+        "codigo": "AFI127",
+        "nombre": "COMEDOR",
+        "descripcion": "COMEDOR",
+        "activo": true
+    },
+    {
+        "codigo": "AFI128",
+        "nombre": "SEGADORA CLAAS 2016 COLOR VERDE",
+        "descripcion": "SEGADORA CLAAS 2016 COLOR VERDE",
+        "activo": true
+    },
+    {
+        "codigo": "AFI129",
+        "nombre": "IMPRESORA MULTIFUNCIONAL WORKFORCE",
+        "descripcion": "IMPRESORA MULTIFUNCIONAL WORKFORCE",
+        "activo": true
+    },
+    {
+        "codigo": "AFI130",
+        "nombre": "AIRE ACONDICIONADO",
+        "descripcion": "AIRE ACONDICIONADO",
+        "activo": true
+    },
+    {
+        "codigo": "ACO031",
+        "nombre": "CONFECCION SILO BOLO PASTO COMPRADO",
+        "descripcion": "CONFECCION SILO BOLO PASTO COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "BPE039",
+        "nombre": "BOTA AQUAFLEX",
+        "descripcion": "BOTA AQUAFLEX",
+        "activo": true
+    },
+    {
+        "codigo": "SER046",
+        "nombre": "SERVICIO DE REMUNERACIONES",
+        "descripcion": "SERVICIO DE REMUNERACIONES",
+        "activo": true
+    },
+    {
+        "codigo": "PRI019",
+        "nombre": "SERVICIOS DE SANITIZACION",
+        "descripcion": "SERVICIOS DE SANITIZACION",
+        "activo": true
+    },
+    {
+        "codigo": "SER047",
+        "nombre": "ARRIENDO GENERADOR",
+        "descripcion": "ARRIENDO GENERADOR",
+        "activo": true
+    },
+    {
+        "codigo": "FER044",
+        "nombre": "COMPOST",
+        "descripcion": "COMPOST",
+        "activo": true
+    },
+    {
+        "codigo": "SER048",
+        "nombre": "SERVICIO RIEGO DE AGUA",
+        "descripcion": "SERVICIO RIEGO DE AGUA",
+        "activo": true
+    },
+    {
+        "codigo": "BPE041",
+        "nombre": "CHALECO ANTICORTE",
+        "descripcion": "CHALECO ANTICORTE",
+        "activo": true
+    },
+    {
+        "codigo": "ABI006",
+        "nombre": "TOROS",
+        "descripcion": "TOROS",
+        "activo": true
+    },
+    {
+        "codigo": "TRA165",
+        "nombre": "BOVIFORT 500 ML",
+        "descripcion": "BOVIFORT 500 ML",
+        "activo": true
+    },
+    {
+        "codigo": "SMA045",
+        "nombre": "MANTENCION BOMBA PURINERA",
+        "descripcion": "MANTENCION BOMBA PURINERA",
+        "activo": true
+    },
+    {
+        "codigo": "SOR0077",
+        "nombre": "ZINICIN CLORO",
+        "descripcion": "ZINICIN CLORO",
+        "activo": true
+    },
+    {
+        "codigo": "APR0433",
+        "nombre": "SERVICIOS ASOCIADOS AL SILO PARVA MAIZ COMPRADO",
+        "descripcion": "SERVICIOS ASOCIADOS AL SILO PARVA COMPRADO",
+        "activo": true
+    },
+    {
+        "codigo": "TRA166",
+        "nombre": "CIANURO POTASIO",
+        "descripcion": "CIANURO POTASIO",
+        "activo": true
+    },
+    {
+        "codigo": "PSA034",
+        "nombre": "ORBESEAL",
+        "descripcion": "ORBESEAL TERAPIA SECADO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI131",
+        "nombre": "ESMERIL ANGULAR ",
+        "descripcion": "ESMERIL ANGULAR ",
+        "activo": true
+    },
+    {
+        "codigo": "AFI0088",
+        "nombre": "AGITADOR VERTICAL PURINERO",
+        "descripcion": "AGITADOR VERTICAL PURINERO",
+        "activo": true
+    },
+    {
+        "codigo": "AFI132",
+        "nombre": "MEJORA SISTEMA PURINES",
+        "descripcion": "MEJORA SISTEMA PURINES",
+        "activo": true
+    },
+    {
+        "codigo": "AFI133",
+        "nombre": "GEOMENBRANA POZO PURINERO",
+        "descripcion": "GEOMENBRANA POZO PURINERO",
+        "activo": true
+    },
+    {
+        "codigo": "RTL013",
+        "nombre": "PANTALON ANTICORTE",
+        "descripcion": "PANTALON ANTICORTE",
+        "activo": true
+    },
+    {
+        "codigo": "SOR041",
+        "nombre": "SOLUTION (SALA ORDEÑA)",
+        "descripcion": "SOLUTION (SALA ORDEÑA)",
+        "activo": true
+    },
+    {
+        "codigo": "AFI134",
+        "nombre": "BARREDOR CAPTAIN",
+        "descripcion": "BARREDOR CAPTAIN VERDE ",
+        "activo": true
+    },
+    {
+        "codigo": "TRA167",
+        "nombre": "VIRKON LTS",
+        "descripcion": "VIRKON LTS",
+        "activo": true
+    }
+]

@@ -1,0 +1,8 @@
+{
+    "Porcentaje": 19.00,
+    "Nombre": "IVA 19% Compras",
+    "Codigo": "TASA19c",
+    "PaisID": "CHL",
+    "Descripcion": "Tasa IVA CLP",
+    "Activo": true
+}

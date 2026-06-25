@@ -52,7 +52,7 @@ if ($fechaHastaValue === '') {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Producción de Leche</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -100,7 +100,7 @@ if ($fechaHastaValue === '') {
                 <option value="HST" <?= ($filtros['filtroProdlechestatus'] ?? '') === 'HST' ? 'selected' : '' ?>>Histórica</option>
             </select>
         </div>
-        <div class="col-md-2" style="display: none;">
+        <div class="col-md-2 d-none">
             <input type="number" name="filtroEmpresaid" class="form-control" placeholder="Empresa ID"
                    value="<?= htmlspecialchars($empresaIdWS ?? '') ?>">
         </div>
@@ -162,7 +162,7 @@ if ($fechaHastaValue === '') {
                     <th>Planta Vacas</th>
                     <th>Planta Lts/Vacas</th>
                     <th>Observación</th>
-                    <th style="width: 190px;">Acciones</th>
+                    <th class="col-actions-lg">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -213,9 +213,9 @@ if ($fechaHastaValue === '') {
                                     <i class="bi bi-eye"></i>
                                 </a>
                                 <?php if (!$isConfirmada && !empty($estatus) && !$isAnulada && $estatus !== 'HST'): ?>
-                                    <form action="?route=prodleche/anular" method="POST" class="d-inline">
+                                    <form action="?route=prodleche/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Desea anular este registro?">
                                         <input type="hidden" name="prodlecheid" value="<?= htmlspecialchars($p['prodlecheid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Desea anular este registro?');" title="Anular" aria-label="Anular">
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Anular" aria-label="Anular">
                                             <i class="bi bi-x-circle"></i>
                                         </button>
                                     </form>
@@ -226,9 +226,9 @@ if ($fechaHastaValue === '') {
                                 <?php endif; ?>
                                 <!-- Boton para sincronizar con el ERP siempre y cuando el estado sea PND. Si no, boton deshabilitado -->
                                 <?php if (!empty($p['prodlechestatus']) && $p['prodlechestatus'] === 'PND'): ?>
-                                    <form action="?route=prodleche/sync" method="POST" class="d-inline">
+                                    <form action="?route=prodleche/sync" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Desea sincronizar este registro?">
                                         <input type="hidden" name="prodlecheid" value="<?= htmlspecialchars($p['prodlecheid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('?Desea sincronizar este registro?');" <?= (!empty($p['prodlechestatus']) && $p['prodlechestatus'] === 'PND') ? '' : 'disabled' ?> title="Sincronizar ERP" aria-label="Sincronizar ERP">
+                                        <button type="submit" class="btn btn-primary btn-sm" <?= (!empty($p['prodlechestatus']) && $p['prodlechestatus'] === 'PND') ? '' : 'disabled' ?> title="Sincronizar ERP" aria-label="Sincronizar ERP">
                                             <i class="bi bi-arrow-repeat"></i>
                                         </button>
                                     </form>
@@ -275,28 +275,6 @@ if ($fechaHastaValue === '') {
         <span>Sincronizando con el ERP. Espere...</span>
     </div>
 </div>
-<style>
-    .erp-sync-loader {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.35);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1055;
-    }
-    .erp-sync-card {
-        background: #ffffff;
-        color: #111111;
-        padding: 14px 18px;
-        border-radius: 8px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-weight: 600;
-    }
-</style>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('prodleche-filter-form');
@@ -471,7 +449,10 @@ if ($fechaHastaValue === '') {
         const syncForms = document.querySelectorAll('form[action*="prodleche/sync"]');
         if (syncLoader && syncForms.length) {
             syncForms.forEach(function (syncForm) {
-                syncForm.addEventListener('submit', function () {
+                syncForm.addEventListener('submit', function (event) {
+                    if (event.defaultPrevented || syncForm.dataset.confirmed !== '1') {
+                        return;
+                    }
                     const submitButton = syncForm.querySelector('button[type="submit"]');
                     if (submitButton) {
                         submitButton.disabled = true;

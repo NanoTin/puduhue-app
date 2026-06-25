@@ -14,12 +14,21 @@ class Env
     public static function load(?string $path = null): void
     {
         $root = dirname(__DIR__, 2);
-        $envPath = $path ?? ($root . '/.env');
+        $envPaths = $path !== null
+            ? [$path]
+            : [$root . '/.env', $root . '/.env.local'];
 
-        if (!is_file($envPath) || !is_readable($envPath)) {
-            return;
+        foreach ($envPaths as $envPath) {
+            if (!is_file($envPath) || !is_readable($envPath)) {
+                continue;
+            }
+
+            self::loadFile($envPath);
         }
+    }
 
+    private static function loadFile(string $envPath): void
+    {
         $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         foreach ($lines as $line) {
             $trimmed = trim($line);

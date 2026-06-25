@@ -3,6 +3,7 @@
 class InvunidmedController
 {
     private \InvunidmedService $service;
+    private \ErpPreItemsSyncService $preItemsSyncService;
 
     public function __construct()
     {
@@ -10,8 +11,13 @@ class InvunidmedController
         if (file_exists($servicePath)) {
             require_once $servicePath;
         }
+        $preItemsSyncServicePath = dirname(__DIR__, 2) . '/Services/ErpPreItemsSyncService.php';
+        if (file_exists($preItemsSyncServicePath)) {
+            require_once $preItemsSyncServicePath;
+        }
 
         $this->service = new \InvunidmedService();
+        $this->preItemsSyncService = new \ErpPreItemsSyncService();
     }
 
     public function listar(bool $partial = false): void
@@ -39,134 +45,64 @@ class InvunidmedController
         require $viewFile;
     }
 
-    public function crearForm(bool $partial = false): void
+    public function syncPost(bool $partial = false): void
     {
         AuthMiddleware::requireAuth();
-        $errorMessage = null;
-        $viewFile = $this->viewPath('invunidmed_crear.php');
-        require $viewFile;
+        $user = AuthMiddleware::getUserContext();
+
+        try {
+            $resultado = $this->preItemsSyncService->sincronizarUnidadesMedida(
+                $user['usuarioId'],
+                $user['dispositivo'],
+                $user['ip'],
+                'MANUAL'
+            );
+
+            $estado = strtoupper((string)($resultado['estado'] ?? 'OK'));
+            if ($estado === 'OK') {
+                $this->setToast('Sincronización de Unidades de Medida completada.', 'success');
+            } elseif ($estado === 'PARCIAL') {
+                $omitidos = (int)($resultado['conteos']['omitidos'] ?? 0);
+                $this->setToast('Sincronización completada parcialmente. Registros omitidos: ' . $omitidos . '. Revise el detalle técnico en logs.', 'warning');
+            } else {
+                $this->setToast('La sincronización de Unidades de Medida finalizó con errores.', 'danger');
+            }
+        } catch (\Throwable $e) {
+            $this->setToast($e->getMessage(), 'danger');
+        }
+
+        header('Location: ?route=invunidmed/listar');
+        exit;
+    }
+
+    public function crearForm(bool $partial = false): void
+    {
+        $this->bloquearGestionManual('crear');
     }
 
     public function crearPost(bool $partial = false): void
     {
-        AuthMiddleware::requireAuth();
-        $user = AuthMiddleware::getUserContext();
-
-        $data = $_POST;
-        unset($data['_token'], $data['action'], $data['route']);
-        $data['invunidmedactivo'] = isset($_POST['invunidmedactivo']) ? 1 : 0;
-
-        try {
-            $this->service->crearInvunidmed(
-                $data,
-                $user['usuarioId'],
-                $user['dispositivo'],
-                $user['ip']
-            );
-            $this->setToast('Unidad de medida creada correctamente', 'success');
-            header('Location: ?route=invunidmed/listar');
-            exit;
-        } catch (RuntimeException $e) {
-            $errorMessage = $e->getMessage();
-            $this->setToast($errorMessage, 'danger');
-            $viewFile = $this->viewPath('invunidmed_crear.php');
-            require $viewFile;
-        }
+        $this->bloquearGestionManual('crear');
     }
 
     public function editarForm(bool $partial = false): void
     {
-        AuthMiddleware::requireAuth();
-        $user = AuthMiddleware::getUserContext();
-
-        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-        if ($id <= 0) {
-            error_log('InvunidmedController::editarForm - ID inválido. ID: ' . $id);
-            header('Location: ?route=invunidmed/listar');
-            exit;
-        }
-
-        $result = $this->service->consultarInvunidmedPorId(
-            $id,
-            $user['usuarioId'],
-            $user['dispositivo'],
-            $user['ip']
-        );
-        $registro = $result['rows'][0] ?? null;
-        if ($registro === null) {
-            error_log('InvunidmedController::editarForm - Registro no encontrado. ID: ' . $id);
-            header('Location: ?route=invunidmed/listar');
-            exit;
-        }
-
-        $invunidmed = $registro;
-        $errorMessage = null;
-        $viewFile = $this->viewPath('invunidmed_editar.php');
-        require $viewFile;
+        $this->bloquearGestionManual('editar');
     }
 
     public function editarPost(bool $partial = false): void
     {
-        AuthMiddleware::requireAuth();
-        $user = AuthMiddleware::getUserContext();
-
-        $id = isset($_POST['invunidmedid']) ? (int)$_POST['invunidmedid'] : 0;
-        if ($id <= 0) {
-            header('Location: ?route=invunidmed/listar');
-            exit;
-        }
-
-        $data = $_POST;
-        unset($data['_token'], $data['action'], $data['route']);
-        $data['invunidmedactivo'] = isset($_POST['invunidmedactivo']) ? 1 : 0;
-
-        try {
-            $this->service->editarInvunidmed(
-                $id,
-                $data,
-                $user['usuarioId'],
-                $user['dispositivo'],
-                $user['ip']
-            );
-            $this->setToast('Unidad de medida editada correctamente', 'success');
-            header('Location: ?route=invunidmed/listar');
-            exit;
-        } catch (RuntimeException $e) {
-            $errorMessage = $e->getMessage();
-            $this->setToast($errorMessage, 'danger');
-
-            $result = $this->service->consultarInvunidmedPorId(
-                $id,
-                $user['usuarioId'],
-                $user['dispositivo'],
-                $user['ip']
-            );
-            $invunidmed = $result['rows'][0] ?? null;
-            $viewFile = $this->viewPath('invunidmed_editar.php');
-            require $viewFile;
-        }
+        $this->bloquearGestionManual('editar');
     }
 
     public function anularPost(bool $partial = false): void
     {
-        AuthMiddleware::requireAuth();
-        $user = AuthMiddleware::getUserContext();
+        $this->bloquearGestionManual('anular');
+    }
 
-        $id = isset($_POST['invunidmedid']) ? (int)$_POST['invunidmedid'] : 0;
-        if ($id > 0) {
-            try {
-                $this->service->anularInvunidmed(
-                    $id,
-                    $user['usuarioId'],
-                    $user['dispositivo'],
-                    $user['ip']
-                );
-                $this->setToast('Unidad de medida anulada correctamente', 'success');
-            } catch (RuntimeException $e) {
-                $this->setToast($e->getMessage(), 'danger');
-            }
-        }
-
+    private function bloquearGestionManual(string $accion): void
+    {
+        $this->setToast('La gestión manual de unidades de medida está bloqueada. Use sincronización ERP.', 'warning');
         header('Location: ?route=invunidmed/listar');
         exit;
     }
@@ -179,9 +115,7 @@ class InvunidmedController
 
     private function setToast(string $message, string $type = 'info'): void
     {
-        $_SESSION['toast'] = [
-            'message' => $message,
-            'type'    => $type,
-        ];
+        require_once dirname(__DIR__, 2) . '/Helpers/FlashMessageHelper.php';
+        FlashMessageHelper::toast($message, $type);
     }
 }
