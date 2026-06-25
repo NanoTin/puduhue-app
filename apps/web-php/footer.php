@@ -20,6 +20,7 @@
         const menuLinks = document.querySelectorAll('.menu-link[data-close-drawer="true"]');
         const sidebar = document.getElementById('appSidebar');
         const flyout = document.getElementById('menuFlyout');
+        const sidebarStorageKey = 'pdh_sidebar_collapsed';
         let currentFlyoutGroup = null;
 
         const closeDrawer = () => body.classList.remove('sidebar-open');
@@ -71,6 +72,11 @@
         collapseBtn?.addEventListener('click', () => {
             closeFlyout();
             body.classList.toggle('sidebar-collapsed');
+            try {
+                localStorage.setItem(sidebarStorageKey, body.classList.contains('sidebar-collapsed') ? '1' : '0');
+            } catch (e) {
+                // Storage can be unavailable in restricted browser modes.
+            }
         });
         backdrop?.addEventListener('click', closeDrawer);
 

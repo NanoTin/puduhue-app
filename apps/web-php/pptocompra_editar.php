@@ -64,7 +64,7 @@ if (empty($mensual)) {
                     <option value="">Seleccione</option>
                     <?php foreach ($subfamilias as $subfamiliaOpt): ?>
                         <option value="<?= htmlspecialchars($subfamiliaOpt['subfamiliaid'] ?? '') ?>" <?= ((string)($formData['subfamiliaid'] ?? ($pptocompra['subfamiliaid'] ?? '')) === (string)($subfamiliaOpt['subfamiliaid'] ?? '')) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars(($subfamiliaOpt['subfamiliacod'] ?? '') . ' - ' . ($subfamiliaOpt['subfamiliadsc'] ?? '')) ?>
+                            <?= htmlspecialchars(($subfamiliaOpt['subfamiliadsc'] ?? '') . ' (' . ($subfamiliaOpt['subfamiliacod'] ?? '') . ')') ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -78,7 +78,7 @@ if (empty($mensual)) {
                     <option value="">Seleccione</option>
                     <?php foreach ($centroscosto as $centroOpt): ?>
                         <option value="<?= htmlspecialchars($centroOpt['centrocostoid'] ?? '') ?>" <?= ((string)($formData['centrocostoid'] ?? ($pptocompra['centrocostoid'] ?? '')) === (string)($centroOpt['centrocostoid'] ?? '')) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars(($centroOpt['centrocostocod'] ?? '') . ' - ' . ($centroOpt['centrocostodsc'] ?? '')) ?>
+                            <?= htmlspecialchars(($centroOpt['centrocostodsc'] ?? '') . ' (' . ($centroOpt['centrocostocod'] ?? '') . ')') ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -86,6 +86,11 @@ if (empty($mensual)) {
                     <input type="hidden" name="centrocostoid" value="<?= htmlspecialchars((string)($formData['centrocostoid'] ?? ($pptocompra['centrocostoid'] ?? ''))) ?>">
                 <?php endif; ?>
             </div>
+        </div>
+
+        <div class="form-field mb-3">
+            <label class="form-label" for="pptocompraobservacion">Observación presupuesto</label>
+            <textarea name="pptocompraobservacion" id="pptocompraobservacion" class="form-control" rows="2" maxlength="500" <?= $hasMovimientos ? 'readonly' : '' ?>><?= htmlspecialchars((string)($formData['pptocompraobservacion'] ?? ($pptocompra['pptocompraobservacion'] ?? ''))) ?></textarea>
         </div>
 
         <section class="mb-3">
@@ -191,11 +196,6 @@ if (empty($mensual)) {
             </td>
         </tr>
     </template>
-<?php endif; ?>
-
-<?php if (!$hasMovimientos): ?>
-    <?php require __DIR__ . '/partials/modal_confirm.php'; ?>
-    <script src="assets/js/confirm-modal.js"></script>
 <?php endif; ?>
 
 <?php if (!$isPartial) { require 'footer.php'; } ?>

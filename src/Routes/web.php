@@ -113,13 +113,17 @@ function handleWebRequest(array $menuData = []): void
         'companies' => ['list-for-change'],
         'empresas' => ['cambiar-empresa'],
         'erpendpoints' => ['diagnostico', 'ejecutar', 'log'],
-        'pptocompra' => ['detalle', 'ajustar'],
+        'pptocompra' => ['detalle', 'ajustar', 'traspasar'],
         'auth' => ['logout'],
     ];
     $routeKey = "$module/$action";
     
     $extraAllowed = in_array($action, $allowActions, true)
     || (isset($allowActionsByModule[$module]) && in_array($action, $allowActionsByModule[$module], true));
+
+    if ($module === 'pptocompra' && in_array($action, ['detalle', 'ajustar', 'traspasar'], true)) {
+        $extraAllowed = isset($allowedMenuRoutes['pptocompra/listar']);
+    }
 
     // Validación de menú
     if (!$extraAllowed && !isset($allowedMenuRoutes[$routeKey])) {
@@ -207,8 +211,9 @@ function handleWebRequest(array $menuData = []): void
         'visualizar' => 'visualizarForm',
         'anular'   => 'anularPost',
         'eliminar' => 'eliminarPost',
-        'detalle'  => 'detalle',
-        'ajustar'  => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'ajustarPost' : 'ajustarForm',
+        'detalle'   => 'detalle',
+        'ajustar'   => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'ajustarPost' : 'ajustarForm',
+        'traspasar' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'traspasarPost' : 'traspasarForm',
         'sync'     => 'syncPost',
         'carga_masiva' => 'cargaMasivaPost',
         'change-password' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'cambioClaveGuardar' : 'cambioClaveForm',
@@ -258,6 +263,8 @@ function isCsrfProtectedWebPost(string $method): bool
         'editarPost',
         'anularPost',
         'eliminarPost',
+        'ajustarPost',
+        'traspasarPost',
         'syncPost',
         'cargaMasivaPost',
         'cambioClaveGuardar',

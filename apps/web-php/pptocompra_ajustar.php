@@ -84,6 +84,29 @@ if (!empty($errorMessage)): ?>
     </form>
 </div>
 
-<?php require __DIR__ . '/partials/modal_confirm.php'; ?>
-<script src="assets/js/confirm-modal.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tipo = document.getElementById('pptocompratransacciontipoid');
+        const monto = document.getElementById('pptocompramonto');
+
+        if (!tipo || !monto) {
+            return;
+        }
+
+        tipo.addEventListener('change', function () {
+            const value = tipo.value || '';
+            monto.value = '';
+            monto.min = '0.01';
+        });
+
+        monto.addEventListener('input', function () {
+            if (!monto.value) {
+                return;
+            }
+            if (monto.value.indexOf('-') !== -1) {
+                monto.value = monto.value.replace('-', '');
+            }
+        });
+    });
+</script>
 <?php if (!$isPartial) { require 'footer.php'; } ?>

@@ -123,7 +123,8 @@
 | BC-30 | Presupuesto | Implementar `PptoCompraTransaccionesTipo` | A | Validado | BC-29 | BE + DB | Tipos codificados, no autoincrementales. | Movimientos codificados por semantica. |
 | BC-31 | Presupuesto | Calculo de saldos, consumos y reproyeccion | A | Validado | BC-27 a BC-30 | BE | Formula ya cerrada funcionalmente. | Reglas financieras consolidadas. |
 | BC-32 | Presupuesto | Ajustes manuales con motivo obligatorio | A | Validado | BC-29, BC-30 | BE + FE | Ajustes positivos/negativos son transacciones reales. | Operacion financiera controlada. |
-| BC-33 | Presupuesto | Traspasos salida/entrada enlazados | B | Pendiente | BC-29, BC-30 | BE | Queda como pendiente fino de operativa. | Cambio de presupuesto trazable. |
+| BC-33 | Presupuesto | Traspasos salida/entrada enlazados | B | Validado | BC-29, BC-30 | BE + FE | Implementado como transaccion atomica con salida/entrada y grupo comun. | Cambio de presupuesto trazable. |
+| BC-33B | Presupuesto | Carga masiva inicial por Excel | B | Pendiente | BC-27, BC-28, BC-31 | BE + FE | La pantalla pregunta temporada; el Excel debe traer Subfamilia Codigo, Centro Costo Codigo, Anio, Mes, Monto y Observacion Mes opcional. Debe mostrar analisis previo con total cargado, resumen por subfamilia, reporte por centro/subfamilia, detalle completo y modal de confirmacion por temporada. | Presupuestos base cargados masivamente con validacion previa. |
 | BC-34 | REQ | Validacion informativa contra saldo disponible | A | Validado | BC-27 a BC-31, BC-09, BC-14 | BE + FE | REQ no genera movimientos; solo valida. | REQ bloquea sobreconsumo sin generar movimientos. |
 | BC-35 | REQ | Snapshot del presupuesto validado | A | Pendiente | BC-34 | BE | Necesario para evidencia historica. | Evidencia historica de validacion. |
 | BC-36 | REQ | Bloqueo de item sin precio referencial | A | Pendiente | BC-10 | FE + BE | Si no hay precio, el item no entra al REQ. | REQ consistente con maestro de items. |

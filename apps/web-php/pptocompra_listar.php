@@ -23,7 +23,7 @@ $fmtDate = static function ($value): string {
     }
 };
 
-$fmtMoney = static function ($value, int $decimals = 2): string {
+$fmtMoney = static function ($value, int $decimals = 0): string {
     if (!is_numeric($value)) {
         return '0';
     }
@@ -51,20 +51,14 @@ $fmtMoney = static function ($value, int $decimals = 2): string {
         <div class="col-md-2">
             <input type="number" name="filtroPptocompraid" class="form-control" placeholder="ID Presupuesto" value="<?= htmlspecialchars($filtros['filtroPptocompraid'] ?? '') ?>">
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <select name="filtroTemporadaid" class="form-select">
                 <option value="">Temporada</option>
                 <?php foreach ($temporadas as $temporadaOpt): ?>
                     <option value="<?= htmlspecialchars($temporadaOpt['temporadaid'] ?? '') ?>" <?= ((string)($filtros['filtroTemporadaid'] ?? '') === (string)($temporadaOpt['temporadaid'] ?? '')) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars(($temporadaOpt['temporadacod'] ?? '') . ' - ' . ($temporadaOpt['temporadadescripcion'] ?? '')) ?>
+                        <?= htmlspecialchars(($temporadaOpt['temporadadescripcion'] ?? '') . ' (' . ($temporadaOpt['temporadatipocodigo'] ?? '') . ')') ?>
                     </option>
                 <?php endforeach; ?>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <select name="filtroTemporadatipo" class="form-select">
-                <option value="">Tipo Temporada</option>
-                <option value="PPTO_COMPRAS" <?= ($filtros['filtroTemporadatipo'] ?? '') === 'PPTO_COMPRAS' ? 'selected' : '' ?>>PPTO_COMPRAS</option>
             </select>
         </div>
         <div class="col-md-2">
@@ -72,7 +66,7 @@ $fmtMoney = static function ($value, int $decimals = 2): string {
                 <option value="">Subfamilia</option>
                 <?php foreach ($subfamilias as $subfamiliaOpt): ?>
                     <option value="<?= htmlspecialchars($subfamiliaOpt['subfamiliaid'] ?? '') ?>" <?= ((string)($filtros['filtroSubfamiliaid'] ?? '') === (string)($subfamiliaOpt['subfamiliaid'] ?? '')) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars(($subfamiliaOpt['subfamiliacod'] ?? '') . ' - ' . ($subfamiliaOpt['subfamiliadsc'] ?? '')) ?>
+                        <?= htmlspecialchars(($subfamiliaOpt['subfamiliadsc'] ?? '') . ' (' . ($subfamiliaOpt['subfamiliacod'] ?? '') . ')') ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -82,7 +76,7 @@ $fmtMoney = static function ($value, int $decimals = 2): string {
                 <option value="">Centro de Costo</option>
                 <?php foreach ($centroscosto as $centroOpt): ?>
                     <option value="<?= htmlspecialchars($centroOpt['centrocostoid'] ?? '') ?>" <?= ((string)($filtros['filtroCentrocostoid'] ?? '') === (string)($centroOpt['centrocostoid'] ?? '')) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars(($centroOpt['centrocostocod'] ?? '') . ' - ' . ($centroOpt['centrocostodsc'] ?? '')) ?>
+                        <?= htmlspecialchars(($centroOpt['centrocostodsc'] ?? '') . ' (' . ($centroOpt['centrocostocod'] ?? '') . ')') ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -118,56 +112,61 @@ $fmtMoney = static function ($value, int $decimals = 2): string {
                     <th class="text-end">Ajuste +</th>
                     <th class="text-end">Ajuste -</th>
                     <th class="text-end">Reproyectado</th>
-                    <th class="text-end">Consumo en curso</th>
-                    <th class="text-end">Consumo confirmado</th>
-                    <th class="text-end">Saldo disponible</th>
-                    <th class="text-end">Periodos</th>
-                    <th class="text-end">Estado</th>
-                    <th class="col-actions-lg">Acciones</th>
+                    <th class="text-end">Cons. curso</th>
+                    <th class="text-end">Cons. conf.</th>
+                    <th class="text-end">Disponible</th>
+                    <th class="text-end">Per.</th>
+                    <th>Estado</th>
+                    <th class="col-actions-sm text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($pptocompra)): ?>
-                    <tr><td colspan="13" class="text-center text-muted">No se encontraron registros</td></tr>
+                    <tr><td colspan="14" class="text-center text-muted">No se encontraron registros</td></tr>
                 <?php else: ?>
                     <?php foreach ($pptocompra as $row): ?>
                         <tr>
                             <td><?= htmlspecialchars($row['pptocompraid'] ?? '') ?></td>
                             <td>
-                                <?= htmlspecialchars(($row['temporadacod'] ?? '') . ' - ' . ($row['temporadadescripcion'] ?? '')) ?>
+                                <?= htmlspecialchars($row['temporadadescripcion'] ?? '') ?>
                                 <div class="small text-muted">
                                     <?= htmlspecialchars(($row['temporadatipocodigo'] ?? '') . ' | ' . ($row['temporadainicio'] ?? '') . ' a ' . ($row['temporadafin'] ?? '')) ?>
                                 </div>
                             </td>
                             <td>
-                                <?= htmlspecialchars(($row['subfamiliacod'] ?? '') . ' - ' . ($row['subfamiliadsc'] ?? '')) ?>
+                                <?= htmlspecialchars($row['subfamiliadsc'] ?? '') ?>
+                                <div class="small text-muted"><?= htmlspecialchars($row['subfamiliacod'] ?? '') ?></div>
                             </td>
                             <td>
-                                <?= htmlspecialchars(($row['centrocostocod'] ?? '') . ' - ' . ($row['centrocostodsc'] ?? '')) ?>
+                                <?= htmlspecialchars($row['centrocostodsc'] ?? '') ?>
+                                <div class="small text-muted"><?= htmlspecialchars($row['centrocostocod'] ?? '') ?></div>
                             </td>
-                            <td class="text-end"><?= htmlspecialchars($fmtMoney($row['presupuestado'] ?? 0, 2)) ?></td>
-                            <td class="text-end text-success">+<?= htmlspecialchars($fmtMoney($row['ajustespositivos'] ?? 0, 2)) ?></td>
-                            <td class="text-end text-danger">-<?= htmlspecialchars($fmtMoney($row['ajustesnegativos'] ?? 0, 2)) ?></td>
-                            <td class="text-end"><?= htmlspecialchars($fmtMoney($row['reproyectado'] ?? 0, 2)) ?></td>
-                            <td class="text-end"><?= htmlspecialchars($fmtMoney($row['consumosencurso'] ?? 0, 2)) ?></td>
-                            <td class="text-end"><?= htmlspecialchars($fmtMoney($row['consumosconfirmados'] ?? 0, 2)) ?></td>
-                            <td class="text-end"><?= htmlspecialchars($fmtMoney($row['saldodisponible'] ?? 0, 2)) ?></td>
+                            <td class="text-end"><?= htmlspecialchars($fmtMoney($row['presupuestado'] ?? 0)) ?></td>
+                            <td class="text-end text-success">+<?= htmlspecialchars($fmtMoney($row['ajustespositivos'] ?? 0)) ?></td>
+                            <td class="text-end text-danger"><?= htmlspecialchars($fmtMoney($row['ajustesnegativos'] ?? 0)) ?></td>
+                            <td class="text-end"><?= htmlspecialchars($fmtMoney($row['reproyectado'] ?? 0)) ?></td>
+                            <td class="text-end"><?= htmlspecialchars($fmtMoney($row['consumosencurso'] ?? 0)) ?></td>
+                            <td class="text-end"><?= htmlspecialchars($fmtMoney($row['consumosconfirmados'] ?? 0)) ?></td>
+                            <td class="text-end fw-semibold"><?= htmlspecialchars($fmtMoney($row['saldodisponible'] ?? 0)) ?></td>
                             <td class="text-end"><?= htmlspecialchars($row['total_periodos'] ?? 0) ?></td>
                             <td>
                                 <?= !empty($row['pptocompraactivo']) ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>' ?>
                             </td>
-                            <td>
-                                <a class="btn btn-primary btn-sm" href="?route=pptocompra/detalle&pptocompraid=<?= urlencode($row['pptocompraid'] ?? '') ?>">
-                                    <i class="bi bi-journal-text"></i> Detalle
+                            <td class="text-center text-nowrap">
+                                <a class="btn btn-outline-primary btn-sm" href="?route=pptocompra/detalle&pptocompraid=<?= urlencode($row['pptocompraid'] ?? '') ?>" title="Ver detalle" aria-label="Ver detalle" data-bs-toggle="tooltip">
+                                    <i class="bi bi-eye"></i>
                                 </a>
                                 <?php if (!empty($row['pptocompraactivo'])): ?>
-                                    <a class="btn btn-warning btn-sm" href="?route=pptocompra/editar&pptocompraid=<?= urlencode($row['pptocompraid'] ?? '') ?>">
-                                        <i class="bi bi-pencil-square"></i> Editar
+                                    <a class="btn btn-outline-success btn-sm" href="?route=pptocompra/ajustar&pptocompraid=<?= urlencode($row['pptocompraid'] ?? '') ?>" title="Ajustar presupuesto" aria-label="Ajustar presupuesto" data-bs-toggle="tooltip">
+                                        <i class="bi bi-sliders2"></i>
                                     </a>
-                                    <form action="?route=pptocompra/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Desea anular este presupuesto de compras?">
+                                    <a class="btn btn-outline-secondary btn-sm" href="?route=pptocompra/traspasar&pptocompraid=<?= urlencode($row['pptocompraid'] ?? '') ?>" title="Traspasar entre presupuestos" aria-label="Traspasar entre presupuestos" data-bs-toggle="tooltip">
+                                        <i class="bi bi-arrow-left-right"></i>
+                                    </a>
+                                    <form action="?route=pptocompra/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Desea cambiar este presupuesto a NO vigente?">
                                         <input type="hidden" name="pptocompraid" value="<?= htmlspecialchars($row['pptocompraid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="bi bi-x-circle"></i> Anular
+                                        <button type="submit" class="btn btn-outline-danger btn-sm" title="Cambiar a NO Vigente" aria-label="Cambiar a NO Vigente" data-bs-toggle="tooltip">
+                                            <i class="bi bi-slash-circle"></i>
                                         </button>
                                     </form>
                                 <?php endif; ?>
@@ -182,8 +181,6 @@ $fmtMoney = static function ($value, int $decimals = 2): string {
 
 <?php if (!$isPartial) { require 'footer.php'; } ?>
 
-<?php require __DIR__ . '/partials/modal_confirm.php'; ?>
-<script src="assets/js/confirm-modal.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('pptocompra-filter-form');
@@ -197,5 +194,9 @@ $fmtMoney = static function ($value, int $decimals = 2): string {
                 form.requestSubmit();
             });
         }
+
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+            new bootstrap.Tooltip(el);
+        });
     });
 </script>

@@ -16,13 +16,29 @@ class PptocompraService
 
     public function listarPptocompra(array $filtros, int $usuarioId, ?string $disp, ?string $ip): array
     {
+        $normalizeInt = static function ($value): ?int {
+            if ($value === null) {
+                return null;
+            }
+
+            $normalized = trim((string)$value);
+            if ($normalized === '') {
+                return null;
+            }
+
+            if (!preg_match('/^-?\\d+$/', $normalized)) {
+                return null;
+            }
+
+            return (int)$normalized;
+        };
+
         $dataJson = [
-            'filtroPptocompraid' => $filtros['filtroPptocompraid'] ?? null,
-            'filtroTemporadaid' => $filtros['filtroTemporadaid'] ?? null,
-            'filtroSubfamiliaid' => $filtros['filtroSubfamiliaid'] ?? null,
-            'filtroCentrocostoid' => $filtros['filtroCentrocostoid'] ?? null,
-            'filtroTemporadatipo' => $filtros['filtroTemporadatipo'] ?? null,
-            'filtroPptocompraactivo' => $filtros['filtroPptocompraactivo'] ?? null,
+            'filtroPptocompraid' => $normalizeInt($filtros['filtroPptocompraid'] ?? null),
+            'filtroTemporadaid' => $normalizeInt($filtros['filtroTemporadaid'] ?? null),
+            'filtroSubfamiliaid' => $normalizeInt($filtros['filtroSubfamiliaid'] ?? null),
+            'filtroCentrocostoid' => $normalizeInt($filtros['filtroCentrocostoid'] ?? null),
+            'filtroPptocompraactivo' => $normalizeInt($filtros['filtroPptocompraactivo'] ?? null),
         ];
 
         return $this->db->callSpQuery(
@@ -45,6 +61,20 @@ class PptocompraService
 
         $rows = $result['rows'] ?? [];
         return $rows[0] ?? null;
+    }
+
+    public function listarPptocompraDestinoTraspaso(int $pptocompraidOrigen, int $usuarioId, ?string $disp, ?string $ip): array
+    {
+        $result = $this->listarPptocompra(
+            ['filtroPptocompraactivo' => 1],
+            $usuarioId,
+            $disp,
+            $ip
+        );
+
+        return array_values(array_filter($result['rows'] ?? [], static function (array $row) use ($pptocompraidOrigen): bool {
+            return (int)($row['pptocompraid'] ?? 0) !== $pptocompraidOrigen;
+        }));
     }
 
     public function listarPptocompraMensual(int $pptocompraid, int $usuarioId, ?string $disp, ?string $ip): array
@@ -76,9 +106,25 @@ class PptocompraService
         return $result['rows'] ?? [];
     }
 
+    public function listarPptocompraMovimientosConSaldos(int $pptocompraid, ?string $filtroTipo, int $usuarioId, ?string $disp, ?string $ip): array
+    {
+        $result = $this->db->callSpQuery(
+            'sp_pptocompra_movimientos_listar_calculos',
+            [
+                'filtroPptocompraid' => $pptocompraid,
+                'filtroTipo' => $filtroTipo,
+            ],
+            $usuarioId,
+            $disp,
+            $ip
+        );
+
+        return $result['rows'] ?? [];
+    }
+
     public function listarTemporadasCompras(int $activo = 1): array
     {
-        $sql = 'SELECT temporadaid, temporadatipocodigo, temporadacod, temporadadescripcion, temporadainicio, temporadafin
+        $sql = 'SELECT temporadaid, temporadatipocodigo, temporadadescripcion, temporadainicio, temporadafin
                 FROM temporadas
                 WHERE temporadatipocodigo = "PPTO_COMPRAS"';
 
@@ -160,6 +206,17 @@ class PptocompraService
     {
         return $this->db->callSpMaint(
             'sp_pptocompra_ajustar',
+            $data,
+            $usuarioId,
+            $disp,
+            $ip
+        );
+    }
+
+    public function traspasarPptocompra(array $data, int $usuarioId, ?string $disp, ?string $ip): array
+    {
+        return $this->db->callSpMaint(
+            'sp_pptocompra_traspasar',
             $data,
             $usuarioId,
             $disp,

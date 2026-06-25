@@ -53,6 +53,17 @@ if ($empresaNombre === '' && $empresaId > 0) {
     <link rel="stylesheet" href="assets/css/layout.css">
 </head>
 <body>
+<script>
+    (function () {
+        try {
+            if (localStorage.getItem('pdh_sidebar_collapsed') === '1') {
+                document.body.classList.add('sidebar-collapsed');
+            }
+        } catch (e) {
+            // Storage can be unavailable in restricted browser modes.
+        }
+    })();
+</script>
 <header class="navbar navbar-dark bg-dark app-header">
     <div class="container-fluid d-flex align-items-center">
         <div class="d-flex align-items-center gap-2">

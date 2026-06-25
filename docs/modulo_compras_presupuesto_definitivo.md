@@ -159,6 +159,25 @@ La PreOC valida contra el saldo disponible operativo del presupuesto segun:
 - No se puede editar si ya existen movimientos.
 - Si no existen movimientos, puede corregirse la carga inicial.
 
+#### 5.1.1 Carga masiva inicial por Excel
+
+- La carga masiva queda pendiente de implementacion.
+- La pantalla debe solicitar solo la temporada `PPTO_COMPRAS`.
+- El archivo Excel debe traer, desde la segunda fila, las columnas:
+  - `Subfamilia Codigo`
+  - `Centro Costo Codigo`
+  - `Anio`
+  - `Mes`
+  - `Monto`
+  - `Observacion Mes` (opcional)
+- Antes de confirmar la grabacion, la pantalla debe mostrar un analisis previo:
+  - tarjeta con total cargado,
+  - grilla resumen por subfamilia, sin meses y con linea final Total,
+  - reporte agrupado por centro de costo con detalle por subfamilia y total temporada, sin meses,
+  - boton `Ver Detalle` con todo lo leido desde el Excel.
+- Las grillas de analisis pueden mostrarse en contenedores colapsables/drill-down, inicialmente colapsados.
+- Al confirmar, debe mostrarse modal de confirmacion incluyendo la temporada seleccionada, por ejemplo: `Confirma cargar estos datos a la Temporada <seleccion>?`.
+
 ### 5.2 Ajustes
 
 - Requieren motivo obligatorio.
@@ -219,4 +238,3 @@ La PreOC valida contra el saldo disponible operativo del presupuesto segun:
 - Edicion de PreOC despues de la primera aprobacion.
 - Lineas confirmadas que se borren en vez de revertirse.
 - Catalogos de transaccion numericos sin semantica funcional.
-
