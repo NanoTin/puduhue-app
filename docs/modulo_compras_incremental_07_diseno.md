@@ -73,9 +73,11 @@ Regla funcional:
 
 - `usuarioreqautorizadorfuerapptocompraorden` debe ser unico entre usuarios con `usuarioreqautorizadorfuerapptocompra = 1`.
 
-Pendiente tecnico:
+Decision tecnica del primer corte:
 
-- MariaDB puede requerir una columna generada o indice funcional para expresar unicidad condicional. Si no se implementa a nivel DDL en el primer corte, debe validarse en SP/BE.
+- No se implementa unicidad condicional con columna generada ni indice funcional en el primer DDL.
+- Se mantiene indice normal para consulta.
+- La unicidad del orden se valida en SP/BE.
 
 ### 3.3 SP afectados despues del DDL
 
@@ -111,13 +113,14 @@ Definir los centros de costo que un usuario puede usar al crear REQ y permitir u
 | `uq_usuarioscentroscosto_usuario_centro` | `usuarioid`, `centrocostoid` | Evitar duplicados. |
 | `idx_usuarioscentroscosto_usuario` | `usuarioid`, `usucenactivo` | Resolver centros de un usuario. |
 | `idx_usuarioscentroscosto_centro` | `centrocostoid`, `usucenactivo` | Consulta inversa. |
-| default unico | `usuarioid` cuando `usucendefault = 1` y activo | Solo un default activo por usuario. |
+| default unico | Validacion SP/BE sobre `usuarioid` cuando `usucendefault = 1` y activo | Solo un default activo por usuario. |
 
 Reglas:
 
 - Si se marca un centro como default, los demas centros del mismo usuario quedan `usucendefault = 0`.
 - Si el usuario no tiene centros activos, crear REQ debe bloquear con mensaje: "No tiene centro(s) asignado(s). Informar a Administracion."
 - No se elimina la asociacion; se inactiva.
+- No se implementa unicidad condicional con columna generada ni indice funcional en el primer DDL; se valida en SP/BE.
 
 ### 4.4 Log
 
@@ -414,7 +417,7 @@ Checklist:
 - Confirmar nombres finales de tablas `erpproveedores*` y `erpcondicionespago*`.
 - Confirmar si los logs de tablas espejo guardan request completo, solo payload normalizado o ambos.
 - Confirmar estrategia si proveedor referencia condicion de pago no sincronizada.
-- Confirmar si `usuarioscentroscosto` default unico se hara con columna generada o validacion SP/BE.
+- Validar en SP/BE la unicidad del centro default por usuario y del orden de autorizadores fuera de presupuesto.
 
 ## 13. Fuera de alcance del incremental 07
 

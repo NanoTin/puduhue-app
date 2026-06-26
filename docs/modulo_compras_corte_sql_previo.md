@@ -73,6 +73,7 @@ Reglas esperadas:
 - el orden de autorizadores fuera de presupuesto debe ser unico cuando `usuarioreqautorizadorfuerapptocompra = 1`;
 - usuarios inactivos no deben servir para nuevas listas de firmantes;
 - el filtro comprador de PreOC debe listar usuarios compradores aunque esten inactivos, para busqueda historica.
+- En el primer corte, la unicidad condicional del orden se valida en SP/BE, no con indice funcional.
 
 Pendiente tecnico:
 
@@ -97,6 +98,7 @@ Reglas esperadas:
 - se permite asociar, inactivar y reactivar;
 - si cambia el default, el resto queda en `FALSE`;
 - si el usuario creador de REQ no tiene centros activos, debe bloquear la creacion con mensaje a Administracion.
+- En el primer corte, la unicidad condicional del centro default se valida en SP/BE, no con indice funcional.
 
 ### 4.3 Funcionarios
 
