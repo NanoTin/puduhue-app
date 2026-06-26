@@ -82,7 +82,7 @@ ALTER TABLE `pptocompra`
   ADD COLUMN IF NOT EXISTS `pptocompraajustenegativos` decimal(18,2) NOT NULL DEFAULT 0 COMMENT 'Suma de montos PPTO_AJUSTE_NEG (valor normalmente negativo)' AFTER `pptocompraajustespositivos`,
   ADD COLUMN IF NOT EXISTS `pptocompreproyectado` decimal(18,2) NOT NULL DEFAULT 0 COMMENT 'Presupuesto reproyectado' AFTER `pptocompraajustenegativos`,
   ADD COLUMN IF NOT EXISTS `pptocompramontoconsumidopnd` decimal(18,2) NOT NULL DEFAULT 0 COMMENT 'Suma consumos pendientes (POC_RESERVA)' AFTER `pptocompreproyectado`,
-  ADD COLUMN IF NOT EXISTS `pptocompramontoconsumidocnf` decimal(18,2) NOT NULL DEFAULT 0 COMMENT 'Monto consumido confirmado (POC_CONFIRMACION + POC_REVERSA, positivo)' AFTER `pptocompramontoconsumidopnd`,
+  ADD COLUMN IF NOT EXISTS `pptocompramontoconsumidocnf` decimal(18,2) NOT NULL DEFAULT 0 COMMENT 'Suma neta de consumos confirmados y reversas' AFTER `pptocompramontoconsumidopnd`,
   ADD COLUMN IF NOT EXISTS `pptocomprasaldodisponible` decimal(18,2) NOT NULL DEFAULT 0 COMMENT 'Saldo disponible calculado' AFTER `pptocompramontoconsumidocnf`;
 
 ALTER TABLE `pptocompratransacciones`
@@ -169,8 +169,8 @@ LEFT JOIN (
         SUM(CASE WHEN tr.pptocompratransacciontipoid = 'PPTO_AJUSTE_POS' THEN tr.pptocompramonto ELSE 0 END) AS ajuste_pos,
         SUM(CASE WHEN tr.pptocompratransacciontipoid = 'PPTO_AJUSTE_NEG' THEN tr.pptocompramonto ELSE 0 END) AS ajuste_neg,
         SUM(CASE WHEN tr.pptocompratransacciontipoid IN ('PPTO_TRASPASO_ENTRADA', 'PPTO_TRASPASO_SALIDA') THEN tr.pptocompramonto ELSE 0 END) AS traspasos,
-        SUM(CASE WHEN tr.pptocompratransacciontipoid = 'POC_RESERVA' THEN tr.pptocompramontoencurso ELSE 0 END) AS consumo_pnd,
-        SUM(CASE WHEN tr.pptocompratransacciontipoid IN ('POC_CONFIRMACION', 'POC_REVERSA') THEN tr.pptocompramontoconfirmado ELSE 0 END) AS consumo_cnf
+        SUM(COALESCE(tr.pptocompramontoencurso, 0)) AS consumo_pnd,
+        SUM(COALESCE(tr.pptocompramontoconfirmado, 0)) AS consumo_cnf
     FROM `pptocompratransacciones` tr
     GROUP BY tr.pptocompraid
 ) a ON a.pptocompraid = pc.pptocompraid

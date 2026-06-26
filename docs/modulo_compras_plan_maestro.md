@@ -34,6 +34,13 @@
 - Reversas se guardan en positivo.
 - La reserva PreOC se genera al pasar de `BRR` a `PND`, no al guardar borrador.
 - Una linea provisional de PreOC solo puede eliminarse sin reversa si la PreOC sigue en curso y no tiene aprobaciones.
+- Si una PreOC vuelve de `PND` a `BRR` antes de aprobaciones, se borran las reservas provisionales asociadas; no se genera reversa.
+- Las transacciones presupuestarias de PreOC se registran agrupadas por presupuesto afectado, usando `preocpptoresumen` como referencia operativa.
+- Para movimientos PreOC en `pptocompratransacciones`: `pptocompramoduloorigen = 'PREOC'`, `pptocompranrodocumentoorigen = preocid` y `pptocomprareflinea = 'PREOCPPTORESUMEN:<preocpptoresumenid>'`.
+- Cada envio de PreOC a aprobacion debe abrir un ciclo presupuestario nuevo identificado en `pptocompregruppomovimiento`, por ejemplo `PREOC:<preocid>:CICLO:<n>`.
+- La idempotencia de movimientos PreOC se valida por tipo de transaccion, modulo origen, documento origen, presupuesto, referencia de resumen y ciclo; si existe movimiento con el mismo monto se considera OK idempotente, si existe con monto distinto es conflicto.
+- El recalculo de `pptocompra` debe tomar el libro `pptocompratransacciones` como fuente oficial; `pptocompramensual` queda como fuente de carga inicial/base mensual mientras no se defina otra estructura.
+- Los SP del incremental 11 no deben contener transacciones internas; `SELECT ... FOR UPDATE` se usa bajo la transaccion abierta por PHP.
 - Cuando existe al menos una aprobacion, la PreOC deja de ser editable.
 
 ### 2.2 REQ
@@ -51,6 +58,10 @@
 - Funcionario es opcional.
 - Items con precio cero no se pueden agregar al REQ.
 - Al aprobar completamente se crean lineas en `reqaprobados`.
+- `EDT` solo nace desde `PND` cuando el usuario creador entra a editar un REQ pendiente.
+- Para analisis presupuestario informativo, "otros REQ pendientes/en edicion" corresponde a REQ vigentes en estado `PND` o `EDT`, excluyendo el REQ actual.
+- Para REQ en `EDT`, la salida normal debe ser explicita: guardar/reenviar o cancelar edicion.
+- Si el usuario abandona navegador, vuelve atras o pierde conexion mientras esta en `EDT`, el backend debe permitir retomar o liberar la edicion con una regla controlada; no depender solo del aviso del navegador.
 
 ### 2.3 Pendientes de compra
 
@@ -79,6 +90,75 @@
 - El workflow de compra es fijo, no maestro.
 - Moneda operativa vigente: CLP / `PES`.
 - Tipo ERP: Material `OC`, Servicio `OCSS`.
+- PreOC debe tener adjuntos/archivos; se requiere al menos un adjunto obligatorio antes de enviar a aprobacion.
+- La obligatoriedad de adjuntos PreOC se valida al pasar `BRR` a `PND`; no bloquea guardar borrador.
+- Adjuntos PreOC debe soportar inicialmente PDF, imagenes, MSG y KMZ.
+- El tipo de adjunto no debe ser digitado por el usuario; debe resolverse por extension/MIME desde una configuracion reutilizable de tipos permitidos por modulo.
+- Adjuntos PreOC se almacenan como archivo fisico y metadata en BD; no se guardan como BLOB.
+- Si se elimina un adjunto permitido por estado, se elimina fisicamente el archivo y la fila de metadata; el LOG de PreOC debe registrar que se elimino el archivo.
+- La descripcion del adjunto debe ser obligatoria, corta, y sirve como base para generar el nombre fisico del archivo.
+- El nombre fisico de adjuntos debe normalizarse a ASCII: sin acentos, sin `ñ`, sin espacios, sin caracteres especiales peligrosos; los espacios se reemplazan por `_` y se agrega sufijo unico para evitar duplicados.
+- El nombre/descripcion original se conserva como metadata visible.
+
+#### 2.4.1 Contrato preliminar adjuntos PreOC
+
+Tabla propuesta: `preocadjuntos`.
+
+Columnas acordadas:
+
+- `preocadjuntoid`: PK autoincremental.
+- `preocid`: FK a cabecera PreOC.
+- `preocadjuntolinea`: orden visual/secuencial dentro de la PreOC.
+- `preocadjuntotipoid`: FK/codigo autocalculado por la logica desde el archivo seleccionado; debe existir en el maestro de extensiones/tipos permitidos y no lo informa el usuario.
+- `preocadjuntodescripcion`: descripcion obligatoria, corta, ingresada por usuario.
+- `preocadjuntonombreoriginal`: nombre original recibido desde el navegador.
+- `preocadjuntonombrearchivo`: nombre fisico generado desde descripcion normalizada ASCII + sufijo unico + extension.
+- `preocadjuntoextension`: extension normalizada en minusculas.
+- `preocadjuntomime`: MIME detectado cuando `finfo` este disponible.
+- `preocadjuntotamano`: tamano en bytes.
+- `preocadjuntoruta`: ruta relativa dentro del almacenamiento de uploads.
+- `auditcreacion*`: auditoria estandar.
+
+Columnas descartadas:
+
+- `preocadjuntoobligatorio`: no aplica; la obligatoriedad es regla al enviar `BRR -> PND`.
+- `preocadjuntovig`: no aplica; el borrado permitido elimina archivo fisico y fila de metadata, dejando evidencia en LOG PreOC.
+
+Reglas propuestas:
+
+- Minimo 1 adjunto al enviar `BRR -> PND`.
+- No exigir adjunto para guardar borrador.
+- Tamaño maximo recomendado: 10 MB por archivo y 50 MB total por PreOC.
+- Tipos/extensiones/MIME permitidos deben salir de un maestro reutilizable por modulo.
+- Extensiones iniciales para PreOC: PDF, imagenes, MSG y KMZ.
+
+#### 2.4.2 Contrato preliminar maestro de extensiones
+
+Tablas propuestas sin autoincremental:
+
+`archivoextensionestipos`
+
+- `archivoextensiontipoid`: codigo unico, por ejemplo `PDF`, `IMG_JPG`, `MSG`, `KMZ`.
+- `archivoextension`: extension normalizada en minusculas, sin punto.
+- `archivoextensionmime`: MIME permitido principal.
+- `archivoextensiondsc`: descripcion visible/tecnica.
+- `archivoextensionactivo`: estado del tipo.
+- `auditcreacion*` y `auditedicion*`: auditoria estandar.
+
+`archivoextensionestiposmodulos`
+
+- `archivoextensiontipoid`: FK/codigo del tipo de extension.
+- `archivomodulocod`: codigo de modulo, inicialmente `REQ`, `PREOC`, `RET_LECHE`.
+- `archivoextensionmoduloactivo`: estado de permiso por modulo.
+- `auditcreacion*` y `auditedicion*`: auditoria estandar.
+
+Reglas:
+
+- La PK de `archivoextensionestipos` es `archivoextensiontipoid`.
+- La PK de `archivoextensionestiposmodulos` es compuesta: `archivoextensiontipoid + archivomodulocod`.
+- Un modulo solo permite adjuntos cuyo tipo este activo en ambas tablas.
+- Para PreOC, `preocadjuntotipoid` se autocalcula validando extension/MIME contra este maestro.
+- `RET_LECHE` debe quedar preparado para imagenes, reemplazando en futuro la validacion local fija de `retiroleche`.
 
 ### 2.5 Bases compartidas
 
@@ -100,7 +180,7 @@
 | 08 | `database/alter_table/08_modulo_compras_req.sql` | Creado. DDL REQ base. Pendiente revalidar tras cambio de PK de estados por codigo. |
 | 09 | `database/alter_table/09_modulo_compras_req_pendientes.sql` | Creado. Pendientes de compra (`reqaprobados*`). Pendiente revalidar tras recreacion. |
 | 10 | `database/alter_table/10_modulo_compras_preoc.sql` | Creado. DDL PreOC. Pendiente revalidar tras correccion MariaDB en FK finales. |
-| 11 | `database/alter_table/11_modulo_compras_presupuesto_sp.sql` | Creado como placeholder/contrato pendiente. Sin SQL ejecutable por ahora. |
+| 11 | `database/alter_table/11_modulo_compras_presupuesto_sp.sql` | SP presupuestarios implementados segun contrato tecnico cerrado. Pendiente validar en MariaDB local. |
 
 ### 3.1 Auditoria aplicada
 
@@ -116,7 +196,7 @@
 - 08: pendiente revalidar tras cambio de PK por codigo.
 - 09: pendiente revalidar tras recreacion.
 - 10: pendiente revalidar tras correccion MariaDB.
-- 11: sin SQL ejecutable por ahora.
+- 11: SP implementados. Pendiente validar sintaxis/ejecucion en MariaDB local.
 
 ## 4. Secuencia recomendada
 
@@ -126,8 +206,7 @@
 2. Ejecutar/revalidar incremental 08.
 3. Ejecutar/revalidar incremental 09.
 4. Ejecutar/revalidar incremental 10.
-5. Definir contrato tecnico del incremental 11.
-6. Implementar incremental 11 solo despues de cerrar parametros, salidas, referencias y efectos presupuestarios.
+5. Validar incremental 11 segun contrato tecnico cerrado en la seccion 4.2.1.
 
 ### 4.2 Backend y SP
 
@@ -154,13 +233,43 @@
    - reserva `POC_RESERVA`,
    - confirmacion `POC_CONFIRMACION`,
    - reversa `POC_REVERSA`,
-   - liberacion al volver de `PND` a `BRR` sin aprobaciones,
+   - borrado de reserva provisional al volver de `PND` a `BRR` sin aprobaciones,
    - recalculo de saldos.
 8. Preparar integracion ERP PreOC aprobada:
    - POST ERP,
    - manejo de `SNC`/`ERR`,
    - reintento,
    - error visible.
+
+### 4.2.1 Contrato tecnico SP incremental 11
+
+Todos los SP deben usar la firma estandar del proyecto:
+
+`p_in_json`, `p_in_usuarioid`, `p_in_dispositivo`, `p_in_ip`, `p_out_json`.
+
+Los SP de mantenimiento no deben contener `BEGIN`, `COMMIT` ni `ROLLBACK`; la transaccion la controla PHP con `callSpMaint()`.
+
+| SP | Objetivo | Parametros JSON | Salida | Tablas afectadas |
+|---|---|---|---|---|
+| `sp_compras_ppto_resolver` | Resolver presupuesto por fecha, subfamilia y centro. | `fecha`, `subfamiliaid`, `centrocostoid` | `SELECT` con `temporadaid`, `pptocompraid`, saldo y firmantes; `p_out_json` solo meta/error. | Solo lectura: `temporadas`, `pptocompra`, `usuarios` si resuelve firmantes. |
+| `sp_compras_req_ppto_analizar` | Analizar presupuesto informativo de REQ sin bloquear ni mover presupuesto. | `reqcompraid` | `SELECT` por grupo presupuestario; `p_out_json` solo meta/error. | Solo lectura: `reqcompras`, `reqcomprasdetalle`, `reqaprobados`, `pptocompra`. |
+| `sp_compras_req_ppto_snapshot_actualizar` | Recalcular y guardar snapshot REQ agrupado por subfamilia y centro. | `reqcompraid` | JSON con `status`, `advertencia`, `fuerapptocompra`, `grupos`. | Escribe `reqcompraspptosnapshot`; actualiza flags en `reqcompras` y `reqcomprasdetalle`. |
+| `sp_compras_preoc_ppto_reservar` | Validar saldo bloqueante y crear `POC_RESERVA` negativa al pasar `BRR -> PND`. | `preocid` | JSON con reservas, saldos antes/despues y error si falta saldo. | Inserta `pptocompratransacciones`; actualiza `preocpptoresumen`; recalcula `pptocompra`. |
+| `sp_compras_preoc_ppto_confirmar` | Confirmar reserva al aprobar PreOC. | `preocid` | JSON con confirmaciones. | Inserta `POC_CONFIRMACION`; recalcula `pptocompra`; actualiza `preocpptoresumen`. |
+| `sp_compras_preoc_ppto_revertir` | Revertir por rechazo/anulacion cuando corresponda. | `preocid`, `motivo`, `evento` (`RCH`/`ANL`) | JSON con reversas. | Inserta `POC_REVERSA` positiva; recalcula `pptocompra`; actualiza `preocpptoresumen`. |
+| `sp_compras_preoc_ppto_borrar_reserva_provisional` | Borrar reservas provisionales si vuelve de `PND` a `BRR` sin aprobaciones. | `preocid`, `motivo` opcional | JSON con reservas borradas. | Borra movimientos `POC_RESERVA` provisionales del ciclo vigente; actualiza `preocpptoresumen`; recalcula `pptocompra`; registra LOG PreOC desde el flujo que invoca. |
+| `sp_compras_ppto_recalcular_totales` | Recalcular cabecera `pptocompra` desde el libro oficial de movimientos. | `pptocompraid` o `null` para varios | JSON con presupuestos recalculados. | Wrapper con firma estandar; actualiza `pptocompra`; suma impactos netos desde `pptocompratransacciones` y usa `pptocompramensual` como base inicial/mensual. |
+
+Reglas transversales:
+
+- REQ no genera movimientos presupuestarios.
+- PreOC es el unico flujo que compromete presupuesto.
+- Las reservas/consumos se registran negativos; las reversas se registran positivas.
+- Los movimientos PreOC se registran agrupados por `preocpptoresumenid`.
+- `pptocomprareflinea = 'PREOCPPTORESUMEN:<preocpptoresumenid>'`.
+- Cada envio a aprobacion abre un ciclo presupuestario nuevo en `pptocompregruppomovimiento`, por ejemplo `PREOC:<preocid>:CICLO:<n>`.
+- La idempotencia valida tipo, modulo, documento, presupuesto, referencia y ciclo.
+- La validacion de saldo PreOC usa `SELECT ... FOR UPDATE` dentro de la transaccion abierta por PHP.
 
 ### 4.3 Frontend
 
@@ -223,11 +332,12 @@
 
 ## 6. Pendientes criticos
 
-- Definir contrato tecnico del incremental 11.
+- Validar sintaxis/ejecucion del incremental 11 en MariaDB local.
+- Definir contrato tecnico/DDL de adjuntos PreOC y maestro reutilizable de tipos/extensiones/MIME permitidos.
 - Validar sintaxis final de 08, 09 y 10 en MariaDB local.
 - Confirmar estrategia de recreacion/migracion si ya existen tablas de 08/09 en BD local.
 - Actualizar logs y SP existentes para nuevas columnas de usuarios, presupuesto e items.
-- Definir SP/servicios de reserva, confirmacion, reversa y recalculo presupuestario.
+- Integrar desde backend los SP/servicios de reserva, confirmacion, reversa y recalculo presupuestario.
 - Confirmar campos obligatorios definitivos del POST ERP de PreOC.
 - Confirmar conceptos/impuestos activos requeridos por Finnegans.
 - Confirmar comportamiento esperado de `NumeroComprobante`.
@@ -241,6 +351,7 @@
 - `preocitemsdimensiones` esta definido por req-item origen; queda pendiente confirmar campos obligatorios finales con Finnegans.
 - `imptoid`/conceptos de impuestos aun dependen de confirmacion tecnica de Finnegans.
 - Responsable y administrador de `pptocompra` son obligatorios funcionalmente, pero entran nullable en el primer DDL para permitir backfill.
+- Falta llevar a DDL/seed el maestro de extensiones/MIME permitidos para adjuntos por modulo.
 
 ## 8. Criterio para usar Spark
 
@@ -293,13 +404,13 @@ Estados sugeridos:
 | CMP-023 | SQL 10 | Ajustar estados PreOC para usar codigo como PK | Cerrado | Maestro `preocestados` por codigo |
 | CMP-024 | SQL 10 | Ajustar FK finales PreOC para MariaDB sin `ADD CONSTRAINT IF NOT EXISTS` | Cerrado | Requiere revalidacion local |
 | CMP-025 | SQL 10 | Revalidar incremental 10 en MariaDB local | Pendiente | Revalidar tras correccion MariaDB |
-| CMP-026 | SQL 11 | Crear placeholder/contrato pendiente de incremental 11 | Cerrado | `database/alter_table/11_modulo_compras_presupuesto_sp.sql` |
-| CMP-027 | SQL 11 | Definir contrato tecnico de SP presupuestarios | Pendiente | No inventar SP sin contrato cerrado |
-| CMP-028 | SQL 11 | Implementar reserva `POC_RESERVA` | Pendiente | Depende de CMP-027 |
-| CMP-029 | SQL 11 | Implementar confirmacion `POC_CONFIRMACION` | Pendiente | Depende de CMP-027 |
-| CMP-030 | SQL 11 | Implementar reversa `POC_REVERSA` | Pendiente | Depende de CMP-027 |
-| CMP-031 | SQL 11 | Implementar liberacion de reserva al volver `PND` a `BRR` sin aprobaciones | Pendiente | Depende de CMP-027 |
-| CMP-032 | SQL 11 | Implementar recalculo operacional de saldos `pptocompra` | Pendiente | Depende de CMP-027 |
+| CMP-026 | SQL 11 | Crear incremental 11 | Cerrado | `database/alter_table/11_modulo_compras_presupuesto_sp.sql`; contrato tecnico cerrado e implementado |
+| CMP-027 | SQL 11 | Definir contrato tecnico de SP presupuestarios | Cerrado | Contrato tecnico cerrado en seccion 4.2.1 y sincronizado con `database/alter_table/11_modulo_compras_presupuesto_sp.sql` |
+| CMP-028 | SQL 11 | Implementar reserva `POC_RESERVA` | Cerrado | Implementado en `sp_compras_preoc_ppto_reservar`; pendiente validacion MariaDB |
+| CMP-029 | SQL 11 | Implementar confirmacion `POC_CONFIRMACION` | Cerrado | Implementado en `sp_compras_preoc_ppto_confirmar`; pendiente validacion MariaDB |
+| CMP-030 | SQL 11 | Implementar reversa `POC_REVERSA` | Cerrado | Implementado en `sp_compras_preoc_ppto_revertir`; pendiente validacion MariaDB |
+| CMP-031 | SQL 11 | Implementar borrado de reserva provisional al volver `PND` a `BRR` sin aprobaciones | Cerrado | Implementado en `sp_compras_preoc_ppto_borrar_reserva_provisional`; decision vigente: borrar reservas, sin reversa; pendiente validacion MariaDB |
+| CMP-032 | SQL 11 | Implementar recalculo operacional de saldos `pptocompra` | Cerrado | Implementado en `sp_compras_ppto_recalcular_totales`; criterio alineado con `sp_pptocompra_recalcular_totales`; pendiente validacion MariaDB |
 | CMP-033 | Migracion | Confirmar estrategia si tablas 08/09 ya existen en BD local | Pendiente | Puede requerir recreacion controlada o migracion |
 | CMP-034 | Backend/SP | Actualizar SP de usuarios por permisos de Compras | Pendiente | Incluye logs y columnas nuevas |
 | CMP-035 | Backend/SP | Actualizar SP de presupuesto de compra por firmantes default PreOC | Pendiente | Responsable, administrador y colaborador |
@@ -314,7 +425,9 @@ Estados sugeridos:
 | CMP-044 | ERP | Confirmar contrato POST ERP PreOC | Bloqueado | Requiere confirmar campos obligatorios, impuestos/conceptos y `NumeroComprobante` |
 | CMP-045 | ERP | Implementar sincronizacion ERP/tracking PreOC | Pendiente | Depende de CMP-044 y flujo PreOC |
 | CMP-046 | Spark | Preparar prompts cerrados para tareas delegables | Pendiente | Solo despues de cerrar objetivo, archivos permitidos/prohibidos y fuentes |
+| CMP-047 | SQL/PreOC | Definir DDL y contrato de adjuntos PreOC obligatorios | Pendiente | Contrato preliminar documentado; falta llevar a DDL y seed del maestro extension/MIME por modulo |
+| CMP-048 | UX/REQ | Definir recuperacion de REQ en estado `EDT` por abandono de navegador | Cerrado | `EDT` solo nace desde `PND`; contar `PND` y `EDT` en analisis informativo; salida normal con guardar/reenviar o cancelar; backend debe permitir retomar/liberar edicion |
 
 ## 10. Cierre operativo
 
-El siguiente paso recomendado es revalidar SQL localmente en orden 07, 08, 09 y 10. Despues de eso, cerrar el contrato tecnico de 11 antes de avanzar a SP funcionales, backend o pantallas.
+El siguiente paso recomendado es revalidar SQL localmente en orden 07, 08, 09, 10 y 11. Despues de eso, avanzar a integracion backend de REQ/PreOC y a la definicion DDL de adjuntos.

@@ -358,7 +358,7 @@ Crear o ajustar SP/servicios para:
 - reservar PreOC al pasar de `BRR` a `PND`;
 - confirmar reserva al aprobar;
 - revertir por rechazo/anulacion;
-- liberar reserva si vuelve de `PND` a `BRR` antes de aprobaciones;
+- borrar reserva provisional si vuelve de `PND` a `BRR` antes de aprobaciones;
 - recalcular totales de `pptocompra`;
 - registrar referencias de origen con modulo, documento y linea.
 

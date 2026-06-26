@@ -129,8 +129,8 @@ sp_main: BEGIN
             SUM(CASE WHEN tr.pptocompratransacciontipoid = 'PPTO_AJUSTE_POS' THEN tr.pptocompramonto ELSE 0 END) AS ajuste_pos,
             SUM(CASE WHEN tr.pptocompratransacciontipoid = 'PPTO_AJUSTE_NEG' THEN tr.pptocompramonto ELSE 0 END) AS ajuste_neg,
             SUM(CASE WHEN tr.pptocompratransacciontipoid IN ('PPTO_TRASPASO_ENTRADA', 'PPTO_TRASPASO_SALIDA') THEN tr.pptocompramonto ELSE 0 END) AS traspasos,
-            SUM(CASE WHEN tr.pptocompratransacciontipoid = 'POC_RESERVA' THEN COALESCE(tr.pptocompramontoencurso, 0) ELSE 0 END) AS consumo_encurso,
-            SUM(CASE WHEN tr.pptocompratransacciontipoid IN ('POC_CONFIRMACION', 'POC_REVERSA') THEN COALESCE(tr.pptocompramontoconfirmado, 0) ELSE 0 END) AS consumo_confirmado
+            SUM(COALESCE(tr.pptocompramontoencurso, 0)) AS consumo_encurso,
+            SUM(COALESCE(tr.pptocompramontoconfirmado, 0)) AS consumo_confirmado
         FROM `pptocompratransacciones` tr
         GROUP BY tr.pptocompraid
     ) a ON a.pptocompraid = pc.pptocompraid
@@ -215,8 +215,8 @@ sp_main: BEGIN
         IFNULL(SUM(CASE WHEN `pptocompratransacciontipoid` = 'PPTO_AJUSTE_POS' THEN `pptocompramonto` ELSE 0 END), 0),
         IFNULL(SUM(CASE WHEN `pptocompratransacciontipoid` = 'PPTO_AJUSTE_NEG' THEN `pptocompramonto` ELSE 0 END), 0),
         IFNULL(SUM(CASE WHEN `pptocompratransacciontipoid` IN ('PPTO_TRASPASO_ENTRADA', 'PPTO_TRASPASO_SALIDA') THEN `pptocompramonto` ELSE 0 END), 0),
-        IFNULL(SUM(CASE WHEN `pptocompratransacciontipoid` = 'POC_RESERVA' THEN `pptocompramontoencurso` ELSE 0 END), 0),
-        IFNULL(SUM(CASE WHEN `pptocompratransacciontipoid` IN ('POC_CONFIRMACION', 'POC_REVERSA') THEN `pptocompramontoconfirmado` ELSE 0 END), 0)
+        IFNULL(SUM(COALESCE(`pptocompramontoencurso`, 0)), 0),
+        IFNULL(SUM(COALESCE(`pptocompramontoconfirmado`, 0)), 0)
       INTO
         v_pptocompraajustespositivos,
         v_pptocompraajustenegativos,
@@ -801,7 +801,6 @@ sp_main: BEGIN
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        ROLLBACK;
         SET p_out_json = JSON_OBJECT('status', 500, 'message', 'Error al actualizar presupuesto de compras.');
     END;
 
@@ -914,8 +913,6 @@ sp_main: BEGIN
     WHERE pc.pptocompraid = v_pptocompraid
     LIMIT 1;
 
-    START TRANSACTION;
-
     UPDATE `pptocompra`
       SET `temporadaid` = v_temporadaid,
           `subfamiliaid` = v_subfamiliaid,
@@ -982,8 +979,6 @@ sp_main: BEGIN
 
     INSERT INTO `pptocompralog` (`pptocompraid`, `logusuarioid`, `logdispositivo`, `logip`, `logtipo`, `logparamjson`, `logregbkpjson`)
     VALUES (v_pptocompraid, p_in_usuarioid, p_in_dispositivo, p_in_ip, 'EDT', p_in_json, v_prev_bkpjson);
-
-    COMMIT;
 
     SET p_out_json = JSON_OBJECT('status', 200, 'message', 'Presupuesto actualizado correctamente.');
 END//
@@ -1186,7 +1181,6 @@ sp_main: BEGIN
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        ROLLBACK;
         SET p_out_json = JSON_OBJECT('status', 500, 'message', 'Error al registrar traspaso de presupuesto.');
     END;
 
@@ -1257,8 +1251,6 @@ sp_main: BEGIN
         LEAVE sp_main;
     END IF;
 
-    START TRANSACTION;
-
     SELECT IFNULL(pc.pptocomprasaldodisponible, 0)
       INTO v_saldoOrigen
       FROM `pptocompra` pc
@@ -1274,7 +1266,6 @@ sp_main: BEGIN
      FOR UPDATE;
 
     IF v_saldoOrigen < v_monto THEN
-        ROLLBACK;
         SET p_out_json = JSON_OBJECT('status', 400, 'message', 'El presupuesto origen no tiene saldo disponible suficiente.');
         LEAVE sp_main;
     END IF;
@@ -1307,7 +1298,7 @@ sp_main: BEGIN
         v_ppoanio,
         v_ppomes,
         'PPTO_TRASPASO_SALIDA',
-        CURDATE(),
+        v_fechaPeriodo,
         -ABS(v_monto),
         0,
         0,
@@ -1347,7 +1338,7 @@ sp_main: BEGIN
         v_ppoanio,
         v_ppomes,
         'PPTO_TRASPASO_ENTRADA',
-        CURDATE(),
+        v_fechaPeriodo,
         ABS(v_monto),
         0,
         0,
@@ -1365,8 +1356,6 @@ sp_main: BEGIN
 
     CALL sp_pptocompra_recalcular_totales(v_pptocompraid_origen);
     CALL sp_pptocompra_recalcular_totales(v_pptocompraid_destino);
-
-    COMMIT;
 
     SET p_out_json = JSON_OBJECT('status', 200, 'message', 'Traspaso registrado correctamente.');
 END//
