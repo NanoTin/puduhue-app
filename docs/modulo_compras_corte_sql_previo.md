@@ -11,6 +11,9 @@
 > - `docs/modulo_compras_presupuesto_definitivo.md`
 > - `docs/modulo_compras_plan_bases_compartidas.md`
 > - `docs/modulo_compras_backlog_bases_compartidas.md`
+>
+> Diseno detallado del primer incremental:
+> - `docs/modulo_compras_incremental_07_diseno.md`
 
 ## 1. Objetivo
 
@@ -45,6 +48,8 @@ El corte busca:
 | `11_modulo_compras_presupuesto_sp.sql` | SP/servicios de reserva, confirmacion, reversa y recalculo operacional | Estados PreOC y saldos |
 
 Los nombres son propuestos. Antes de crear archivos reales, deben revisarse contra la secuencia vigente en `database/alter_table`.
+
+El detalle funcional/tecnico del incremental 07 queda desarrollado en `docs/modulo_compras_incremental_07_diseno.md`.
 
 ## 4. Incremental 07 - Bases compartidas
 
@@ -99,7 +104,7 @@ Crear maestro propio. No deberia existir actualmente una tabla equivalente.
 
 Columnas funcionales minimas:
 
-- Rut como PK funcional, validado y con formato definido;
+- Rut como PK funcional, sin puntos, con guion y digito verificador;
 - nombre,
 - estado,
 - `funcencos`,
@@ -152,6 +157,9 @@ Reglas esperadas:
 - todos deben ser usuarios activos con permiso de aprobacion PreOC;
 - colaborador puede repetir con responsable/administrador;
 - la lista final de firmantes PreOC debe deduplicar usuarios.
+- En el primer incremental las columnas se crean `NULL` para permitir carga/backfill de datos existentes.
+- BE/FE deben validar obligatoriedad funcional antes de crear/enviar presupuestos que se usen para PreOC.
+- Luego de poblar datos se podra evaluar un incremental posterior para endurecer a `NOT NULL`.
 
 Pendiente tecnico:
 
