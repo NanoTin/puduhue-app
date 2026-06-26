@@ -23,6 +23,9 @@
 > - `database/tables/01_table_erpmonedas.sql`
 > - `database/alter_table/05_modulo_compras_bases.sql`
 > - `database/sp/02_sp_pptocompra.sql`
+>
+> Documento siguiente recomendado:
+> - `docs/modulo_compras_corte_sql_previo.md`
 
 ## 1. Resumen ejecutivo
 
@@ -285,3 +288,5 @@ Orden sugerido:
 6. Revalidar SP existentes para incluir columnas nuevas en listar/crear/editar/log.
 
 No se recomienda iniciar pantallas o endpoints REQ/PreOC hasta cerrar, como minimo, el punto 1 y el DDL base de REQ.
+
+El detalle del orden propuesto por incrementales queda desarrollado en `docs/modulo_compras_corte_sql_previo.md`.
