@@ -4,7 +4,7 @@ Incremental 11 - SP y reglas presupuestarias para Compras.
 Estado:
 - SP presupuestarios implementados segun contrato tecnico cerrado en
   `docs/modulo_compras_plan_maestro.md`, seccion 4.2.1;
-- pendiente validar sintaxis/ejecucion en MariaDB local.
+- validado manualmente en MariaDB local: OK.
 
 Este archivo queda sin DDL de bases compartidas por diseno:
 - el incremental 07 crea/ajusta usuarios, items, pptocompra, usuarios-centros,
