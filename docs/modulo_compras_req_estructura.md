@@ -62,7 +62,7 @@
 | Columna | Tipo logico | NULL | Descripcion / regla |
 |---|---|---|---|
 | `reqcompraid` | INT PK AI | NO | PK interna |
-| `reqcompracod` | VARCHAR(20) | NO | Codigo visible, por ejemplo `REQ-000001` |
+| `reqcompracod` | VARCHAR(20) | NO | Codigo visible `REQ-00000001`: prefijo `REQ-` + `reqcompraid` con `LPAD` a 8 digitos |
 | `reqcompratipo` | TINYINT | NO | 1=Material, 2=Servicio; nunca mixto |
 | `reqcomprafecha` | DATE | NO | Fecha funcional definida por sistema/BD; se actualiza en cada edicion permitida |
 | `centrocostoid` | INT FK | NO | Centro elegido desde `usuarioscentroscosto` |
@@ -84,6 +84,7 @@ Notas:
 - `empresaid` no se resuelve desde el centro de costo ERP. El ERP usa una sola base de centros para todas las empresas; una separacion por empresa quedaria como dato local futuro si el cliente lo solicita.
 - Si el usuario no tiene centros asignados, no puede crear REQ y se informa: "No tiene centro(s) asignado(s). Informar a Administracion."
 - Si el usuario tiene varios centros, puede elegir cualquiera activo entre sus centros asignados.
+- `reqcompracod` es global, no editable por usuario, no reciclable y no cambia aunque el REQ se anule. Lo genera `sp_compras_req_crear` despues de obtener `reqcompraid`.
 
 ## 3. `reqcomprasdetalle` - Detalle de items
 

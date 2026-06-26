@@ -73,16 +73,16 @@ Cuando el analisis presupuestario del REQ detecta falta de saldo en una o mas co
 
 Estos autorizadores se resuelven desde usuarios activos con:
 
-- `reqautorizadorfuerapptocompra = 1`,
-- `reqautorizadorfuerapptocompraorden > 0`.
+- `usuarioreqautorizadorfuerapptocompra = 1`,
+- `usuarioreqautorizadorfuerapptocompraorden > 0`.
 
-El orden debe ser unico entre usuarios con `reqautorizadorfuerapptocompra = 1`. Para el resto de usuarios, el orden queda en `0`.
+El orden debe ser unico entre usuarios con `usuarioreqautorizadorfuerapptocompra = 1`. Para el resto de usuarios, el orden queda en `0`.
 
 Reglas:
 
 - Se agregan una sola vez, aunque existan varios presupuestos sin saldo.
 - Si un usuario ya estaba en la lista por otro motivo, se mantiene una sola fila y se marca tambien su motivo fuera de presupuesto.
-- Si no estaba en la lista, se agrega internamente al final, ordenado por `reqautorizadorfuerapptocompraorden`.
+- Si no estaba en la lista, se agrega internamente al final, ordenado por `usuarioreqautorizadorfuerapptocompraorden`.
 - Es firmante default, no removible.
 - No puede reordenarse por el usuario.
 - Si existe un firmante fuera de presupuesto al final de la grilla, sus botones subir/bajar quedan bloqueados y el firmante inmediatamente anterior no puede bajar para quedar despues de el.
