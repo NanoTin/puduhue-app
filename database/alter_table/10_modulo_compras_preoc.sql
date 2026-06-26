@@ -10,7 +10,6 @@ Incluye:
 */
 
 CREATE TABLE IF NOT EXISTS `preocestados` (
-  `preocestadoid` int(11) NOT NULL AUTO_INCREMENT,
   `preocestadocod` varchar(20) NOT NULL,
   `preocestadosigla` varchar(20) NOT NULL,
   `preocestadodsc` varchar(100) NOT NULL,
@@ -23,8 +22,7 @@ CREATE TABLE IF NOT EXISTS `preocestados` (
   `auditediciondispositivo` varchar(100) NULL DEFAULT NULL COMMENT 'Dispositivo nombre',
   `auditedicionip` varchar(50) NULL DEFAULT NULL COMMENT 'IP del PC',
   `auditedicionfechahora` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha hora de UPD',
-  PRIMARY KEY (`preocestadoid`),
-  UNIQUE KEY `uq_preocestados_cod` (`preocestadocod`),
+  PRIMARY KEY (`preocestadocod`),
   KEY `idx_preocestados_activo` (`preocestadoactivo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -46,7 +44,6 @@ ON DUPLICATE KEY UPDATE
   `auditedicionfechahora` = NOW();
 
 CREATE TABLE IF NOT EXISTS `preocestadoserp` (
-  `preocestadoerpid` int(11) NOT NULL AUTO_INCREMENT,
   `preocestadoercod` varchar(20) NOT NULL,
   `preocestadodsc` varchar(100) NOT NULL,
   `preocestadoeractivo` tinyint(1) NOT NULL DEFAULT 1,
@@ -58,8 +55,7 @@ CREATE TABLE IF NOT EXISTS `preocestadoserp` (
   `auditediciondispositivo` varchar(100) NULL DEFAULT NULL COMMENT 'Dispositivo nombre',
   `auditedicionip` varchar(50) NULL DEFAULT NULL COMMENT 'IP del PC',
   `auditedicionfechahora` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha hora de UPD',
-  PRIMARY KEY (`preocestadoerpid`),
-  UNIQUE KEY `uq_preocestadoserp_cod` (`preocestadoercod`),
+  PRIMARY KEY (`preocestadoercod`),
   KEY `idx_preocestadoserp_activo` (`preocestadoeractivo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -91,8 +87,8 @@ CREATE TABLE IF NOT EXISTS `preoc` (
   `preocobsinterna` text NULL DEFAULT NULL,
   `preocobsoc` text NULL DEFAULT NULL,
   `preocprioridad` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1=Normal, 2=Alta',
-  `preocestadoid` int(11) NOT NULL,
-  `preocestadoerpid` int(11) NULL DEFAULT NULL,
+  `preocestadoid` varchar(20) NOT NULL,
+  `preocestadoerpid` varchar(20) NULL DEFAULT NULL,
   `preocaprobadoridpnd` int(11) NULL DEFAULT NULL,
   `preocaprobacionfecha` date NULL DEFAULT NULL,
   `preocnettotal` decimal(15,2) NOT NULL DEFAULT 0.00,
@@ -130,9 +126,9 @@ CREATE TABLE IF NOT EXISTS `preoc` (
   CONSTRAINT `fk_preoc_condicionpago`
     FOREIGN KEY (`erpcondicionpagoid`) REFERENCES `erpcondicionespago` (`erpcondicionpagoid`) ON DELETE SET NULL,
   CONSTRAINT `fk_preoc_estado`
-    FOREIGN KEY (`preocestadoid`) REFERENCES `preocestados` (`preocestadoid`),
+    FOREIGN KEY (`preocestadoid`) REFERENCES `preocestados` (`preocestadocod`),
   CONSTRAINT `fk_preoc_estadoerp`
-    FOREIGN KEY (`preocestadoerpid`) REFERENCES `preocestadoserp` (`preocestadoerpid`),
+    FOREIGN KEY (`preocestadoerpid`) REFERENCES `preocestadoserp` (`preocestadoercod`),
   CONSTRAINT `fk_preoc_aprobadorpnd`
     FOREIGN KEY (`preocaprobadoridpnd`) REFERENCES `usuarios` (`usuarioid`),
   CONSTRAINT `chk_preoc_tipo`
@@ -435,7 +431,9 @@ CREATE TABLE IF NOT EXISTS `preocaprobadoresxmonto` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 ALTER TABLE `reqaprobadoshistorial`
-  ADD CONSTRAINT IF NOT EXISTS `fk_reqaprobadoshistorial_preoc`
-    FOREIGN KEY (`preocid`) REFERENCES `preoc` (`preocid`) ON DELETE SET NULL,
-  ADD CONSTRAINT IF NOT EXISTS `fk_reqaprobadoshistorial_preocdetreqitem`
+  ADD CONSTRAINT `fk_reqaprobadoshistorial_preoc`
+    FOREIGN KEY (`preocid`) REFERENCES `preoc` (`preocid`) ON DELETE SET NULL;
+
+ALTER TABLE `reqaprobadoshistorial`
+  ADD CONSTRAINT `fk_reqaprobadoshistorial_preocdetreqitem`
     FOREIGN KEY (`preocdetid`) REFERENCES `preocdetallereqitems` (`preocdetreqitemid`) ON DELETE SET NULL;

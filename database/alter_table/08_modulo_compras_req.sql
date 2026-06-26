@@ -16,7 +16,6 @@ No incluye:
 */
 
 CREATE TABLE IF NOT EXISTS `reqcomprasestados` (
-  `reqcomprasestadoid` int(11) NOT NULL AUTO_INCREMENT,
   `reqcomprasestadocod` varchar(20) NOT NULL,
   `reqcomprasestadosigla` varchar(20) NOT NULL,
   `reqcomprasestadodsc` varchar(100) NOT NULL,
@@ -29,8 +28,7 @@ CREATE TABLE IF NOT EXISTS `reqcomprasestados` (
   `auditediciondispositivo` varchar(100) NULL DEFAULT NULL COMMENT 'Dispositivo nombre',
   `auditedicionip` varchar(50) NULL DEFAULT NULL COMMENT 'IP del PC',
   `auditedicionfechahora` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha hora de UPD',
-  PRIMARY KEY (`reqcomprasestadoid`),
-  UNIQUE KEY `uq_reqcomprasestados_cod` (`reqcomprasestadocod`),
+  PRIMARY KEY (`reqcomprasestadocod`),
   KEY `idx_reqcomprasestados_activo` (`reqcomprasestadoactivo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -53,7 +51,6 @@ ON DUPLICATE KEY UPDATE
   `auditedicionfechahora` = NOW();
 
 CREATE TABLE IF NOT EXISTS `reqcompraestadopreoc` (
-  `reqcompraestadopreocid` int(11) NOT NULL AUTO_INCREMENT,
   `reqcompraestadopreoccod` varchar(20) NOT NULL,
   `reqcompraestadopreocdsc` varchar(100) NOT NULL,
   `reqcompraestadopreocactivo` tinyint(1) NOT NULL DEFAULT 1,
@@ -65,8 +62,7 @@ CREATE TABLE IF NOT EXISTS `reqcompraestadopreoc` (
   `auditediciondispositivo` varchar(100) NULL DEFAULT NULL COMMENT 'Dispositivo nombre',
   `auditedicionip` varchar(50) NULL DEFAULT NULL COMMENT 'IP del PC',
   `auditedicionfechahora` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha hora de UPD',
-  PRIMARY KEY (`reqcompraestadopreocid`),
-  UNIQUE KEY `uq_reqcompraestadopreoc_cod` (`reqcompraestadopreoccod`),
+  PRIMARY KEY (`reqcompraestadopreoccod`),
   KEY `idx_reqcompraestadopreoc_activo` (`reqcompraestadopreocactivo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -92,8 +88,8 @@ CREATE TABLE IF NOT EXISTS `reqcompras` (
   `funcionariorut` varchar(12) NULL DEFAULT NULL,
   `reqcompraobs` text NULL DEFAULT NULL,
   `reqcompraprioridad` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1=Normal, 2=Alta',
-  `reqcompraestadoid` int(11) NOT NULL,
-  `reqcompraestadopreocid` int(11) NULL DEFAULT NULL,
+  `reqcompraestadoid` varchar(20) NOT NULL,
+  `reqcompraestadopreocid` varchar(20) NULL DEFAULT NULL,
   `reqaprobadoridpnd` int(11) NULL DEFAULT NULL,
   `reqaprobacionfecha` date NULL DEFAULT NULL,
   `reqadvertenciapptocompra` tinyint(1) NOT NULL DEFAULT 0,
@@ -122,9 +118,9 @@ CREATE TABLE IF NOT EXISTS `reqcompras` (
   CONSTRAINT `fk_reqcompras_funcionario`
     FOREIGN KEY (`funcionariorut`) REFERENCES `funcionarios` (`funcionariorut`) ON DELETE SET NULL,
   CONSTRAINT `fk_reqcompras_estado`
-    FOREIGN KEY (`reqcompraestadoid`) REFERENCES `reqcomprasestados` (`reqcomprasestadoid`),
+    FOREIGN KEY (`reqcompraestadoid`) REFERENCES `reqcomprasestados` (`reqcomprasestadocod`),
   CONSTRAINT `fk_reqcompras_estadopreoc`
-    FOREIGN KEY (`reqcompraestadopreocid`) REFERENCES `reqcompraestadopreoc` (`reqcompraestadopreocid`),
+    FOREIGN KEY (`reqcompraestadopreocid`) REFERENCES `reqcompraestadopreoc` (`reqcompraestadopreoccod`),
   CONSTRAINT `fk_reqcompras_aprobadorpnd`
     FOREIGN KEY (`reqaprobadoridpnd`) REFERENCES `usuarios` (`usuarioid`),
   CONSTRAINT `chk_reqcompras_tipo`
