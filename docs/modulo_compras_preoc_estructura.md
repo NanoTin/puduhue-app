@@ -1,557 +1,583 @@
-# Módulo PreOC (Pre Orden de Compra) — Estructura de Datos v1
+# Modulo PreOC (Pre Orden de Compra) - Estructura de Datos v2
 
-> [!NOTE]
-> Diseño detallado de tablas para el módulo de Pre Orden de Compra (PreOC).
-> En Finnegans: "Orden de Compra". En Puduhue App: "Pre OC" o "POC".
+> Diseno funcional y logico vigente para Pre Orden de Compra.
 >
-> Convenciones aplicadas del proyecto:
-> - PK: `<tabla>id` INT AUTO_INCREMENT.
-> - Baja lógica: `<tabla>vig` TINYINT(1).
-> - Auditoría: 8 columnas estándar (4 creación + 4 edición). Ver README §7.1.
-> - LOG: tabla separada `<tabla>log` con `logid`, `logtipo`, `logparamjson`, `logregbkpjson`. Ver README §7.2.
-
-### Decisiones confirmadas
-
-| # | Decisión | Resolución |
-|---|----------|------------|
-| 1 | ¿Quién crea la Pre OC? | ✅ Las secretarias (compradores). Atributo `comprador = 1` en `usuarios` |
-| 2 | Consolidación de REQ | ✅ Una POC puede consolidar múltiples REQs aprobados |
-| 3 | Compra parcial | ✅ Se puede comprar parte de un REQ; el saldo queda disponible para otra POC |
-| 4 | Sin cotizaciones | ✅ Flujo directo: REQ Aprobado → Pre OC. Sin módulo de cotizaciones |
-| 5 | Fecha de la Pre OC | ✅ Fecha de creación automática. No editable por el comprador |
-| 6 | Moneda | ✅ Solo CLP (`MonedaCodigo: "PES"`) |
-| 7 | Tipo en ERP | ✅ Material = `TransaccionSubtipoCodigo: "OC"` / Servicio = `"OCSS"` |
-| 8 | Campo Descripcion ítem ERP | ✅ Se usa para identificar el Centro de Costo de cada línea en pantalla ERP |
-| 9 | Cambio de ítem | ✅ El comprador puede cambiar un ítem desde "Pendientes de Compra" (no desde la POC) |
-| 10 | Aprobación por monto | ✅ Tabla de reglas por monto neto → agrega aprobadores automáticos a la lista |
-| 11 | Orden de firmantes | ✅ Drag & drop o flechas. Último paso antes de grabar. El aprobador puede existir solo una vez |
-| 12 | Validación presupuestaria | ✅ Bloqueante. No puede avanzar si no hay saldo |
-| 13 | Acceso al presupuesto | ✅ Solo Gerencia de Adm. y Finanzas crea/edita. Compradores solo consultan reporte |
-| 14 | Vista por defecto comprador | ✅ Muestra solo sus POC. Puede limpiar filtro para ver las de otros |
-
----
-
-## 1. Tablas Nuevas — Resumen
-
-| Tabla                           | Tipo           | Descripción                                                          |
-|---------------------------------|----------------|----------------------------------------------------------------------|
-| `preoc`                         | Transaccional  | Cabecera de la Pre Orden de Compra                                   |
-| `preocdetalle`                  | Transaccional  | Detalle (ítems) de la Pre OC                                         |
-| `preocfirmantes`                | Transaccional  | Lista de firmantes/aprobadores por POC                               |
-| `preoclog`                      | LOG            | Registro de acciones (INS/UPD/ANL/APR/RCH/CSO/ERP)                  |
-| `preocestados`                  | Maestro        | Catálogo de estados para Pre OC                                      |
-| `preocaprobadoresxmonto`        | Maestro        | Reglas de aprobadores automáticos según monto neto de la POC         |
-| `pptocompra`                    | Maestro        | Presupuesto de compra (encabezado: clasificación / sub / presupuesto)|
-| `pptocompramovimientos`         | Transaccional  | Kardex de movimientos del presupuesto                                |
-
-### Tablas existentes a modificar / relacionar
-
-| Tabla              | Cambio / Relación                                                      |
-|--------------------|------------------------------------------------------------------------|
-| `reqaprobados`     | `preocid` FK ya contemplado. Estado se actualiza al vincular a POC     |
-| `reqaprobadoshistorial` | `preocid` y `preocdetid` FK → ya contemplados en la estructura REQ |
-
-### Maestros ERP requeridos (definidos en `modulo_compras_maestros_erp.md`)
-
-| Tabla                         | Descripción                                        |
-|-------------------------------|----------------------------------------------------|
-| `centroscosto`                | Centros de costo (ya en req_estructura.md)         |
-| `erpdimensiones`              | Dimensiones ERP (DIMPARFIN, DIMCTC, DIMBU)         |
-| `erpdimensionvalores`         | Valores por dimensión (código de partida financiera)|
-| `erpcategoriasfiscales`       | Categorías fiscales de proveedores                 |
-| `erpcatfiscalconceptos`       | Conceptos / impuestos por categoría fiscal         |
-| `proveedores`                 | Maestro de proveedores (espejo ERP)                |
-| `condicionespago`             | Condiciones de pago (espejo ERP)                   |
-| `erpmonedas`                  | Monedas (espejo ERP; por defecto CLP = `PES`)      |
-| `erpworkflows`                | Workflows de compra (ej. `CPRA-INS-SERV`)          |
-| `erpprovinciasdestino`        | Provincias / establecimientos destino              |
-| `erpcuentas`                  | Plan de cuentas contables (referencia, no se envía en POST) |
-
----
-
-## 2. `preoc` — Cabecera de la Pre Orden de Compra
-
-| Columna                        | Tipo           | NULL | Default   | Descripción / Notas                                                                   |
-|--------------------------------|----------------|------|-----------|---------------------------------------------------------------------------------------|
-| `preocid`                      | INT PK AI      | NO   |           | PK interna                                                                            |
-| `preocdoc`                     | VARCHAR(20)    | NO   |           | Código visible: `POC-000001`. Autogenerado, UNIQUE                                    |
-| `empresaid`                    | INT FK         | NO   |           | FK → `empresas`                                                                       |
-| `preoctipo`                    | TINYINT        | NO   |           | 1=Material (`OC`), 2=Servicio (`OCSS`). Determinado por el tipo de los REQ vinculados|
-| `preocfecha`                   | DATE           | NO   | CURDATE() | Fecha de creación. **No editable**. Fijada por SP al insertar                        |
-| `proveedorid`                  | INT FK         | NO   |           | FK → `proveedores`. RUT en ERP: `Proveedor`                                           |
-| `condicionpagoid`              | INT FK         | SÍ   | NULL      | FK → `condicionespago`. Pre-cargado desde ficha del proveedor, editable por comprador |
-| `erpworkflowid`                | INT FK         | NO   |           | FK → `erpworkflows`. Workflow de compra (ej. `CPRA-INS-SERV`)                        |
-| `erpmonedaid`                  | INT FK         | NO   |           | FK → `erpmonedas`. Por default CLP (`PES`). Fijado automáticamente                   |
-| `erpprovinciaid`               | INT FK         | SÍ   | NULL      | FK → `erpprovinciasdestino`. Provincia/establecimiento destino global de la POC       |
-| `pptocompraid`                 | INT FK         | SÍ   | NULL      | FK → `pptocompra`. Presupuesto seleccionado por el comprador (activo, con saldo)     |
-| `preocobs`                     | TEXT           | SÍ   | NULL      | Observaciones generales de la Pre OC                                                  |
-| `preocestadoid`                | INT FK         | NO   |           | FK → `preocestados`                                                                   |
-| `preocaprobadorpendienteid`    | INT FK         | SÍ   | NULL      | FK → `usuarios`. Siguiente firmante. NULL cuando BRR/APR/RCH/ANL                    |
-| `preocnettotal`                | DECIMAL(15,2)  | NO   | 0.00      | Suma total neto del detalle (recalculado por SP)                                      |
-| `preociva`                     | DECIMAL(15,2)  | NO   | 0.00      | IVA calculado (desde conceptos del proveedor). Recalculado por SP                     |
-| `preoctotal`                   | DECIMAL(15,2)  | NO   | 0.00      | Total con impuestos. Recalculado por SP                                               |
-| `erptransaccionid`             | VARCHAR(50)    | SÍ   | NULL      | ID de la transacción generada en Finnegans (post integración)                        |
-| `erpnumerodoc`                 | VARCHAR(50)    | SÍ   | NULL      | Número de documento ERP (`NumeroComprobante`) asignado por Finnegans                 |
-| `erpenviofechahora`            | DATETIME       | SÍ   | NULL      | Fecha/hora de envío al ERP                                                            |
-| `erprespuestajson`             | JSON           | SÍ   | NULL      | Respuesta completa del ERP al POST (para debugging y trazabilidad)                    |
-| `preocvig`                     | TINYINT(1)     | NO   | 1         | 1=vigente, 0=anulado                                                                  |
-| + 8 columnas de auditoría      |                |      |           | Estándar del proyecto                                                                 |
-
-**Índices:**
-- `PK (preocid)`
-- `UNIQUE (preocdoc)`
-- `FK → empresas`, `FK → proveedores`, `FK → condicionespago`, `FK → erpworkflows`, `FK → erpmonedas`, `FK → erpprovinciasdestino` (nullable), `FK → pptocompra`, `FK → preocestados`, `FK → usuarios` (nullable)
-
----
-
-## 3. `preocdetalle` — Detalle (Ítems)
-
-| Columna                        | Tipo           | NULL | Default | Descripción / Notas                                                               |
-|--------------------------------|----------------|------|---------|-----------------------------------------------------------------------------------|
-| `preocdetid`                   | INT PK AI      | NO   |         | PK interna                                                                        |
-| `preocid`                      | INT FK         | NO   |         | FK → `preoc`                                                                      |
-| `reqaprobadoid`                | INT FK         | NO   |         | FK → `reqaprobados`. Línea del REQ aprobado origen                                |
-| `preocdetlinea`                | INT            | NO   |         | Nro de línea (1, 2, 3...)                                                         |
-| `invitemid`                    | INT FK         | NO   |         | FK → `invitems`. Producto (puede diferir del REQ original si el comprador lo cambió)|
-| `centrocostoid`                | INT FK         | NO   |         | FK → `centroscosto`. Centro de costo de la línea                                  |
-| `erpprovinciaid`               | INT FK         | SÍ   | NULL    | FK → `erpprovinciasdestino`. Puede heredarse de la cabecera o definirse por línea |
-| `erpdimparfincod`              | VARCHAR(50)    | SÍ   | NULL    | Código `DIMPARFIN` para esta línea (partida financiera ERP). ❓ Pendiente definir   |
-| `preocdetdsc`                  | VARCHAR(200)   | NO   |         | Descripción del producto (de `invitems`)                                          |
-| `preocdetdsccc`                | VARCHAR(200)   | NO   |         | Descripción para ERP: se mapea al campo `Descripcion` del item = nombre del CC    |
-| `invunidmedid`                 | INT FK         | NO   |         | FK → `invunidadesmedidas`                                                         |
-| `preocdetcantidad`             | DECIMAL(15,4)  | NO   |         | Cantidad a comprar (≤ `reqaprobados.reqaprobadocantidadpendiente`)                |
-| `preocdetprecioneto`           | DECIMAL(15,2)  | NO   | 0.00    | Precio neto unitario                                                              |
-| `preocdetsubtotalneto`         | DECIMAL(15,2)  | NO   | 0.00    | CALC: `cantidad × precioneto`                                                     |
-| `preocdetobs`                  | TEXT           | SÍ   | NULL    | Observación por línea (opcional)                                                  |
-
-**Reglas:**
-- Al crear cada línea de la POC, se descuenta `reqaprobados.reqaprobadocantidadpendiente`.
-- Si la cantidad de la POC = `reqaprobadocantidadpendiente` → estado `Completa`.
-- Si la cantidad de la POC < `reqaprobadocantidadpendiente` → estado `Parcial`.
-- El campo `preocdetdsccc` se construye con el nombre del CC para enviarlo al ERP como `Descripcion` de cada ítem.
-- El campo `erpdimparfincod` es el código de partida financiera para `DIMPARFIN`. ❓ **Pendiente definir cómo se obtiene.**
-- El campo `erpprovinciaid` puede heredarse de la cabecera (`preoc.erpprovinciaid`) o definirse por línea si difiere.
-
----
-
-## 4. `preocfirmantes` — Lista de Aprobadores
-
-| Columna                        | Tipo           | NULL | Default | Descripción / Notas                                                                |
-|--------------------------------|----------------|------|---------|------------------------------------------------------------------------------------|
-| `preocfirmanteid`              | INT PK AI      | NO   |         | PK interna                                                                         |
-| `preocid`                      | INT FK         | NO   |         | FK → `preoc`                                                                       |
-| `firmanteusuarioid`            | INT FK         | NO   |         | FK → `usuarios`                                                                    |
-| `firmantetipo`                 | TINYINT        | NO   |         | 1=Responsable Ppto, 2=Administrador Ppto, 3=Colaborador Ppto, 4=Por Monto, 5=Manual|
-| `firmanteorden`                | INT            | NO   |         | Orden de firma. Editable por el comprador antes de grabar (drag & drop / flechas) |
-| `firmanteestado`               | TINYINT        | NO   | 0       | 0=Pendiente, 1=Aprobado, 2=Rechazado, 3=Cambios solicitados                       |
-| `firmanteobs`                  | TEXT           | SÍ   | NULL    | Motivo de rechazo o comentario                                                     |
-| `firmantefechahora`            | DATETIME       | SÍ   | NULL    | Fecha/hora de firma. NULL si pendiente                                             |
-
-**Constraint**: `UNIQUE (preocid, firmanteusuarioid)` — Un aprobador puede existir **solo una vez** en la lista.
-
-### Lógica de generación de firmantes
-
-Al completar los datos de la Pre OC (antes de grabar), el SP genera automáticamente la lista de firmantes en este orden por defecto:
-
-```
-1. Responsable del Presupuesto  (firmantetipo = 1)
-2. Administrador del Presupuesto (firmantetipo = 2)
-3. Colaborador del Presupuesto  (firmantetipo = 3)
-4. Aprobadores por Monto        (firmantetipo = 4) — solo si preocnettotal > umbral
-5. Aprobadores Manuales         (firmantetipo = 5) — agregados por el comprador
-```
-
-**Deduplicación**: Si el mismo usuario aparece en más de un rol (ej. Responsable y Administrador son la misma persona), se agrega **una sola vez** con el tipo/orden del primer rol donde aparece.
-
-**Edición de orden**: El comprador puede modificar el orden antes de grabar mediante drag & drop o flechas en cada fila. La lista se muestra como **último paso** en el formulario de creación de la Pre OC.
-
-**Al enviar (BRR → PND):**
-- `preocaprobadorpendienteid` = firmante con `firmanteorden = 1`.
-- Se notifica al primer firmante.
-
-**Al aprobar firmante N:**
-- Si hay N+1 → `preocaprobadorpendienteid = firmante[N+1]`.
-- Si era el último → `preocaprobadorpendienteid = NULL`, estado → `APR`.
-- Se actualiza el presupuesto: movimiento de "En proceso" → "Aprobada".
-- Se inicia integración con Finnegans.
-
-**Al rechazar / Cambios solicitados:**
-- `preocaprobadorpendienteid = NULL`.
-- El presupuesto devuelve el importe reservado (movimiento positivo de devolución).
-
----
-
-## 5. Flujo de Estados
-
-```
-               ┌──────────── CREAR ──────────────────────┐
-               ▼                                         │
-          ┌─────────┐       Enviar       ┌─────────────┐ │
-          │   BRR   │ ─────────────────► │     PND     │ │
-          │Borrador │                    │  Pendiente  │ │
-          └────┬────┘                    └──┬──┬──┬────┘ │
-               │                           │  │  │      │
-               │ Anular                    │  │  │      │
-               ▼                           │  │  │      │
-          ┌─────────┐                      │  │  │      │
-          │   ANL   │ ◄────────────────────┘  │  │      │
-          │ Anulada │                         │  │      │
-          └─────────┘                         │  │      │
-                                              │  │      │
-          ┌──────────────── Último APR ───────┘  │      │
-          ▼                                      │      │
-     ┌─────────┐    Integrar ERP   ┌──────────┐  │      │
-     │   APR   │ ────────────────► │   ERP    │  │      │
-     │Aprobada │                   │Integrada │  │      │
-     └─────────┘                   └──────────┘  │      │
-                                                 │      │
-          ┌──────────────── RCH ────────────────-┘      │
-          ▼                                             │
-     ┌─────────┐                                        │
-     │   RCH   │                                        │
-     │Rechazada│                                        │
-     └─────────┘                                        │
-                                                        │
-          ┌──────────────── CSO ───────────────────────-┘
-          ▼
-     ┌─────────┐
-     │   CSO   │  ── Comprador corrige ──► BRR / PND
-     │ Cambios │
-     └─────────┘
-```
-
-### Estados
-
-| ID | Código | Descripción              | Editable | Notas                                                                |
-|----|--------|--------------------------|-----------|----------------------------------------------------------------------|
-| 1  | `BRR`  | Borrador                 | ✅ Sí    | En redacción. El comprador puede modificar libremente               |
-| 2  | `PND`  | Pendiente de aprobación  | ❌ No    | Enviada a firmantes. El presupuesto reserve el importe              |
-| 3  | `APR`  | Aprobada                 | ❌ No    | Todos aprobaron. Disponible para integrar a Finnegans               |
-| 4  | `RCH`  | Rechazada                | ❌ No    | Definitivo. Presupuesto devuelve importe                            |
-| 5  | `CSO`  | Cambios solicitados      | ✅ Sí    | El comprador corrige y reenvía. Presupuesto devuelve hasta reenvío  |
-| 6  | `ANL`  | Anulada                  | ❌ No    | Baja lógica definitiva. Presupuesto devuelve importe si fue en PND  |
-| 7  | `ERP`  | Integrada ERP            | ❌ No    | OC creada en Finnegans exitosamente                                 |
-| 8  | `ERR`  | Error de integración     | ❌ No    | Fallo en POST a Finnegans. Permite reintento manual                 |
-
----
-
-## 6. `preocaprobadoresxmonto` — Reglas de Aprobación por Monto
-
-> Maestro de reglas para agregar aprobadores automáticos cuando el neto de la POC supera un umbral.
-
-| Columna                        | Tipo           | NULL | Descripción                                                         |
-|--------------------------------|----------------|------|---------------------------------------------------------------------|
-| `preocaprobmontoid`            | INT PK AI      | NO   | PK interna                                                          |
-| `usuarioid`                    | INT FK         | NO   | FK → `usuarios`. Aprobador que se agrega                            |
-| `montominimo`                  | DECIMAL(15,2)  | NO   | Monto neto mínimo para activar este aprobador (ej. 1.000.000)      |
-| `firmanteorden`                | INT            | NO   | Orden sugerido en la lista de firmantes de la POC                   |
-| `preocaprobmontoactivo`        | TINYINT(1)     | NO   | 1=Activo, 0=Inactivo                                                |
-| + 8 columnas de auditoría      |                |      | Estándar                                                            |
-
-> [!NOTE]
-> Cuando el total neto de la Pre OC supera el `montominimo`, este aprobador se agrega automáticamente a la lista de firmantes con su `firmanteorden` sugerido. El comprador puede ajustar el orden final.
-
----
-
-## 7. `preoclog` — Log de Auditoría
-
-| Columna              | Tipo           | Descripción                                        |
-|----------------------|----------------|----------------------------------------------------|
-| `preocid`            | INT FK         | FK → `preoc`                                       |
-| `logid`              | INT PK AI      | PK del log                                         |
-| `logusuarioid`       | INT            | `p_in_usuarioid`                                   |
-| `logdispositivo`     | VARCHAR(100)   | `p_in_dispositivo`                                 |
-| `logip`              | VARCHAR(50)    | `p_in_ip`                                          |
-| `logfechahora`       | DATETIME       | NOW()                                              |
-| `logtipo`            | VARCHAR(3)     | Ver tabla abajo                                    |
-| `logparamjson`       | JSON           | `p_in_json`                                        |
-| `logregbkpjson`      | JSON           | Registro antes de modificación                     |
-
-| `logtipo` | Significado          | Cuándo se registra                                          |
-|-----------|----------------------|-------------------------------------------------------------|
-| `INS`     | Inserción            | Al **enviar** la POC (BRR → PND)                           |
-| `UPD`     | Actualización        | Al confirmar edición tras CSO                               |
-| `ANL`     | Anulación            | Baja lógica (→ ANL)                                         |
-| `APR`     | Aprobación           | Un firmante aprueba                                         |
-| `RCH`     | Rechazo              | Un firmante rechaza                                         |
-| `CSO`     | Cambios solicitados  | Un firmante solicita cambios                                |
-| `ERP`     | Integración ERP      | POST a Finnegans exitoso (→ ERP)                            |
-| `ERR`     | Error ERP            | POST a Finnegans falló (→ ERR). Incluye respuesta de error |
-
----
-
-## 8. Módulo de Presupuesto
-
-### 8.1. Estructura jerárquica
-
-```
-pptocompraclasif (Clasificación)       → Capex / Opex
-    └── pptocomprasubclasif (Sub)      → Salud Animal
-            └── pptocompra (Presupuesto) → Insumos Veterinarios — T1-26
-```
-
-### 8.2. `pptocompraclasif` — Clasificación (Nivel 1)
-
-| Columna                    | Tipo           | NULL | Descripción                    |
-|----------------------------|----------------|------|--------------------------------|
-| `pptocompraclasifid`       | INT PK AI      | NO   | PK interna                     |
-| `pptocompraclasifcod`      | VARCHAR(20)    | NO   | Código (ej. `CAPEX`, `OPEX`)   |
-| `pptocompraclasifdsc`      | VARCHAR(100)   | NO   | Descripción                    |
-| `pptocompraclasifactivo`   | TINYINT(1)     | NO   | 1=Activo                       |
-| + 8 columnas de auditoría  |                |      | Estándar                       |
-
-### 8.3. `pptocomprasubclasif` — Sub-Clasificación (Nivel 2)
-
-| Columna                       | Tipo           | NULL | Descripción                          |
-|-------------------------------|----------------|------|--------------------------------------|
-| `pptocomprasubclasifid`       | INT PK AI      | NO   | PK interna                           |
-| `pptocompraclasifid`          | INT FK         | NO   | FK → `pptocompraclasif`              |
-| `pptocomprasubclasifdsc`      | VARCHAR(100)   | NO   | Descripción (ej. `Salud Animal`)     |
-| `pptocomprasubclasifactivo`   | TINYINT(1)     | NO   | 1=Activo                             |
-| + 8 columnas de auditoría     |                |      | Estándar                             |
-
-### 8.4. `pptocompra` — Presupuesto (Nivel 3)
-
-| Columna                    | Tipo           | NULL | Default | Descripción / Notas                                                        |
-|----------------------------|----------------|------|---------|----------------------------------------------------------------------------|
-| `pptocompraid`             | INT PK AI      | NO   |         | PK interna                                                                 |
-| `pptocomprasubclasifid`    | INT FK         | NO   |         | FK → `pptocomprasubclasif`                                                 |
-| `pptocompranombre`         | VARCHAR(100)   | NO   |         | Nombre descriptivo (ej. `Insumos Veterinarios`)                            |
-| `pptocompraperiodo`        | VARCHAR(20)    | NO   |         | Período codificado: `A-2026`, `T1-26`, `S2-26`, `M04-26`                  |
-| `pptocompratipoper`        | CHAR(1)        | NO   |         | Tipo de período: `A`=Anual, `T`=Trimestral, `S`=Semestral, `M`=Mensual   |
-| `pptocomprafechadesde`     | DATE           | SÍ   | NULL    | Fecha de inicio del período (referencial, para reportes)                   |
-| `pptocomprafechahasta`     | DATE           | SÍ   | NULL    | Fecha de fin del período (referencial)                                     |
-| `pptoinicial`              | DECIMAL(15,2)  | NO   | 0.00    | Saldo inicial cargado al crear el presupuesto                              |
-| `pptoajustes`              | DECIMAL(15,2)  | NO   | 0.00    | Suma de ajustes manuales (calculado desde movimientos)                     |
-| `pptoreproyectado`         | DECIMAL(15,2)  | NO   | 0.00    | CALC: `pptoinicial + pptoajustes`                                          |
-| `pptoconsumos`             | DECIMAL(15,2)  | NO   | 0.00    | CALC: suma de consumos en estado PND/APR (reservas activas)                |
-| `pptosaldo`                | DECIMAL(15,2)  | NO   | 0.00    | CALC: `pptoreproyectado − pptoconsumos`                                    |
-| `pptocompraactivo`         | TINYINT(1)     | NO   | 1       | 1=Activo (visible para compradores). 0=Inactivo                            |
-| + 8 columnas de auditoría  |                |      |         | Estándar. Solo Gerencia puede crear/editar                                 |
-
-> [!IMPORTANT]
-> Los campos calculados (`pptoajustes`, `pptoreproyectado`, `pptoconsumos`, `pptosaldo`) se recalculan por SP a partir de `pptocompramovimientos`. No se editan directamente.
-
-### 8.5. `pptocompramovimientos` — Kardex del Presupuesto
-
-> Cada movimiento que afecta el saldo del presupuesto genera un registro aquí. Funciona como un extracto bancario o kardex.
-
-| Columna                        | Tipo           | NULL | Descripción                                                                    |
-|--------------------------------|----------------|------|--------------------------------------------------------------------------------|
-| `pptomovid`                    | INT PK AI      | NO   | PK interna                                                                     |
-| `pptocompraid`                 | INT FK         | NO   | FK → `pptocompra`                                                              |
-| `preocid`                      | INT FK         | SÍ   | FK → `preoc`. NULL si es ajuste manual                                         |
-| `pptomovtipo`                  | TINYINT        | NO   | 1=Saldo inicial, 2=Ajuste manual, 3=Consumo POC PND, 4=Consumo POC APR, 5=Devolución |
-| `pptomovimporte`               | DECIMAL(15,2)  | NO   | Importe del movimiento. Positivo (+) suma, negativo (−) resta                  |
-| `pptomovconcepto`              | VARCHAR(200)   | SÍ   | Descripción del movimiento (ej. "Reserva POC-000023")                         |
-| `pptomovfechahora`             | DATETIME       | NO   | Fecha/hora del movimiento                                                      |
-| `pptomovusuarioid`             | INT FK         | NO   | FK → `usuarios`. Quién generó el movimiento                                    |
-| + 4 columnas auditoría creación|                |      | Solo creación (movimientos no se editan)                                       |
-
-**Tipos de movimiento y su impacto:**
-
-| Tipo | Código | Signo | Cuándo se genera |
-|------|--------|-------|-----------------|
-| Saldo inicial | 1 | `+` | Al crear el presupuesto |
-| Ajuste manual | 2 | `+/-` | Gerencia hace ajuste (opción específica en UI) |
-| Consumo POC → PND | 3 | `−` | Al enviar la Pre OC a aprobación. Estado: "En proceso" |
-| Consumo POC → APR | 4 | sin cambio neto | Al aprobar la Pre OC. Cambia el estado del movimiento anterior de "En proceso" a "Aprobado" |
-| Devolución | 5 | `+` | Al rechazar, anular, o cambios solicitados en POC. Devuelve el importe al presupuesto |
-
-> [!NOTE]
-> Los movimientos de tipo 3 (POC en PND) bloquean el saldo disponible desde el momento del envío. Si la POC es rechazada o anulada, se genera automáticamente un movimiento de tipo 5 (devolución).
-
----
-
-## 9. Integración con Finnegans
-
-### 9.1. Cuándo se integra
-- Cuando la Pre OC alcanza el estado `APR` (todos los firmantes aprobaron).
-- El SP genera el JSON y hace el POST al endpoint de Finnegans.
-- Si el POST es exitoso → estado `ERP`, guarda `erptransaccionid`, `erpnumerodoc`, `erprespuestajson`.
-- Si el POST falla → estado `ERR`, guarda error en `erprespuestajson`. El comprador puede reintentar desde la UI.
-
-### 9.2. Mapeo de campos Pre OC → Finnegans
-
-| Campo Puduhue App                | Campo Finnegans JSON                  | Valor / Lógica                                                    |
-|----------------------------------|---------------------------------------|-------------------------------------------------------------------|
-| `preoctipo = 1` (Material)       | `TransaccionSubtipoCodigo`            | `"OC"`                                                            |
-| `preoctipo = 2` (Servicio)       | `TransaccionSubtipoCodigo`            | `"OCSS"`                                                          |
-| `preocdoc`                       | `IdentificacionExterna`               | Código legible de la POC                                          |
-| `preocfecha`                     | `Fecha`                               | Fecha de creación                                                 |
-| `proveedores.proveedorrut`       | `Proveedor`                           | RUT del proveedor (ej. `"82392600-6"`)                            |
-| `condicionespago.condicionpagocod`| `CondicionPagoCodigo`               | Código de condición de pago (ej. `"30"`)                          |
-| `erpworkflows.erpworkflowcod`    | `WorkflowCodigo`                      | Workflow de compra (ej. `"CPRA-INS-SERV"`)                        |
-| `erpmonedas.erpmonedacod`        | `MonedaCodigo`                        | Moneda (siempre `"PES"` por defecto)                              |
-| (fijo)                           | `TransaccionTipoCodigo`               | `"OPER"` (fijo para compras)                                      |
-| `empresas.erpempresacod`         | `EmpresaCodigo`                       | Código de empresa en Finnegans                                    |
-| `preocdoc`                       | `Nombre`                              | Nombre de la OC (ej. `"POC-000023"`)                              |
-| `preocobs`                       | `Descripcion`                         | Observación general                                               |
-| `preocdetalle[n].invitemid`      | `Items[n].ProductoCodigo`             | Código ERP del producto (`invitems.erpitemcod`)                   |
-| `preocdetalle[n].preocdetcantidad`| `Items[n].Cantidad`                  | Cantidad a comprar                                                |
-| `preocdetalle[n].preocdetcantidad`| `Items[n].CantidadPendiente`         | Igual a `Cantidad` al crear                                       |
-| `preocdetalle[n].preocdetprecioneto`| `Items[n].Precio`                  | Precio unitario neto                                              |
-| `preocdetalle[n].preocdetdsccc`  | `Items[n].Descripcion`                | **Nombre del CC** de esa línea (para identificar en ERP)          |
-| `preocdetalle[n].erpprovinciaid` | `Items[n].ProvinciaDestino`           | Código provincia destino ERP (ej. `"RDLL"`)                       |
-| `preocdetalle[n].erpdimparfincod`| `DimensionDistribucion[DIMPARFIN]`    | Código de partida financiera. ❓ **Pendiente definir origen**     |
-| `centroscosto.erpcentrocostocod` | `DimensionDistribucion[DIMCTC]`       | Código de Centro de Costo en ERP                                 |
-| `erpcatfiscalconceptos.*`        | `Conceptos[]`                         | Array generado desde la categoría fiscal del proveedor            |
-| `preocfecha`                     | `FechaBaseVencimiento`                | Fecha de la OC como base de vencimiento                           |
-| `erpprovinciasdestino.erprovinciacod`| `ProvinciaDestinoCodigo`          | Provincia destino global de la cabecera                           |
-
-### 9.3. Campos ERP adicionales en detalle (por línea)
-
-Cada línea de `preocdetalle` requiere los códigos de las **DimensionDistribucion** para el POST al ERP:
-
-| Campo adicional en `preocdetalle` | Descripción |
-|-----------------------------------|-------------|
-| `dimparfincod` | Código de partida financiera (`DIMPARFIN`) para esta línea |
-| `dimparfinimporte` | Importe para `DIMPARFIN` (= subtotal neto de la línea) |
-| `erpprovcod` | Código de provincia destino ERP en `ProvinciaDestino` e ítem |
-
-> [!IMPORTANT]
-> Para los campos de `DimensionDistribucion`, se deben analizar los ejemplos reales provistos:
-> - `docs/inputs/mejoras_mar_abr_26/erp_oc_material_ejemplo.json`
-> - `docs/inputs/mejoras_mar_abr_26/erp_oc_servicio_ejemplo.json`
+> Fuentes normativas:
+> - `docs/ADR/modulo-compras/ADR-001-modelo-presupuesto-compras.md`
+> - `docs/ADR/modulo-compras/ADR-002-compromiso-edicion-preoc.md`
+> - `docs/ADR/modulo-compras/ADR-003-requerimientos-pendientes-compra.md`
+> - `docs/modulo_compras_presupuesto_definitivo.md`
 >
-> El campo `DIMPARFIN` corresponde a la partida financiera (presupuesto ERP). El código de la partida (`REB000`, `LEC000`, `CRM000`) debe ser determinado por el cliente. ❓ **Pendiente confirmar**: ¿cómo se obtiene el código `DIMPARFIN` desde el presupuesto de Puduhue App?
+> Este documento reemplaza la version v1, que mantenia un modelo anterior con presupuesto jerarquico, `CSO`, estado ERP como estado documental y seleccion manual de presupuesto.
 
----
+## 0. Decisiones vigentes
 
-## 10. Diagrama de Relaciones
+| # | Decision | Resolucion vigente |
+|---|---|---|
+| 1 | Creador de PreOC | Usuario comprador con permiso `comprador` |
+| 2 | Origen de lineas | `reqaprobados` pendientes o parciales |
+| 3 | Compra parcial | Permitida; se actualiza saldo pendiente del requerimiento aprobado |
+| 4 | Cotizaciones | Fuera de alcance |
+| 5 | Fechas PreOC | `preocfecha` es creacion interna no editable; `preocfechaoc` la selecciona el usuario para presupuesto y ERP |
+| 6 | Moneda | Solo CLP / `PES` |
+| 7 | Tipo ERP | Material=`OC`, Servicio=`OCSS` |
+| 8 | Presupuesto | Resolucion automatica por `preocfechaoc`, subfamilia y centro de costo |
+| 9 | Reserva presupuestaria | Se genera al pasar `BRR -> PND`, no al guardar borrador |
+| 10 | Edicion | Solo mientras no exista ninguna aprobacion |
+| 11 | Estado ERP | Columna separada del estado documental |
+| 12 | Anulacion sincronizada | Local con permiso especial; mantiene estado ERP `SNC` |
+| 13 | Workflow | Valor fijo, no maestro |
+| 14 | Dimensiones ERP | Se guardan por item PreOC o req-item, pendiente confirmar con cliente/Finnegans |
+| 15 | Firmantes | Default desde presupuestos + aprobadores por monto + manuales |
+| 16 | Reordenamiento | Botones Subir/Bajar |
+| 17 | Comentarios | Tabla funcional separada del LOG |
+| 18 | Agrupacion de items | Se separa origen req-item, item agrupado e impuestos |
+| 19 | Resumen presupuesto | `preocpptoresumen` como apoyo de consulta rapida por presupuesto |
 
-```
-┌─────────────────────────────┐
-│    pptocompraclasif         │
-│ pptocompraclasifid          │
-└──────────┬──────────────────┘
-           ▼
-┌─────────────────────────────┐
-│    pptocomprasubclasif      │
-│ pptocomprasubclasifid       │
-│ pptocompraclasifid FK       │
-└──────────┬──────────────────┘
-           ▼
-┌─────────────────────────────┐     ┌──────────────────────────┐
-│       pptocompra            │────►│   pptocompramovimientos   │
-│ pptocompraid                │     │ pptomovtipo (1-5)         │
-│ pptoperiodo / tipo          │     │ pptomovimporte (+/-)      │
-│ pptoinicial                 │     │ preocid FK (opt)          │
-│ pptosaldo (calc)            │     └──────────────────────────┘
-└──────────┬──────────────────┘
-           │ FK pptocompraid
-           ▼
-┌──────────────────────────────────────────────────────────┐
-│                         preoc                            │
-│ preocid       preoctipo (1=OC / 2=OCSS)                  │
-│ preocdoc      preocfecha (no editable)                   │
-│ proveedorid FK   condicionpagoid FK   pptocompraid FK    │
-│ preocnettotal / preociva / preoctotal                    │
-│ erptransaccionid   erpnumerodoc   erprespuestajson        │
-│ preocestadoid FK                                         │
-└────────────┬──────────────┬───────────────────-----------┘
-             │              │
-             ▼              ▼
-┌────────────────┐  ┌───────────────────────┐
-│  preocdetalle  │  │    preocfirmantes      │
-│ preocdetid     │  │ firmanteusuarioid FK   │
-│ reqaprobadoid FK│  │ firmantetipo (1-5)    │
-│ invitemid FK   │  │ firmanteorden (reord.) │
-│ centrocostoid FK│  │ firmanteestado        │
-│ preocdetdsccc  │  └───────────────────────┘
-│ (nombre del CC │
-│  para el ERP)  │
-└────────────────┘
-       │
-       ▼
-┌───────────────────────────────────┐
-│          reqaprobados             │
-│ reqaprobadoid                     │
-│ cantidadoriginal / cantidadpendiente │
-│ estado (Pendiente/Parcial/Completa)│
-└───────────────────────────────────┘
-       │
-       ▼
-┌──────────────────────────────────┐
-│      reqaprobadoshistorial        │
-│ preocid FK / preocdetid FK        │
-│ histcantidad / histprecioneto     │
-└──────────────────────────────────┘
-```
+## 1. Tablas nuevas o ajustadas
 
----
+| Tabla | Tipo | Descripcion |
+|---|---|---|
+| `preoc` | Transaccional | Cabecera de la PreOC |
+| `preocdetallereqitems` | Transaccional | Lineas origen desde requerimientos aprobados |
+| `preocitems` | Transaccional | Items agrupados de la PreOC |
+| `preocimptos` | Transaccional | Impuestos por item agrupado |
+| `preocitemsdimensiones` | Transaccional | Dimensiones ERP por item o req-item, pendiente confirmar |
+| `preocpptoresumen` | Resumen | Resumen de presupuesto afectado por PreOC |
+| `preocfirmantes` | Transaccional | Firmantes/aprobadores de PreOC |
+| `preoccomentarios` | Funcional | Comentarios visibles de aprobacion, rechazo y anulacion |
+| `preoclog` | LOG | Auditoria tecnica |
+| `preocestados` | Maestro | Estados documentales |
+| `preocestadoserp` | Maestro | Estados de sincronizacion ERP |
+| `preocaprobadoresxmonto` | Maestro | Reglas de aprobadores por monto neto |
+| `PptoCompraTransacciones` | Transaccional | Movimientos presupuestarios, definido en presupuesto definitivo |
 
-## 11. Flujo Completo
+### Tablas relacionadas
 
-```
-1. CREAR (BRR)
-   → Comprador (atributo comprador = 1) inicia la Pre OC
-   → Selecciona proveedor, condición de pago
-   → Selecciona líneas de `reqaprobados` (estado Pendiente o Parcial)
-   → Define cantidades a comprar por cada línea (≤ cantidad pendiente)
-   → Ingresa precio por línea
-   → El SP genera lista de firmantes (responsable/admin/colaborador ppto + por monto)
-   → El comprador puede reordenar firmantes (drag & drop / flechas)
-   → Selecciona el presupuesto a aplicar (activo, con saldo disponible ≥ total neto)
-   → Visualiza la lista final de firmantes como último paso antes de grabar
-   → Graba en estado BRR
+| Tabla | Relacion |
+|---|---|
+| `reqaprobados` | Fuente de lineas aprobadas; no contiene `preocid` unico |
+| `reqaprobadoshistorial` | Guarda vinculos de compra/anulacion con `preocid` y `preocdetreqitemid` |
+| `PptoCompra` | Presupuesto resuelto automaticamente por linea |
+| `usuarios` | Permisos de comprador, aprobacion PreOC y anulacion especial |
+| `aprobadoresperiodoinactividad` | Reemplazo de aprobadores inactivos |
 
-2. ENVIAR (BRR → PND)
-   → SP valida saldo presupuestario (bloqueante si no hay saldo)
-   → SP genera log INS
-   → SP genera movimiento de tipo 3 (Consumo en proceso) en `pptocompramovimientos`
-   → preocaprobadorpendienteid = firmante[1]
-   → Notificación al primer firmante
+## 2. `preoc` - Cabecera
 
-3. APROBAR (PND)
-   → Firmante N firma → log APR
-   → Si hay N+1 → preocaprobadorpendienteid = firmante[N+1]
-   → Si era el último → estado APR
-   → SP actualiza movimiento ppto: tipo 3 → tipo 4 (Aprobado)
-   → SP inicia integración con Finnegans (construye JSON, hace POST)
-   → Si éxito → estado ERP, guarda erptransaccionid y erpnumerodoc
-   → Si falla → estado ERR, guarda error en erprespuestajson
+| Columna | Tipo logico | NULL | Descripcion / regla |
+|---|---|---|---|
+| `preocid` | INT PK AI | NO | PK interna |
+| `preocdoc` | VARCHAR(20) | NO | Codigo visible, por ejemplo `POC-000001` |
+| `preoctipo` | TINYINT | NO | 1=Material (`OC`), 2=Servicio (`OCSS`) |
+| `preocfecha` | DATE | NO | Fecha de creacion interna definida por sistema/BD, no editable |
+| `preocfechaoc` | DATE | NO | Fecha seleccionada por usuario para presupuesto y envio ERP |
+| `compradorusuarioid` | INT FK | NO | Usuario comprador creador |
+| `proveedorid` | INT FK | NO | Proveedor espejo ERP |
+| `condicionpagoid` | INT FK | SI | Condicion de pago precargada desde proveedor y editable antes de enviar |
+| `preocworkflowcod` | VARCHAR(50) | NO | Workflow fijo de compra |
+| `erpmonedacod` | VARCHAR(10) | NO | Moneda operativa; CLP=`PES` |
+| `erpprovinciaid` | INT FK | SI | Provincia/destino global si aplica |
+| `preocobsinterna` | TEXT | SI | Observacion interna de la PreOC |
+| `preocobsoc` | TEXT | SI | Observacion para formato imprimible / OC |
+| `preocprioridad` | TINYINT | NO | 1=Normal, 2=Alta; efecto visual/correo |
+| `preocestadoid` | INT FK | NO | Estado documental |
+| `preocestadoerpid` | INT FK | SI | Estado ERP separado |
+| `preocaprobadoridpnd` | INT FK | SI | Aprobador pendiente vigente para consultas rapidas |
+| `preocaprobacionfecha` | DATE | SI | Fecha de aprobacion completa |
+| `preocnettotal` | DECIMAL(15,2) | NO | Total neto recalculado desde detalle |
+| `preocimptostotal` | DECIMAL(15,2) | NO | Total impuestos calculados |
+| `preoctotal` | DECIMAL(15,2) | NO | Total con impuestos |
+| `erptransaccionid` | VARCHAR(50) | SI | ID transaccion ERP si aplica |
+| `erpnumerodoc` | VARCHAR(50) | SI | Numero ERP / NumeroComprobante |
+| `erpsincfechahora` | DATETIME | SI | Fecha/hora de sincronizacion correcta |
+| `erperror` | TEXT | SI | Error ERP visible para consulta; se limpia al sincronizar OK |
+| `erprespuestajson` | JSON | SI | Respuesta tecnica completa |
+| `preocvig` | TINYINT(1) | NO | Vigente/baja logica |
+| + auditoria |  |  | Columnas estandar del proyecto |
 
-4. RECHAZAR / CAMBIOS SOLICITADOS
-   → firmante rechaza → estado RCH
-   → SP genera movimiento tipo 5 (devolución) en presupuesto
-   → CSO: comprador corrige → reenvía → PND
-   → SP genera nuevo movimiento tipo 3 al reenviar
+Notas:
 
-5. ANULAR (cualquier estado editable)
-   → estado ANL (baja lógica)
-   → Si estaba en PND: SP genera movimiento tipo 5 (devolución)
-   → reqaprobados: las cantidades vinculadas se devuelven a `cantidadpendiente`
+- No se guarda un unico `pptocompraid` en cabecera, porque una PreOC puede contener lineas que resuelven distintos presupuestos por subfamilia y centro.
+- El presupuesto se resuelve por linea usando `preocfechaoc`, subfamilia del item y centro de costo.
+- `preocfecha` y `preocfechaoc` deben mostrarse ambas.
+- `preocvig` se mantiene por consistencia tecnica con el patron de baja logica, aunque el estado documental concentra la regla funcional.
+- La vista principal debe mostrar por defecto las PreOC del comprador login si `comprador = 1`. Si el usuario no tiene ese atributo, el filtro comprador inicia en `TODOS`.
 
-6. REINTENTO ERP (estado ERR)
-   → Comprador o admin presiona "Reintentar envío a ERP"
-   → SP vuelve a construir JSON y hace POST
-   → Misma lógica de éxito/error
-```
+## 3. Estados
 
----
+### 3.1 Estados documentales
 
-## 12. Resumen de Atributos Nuevos en `usuarios`
+| Codigo | Descripcion | Efecto |
+|---|---|---|
+| `BRR` | Borrador | Editable; no reserva presupuesto |
+| `PND` | Pendiente / En curso | Reserva presupuesto al enviar; editable solo si no tiene aprobaciones |
+| `APR` | Aprobada | Confirma reserva y habilita sincronizacion ERP |
+| `RCH` | Rechazada | Revierte presupuesto asociado |
+| `ANL` | Anulada | Revierte presupuesto cuando corresponde |
 
-| Atributo           | Descripción                                                       | Quién puede tenerlo |
-|--------------------|-------------------------------------------------------------------|---------------------|
-| `autorizareq`      | Puede ser firmante/aprobador de REQ                               | Jefes de CC, gerentes |
-| `editarprecios`    | Puede editar precios en REQ                                       | Usuarios autorizados |
-| `comprador`        | Puede Crear/Editar/Anular Pre OC                                  | Secretarias/compradores |
-| `permitecreareditar`| Puede Crear/Editar productos en Maestro de Productos             | Administradores |
+Reglas:
 
----
+- No existe `CSO`; se usa `RCH` con comentario obligatorio.
+- `PND -> BRR` solo se permite si ningun firmante aprobo; libera o revierte reserva.
+- `RCH -> BRR` se permite para corregir/rearmar; el rechazo ya hizo la reversa.
+- Cuando existe al menos una aprobacion, la PreOC deja de ser editable.
+- Una PreOC con al menos un firmante aprobado no puede anularse directamente; debe solicitarse rechazo.
+- Una PreOC sincronizada puede anularse localmente con permiso especial y comentario obligatorio.
 
-## 13. Preguntas Pendientes (PreOC)
+### 3.2 Estados ERP
 
-❓ Aún sin confirmar:
+| Codigo | Descripcion | Regla |
+|---|---|---|
+| Sin estado | No aplica | Mientras PreOC no este aprobada |
+| `SNC` | Sincronizada | POST ERP exitoso |
+| `ERR` | Error sincronizacion | POST ERP fallido; permite reintento |
 
-| # | Pregunta |
-|---|----------|
-| 1 | ¿El Maestro de Proveedores se sincroniza desde Finnegans (espejo) o se mantiene manualmente? |
-| 2 | ¿Las Condiciones de Pago son texto libre o se sincronizan desde el ERP? |
-| 3 | ¿Cómo se obtiene el código `DIMPARFIN` (partida financiera) para mapear al presupuesto ERP desde el presupuesto de Puduhue App? |
-| 4 | ¿Quién son el Responsable, Administrador y Colaborador del Presupuesto? ¿Son columnas en `pptocompra` o roles configurables? |
-| 5 | ¿Se puede anular una OC ya enviada a Finnegans desde esta app? |
-| 6 | ¿El campo `ProvinciaDestino` en cada ítem del ERP siempre corresponde al fundo/provincia del CC, o es un valor fijo? |
-| 7 | ¿La recepción de la OC en ERP se integrará en el historial del REQ en etapa futura? (Ya se contempla en el diseño) |
+Reglas:
+
+- Si falla ERP, el estado documental permanece `APR` y el estado ERP queda `ERR`.
+- El error ERP debe quedar en columna visible, no solo en LOG.
+- Al sincronizar correctamente, se limpia error y se guardan numero ERP y fecha/hora.
+- Si una PreOC sincronizada se anula localmente, estado documental pasa a `ANL` y estado ERP permanece `SNC`.
+
+## 4. `preocdetallereqitems` - Lineas origen REQ
+
+| Columna | Tipo logico | NULL | Descripcion / regla |
+|---|---|---|---|
+| `preocdetreqitemid` | INT PK AI | NO | PK interna |
+| `preocid` | INT FK | NO | Cabecera |
+| `reqaprobadoid` | INT FK | NO | Linea aprobada origen |
+| `preocdetlinea` | INT | NO | Numero de linea |
+| `invitemid` | INT FK | NO | Item actual desde pendiente de compra |
+| `preocdetitemcod` | VARCHAR(50) | NO | Snapshot codigo item |
+| `preocdetdsc` | VARCHAR(200) | NO | Snapshot descripcion item |
+| `centrocostoid` | INT FK | NO | Centro de costo de la linea |
+| `pptocompraid` | INT FK | NO | Presupuesto resuelto automaticamente |
+| `subfamiliaid` | INT FK | NO | Subfamilia usada para presupuesto |
+| `erpprovinciaid` | INT FK | SI | Provincia/destino por linea si aplica |
+| `preocdetdsccc` | VARCHAR(200) | NO | Descripcion para ERP = nombre/descripcion del centro de costo |
+| `invunidmedid` | INT FK | NO | Unidad de medida |
+| `preocdetcantidad` | DECIMAL(15,4) | NO | Cantidad a comprar, menor o igual al saldo pendiente |
+| `preocdetprecioneto` | DECIMAL(15,2) | NO | Precio real/neto usado por comprador |
+| `preocdetsubtotalneto` | DECIMAL(15,2) | NO | Cantidad x precio |
+| `preocdetobs` | TEXT | SI | Observacion por linea |
+
+Reglas:
+
+- Esta tabla representa los req-items-centro-subfamilia seleccionados por el comprador.
+- El item se cambia, si corresponde, en pendientes de compra; no dentro de PreOC.
+- La cantidad no puede superar `reqaprobados.reqaprobadocantidadpendiente`.
+- Al enviar o confirmar la PreOC se registra movimiento en `reqaprobadoshistorial`.
+- La compra parcial actualiza cantidad pendiente/comprada en `reqaprobados`.
+- El campo `preocdetdsccc` se envia al ERP en `Items[n].Descripcion` para identificar centro de costo.
+- `DIMPARFIN` viene del maestro de items.
+- `DIMCTC` viene del codigo del centro de costo.
+
+## 5. `preocitems` - Items agrupados
+
+Tabla espejo de la agrupacion por item usada para precio, impuestos y total de OC.
+
+| Columna | Tipo logico | NULL | Descripcion / regla |
+|---|---|---|---|
+| `preocitemid` | INT PK AI | NO | PK |
+| `preocid` | INT FK | NO | Cabecera |
+| `invitemid` | INT FK | NO | Item agrupado |
+| `invunidmedid` | INT FK | NO | Unidad de medida |
+| `preocitemcantidadtotal` | DECIMAL(15,4) | NO | Suma de cantidades de `preocdetallereqitems` para el item |
+| `preocitemprecioneto` | DECIMAL(15,2) | NO | Precio neto unitario digitado/confirmado por comprador |
+| `preocitemnetototal` | DECIMAL(15,2) | NO | Cantidad total x precio neto |
+| `preocitemimptostotal` | DECIMAL(15,2) | NO | Suma de impuestos del item |
+| `preocitemtotal` | DECIMAL(15,2) | NO | Neto total + impuestos |
+
+Reglas:
+
+- El comprador informa precio neto por item agrupado, no requerimiento por requerimiento.
+- No se puede finalizar/enviar una PreOC si falta precio en algun item agrupado.
+- Al cambiar precio, se actualizan totales agrupados y las lineas req-item relacionadas.
+- La visualizacion debe mostrar variacion de precio: buscar primero historico en PreOC; si no existe, usar costo estandar/precio referencial del maestro de items.
+- El modal de precio puede mostrar ultimo proveedor, ultimo precio, fecha ultima compra y variacion contra el precio actual.
+
+## 6. `preocimptos`
+
+Detalle de impuestos por item agrupado.
+
+| Columna | Tipo logico | NULL | Descripcion / regla |
+|---|---|---|---|
+| `preocimptoid` | INT PK AI | NO | PK |
+| `preocitemid` | INT FK | NO | Item agrupado |
+| `imptoid` | INT FK | SI | Impuesto/concepto, pendiente confirmar con soporte Finnegans |
+| `preocimptoneto` | DECIMAL(15,2) | NO | Precio neto unitario base |
+| `preocimptocantidadtotal` | DECIMAL(15,4) | NO | Cantidad total del item |
+| `preocimptonetototal` | DECIMAL(15,2) | NO | Neto total base |
+| `preocimptotasa` | DECIMAL(9,4) | NO | Tasa de impuesto |
+| `preocimptomonto` | DECIMAL(15,2) | NO | Monto calculado para este impuesto |
+
+Reglas:
+
+- Un item puede tener uno o mas impuestos.
+- La tasa puede venir del item o de un grupo/categoria de impuestos pendiente de confirmar con soporte Finnegans.
+- La suma de `preocimptomonto` alimenta `preocitems.preocitemimptostotal` y `preoc.preocimptostotal`.
+
+## 7. `preocitemsdimensiones`
+
+Tabla para representar `DimensionDistribucion`.
+
+> Pendiente de confirmacion con cliente/Finnegans: puede colgar del item agrupado (`preocitems`) o del req-item origen (`preocdetallereqitems`). Ambas opciones son soportadas por Finnegans segun revision preliminar.
+
+| Columna | Tipo logico | NULL | Descripcion |
+|---|---|---|---|
+| `preocitemdimensionid` | INT PK AI | NO | PK |
+| `preocitemid` | INT FK | SI | Item agrupado, si la distribucion se define a nivel item |
+| `preocdetreqitemid` | INT FK | SI | Req-item origen, si la distribucion se define a nivel detalle |
+| `dimensioncodigo` | VARCHAR(50) | NO | Ej. `DIMPARFIN`, `DIMCTC` |
+| `distribucioncodigo` | VARCHAR(50) | SI | Codigo distribucion si aplica |
+| `tipocalculo` | VARCHAR(10) | NO | Tipo calculo ERP; ejemplo `2` |
+| `dimensionitemcodigo` | VARCHAR(50) | NO | Codigo valor; ej. `LEC000`, `LMT-0002` |
+| `dimensionporcentaje` | DECIMAL(9,4) | NO | Porcentaje |
+| `dimensionimporte` | DECIMAL(15,2) | NO | Importe |
+| `dimensionfuente` | VARCHAR(30) | NO | ITEM/CENTRO/SISTEMA |
+
+Reglas:
+
+- Se completan desde maestros y reglas internas.
+- El comprador no las edita.
+- Deben visualizarse desde la PreOC, por ejemplo con accion "ver dimensiones" por linea.
+- Deben soportar mas de una distribucion por dimension si el ERP lo requiere, por ejemplo cuando un item agrupado distribuye por mas de un centro.
+
+## 8. `preocpptoresumen`
+
+Resumen de apoyo/consulta rapida por presupuesto afectado. El libro oficial sigue siendo `PptoCompraTransacciones`.
+
+| Columna | Tipo logico | NULL | Descripcion |
+|---|---|---|---|
+| `preocpptoresumenid` | INT PK AI | NO | PK |
+| `preocid` | INT FK | NO | PreOC |
+| `pptocompraid` | INT FK | NO | Presupuesto afectado |
+| `preocpptomonto` | DECIMAL(15,2) | NO | Total neto afectado a ese presupuesto |
+| `preocpptosaldoantes` | DECIMAL(15,2) | SI | Saldo disponible antes del evento registrado |
+| `preocpptosaldodespues` | DECIMAL(15,2) | SI | Saldo disponible posterior |
+| `preocpptoestado` | VARCHAR(20) | NO | RESERVA/CONFIRMADO/REVERTIDO u otro estado funcional |
+| `preocpptofechahora` | DATETIME | NO | Momento del calculo |
+
+Reglas:
+
+- No incluye `preocdetid`, `preocdetreqitemid` ni `preocitemid`.
+- La relacion con lineas se reconstruye por `preocid + pptocompraid`.
+- Sirve para visualizacion rapida de presupuestos usados, montos y saldos.
+- No reemplaza las transacciones del presupuesto.
+
+## 9. Presupuesto y movimientos
+
+La PreOC es el unico punto del flujo que compromete presupuesto.
+
+| Evento | Efecto |
+|---|---|
+| Guardar `BRR` | No genera reserva |
+| Enviar `BRR -> PND` | Valida saldo usando `preocfechaoc` y genera `POC_RESERVA` negativa |
+| Eliminar linea en `PND` sin aprobaciones | Borra transaccion provisional asociada |
+| Volver `PND -> BRR` sin aprobaciones | Libera/revierte reserva |
+| Aprobar completamente | Confirma reserva con `POC_CONFIRMACION` |
+| Rechazar/anular | Reversa positiva con `POC_REVERSA` cuando corresponde |
+
+Reglas:
+
+- La validacion de PreOC es bloqueante.
+- Si no existe presupuesto para `preocfechaoc` + subfamilia + centro, no avanza.
+- Si no hay saldo suficiente, no avanza.
+- Las reservas y consumos se guardan en negativo.
+- Las reversas se guardan en positivo.
+- No se borra historia de movimientos confirmados.
+
+## 10. `preocfirmantes`
+
+| Columna | Tipo logico | NULL | Descripcion / regla |
+|---|---|---|---|
+| `preocfirmanteid` | INT PK AI | NO | PK |
+| `preocid` | INT FK | NO | PreOC |
+| `firmanteusuarioid` | INT FK | NO | Usuario aprobador |
+| `firmantetipo` | VARCHAR(20) | NO | RESPONSABLE/ADMIN/COLABORADOR/MONTO/MANUAL/REEMPLAZO |
+| `firmanteorden` | INT | NO | Orden secuencial |
+| `firmantedefault` | TINYINT(1) | NO | 1 si no se puede remover |
+| `firmanteestado` | VARCHAR(5) | NO | PND/APR/RCH/INA/NVG |
+| `firmantefechahora` | DATETIME | SI | Fecha/hora del evento |
+| `firmantecomentario` | TEXT | SI | Comentario funcional |
+| `firmantereemplazodeid` | INT FK | SI | Firmante reemplazado por inactividad |
+
+Reglas:
+
+- Un aprobador no puede repetirse en la misma PreOC.
+- El comentario de rechazo es obligatorio y debe tener mas de 10 caracteres.
+- La aprobacion permite comentario opcional.
+- Los firmantes default no se remueven.
+- Aplica inactividad/reemplazo.
+
+### 10.1 Generacion de firmantes
+
+La lista se genera desde los presupuestos que componen la PreOC:
+
+1. Responsable del presupuesto.
+2. Administrador del presupuesto.
+3. Colaborador del presupuesto, si existe.
+4. Aprobadores por monto.
+5. Aprobadores manuales.
+
+Reglas:
+
+- Se toman todos los `PptoCompra` resueltos por las lineas.
+- Responsable y administrador son obligatorios en cada presupuesto.
+- Colaborador es opcional.
+- Si un usuario aparece mas de una vez, se conserva una sola fila.
+- Los default de presupuesto no se pueden quitar.
+- El comprador puede agregar aprobadores manuales.
+- Los manuales no pueden duplicar usuarios ya presentes.
+
+### 10.2 Aprobadores por monto
+
+`preocaprobadoresxmonto` mantiene reglas para agregar aprobadores automaticos segun monto neto.
+
+| Columna | Tipo logico | NULL | Descripcion |
+|---|---|---|---|
+| `preocaprobmontoid` | INT PK AI | NO | PK |
+| `usuarioid` | INT FK | NO | Aprobador |
+| `montominimo` | DECIMAL(15,2) | NO | Umbral |
+| `firmanteorden` | INT | NO | Orden sugerido |
+| `preocaprobmontoactivo` | TINYINT(1) | NO | Activo |
+| + auditoria |  |  | Auditoria estandar |
+
+### 10.3 Agregar y reordenar firmantes
+
+Agregar manual:
+
+- Boton con signo `+`.
+- Modal de busqueda de usuarios.
+- Filtrar usuarios activos con permiso de aprobacion PreOC.
+- Al grabar, validar duplicidad.
+- Si esta OK, agregar como manual removible y reordenable.
+
+Reordenar:
+
+- La grilla usa botones Subir y Bajar.
+- El primer registro no puede subir.
+- El ultimo registro no puede bajar.
+- Si hay un solo registro, ambos botones quedan bloqueados.
+- Al mover, se intercambia orden y se renumera sin huecos.
+
+### 10.4 Resolver siguiente aprobador
+
+La PreOC usa la misma logica que REQ:
+
+1. Buscar siguiente firmante por orden.
+2. Si el usuario no esta vigente:
+   - marcar `NVG`,
+   - registrar comentario funcional,
+   - registrar LOG,
+   - continuar con el siguiente.
+3. Si el usuario esta vigente pero tiene periodo de inactividad:
+   - marcar firmante original `INA`,
+   - insertar reemplazante inmediatamente despues,
+   - reordenar,
+   - dejar reemplazante como pendiente.
+4. Si el usuario esta vigente y sin inactividad:
+   - asignarlo a `preocaprobadoridpnd`.
+
+`preocaprobadoridpnd` es una denormalizacion controlada para consultas rapidas. Debe coincidir con el firmante pendiente vigente.
+
+## 11. `preoccomentarios`
+
+Tabla funcional separada del LOG tecnico.
+
+| Columna | Tipo logico | NULL | Descripcion |
+|---|---|---|---|
+| `preoccomentarioid` | INT PK AI | NO | PK |
+| `preocid` | INT FK | NO | PreOC |
+| `usuarioid` | INT FK | NO | Usuario que comenta |
+| `preoccomentariotipo` | VARCHAR(20) | NO | APR/RCH/ANL/INFO u otro |
+| `preoccomentariotxt` | TEXT | NO | Comentario visible |
+| `preoccomentariofechahora` | DATETIME | NO | Fecha/hora |
+
+El rechazo y la anulacion requieren comentario funcional obligatorio de mas de 10 caracteres.
+
+## 12. `preoclog`
+
+Tipos minimos:
+
+| Tipo | Evento |
+|---|---|
+| `INS` | Envio de PreOC a aprobacion |
+| `UPD` | Modificacion confirmada antes de aprobaciones |
+| `ANL` | Anulacion |
+| `APR` | Aprobacion |
+| `RCH` | Rechazo |
+| `ERP` | Sincronizacion ERP exitosa |
+| `ERR` | Error ERP |
+| `REV` | Reversa/liberacion de presupuesto, si se define este codigo |
+
+El LOG tecnico no reemplaza comentarios funcionales.
+
+## 13. Integracion ERP
+
+### 13.1 Cuando se integra
+
+- La integracion se intenta cuando PreOC queda `APR`.
+- Si POST es exitoso: estado ERP `SNC`, guarda `erptransaccionid`, `erpnumerodoc`, `erpsincfechahora`, `erprespuestajson`.
+- Si POST falla: estado documental sigue `APR`, estado ERP `ERR`, guarda `erperror` y `erprespuestajson`.
+- El reintento ERP opera sobre PreOC documental `APR` con estado ERP `ERR`.
+
+### 13.2 Mapeo base
+
+| Dato PreOC | Dato ERP | Regla |
+|---|---|---|
+| `preoctipo = 1` | `TransaccionSubtipoCodigo` | `OC` |
+| `preoctipo = 2` | `TransaccionSubtipoCodigo` | `OCSS` |
+| `preocdoc` | `IdentificacionExterna` / `Nombre` | Codigo PreOC |
+| `preocfechaoc` | `Fecha` | Fecha OC seleccionada por usuario |
+| proveedor | `Proveedor` | Codigo/RUT ERP proveedor |
+| condicion pago | `CondicionPagoCodigo` | Desde maestro/seleccion |
+| workflow fijo | `WorkflowCodigo` | Valor fijo definido para compra |
+| moneda | `MonedaCodigo` | `PES` |
+| item | `Items[n].ProductoCodigo` | Codigo ERP item |
+| cantidad | `Items[n].Cantidad` | Cantidad comprar |
+| precio | `Items[n].Precio` | Precio neto |
+| `preocdetdsccc` | `Items[n].Descripcion` | Centro de costo legible |
+| dimensiones | `DimensionDistribucion` | Desde `preocitemsdimensiones`, pendiente confirmar nivel |
+
+Pendiente tecnico:
+
+- Confirmar campos obligatorios definitivos del POST.
+- Confirmar conceptos/impuestos activos requeridos por Finnegans.
+- Confirmar comportamiento de `NumeroComprobante`.
+- Confirmar endpoints/maestros de proveedores, condiciones de pago, monedas e impuestos si aun no estan cerrados.
+
+## 14. Pantallas y experiencia
+
+### 14.1 `preoc_listar`
+
+Filtros:
+
+- Comprador.
+- Estado PreOC.
+- Estado ERP.
+- Aprobador pendiente.
+- Fecha, proveedor y otros filtros operativos.
+
+Reglas:
+
+- Si usuario login tiene `comprador = 1`, el filtro comprador inicia con ese usuario.
+- Si no tiene `comprador = 1`, comprador inicia en `TODOS`.
+- El combo comprador lista todos los usuarios con `comprador = 1`, independiente de su estado.
+- El filtro aprobador pendiente aplica para `PND` o `TODOS`; estados cerrados no tienen aprobador pendiente.
+
+### 14.2 Seleccion de requerimientos aprobados
+
+Flujo propuesto:
+
+1. Desde `preoc_listar`, el comprador presiona Crear.
+2. Se abre `reqcompra_aprobados_listar` o pantalla equivalente.
+3. Se listan requerimientos-items pendientes de compra.
+4. Cada fila tiene checkbox para seleccionar/agregar.
+5. La pantalla incluye filtros para buscar.
+6. El comprador puede ver un listado temporal/oculto de seleccionados mediante boton.
+7. Cuando completa la seleccion, presiona Crear PreOC.
+
+Notas:
+
+- Se debe cuidar el flujo de volver/avanzar del navegador para no perder la seleccion o datos guardados.
+- La seleccion debe poder persistirse como borrador o estado intermedio si el flujo lo requiere.
+
+### 14.3 Crear/editar PreOC
+
+Flujo:
+
+1. Comprador selecciona proveedor.
+2. Condicion de pago se precarga desde proveedor y puede editarse antes de enviar.
+3. Se muestran las lineas seleccionadas desde `reqaprobados` pendientes/parciales.
+4. Define cantidad a comprar, sin exceder saldo pendiente.
+5. El sistema agrupa por item en `preocitems`.
+6. El comprador informa/confirma precio neto por item agrupado.
+7. El sistema calcula impuestos en `preocimptos`.
+8. El sistema resuelve presupuesto por req-item y arma `preocpptoresumen`.
+9. El sistema prepara dimensiones.
+10. El sistema genera firmantes default desde presupuestos y reglas por monto.
+11. El comprador puede agregar manuales y reordenar.
+12. Guarda `BRR` o envia `PND`.
+
+Reglas:
+
+- No se edita despues de la primera aprobacion.
+- Si vuelve a `BRR` antes de aprobaciones, libera reserva.
+- Si se elimina una linea en `PND` sin aprobaciones, se borra reserva provisional de esa linea.
+- Si hay aprobaciones, no hay edicion de lineas.
+- No puede finalizar/enviar si falta precio en algun item agrupado.
+- Debe mostrar grilla de presupuestos usados, montos de PreOC y comparacion contra saldo disponible.
+
+### 14.4 Modal de precio por item
+
+La grilla de items agrupados debe permitir editar precio unitario neto mediante accion por fila.
+
+El modal puede mostrar:
+
+- item,
+- unidad,
+- cantidad total,
+- ultimo proveedor,
+- ultimo precio,
+- fecha ultima compra,
+- costo estandar/precio referencial del maestro si no hay historico,
+- variacion entre precio historico/referencial y precio actual.
+
+Al confirmar:
+
+- se actualiza `preocitems`,
+- se actualizan las lineas req-item relacionadas,
+- se recalculan impuestos, totales y presupuesto.
+
+### 14.5 Visualizacion
+
+Debe mostrar:
+
+- prioridad,
+- estado documental,
+- estado ERP,
+- `preocfecha` y `preocfechaoc`,
+- numero ERP y fecha/hora de sincronizacion si aplica,
+- error ERP visible si aplica,
+- presupuesto resuelto por linea,
+- resumen de presupuestos usados desde `preocpptoresumen`,
+- items agrupados, impuestos y totales,
+- variacion de precios,
+- dimensiones por linea mediante accion "ver dimensiones",
+- historial de firmantes,
+- comentarios funcionales,
+- movimientos presupuestarios asociados.
+
+## 15. Proveedores
+
+Falta definir la integracion de proveedores y la estructura de tabla definitiva segun lo que devuelva la API de Finnegans.
+
+Requisitos esperados:
+
+- maestro espejo ERP,
+- busqueda/autocomplete,
+- condicion de pago precargable,
+- datos necesarios para impuestos/categoria fiscal si aplica.
+
+## 16. Usuarios y permisos
+
+| Permiso | Uso |
+|---|---|
+| `comprador` | Crear/editar PreOC si tiene acceso al formulario |
+| permite aprobacion PreOC | Puede ser firmante PreOC |
+| `permiteanularpreoc` | Permite anulacion especial cuando el estado lo permite |
+
+Reglas:
+
+- Tener acceso al formulario no basta para crear PreOC; debe tener `comprador = 1`.
+- La anulacion especial no permite saltarse la regla de firmantes aprobados.
+
+## 17. Fuera de alcance
+
+- Modulo de cotizaciones.
+- Multimoneda.
+- Edicion de PreOC despues de primera aprobacion.
+- Edicion manual de dimensiones ERP por comprador.
+- Recepcion ERP dentro del tracking del REQ.
+- Anulacion ERP remota desde la app; la anulacion sincronizada definida aqui es local/documental.

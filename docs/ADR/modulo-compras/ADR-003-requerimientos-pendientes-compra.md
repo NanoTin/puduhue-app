@@ -103,6 +103,10 @@ La tabla/pantalla se llamara conceptualmente `aprobadoresperiodoinactividad` y a
 - estado/activo,
 - auditoria.
 
+Los registros no se eliminan fisicamente. Si dejan de aplicar, se inactivan.
+
+Debe existir `aprobadoresperiodoinactividadlog` o tabla equivalente para trazabilidad adicional de creacion, edicion e inactivacion.
+
 ### Comentarios funcionales
 
 REQ y PreOC tendran tablas separadas de comentarios funcionales. Estas tablas no reemplazan el LOG tecnico.
@@ -130,6 +134,15 @@ El calculo debe agrupar primero los items por:
 La cabecera del REQ debe guardar un indicador de advertencia, por ejemplo `reqadvertenciapptocompra`, cuando exista al menos un grupo o item sin saldo suficiente.
 
 Tambien debe guardarse una copia actualizable del calculo presupuestario usado como referencia. Si el REQ se edita, esa copia se recalcula y actualiza.
+
+El detalle del REQ debe guardar `subfamiliaid` para facilitar el cruce con el snapshot presupuestario y reconocer los items que originan cada grupo de presupuesto.
+
+Cada item del detalle debe guardar informacion informativa del ultimo requerimiento del mismo centro de costo e item:
+
+- fecha ultimo requerimiento: maxima fecha encontrada para el mismo centro e item,
+- cantidad ultimo requerimiento: cantidad solicitada en esa fecha.
+
+Estos datos se muestran en la grilla y en las tarjetas de visualizacion. Son informativos y no cambian reglas de aprobacion.
 
 El boton o accion "Analisis de ppto de compra" debe estar disponible para todo usuario que pueda visualizar el REQ, no solo para aprobadores. Debe permitir revisar el detalle por temporada, subfamilia y centro de costo.
 
@@ -227,6 +240,8 @@ La regla de consistencia es:
 `cantidad requerida = cantidad pendiente + cantidad comprada + cantidad anulada`
 
 Las pantallas pueden mostrar datos actuales del maestro cuando corresponda, pero los snapshots preservan la evidencia operativa.
+
+El historial de pendientes debe guardar tambien la cantidad pendiente que tenia la linea antes del movimiento. Esto permite reconstruir rapidamente el saldo nuevo de una compra o anulacion sin depender solo del estado actual de `reqaprobados`.
 
 ### Cambio de item en pendientes
 

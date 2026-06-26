@@ -45,6 +45,7 @@
 | `reqaprobadoshistorial` | Transaccional | Historial de compras/anulaciones por linea aprobada |
 | `reqaprobadoscambios` | Transaccional | Cambios de item realizados por comprador |
 | `aprobadoresperiodoinactividad` | Transaccional | Periodos de inactividad y reemplazos de usuarios aprobadores |
+| `aprobadoresperiodoinactividadlog` | LOG | Trazabilidad de creacion, edicion e inactivacion de periodos |
 | `usuarioscentroscosto` | Asociacion | Centros de costo accesibles por usuario |
 | `funcionarios` | Maestro | Funcionarios/solicitantes, con RUT como PK funcional |
 
@@ -92,6 +93,7 @@ Notas:
 | `reqcompraid` | INT FK | NO | FK a cabecera |
 | `reqcompradetlinea` | INT | NO | Numero de linea |
 | `invitemid` | INT FK | NO | Item seleccionado |
+| `subfamiliaid` | INT FK | NO | Subfamilia del item al momento del REQ |
 | `reqcompradetitemcod` | VARCHAR(50) | NO | Snapshot del codigo del item |
 | `reqcompradetdsc` | VARCHAR(200) | NO | Snapshot de descripcion al momento del REQ |
 | `invunidmedid` | INT FK | NO | Unidad de medida |
@@ -102,6 +104,8 @@ Notas:
 | `reqcompradetobs` | TEXT | SI | Observacion por linea |
 | `reqcompradetitemmodificado` | TINYINT(1) | NO | 1 si el item fue cambiado en pendientes de compra |
 | `reqcompradetadvertenciappto` | TINYINT(1) | NO | 1 si esta linea participa en una advertencia presupuestaria |
+| `reqcompradetultreqfecha` | DATE | SI | Fecha del ultimo REQ para el mismo centro e item |
+| `reqcompradetultreqcantidad` | DECIMAL(15,4) | SI | Cantidad solicitada en ese ultimo REQ |
 
 Reglas:
 
@@ -109,6 +113,10 @@ Reglas:
 - Un item con precio cero no puede agregarse al REQ. Debe indicarse que se contacte a Administracion.
 - No se permite mezclar Material y Servicio.
 - La prioridad visual del REQ no altera reglas de aprobacion.
+- `subfamiliaid` facilita el cruce con `reqcompraspptosnapshot` para saber que items originaron cada grupo presupuestario.
+- La fecha ultimo requerimiento se obtiene buscando la maxima fecha para el mismo centro de costo e item.
+- La cantidad ultimo requerimiento corresponde a la cantidad solicitada para esa fecha.
+- Los datos de ultimo requerimiento son informativos y deben mostrarse en grilla y tarjetas de visualizacion.
 
 ## 4. Estados
 
@@ -312,6 +320,7 @@ Registra compras y anulaciones de saldo pendiente.
 | `preocid` | INT FK | SI | PreOC asociada, si es compra |
 | `preocdetid` | INT FK | SI | Linea PreOC asociada, si es compra |
 | `histtipo` | VARCHAR(20) | NO | COMPRA/ANULACION/AJUSTE u otro |
+| `histcantidadpendienteantes` | DECIMAL(15,4) | NO | Cantidad pendiente antes de aplicar el movimiento |
 | `histcantidad` | DECIMAL(15,4) | NO | Cantidad afectada |
 | `histprecioneto` | DECIMAL(15,2) | SI | Precio al momento, si aplica |
 | `histitemcod` | VARCHAR(50) | SI | Snapshot rapido |
@@ -326,6 +335,7 @@ Anulacion:
 - motivo obligatorio,
 - visible para el solicitante,
 - si ya se compro todo, no permite anular.
+- `histcantidadpendienteantes` permite reconstruir rapidamente el saldo posterior del evento para consultas historicas.
 
 ## 12. `reqaprobadoscambios`
 
@@ -399,6 +409,26 @@ Funcionario es opcional en REQ.
 | `fechahasta` | DATE | Fin incluido |
 | `periodoactivo` | TINYINT(1) | Vigente |
 | + auditoria |  | Auditoria estandar |
+
+Reglas:
+
+- No se elimina fisicamente un periodo de inactividad existente.
+- Si deja de aplicar, se cambia su estado a inactivo.
+- Toda creacion, edicion o inactivacion debe dejar LOG.
+
+### 13.5 `aprobadoresperiodoinactividadlog`
+
+Tabla de auditoria especifica para periodos de inactividad.
+
+| Columna | Tipo logico | Descripcion |
+|---|---|---|
+| `aprobadorperiodologid` | INT PK AI | PK |
+| `aprobadorperiodoid` | INT FK | Periodo afectado |
+| `logusuarioid` | INT FK | Usuario que ejecuta |
+| `logtipo` | VARCHAR(10) | INS/UPD/INA u otro |
+| `logfechahora` | DATETIME | Fecha/hora |
+| `logparamjson` | JSON | Parametros/evento |
+| `logregbkpjson` | JSON | Registro antes del cambio si aplica |
 
 ## 14. Modificaciones a `usuarios`
 
@@ -513,6 +543,7 @@ Debe mostrar:
 - advertencia presupuestaria arriba si `reqadvertenciapptocompra = 1`,
 - boton "Analisis de ppto de compra" disponible para todos los usuarios que puedan visualizar,
 - items con falta de saldo resaltados en amarillo suave,
+- fecha y cantidad del ultimo requerimiento del mismo centro-item, tanto en grilla como en tarjetas,
 - prioridad alta con marca visual,
 - si el item tiene PreOC asociada,
 - compra parcial/total,
