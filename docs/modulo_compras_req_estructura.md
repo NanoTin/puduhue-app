@@ -69,8 +69,8 @@
 | `funcionariorut` | VARCHAR(20) FK | SI | Solicitante asignado opcional |
 | `reqcompraobs` | TEXT | SI | Observacion general |
 | `reqcompraprioridad` | TINYINT | NO | 1=Normal, 2=Alta; efecto visual y correo |
-| `reqcompraestadoid` | INT FK | NO | Estado documental |
-| `reqcompraestadopreocid` | INT FK | SI | Estado de vinculacion con PreOC |
+| `reqcompraestadoid` | VARCHAR(20) FK | NO | Estado documental |
+| `reqcompraestadopreocid` | VARCHAR(20) FK | SI | Estado de vinculacion con PreOC |
 | `reqaprobadoridpnd` | INT FK | SI | Usuario aprobador pendiente cuando esta en `PND`; se limpia al rechazar o aprobar completamente |
 | `reqaprobacionfecha` | DATE | SI | Fecha de aprobacion completa, para KPI |
 | `reqadvertenciapptocompra` | TINYINT(1) | NO | 1 si existe advertencia presupuestaria informativa |
@@ -285,7 +285,7 @@ Reglas:
 - REQ no genera movimientos de presupuesto.
 - Si el REQ se edita, se recalcula y reemplaza/actualiza la copia.
 - El boton "Analisis de ppto de compra" debe estar disponible para todo usuario que pueda visualizar el REQ.
-- El analisis se muestra agrupado por temporada, subfamilia y centro de costo.
+- El analisis se muestra agrupado por subfamilia y centro de costo. La temporada solo se muestra si el backend la entrega explicitamente.
 
 ## 10. `reqaprobados`
 
@@ -569,9 +569,15 @@ Debe mostrar:
 | `RCH` | Rechazo |
 | `EDT` | Paso a edicion |
 | `CMB` | Cambio de item |
-| `AJP` | Ajuste/anulacion de cantidad pendiente, si se define este codigo |
+| `AJP` | Reservado para ajuste/anulacion de cantidad pendiente futuro; no forma parte del primer corte REQ |
 
 Los comentarios funcionales no reemplazan el LOG.
+
+Convencion minima para el primer corte REQ:
+
+- `EDT`: registrar toma de edicion desde `PND`.
+- `UPD`: registrar guardado como borrador y tambien reenvio a aprobacion cuando exista modificacion confirmada del documento.
+- No se crea un codigo nuevo de LOG solo para `reenviar_aprobacion` en este corte; si en el futuro se requiere mayor granularidad, se podra ampliar con ADR o contrato tecnico especifico.
 
 ## 18. Emails
 

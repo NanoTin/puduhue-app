@@ -57,9 +57,15 @@ Preparar el siguiente corte funcional del modulo Compras: implementar REQ comple
 - REQ no mueve presupuesto; solo analiza de forma informativa.
 - `EDT` solo nace desde `PND` cuando el usuario creador entra a editar un REQ pendiente.
 - Para calculo informativo de "otros REQ pendientes/en edicion", considerar REQ vigentes en `PND` o `EDT`, excluyendo el REQ actual.
-- Para REQ en `EDT`, la salida normal debe ser explicita: guardar/reenviar o cancelar edicion.
+- Para REQ en `EDT`, la salida normal queda cerrada asi:
+  - `guardar_borrador` guarda cambios y pasa a `BRR`;
+  - `reenviar_aprobacion` guarda cambios y vuelve a `PND`;
+  - `cancelar_edicion` no guarda cambios y vuelve a `PND`.
 - Si el usuario abandona navegador, vuelve atras o pierde conexion en `EDT`, el backend no libera automaticamente; debe permitir retomar la edicion o ejecutar una liberacion controlada/manual.
 - Si el usuario cierra navegador/pestana o abandona el flujo, el REQ queda en `EDT`; al volver a editar, el creador retoma la edicion. La liberacion de `EDT` es accion controlada/manual, no automatica por evento de navegador.
+- En crear/editar REQ, toda accion que persista datos en tablas debe validar datos minimos y lineas validas; no es una regla amarrada a un estado especifico.
+- En crear REQ, `Cancelar` no persiste datos y no crea cabecera vacia en BD.
+- En crear/editar REQ, la barra de acciones debe permanecer visible en la parte superior durante scroll vertical, especialmente en pantallas chicas.
 - PreOC es el unico flujo que compromete presupuesto.
 - Al volver PreOC de `PND` a `BRR` sin aprobaciones, se borran reservas provisionales, sin reversa.
 - Movimientos PreOC se registran agrupados por presupuesto afectado y referencian `preocpptoresumen`.

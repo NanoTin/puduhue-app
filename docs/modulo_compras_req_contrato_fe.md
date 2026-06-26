@@ -138,12 +138,23 @@ Formulario:
   - detalle de items;
   - firmantes manuales;
   - resumen presupuestario informativo si existe tras error o recalculo posterior.
+- La barra de acciones del formulario debe permanecer visible en la parte superior durante el scroll vertical, especialmente en pantallas chicas. Puede resolverse con una barra sticky usando clases del modulo, sin CSS inline.
 
 Botones:
 
-- Guardar borrador.
+- Cancelar.
+- Guardar como borrador.
 - Enviar a aprobacion.
-- Volver a listado.
+
+Reglas UX de botones:
+
+- `Cancelar` no persiste nada en BD.
+- Al presionar `Cancelar`, abrir modal:
+  `Esta accion borrara los datos ingresados. Desea continuar?`
+- Si acepta, vuelve a `?route=compras-req/listar`.
+- Si cancela el modal, permanece en el formulario sin refrescar ni perder datos.
+- `Guardar como borrador` debe abrir modal de confirmacion antes del POST.
+- `Enviar a aprobacion` debe abrir modal de confirmacion antes del POST.
 
 Comportamiento:
 
@@ -151,6 +162,11 @@ Comportamiento:
 - No permitir agregar item con precio cero en cliente si el dato viene en `$itemsRows`; el SP valida igualmente.
 - No permitir cantidades menores o iguales a cero en cliente; el SP valida igualmente.
 - Mantener datos ingresados si hay error y el Controller devuelve `$formData`.
+- Tanto `Guardar como borrador` como `Enviar a aprobacion` requieren al menos:
+  - tipo REQ,
+  - centro de costo,
+  - prioridad,
+  - al menos un item valido en el detalle.
 
 ## 7. `compras_req_editar.php`
 
@@ -176,13 +192,23 @@ Formulario:
 - Misma estructura que crear.
 - Mostrar codigo, estado actual y fecha funcional en bloque de contexto.
 - Cambiar `reqcompraid` en la URL o en el hidden no debe habilitar edicion; el Controller y el SP validan permisos y estado antes de mostrar o guardar.
+- La barra de acciones del formulario debe permanecer visible en la parte superior durante el scroll vertical, especialmente en pantallas chicas. Puede resolverse con una barra sticky usando clases del modulo, sin CSS inline.
 
 Botones:
 
-- Guardar borrador o guardar cambios, segun estado.
-- Guardar y enviar / reenviar a aprobacion.
-- Cancelar edicion si estado `EDT`.
+- Guardar como borrador.
+- Guardar y reenviar a aprobacion.
+- Cancelar cambios si estado `EDT`.
 - Volver a ver.
+
+Reglas UX de botones:
+
+- `Guardar como borrador` en `EDT` guarda cambios y deja el REQ en `BRR`.
+- `Guardar y reenviar a aprobacion` en `EDT` guarda cambios y reenvia a aprobacion, dejando el REQ en `PND`.
+- `Cancelar cambios` en `EDT` no guarda cambios y abre modal:
+  `Esta accion NO guardara los cambios realizados y volvera a dejar el requerimiento Pendiente de Aprobacion (En Curso). Desea continuar?`
+- Si acepta el modal de `Cancelar cambios`, el FE hace POST a `?route=compras-req/cancelar-edicion`.
+- Si cancela el modal, permanece en la pantalla de edicion sin refrescar ni perder los cambios en memoria.
 
 Redirecciones esperadas:
 
@@ -192,7 +218,7 @@ Redirecciones esperadas:
 Regla `EDT`:
 
 - Si el usuario abandona navegador/pestana, el FE no intenta liberar automaticamente.
-- La accion normal para salir sin guardar es el boton Cancelar edicion.
+- La accion normal para salir sin guardar es el boton Cancelar cambios.
 - Si el REQ esta `PND`, el FE no debe navegar directo a editar con efecto de estado; debe usar `POST ?route=compras-req/tomar-edicion` y luego seguir la redireccion del BE.
 
 ## 8. `compras_req_ver.php`
@@ -393,8 +419,8 @@ Cuando se implemente:
 - Revisar visualmente listado, crear, editar, ver y pendientes de aprobacion.
 - Verificar responsive con tablas dentro de `.table-responsive`.
 
-## 16. Pendientes antes de implementar FE
+## 16. Cierre antes de implementar FE
 
-- Revisar si `pdh-components.css` ya cubre todos los bloques necesarios o si se requiere CSS modulo-especifico.
-- Confirmar disponibilidad de helper JS comun de toasts/confirmaciones.
-- Confirmar si las acciones de aprobar/rechazar quedan solo en `ver` o tambien como atajos en tabla de pendientes.
+- Usar `pdh-components.css` y componentes existentes siempre que cubran el caso; agregar CSS modulo-especifico solo si falta una pieza concreta.
+- Usar los helpers comunes disponibles de toasts/confirmaciones.
+- Las acciones de aprobar/rechazar quedan en `ver`; cualquier atajo futuro desde tabla de pendientes requiere contrato adicional.

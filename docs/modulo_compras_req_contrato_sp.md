@@ -25,7 +25,8 @@
   `p_in_json`, `p_in_usuarioid`, `p_in_dispositivo`, `p_in_ip`, `p_out_json`.
 - Los SP de mantenimiento no deben incluir `BEGIN`, `COMMIT` ni `ROLLBACK`; PHP controla transacciones mediante `callSpMaint()`.
 - Los SP de consulta se consumen con `callSpQuery()` y no devuelven data en `p_out_json`; la data sale por `SELECT`.
-- `p_out_json` se usa para meta/error: `status`, `message`, `id` cuando aplique y datos resumidos no tabulares si corresponde.
+- En SP de consulta, `p_out_json` se usa solo para meta/error: `status` y `message`; no contiene data de negocio.
+- En SP de mantenimiento, `p_out_json` puede devolver meta operativa acotada como `status`, `message`, `id`, `estado` o resumen de la accion ejecutada.
 - Los campos `auditcreacion*` y `auditedicion*` nunca vienen desde `p_in_json`.
 - Los SP de mantenimiento deben insertar LOG tecnico en `reqcompraslog` cuando afecten cabecera, estado, detalle, firmantes o comentarios.
 - `sp_compras_req_ppto_snapshot_actualizar` reutiliza el SP existente del incremental 11 y no inserta LOG tecnico propio; cuando se invoque desde `sp_compras_req_crear` o `sp_compras_req_editar`, el LOG tecnico lo registra el SP padre para evitar doble trazabilidad.
@@ -57,7 +58,7 @@ Permisos/validaciones de usuario:
 | `sp_compras_req_consulta_por_id_detalle` | Consultar lineas del REQ. | `reqcompraid` | Lineas ordenadas por `reqcompradetlinea`, snapshots de item, cantidades, precios, ultimo REQ y advertencia de presupuesto. | `reqcomprasdetalle`, `invitems`, `subfamilias`, `invunidadesmedidas` |
 | `sp_compras_req_consulta_por_id_firmantes` | Consultar firmantes del REQ. | `reqcompraid` | Firmantes ordenados por `firmanteorden`, usuario, tipo, estado, motivos, reemplazo y comentario. | `reqcomprasfirmantes`, `usuarios` |
 | `sp_compras_req_consulta_por_id_comentarios` | Consultar comentarios funcionales visibles. | `reqcompraid` | Comentarios ordenados por fecha/hora con usuario y tipo. | `reqcomprascomentarios`, `usuarios` |
-| `sp_compras_req_ppto_analizar` | Mostrar analisis presupuestario informativo actual del REQ sin escribir snapshot. | `reqcompraid` | Grupos por temporada/subfamilia/centro con saldo disponible, otros REQ en curso, aprobados pendientes, monto del REQ, saldo proyectado, porcentaje, deficit y advertencia. | `reqcompras`, `reqcomprasdetalle`, `pptocompra`, `temporadas`, `reqaprobados`, `reqcompraspptosnapshot` |
+| `sp_compras_req_ppto_analizar` | Mostrar analisis presupuestario informativo actual del REQ sin escribir snapshot. | `reqcompraid` | Grupos por subfamilia/centro con saldo disponible, otros REQ en curso, aprobados pendientes, monto del REQ, saldo proyectado, porcentaje, deficit y advertencia. La temporada solo se muestra si el SELECT la entrega explicitamente. | `reqcompras`, `reqcomprasdetalle`, `pptocompra`, `temporadas`, `reqaprobados`, `reqcompraspptosnapshot` |
 
 Reglas para listados:
 
@@ -99,7 +100,7 @@ Reglas:
 | SP | Objetivo | JSON entrada minimo | Salida `p_out_json` | Tablas afectadas |
 |---|---|---|---|---|
 | `sp_compras_req_crear` | Crear REQ en `BRR` o enviar directo a `PND`. | `reqcompratipo`, `centrocostoid`, `funcionariorut`, `reqcompraobs`, `reqcompraprioridad`, `accion`, `detalle[]`, `firmantesManual[]` | `status`, `message`, `id`, `reqcompracod`, `estado`, `reqaprobadoridpnd`, `advertenciapptocompra`, `fuerapptocompra` | `reqcompras`, `reqcomprasdetalle`, `reqcomprasfirmantes`, `reqcompraspptosnapshot`, `reqcomprascomentarios`, `reqcompraslog` |
-| `sp_compras_req_editar` | Editar REQ permitido y opcionalmente reenviar a aprobacion. | `reqcompraid`, cabecera editable, `accion`, `detalle[]`, `firmantesManual[]`, `comentario` opcional | `status`, `message`, `id`, `estado`, `reqaprobadoridpnd`, `advertenciapptocompra`, `fuerapptocompra` | `reqcompras`, `reqcomprasdetalle`, `reqcomprasfirmantes`, `reqcompraspptosnapshot`, `reqcomprascomentarios`, `reqcompraslog` |
+| `sp_compras_req_editar` | Editar REQ permitido y guardarlo como borrador o reenviarlo a aprobacion. | `reqcompraid`, cabecera editable, `accion`, `detalle[]`, `firmantesManual[]`, `comentario` opcional | `status`, `message`, `id`, `estado`, `reqaprobadoridpnd`, `advertenciapptocompra`, `fuerapptocompra` | `reqcompras`, `reqcomprasdetalle`, `reqcomprasfirmantes`, `reqcompraspptosnapshot`, `reqcomprascomentarios`, `reqcompraslog` |
 | `sp_compras_req_tomar_edicion` | Pasar de `PND` a `EDT` mediante accion POST explicita antes de mostrar el formulario de edicion. | `reqcompraid` | `status`, `message`, `id`, `estado` | `reqcompras`, `reqcompraslog` |
 | `sp_compras_req_cancelar_edicion` | Salir de `EDT` sin guardar cambios funcionales, liberando el REQ. | `reqcompraid`, `motivo` opcional | `status`, `message`, `id`, `estado` | `reqcompras`, `reqcompraslog` |
 | `sp_compras_req_liberar_edicion` | Liberar `EDT` por regla controlada de abandono/perdida de conexion. | `reqcompraid`, `motivo` | `status`, `message`, `id`, `estado` | `reqcompras`, `reqcompraslog` |
@@ -141,7 +142,7 @@ El SP resuelve y guarda desde maestros:
 
 Validaciones:
 
-- Debe existir al menos una linea para enviar a aprobacion.
+- Toda accion que persista cabecera/detalle en tablas debe validar datos minimos y al menos una linea valida, tanto al crear como al editar.
 - No se permite mezclar Material y Servicio.
 - Material/Servicio se resuelve desde `invitemstockeable`: `1` Material, `0` Servicio.
 - El item debe estar activo y cumplir `invitemcompra = 1`.
@@ -170,9 +171,17 @@ Reglas:
 
 ### 9.1 Crear/guardar
 
-- Crear sin enviar deja REQ en `BRR`.
-- Crear enviando requiere detalle valido y al menos un firmante activo.
+- La accion `guardar_borrador` crea el REQ en `BRR`.
+- La accion `enviar_aprobacion` crea el REQ y lo deja en `PND`.
+- Toda accion de crear que persista datos en tablas (`guardar_borrador` o `enviar_aprobacion`) requiere al menos:
+  - `reqcompratipo`,
+  - `centrocostoid`,
+  - `reqcompraprioridad`,
+  - una linea valida en `detalle[]`.
+- `funcionariorut` y `reqcompraobs` son opcionales.
+- Crear enviando requiere, ademas, al menos un firmante activo resultante.
 - Si no hay firmantes default ni manuales, el documento queda `BRR` y debe devolver advertencia.
+- El boton de cancelar/descartar en crear no invoca SP de mantenimiento ni persiste datos; es una accion FE/UX.
 - Envio a aprobacion deja estado `PND` y asigna `reqaprobadoridpnd`.
 
 ### 9.2 Editar
@@ -181,7 +190,14 @@ Reglas:
 - Desde `PND`, solo el creador puede tomar edicion si no existe aprobacion efectiva; cambia a `EDT`.
 - No se permite editar si existe al menos un firmante `APR` o si el estado es `APR`.
 - Cada edicion permitida actualiza `reqcomprafecha` desde sistema/BD.
-- Salida normal de `EDT`: guardar/reenviar mediante `sp_compras_req_editar` o cancelar mediante `sp_compras_req_cancelar_edicion`.
+- Mientras el REQ este en `EDT`, solo el usuario creador que tomo la edicion puede ejecutar `guardar_borrador` o `reenviar_aprobacion`.
+- En `EDT`, `sp_compras_req_editar` admite solo estas acciones:
+  - `guardar_borrador`: guarda cambios y deja el REQ en `BRR`;
+  - `reenviar_aprobacion`: guarda cambios, regenera flujo de firmantes segun contrato y deja el REQ en `PND`.
+- Si durante `EDT` aparece al menos una aprobacion efectiva (`firmanteestado = 'APR'`), el SP debe rechazar `guardar_borrador`, `reenviar_aprobacion` y `sp_compras_req_cancelar_edicion`, devolviendo error funcional para evitar reabrir un flujo ya aprobado parcialmente.
+- `sp_compras_req_cancelar_edicion` no guarda cambios funcionales y devuelve el REQ a `PND`.
+- `sp_compras_req_cancelar_edicion` se invoca desde una ruta dedicada; no forma parte del set de acciones del payload de `sp_compras_req_editar`.
+- `sp_compras_req_cancelar_edicion` solo restaura estado documental y `reqaprobadoridpnd` segun la lista vigente; no modifica cabecera, detalle, snapshot ni comentarios funcionales.
 - Si el usuario cierra navegador/pestana, vuelve atras, pierde conexion o abandona el flujo, el REQ queda en `EDT` hasta que el creador retome la edicion o se ejecute una liberacion controlada.
 - `sp_compras_req_liberar_edicion` no se ejecuta automaticamente por eventos del navegador; queda reservado para accion controlada/manual con motivo obligatorio.
 
@@ -211,6 +227,8 @@ Reglas:
 
 - `subfamiliaid`;
 - `centrocostoid`.
+
+La temporada se usa para resolver el presupuesto vigente. No es un campo obligatorio de salida del analisis REQ; si el backend no la entrega explicitamente, FE no debe mostrarla.
 
 Cada grupo debe considerar:
 
@@ -265,9 +283,7 @@ Cuando se implemente PHP:
 - Ejecutar `php -l` en archivos PHP nuevos o modificados.
 - Ejecutar `git diff --check`.
 
-## 13. Pendientes para contrato BE/FE
+## 13. Cierre documental
 
-- Documentar `ComprasCatalogosService` y sus metodos `*FormSelect`/`*FormGrid`.
-- Confirmar nombres de clases Service/Controller/Model segun patrones existentes.
-- Confirmar rutas web definitivas para listado, crear, editar, ver y pendientes de aprobacion.
-- Confirmar nombres de vistas PHP y variables entregadas por controlador.
+- Contrato BE y contrato FE ya existen para el primer corte REQ.
+- Las rutas, clases, vistas y variables definitivas se implementan segun esos contratos y patrones existentes del proyecto.

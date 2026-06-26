@@ -128,7 +128,7 @@ El Controller debe normalizar los POST de crear/editar antes de llamar al Servic
 - `funcionariorut`: RUT opcional o `null`.
 - `reqcompraobs`: observacion opcional.
 - `reqcompraprioridad`: `1` Normal o `2` Alta.
-- `accion`: `guardar_borrador`, `enviar_aprobacion`, `guardar_cambios` o `reenviar_aprobacion`.
+- `accion`: `guardar_borrador`, `enviar_aprobacion` o `reenviar_aprobacion`. Cancelar edicion no viaja como `accion`; usa ruta dedicada.
 - `detalle[]`: cada fila con `invitemid`, `reqcompradetcantidad` y `reqcompradetobs` opcional.
 - `firmantesManual[]`: cada fila con `usuarioid` y `firmanteorden`.
 - `comentario`: opcional, salvo rechazo/anulacion segun contrato SP.
@@ -138,6 +138,13 @@ Reglas:
 - El FE puede enviar inputs como `detalle[0][invitemid]`; el BE los normaliza a arrays limpios.
 - El BE no acepta campos calculados de item, precio, subfamilia, unidad ni totales desde el POST; esos valores se resuelven en SP desde maestros.
 - `POST /editar` no confia en el hidden `reqcompraid`; el SP vuelve a validar estado, creador/autorizacion y aprobador pendiente.
+- `crearPost` solo debe invocar `sp_compras_req_crear` para acciones que persisten: `guardar_borrador` o `enviar_aprobacion`.
+- La accion de cancelar/descartar en crear no persiste datos y vuelve al listado; no crea cabecera vacia en BD.
+- Toda accion que persista datos en tablas debe validar datos minimos y al menos una linea valida. En crear, aplica a `guardar_borrador` y `enviar_aprobacion`:
+  - `reqcompratipo`,
+  - `centrocostoid`,
+  - `reqcompraprioridad`,
+  - una linea valida en `detalle[]`.
 
 ## 6. `ComprasReqController`
 
@@ -286,7 +293,12 @@ Regla aprobada:
 - Si el REQ ya esta en `EDT` y el mismo creador vuelve a editar, el BE permite retomar la edicion.
 - Cambiar `id` en la URL o el hidden `reqcompraid` no concede permisos: Controller y SP validan que el usuario pueda ver/editar ese REQ.
 - Si el usuario cierra navegador/pestana, vuelve atras, pierde conexion o abandona el flujo, el REQ queda en `EDT`.
-- La salida normal de `EDT` es guardar/reenviar mediante `editarReq` o cancelar mediante `cancelarEdicion`.
+- Mientras el REQ esta en `EDT`, solo el creador que tomo la edicion puede operar sobre ese formulario.
+- La salida normal de `EDT` es:
+  - `guardar_borrador`: guardar cambios y pasar a `BRR`;
+  - `reenviar_aprobacion`: guardar cambios y volver a `PND`;
+  - ruta dedicada `cancelar-edicion`: no guardar cambios y volver a `PND`.
+- Si el backend detecta una aprobacion efectiva mientras el REQ estaba en `EDT`, debe bloquear `guardar_borrador`, `reenviar_aprobacion` y `cancelar-edicion`, mostrar mensaje funcional y obligar a recargar desde vista/listado.
 - `liberarEdicion` queda reservado para accion controlada/manual, no para eventos automaticos del navegador.
 - Mientras el REQ esta en `EDT`, aprobadores no pueden aprobar ni rechazar; el SP debe rechazar la accion y el Controller debe mostrar mensaje funcional y volver al listado de pendientes o a ver.
 
@@ -304,6 +316,7 @@ Redirecciones post-edicion:
 
 - Guardar borrador: `compras-req/ver&id=X`.
 - Guardar y enviar o reenviar: `compras-req/ver&id=X`.
+- Cancelar cambios desde `EDT`: `compras-req/ver&id=X` con el REQ nuevamente en `PND`.
 - Error: volver a `compras_req_editar.php` con datos, `errorMessage` y toast.
 
 ## 11. Permisos BE visibles
@@ -328,8 +341,7 @@ Cuando se implemente:
 - No ejecutar SQL contra BD real sin autorizacion explicita.
 - No llamar ERP/Finnegans desde terminal.
 
-## 13. Pendientes para contrato FE
+## 13. Cierre documental
 
-- Definir layout de listado, crear, editar, ver y pendientes de aprobacion.
-- Definir comportamiento visual de modales de items y aprobadores.
-- Definir mensajes/toasts principales.
+- Contrato FE ya existe para el primer corte REQ.
+- Layout, modales y mensajes/toasts se implementan segun contrato FE y patrones existentes del proyecto.
