@@ -61,7 +61,7 @@
 | Algunos endpoints restantes de maestros | Pendiente |
 | Integracion de proveedores y estructura local final | Pendiente |
 | Impuestos multiples por item y soporte exacto de Finnegans | Pendiente |
-| Nivel final de `preocitemsdimensiones`: item agrupado o req-item origen | Pendiente |
+| Estructura final de reglas `preocaprobadoresxmonto` | Pendiente |
 | Algunos detalles del payload ERP | Pendiente |
 | Casos borde de traspasos / reversas | Pendiente parcial |
 
@@ -105,14 +105,14 @@
 | BC-08 | Usuarios | Exponer permisos correctos en login/payload | B | Pendiente | BC-07 | BE | Necesario para UI y middleware. | Permisos consumibles por UI y middleware. |
 | BC-09 | Items | Sincronizacion diaria del maestro de productos | A | Parcial | API ERP | BE + DB | Ya existe base y endpoints casi cerrados. | Maestro de items vigente para todo Compras. |
 | BC-10 | Items | Precio referencial / estandar para validacion operativa | A | Parcial | BC-09 | BE + DB | Clave para validar REQ sin consumir presupuesto. Si el precio/costo es cero, no se permite agregar al REQ. | REQ puede validar precio y bloquear items sin precio. |
-| BC-11 | Items | Campos Material/Servicio, uso `LCH/CMB/ALM/BDG` e ingreso local | A | Validado | BC-09 | BE + DB | Item local se marca con `iteminglocal`; ERP manda cuando lo sincronice. Edicion local solo precio cero, uso funcional y activar/desactivar. | Clasificacion funcional lista para compras y contingencias locales. |
+| BC-11 | Items | Material/Servicio, uso `LCH/CMB/ALM/BDG` e ingreso local | A | Validado | BC-09 | BE + DB | Material/Servicio se resuelve con `invitemstockeable`: 1 Material, 0 Servicio. Para REQ/PreOC debe ser `invitemcompra = 1`. Item local se marca con `iteminglocal`; ERP manda cuando lo sincronice. Edicion local solo precio cero, uso funcional y activar/desactivar. | Clasificacion funcional lista para compras y contingencias locales. |
 | BC-12 | Items | Soporte de familia y subfamilia en `invitems` | A | Parcial | BC-09, BC-13, BC-14 | BE + DB | Necesario para presupuesto y validacion. | Item clasificado para presupuesto y validacion. |
 | BC-13 | Familias | Crear o sincronizar maestro de familia | B | Parcial | API ERP o decision local | BE + DB | Ya aparece en analisis consolidado transversal. | Catalogo base para clasificacion transversal. |
 | BC-14 | Subfamilias | Crear o sincronizar maestro de subfamilia | A | Parcial | BC-13 | BE + DB | Clave operativa del presupuesto y validacion. | Clave operativa del presupuesto y validacion. |
-| BC-15 | Proveedores | Sincronizacion ERP como maestro espejo | A | Parcial | API ERP | BE + DB | Existe endpoint identificado, falta cierre total del modelo. | Proveedor seleccionable en PreOC. |
-| BC-16 | Proveedores | Busqueda/autocomplete con formato real del codigo ERP | B | Pendiente | BC-15 | FE + BE | El formato real del codigo puede variar. | Seleccion segura y usable del proveedor. |
-| BC-17 | Condiciones de pago | Sincronizacion catalogo ERP | A | Parcial | API ERP | BE + DB | Maestro requerido para PreOC. | Condicion de pago disponible para PreOC. |
-| BC-18 | Condiciones de pago | Pre-carga desde proveedor con edicion manual | A | Pendiente | BC-15, BC-17 | FE + BE | Debe respetar ficha del proveedor y permitir override. | PreOC con valor inicial correcto. |
+| BC-15 | Proveedores | Sincronizacion ERP como maestro espejo | A | Validado funcional | API ERP | BE + DB | Misma logica de productos: list + detalle por codigo. El detalle trae categoria fiscal, identificacion tributaria, condiciones de pago, concepto/cuenta proveedor y medio de pago. | Proveedor seleccionable en PreOC. |
+| BC-16 | Proveedores | Consulta y exportacion Excel | B | Validado funcional | BC-15 | FE + BE | Pantalla solo consulta y exportar a Excel; no CRUD libre. | Maestro proveedor usable por operacion y auditoria. |
+| BC-17 | Condiciones de pago | Sincronizacion catalogo ERP | A | Validado funcional | API ERP | BE + DB | Misma logica: list + detalle por codigo. El detalle incluye tipo, cuentas e items con dias/porcentaje. | Condicion de pago disponible para PreOC. |
+| BC-18 | Condiciones de pago | Pre-carga desde proveedor con edicion manual | A | Validado funcional | BC-15, BC-17 | FE + BE | Debe respetar ficha del proveedor y permitir override antes de grabar PreOC. Requiere relacion proveedor-condicion de pago. | PreOC con valor inicial correcto. |
 | BC-19 | Fiscalidad | Categorias fiscales e impuestos por proveedor | B | Parcial | API ERP | BE + DB | Requerido para conceptos de OC. | Conceptos de OC generables desde maestro. |
 | BC-20 | Fiscalidad | Construccion de conceptos/retenciones para Finnegans | B | Pendiente | BC-19 | BE | Depende del detalle final de conceptos activos. | JSON de OC consistente con ERP. |
 | BC-21 | Monedas | Sincronizacion catalogo monedas | C | Parcial | API ERP | BE + DB | Ya se levantó pero no es bloqueante para el negocio. | Catálogo operativo y trazable. |
@@ -120,7 +120,7 @@
 | BC-23 | Ctas contables | Sincronizar cuentas como referencia | C | Parcial | API ERP | BE + DB | Solo referencia y auditoría. | Referencia contable para auditoria. |
 | BC-24 | ERP core | Definir workflow fijo de compra | B | Validado | Mapeo ERP | BE | Workflow es valor fijo de integracion; no requiere maestro propio por ahora. | PreOC con workflow correcto sin CRUD adicional. |
 | BC-25 | ERP core | Definir provincias/destinos requeridos | B | Parcial | API ERP | BE + DB | Depende del flujo real de OC y destino final. | Integracion completa con OC. |
-| BC-26 | ERP core | Confirmar dimensiones ERP obligatorias | A | Parcial | Soporte Finnegans | BE + DB | `DIMCTC` sale del centro de costo y `DIMPARFIN` del item. Falta confirmar si `preocitemsdimensiones` queda por item agrupado o por req-item origen. | Integracion no bloqueada por dimensiones faltantes. |
+| BC-26 | ERP core | Confirmar dimensiones ERP obligatorias | A | Validado funcional | Soporte Finnegans | BE + DB | `DIMCTC` sale del centro de costo y `DIMPARFIN` del item. `preocitemsdimensiones` queda operativamente a nivel req-item origen, con `preocitemid` nullable como apoyo si se requiere consulta agrupada. | Integracion no bloqueada por dimensiones faltantes. |
 | BC-27 | Presupuesto | Implementar cabecera `PptoCompra` | A | Validado | BC-01, BC-14 | BE + DB | Ya definido en documento definitivo de presupuesto. Debe sumar responsable, administrador y colaborador opcional para firmantes default de PreOC. | Modelo central de presupuesto operativo. |
 | BC-28 | Presupuesto | Implementar `PptoCompraMensual` | A | Validado | BC-27 | BE + DB | Base de carga mensual del presupuesto. | Carga mensual del presupuesto. |
 | BC-29 | Presupuesto | Implementar `PptoCompraTransacciones` | A | Validado | BC-27 | BE + DB | Debe preservar toda la historia de movimientos. | Libro de movimientos trazable. |
@@ -192,7 +192,7 @@
 - No avanzar con presupuesto si no existe temporada con tipo `PPTO_COMPRAS`.
 - No permitir compra sin subfamilia y centro de costo resolubles.
 - No activar listados de aprobacion sin resolver `reqaprobadoridpnd`/`preocaprobadoridpnd` desde cabecera.
-- No cerrar integracion PreOC hasta confirmar estructura final de proveedores, impuestos y nivel de dimensiones.
+- No cerrar integracion PreOC hasta confirmar impuestos y estructura final de `preocaprobadoresxmonto`.
 
 ## 8. Estado sugerido
 

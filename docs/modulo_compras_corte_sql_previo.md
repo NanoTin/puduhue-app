@@ -52,26 +52,25 @@ Los nombres son propuestos. Antes de crear archivos reales, deben revisarse cont
 
 Agregar atributos documentados:
 
-- permite aprobacion REQ,
-- permite aprobacion PreOC,
-- comprador,
-- permite anular PreOC,
-- permite editar precios,
-- permite crear item,
-- permite editar item,
-- `permitesynctrnerp`,
-- `reqautorizadorfuerapptocompra`,
-- `reqautorizadorfuerapptocompraorden`.
+- `usuariopermiteaprobreq`,
+- `usuariopermiteaprobpreoc`,
+- `usuariocomprador`,
+- `usuariopermiteanularpreoc`,
+- `usuariopermiteeditarprecios`,
+- `usuariopermitecrearitem`,
+- `usuariopermiteeditaritem`,
+- `usuariopermitesynctrnerp`,
+- `usuarioreqautorizadorfuerapptocompra`,
+- `usuarioreqautorizadorfuerapptocompraorden`.
 
 Reglas esperadas:
 
-- el orden de autorizadores fuera de presupuesto debe ser unico cuando `reqautorizadorfuerapptocompra = 1`;
+- el orden de autorizadores fuera de presupuesto debe ser unico cuando `usuarioreqautorizadorfuerapptocompra = 1`;
 - usuarios inactivos no deben servir para nuevas listas de firmantes;
 - el filtro comprador de PreOC debe listar usuarios compradores aunque esten inactivos, para busqueda historica.
 
 Pendiente tecnico:
 
-- definir nombres fisicos exactos de columnas para mantener consistencia con estilo `usuario...` o aceptar los nombres funcionales documentados.
 - actualizar `usuarioslog` y `sp_usuarios_*`.
 
 ### 4.2 Usuarios-centros de costo
@@ -96,7 +95,7 @@ Reglas esperadas:
 
 ### 4.3 Funcionarios
 
-Crear maestro si se confirma que no existe en otro modulo.
+Crear maestro propio. No deberia existir actualmente una tabla equivalente.
 
 Columnas funcionales minimas:
 
@@ -112,6 +111,7 @@ Reglas esperadas:
 - funcionario es opcional en REQ;
 - no debe confundirse funcionario con usuario aprobador;
 - un funcionario no necesariamente tiene usuario de sistema.
+- requiere BE, FE y carga masiva por Excel.
 
 ### 4.4 Aprobadores periodo inactividad
 
@@ -161,11 +161,14 @@ Pendiente tecnico:
 
 Extender `invitems`:
 
-- agregar `iteminglocal` o nombre equivalente definido;
-- confirmar atributo Material/Servicio si no existe otra fuente oficial.
+- agregar `iteminglocal` o nombre equivalente definido.
 
 Reglas esperadas:
 
+- Material/Servicio no requiere columna nueva:
+  - `invitemstockeable = 1` equivale a Material,
+  - `invitemstockeable = 0` equivale a Servicio.
+- Para REQ y PreOC debe cumplirse ademas `invitemcompra = 1`.
 - item local resuelve urgencias operativas;
 - si ERP sincroniza el item despues, ERP manda sobre campos espejo;
 - edicion local permitida solo para precio cuando es cero, uso funcional y activar/desactivar.
@@ -175,26 +178,57 @@ Pendiente tecnico:
 - actualizar `sp_invitems_*`;
 - incorporar validaciones de permisos desde `usuarios`.
 
-### 4.7 Proveedores y condiciones de pago
+### 4.7 Proveedores
 
-Crear solo si se confirma estructura con API/Finnegans:
+Crear maestros locales de proveedores, usando la misma logica de productos:
+
+1. leer `ERP_PROVEEDORES_LIST`;
+2. guardar/cotejar proveedor base por codigo;
+3. consultar `ERP_PROVEEDORES_DETALLE` por cada proveedor grabado;
+4. completar los campos de detalle.
 
 - maestro local de proveedores,
 - LOG proveedores,
-- maestro local de condiciones de pago,
-- LOG condiciones de pago.
+- relacion proveedor-condicion de pago.
 
 Reglas esperadas:
 
-- son espejos ERP;
+- proveedores son espejo ERP;
+- la pantalla es solo consulta y exportar a Excel;
 - PreOC no avanza sin proveedor resoluble;
-- condicion de pago se precarga desde proveedor, pero puede editarse antes de grabar la PreOC.
+- proveedor puede tener una o mas condiciones de pago asociadas;
+- la condicion de pago de PreOC se precarga desde proveedor cuando aplique, pero puede editarse antes de grabar.
 
-Pendiente funcional/tecnico:
+Campos observados en JSON:
 
-- confirmar estructura exacta del JSON real;
-- confirmar llaves/codigos ERP;
-- confirmar categoria fiscal e impuestos asociados.
+- list: `codigo`, `nombre`, `descripcion`, `activo`;
+- detalle: `Codigo`, `Nombre`, `Activo`, `RazonSocial`, `Email`, `CategoriaFiscalCodigo`, `IdentificacionTributariaCodigo`, `IdentificacionTributariaNumero`, `CondicionesPago`, `ConceptoProveedorCodigo`, `CuentaProveedorCodigo`, `MonedaID_Pago_Codigo`, `USR_MedioPago`.
+
+### 4.8 Condiciones de pago
+
+Crear maestros locales de condiciones de pago, usando la misma logica de productos/proveedores:
+
+1. leer `ERP_CONDICIONES_PAGO_LIST`;
+2. guardar/cotejar condicion base por codigo;
+3. consultar `ERP_CONDICIONES_PAGO_DETALLE` por cada condicion grabada;
+4. completar los campos de detalle y sus items.
+
+- maestro local de condiciones de pago,
+- LOG condiciones de pago,
+- detalle/items de condicion de pago.
+
+Reglas esperadas:
+
+- condiciones de pago son espejo ERP;
+- la pantalla es solo consulta y exportar a Excel;
+- proveedor puede restringir las condiciones disponibles;
+- PreOC debe validar condicion seleccionada.
+
+Campos observados en JSON:
+
+- list: `codigo`, `nombre`, `descripcion`, `activo`;
+- detalle: `Codigo`, `Activo`, `Nombre`, `Tipo`, `EdicionFija`, `ExigeDocumentosDiferidos`, `PorcentajeInteres`, `CtaProveedores`, `CtaDeudoresPorVentas`, `CtaDisponibilidad`, `ETA/ETD`, `CondicionPagoItems`;
+- item: `Fecha`, `Tipo`, `Dias`, `Porcentaje`.
 
 ## 5. Incremental 08 - REQ
 
@@ -227,8 +261,9 @@ Reglas a cubrir:
 
 Pendiente antes de DDL:
 
-- confirmar nombres fisicos finales de columnas de prioridad, observaciones y tipo Material/Servicio.
-- decidir si `reqcomprasestados` usa PK codigo (`BRR`) o ID + codigo.
+- confirmar nombres fisicos finales de columnas de prioridad y observaciones.
+- Material/Servicio se resuelve desde `invitems.invitemstockeable`; no requiere columna nueva.
+- `reqcomprasestados` debe usar codigo como PK (`BRR`, `PND`, `EDT`, `APR`, `RCH`, `ANL`).
 
 ## 6. Incremental 09 - Pendientes de compra
 
@@ -295,9 +330,13 @@ Reglas a cubrir:
 
 Pendientes antes de DDL:
 
-- confirmar proveedor/condicion pago/categoria fiscal;
-- confirmar si `preocitemsdimensiones` cuelga de item agrupado o req-item origen;
 - confirmar estructura de `preocaprobadoresxmonto`.
+
+Definiciones cerradas:
+
+- proveedor y condicion de pago se crean como maestros espejo ERP con list + detalle.
+- `preocitemsdimensiones` cuelga operativamente de `preocdetallereqitems`; puede mantener `preocitemid` nullable como apoyo si luego se requiere consulta por item agrupado.
+- estados documentales y ERP usan codigo como PK.
 
 ## 8. Incremental 11 - SP y reglas presupuestarias
 
@@ -336,23 +375,24 @@ Antes de programar pendientes de compra:
 
 Antes de programar PreOC:
 
-1. Incremental 07 completo incluyendo proveedores/condiciones si el flujo los exige desde el primer corte.
+1. Incremental 07 completo incluyendo proveedores/condiciones.
 2. Incremental 09 completo.
 3. Incremental 10 cabecera/detalle/firmantes.
 4. Incremental 11 para reserva/confirmacion/reversa.
 
-## 10. Pendientes de decision antes de escribir SQL
+## 10. Decisiones cerradas y pendientes antes de escribir SQL
 
-| Tema | Decision pendiente | Impacto |
+| Tema | Decision | Estado | Impacto |
 |---|---|---|
-| Nombres fisicos de permisos en `usuarios` | Usar prefijo `usuario...` o nombres funcionales directos | DDL, SP, FE |
-| Material/Servicio en item | Campo nuevo o fuente existente | Validacion REQ/PreOC |
-| Funcionarios | Confirmar si ya existe maestro en otra rama/documento | Evita duplicar tabla |
-| Proveedores | Estructura JSON real y campos locales | Bloquea PreOC |
-| Condiciones de pago | Estructura JSON real y relacion con proveedor | Bloquea PreOC |
-| `preocitemsdimensiones` | Nivel item agrupado o req-item origen | Payload ERP |
-| Estados maestros | PK codigo o ID + codigo | Consistencia SQL/SP |
-| Centros de costo `empresaid` | Mantener como local/no usado o remover en futuro | Integracion ERP |
+| Nombres fisicos de permisos en `usuarios` | Usar prefijo `usuario...` y nombres definidos en 4.1 | Cerrado | DDL, SP, FE |
+| Material/Servicio en item | Usar `invitemstockeable`: 1 Material, 0 Servicio; complementar con `invitemcompra = 1` | Cerrado | Validacion REQ/PreOC |
+| Funcionarios | Crear tabla propia, BE, FE y carga masiva Excel | Cerrado | Base compartida |
+| Proveedores | Crear maestros espejo con list + detalle; consulta y exportacion Excel | Cerrado para primer modelo | Bloquea PreOC |
+| Condiciones de pago | Crear maestros espejo con list + detalle/items; consulta y exportacion Excel | Cerrado para primer modelo | Bloquea PreOC |
+| `preocitemsdimensiones` | Nivel operativo `preocdetallereqitems`; `preocitemid` nullable opcional | Cerrado | Payload ERP |
+| Estados maestros | PK codigo | Cerrado | Consistencia SQL/SP |
+| Centros de costo `empresaid` | Mantener como local/no usado por ERP por ahora | Cerrado | Integracion ERP |
+| `preocaprobadoresxmonto` | Confirmar estructura de reglas por monto | Pendiente | Firmantes PreOC |
 
 ## 11. Recomendacion
 

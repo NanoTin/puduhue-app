@@ -108,7 +108,8 @@ Acciones requeridas:
 
 - Sincronizar desde Finnegans como espejo.
 - Guardar precio referencial o estándar para validación operativa.
-- Diferenciar Material vs Servicio.
+- Diferenciar Material vs Servicio usando `invitemstockeable`: `1` Material, `0` Servicio.
+- Usar `invitemcompra = 1` como habilitador para REQ/PreOC.
 - No permitir agregar al REQ items sin precio/costo referencial.
 - Clasificar por uso de negocio:
   - `LCH`

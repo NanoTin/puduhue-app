@@ -91,23 +91,23 @@ Brechas contra documentacion:
 
 Existe tabla `usuarios`, pero faltan los atributos documentados:
 
-- permite aprobacion REQ,
-- permite aprobacion PreOC,
-- comprador,
-- permite anular PreOC,
-- permite editar precios,
-- permite crear item,
-- permite editar item,
-- `permitesynctrnerp`,
-- `reqautorizadorfuerapptocompra`,
-- `reqautorizadorfuerapptocompraorden`.
+- `usuariopermiteaprobreq`,
+- `usuariopermiteaprobpreoc`,
+- `usuariocomprador`,
+- `usuariopermiteanularpreoc`,
+- `usuariopermiteeditarprecios`,
+- `usuariopermitecrearitem`,
+- `usuariopermiteeditaritem`,
+- `usuariopermitesynctrnerp`,
+- `usuarioreqautorizadorfuerapptocompra`,
+- `usuarioreqautorizadorfuerapptocompraorden`.
 
 Tambien faltan indices/reglas para:
 
 - listar compradores,
 - listar aprobadores REQ activos,
 - listar aprobadores PreOC activos,
-- asegurar orden unico de autorizadores fuera de presupuesto cuando `reqautorizadorfuerapptocompra = 1`.
+- asegurar orden unico de autorizadores fuera de presupuesto cuando `usuarioreqautorizadorfuerapptocompra = 1`.
 - Los SP `sp_usuarios_insertar`, `sp_usuarios_editar` y `sp_usuarios_listar` no reciben ni exponen estos atributos.
 
 ### 3.3 Usuarios-centros de costo
@@ -124,7 +124,7 @@ Brechas documentadas:
 
 ### 3.4 Funcionarios
 
-No se encontro DDL de maestro de funcionarios.
+No se encontro DDL de maestro de funcionarios. Se define crear tabla propia, mas BE, FE y carga masiva por Excel.
 
 Brechas documentadas:
 
@@ -167,7 +167,7 @@ Existe `invitems` con:
 Brechas contra documentacion:
 
 - Falta `iteminglocal` o nombre equivalente para marcar item ingresado localmente.
-- Falta atributo explicito Material/Servicio, si no se resolvera desde otro maestro/campo existente.
+- Material/Servicio no requiere atributo nuevo: se resuelve con `invitemstockeable` (`1` Material, `0` Servicio), complementado con `invitemcompra = 1` para REQ/PreOC.
 - Los SP `sp_invitems_insertar`, `sp_invitems_editar` y `sp_invitems_listar` ya consideran familia, subfamilia, tasa, partida, compra, costo estandar y uso funcional.
 - Los SP `sp_invitems_*` no validan permisos de crear/editar item y no limitan la edicion local a:
   - precio cuando es cero,
@@ -183,11 +183,15 @@ Existen endpoints en `init_erplistadoendpoints.sql`:
 - `ERP_CONDICIONES_PAGO_LIST`
 - `ERP_CONDICIONES_PAGO_DETALLE`
 
-Brechas:
+Definiciones y brechas:
 
 - No existen tablas locales de proveedores.
 - No existen tablas locales de condiciones de pago.
-- Falta definir estructura segun respuesta real de API/Finnegans.
+- Se definen como maestros espejo ERP con la misma logica de productos: primero `list`, luego detalle por codigo.
+- Proveedores usa `ERP_PROVEEDORES_LIST` y `ERP_PROVEEDORES_DETALLE`.
+- Condiciones de pago usa `ERP_CONDICIONES_PAGO_LIST` y `ERP_CONDICIONES_PAGO_DETALLE`.
+- Se requiere tabla puente proveedor-condicion de pago porque el detalle de proveedor trae `CondicionesPago`.
+- Ambas pantallas son de consulta y exportacion a Excel.
 - PreOC no deberia avanzar sin proveedor y condicion de pago resolubles.
 
 ### 3.8 Aprobadores por periodo de inactividad
@@ -267,7 +271,7 @@ Brechas principales:
 2. `pptocompra` esta funcionalmente definida como fuente de firmantes default PreOC, pero la tabla SQL aun no tiene los tres usuarios responsables.
 3. La documentacion de PreOC depende de proveedores/condiciones de pago, pero hoy solo existen endpoints registrados, no maestros locales.
 4. La documentacion de REQ y PreOC usa aprobador pendiente denormalizado en cabecera, pero no existe todavia ninguna tabla transaccional para materializar esa regla.
-5. Las dimensiones ERP estan parcialmente cubiertas por items/centros, pero la tabla `preocitemsdimensiones` sigue pendiente de confirmacion de nivel.
+5. Las dimensiones ERP estan parcialmente cubiertas por items/centros. Se define que `preocitemsdimensiones` cuelgue operativamente de `preocdetallereqitems`, con `preocitemid` nullable como apoyo si se requiere consulta por item agrupado.
 
 ## 5. Recomendacion de corte SQL antes de programar
 
@@ -280,10 +284,10 @@ Orden sugerido:
    - aprobadores-periodo-inactividad,
    - `pptocompra` responsables PreOC,
    - `invitems.iteminglocal`,
-   - proveedores/condiciones pago si se confirma estructura.
+   - proveedores/condiciones pago con logica list + detalle.
 2. DDL REQ completo, con estados y logs.
 3. DDL pendientes de compra (`reqaprobados*`).
-4. DDL PreOC completo, dejando marcado si `preocitemsdimensiones` queda pendiente.
+4. DDL PreOC completo, con `preocitemsdimensiones` a nivel req-item origen.
 5. SP/servicios presupuestarios para reserva, confirmacion y reversa.
 6. Revalidar SP existentes para incluir columnas nuevas en listar/crear/editar/log.
 

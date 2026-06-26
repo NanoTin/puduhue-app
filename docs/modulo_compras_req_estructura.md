@@ -54,7 +54,7 @@
 | Tabla | Cambio |
 |---|---|
 | `usuarios` | Separar permisos de aprobacion REQ, aprobacion PreOC, comprador, anular PreOC, editar precios, crear/editar item y sincronizar transacciones ERP |
-| `invitems` | Mantener tipo, precio referencial, comprable, uso funcional, estado local y marca `iteminglocal` |
+| `invitems` | Mantener `invitemstockeable` como Material/Servicio, precio referencial, comprable, uso funcional, estado local y marca `iteminglocal` |
 | `centroscosto` | Mantener atributos locales de jefe de centro y jefe tecnico |
 
 ## 2. `reqcompras` - Cabecera del Requerimiento
@@ -112,6 +112,8 @@ Reglas:
 - Mostrar solo items comprables, activos y del mismo tipo del REQ.
 - Un item con precio cero no puede agregarse al REQ. Debe indicarse que se contacte a Administracion.
 - No se permite mezclar Material y Servicio.
+- Material/Servicio se resuelve desde `invitemstockeable`: `1` Material, `0` Servicio.
+- Para agregar un item a REQ debe cumplirse `invitemcompra = 1`.
 - La prioridad visual del REQ no altera reglas de aprobacion.
 - `subfamiliaid` facilita el cruce con `reqcompraspptosnapshot` para saber que items originaron cada grupo presupuestario.
 - La fecha ultimo requerimiento se obtiene buscando la maxima fecha para el mismo centro de costo e item.
@@ -202,13 +204,13 @@ Reglas:
 Cuando el snapshot presupuestario detecta falta de saldo:
 
 1. Se setea advertencia en cabecera.
-2. Se agregan al final los usuarios activos con `reqautorizadorfuerapptocompra = 1`.
-3. Se ordenan por `reqautorizadorfuerapptocompraorden`.
+2. Se agregan al final los usuarios activos con `usuarioreqautorizadorfuerapptocompra = 1`.
+3. Se ordenan por `usuarioreqautorizadorfuerapptocompraorden`.
 4. Se agregan una sola vez aunque existan multiples deficits.
 5. Se les marca `firmantedefault = 1`, `firmantefuerapptocompra = 1` y motivo `REQ_SIN_SALDO_PPTO`.
 6. Se aplica inactividad/reemplazo.
 
-`reqautorizadorfuerapptocompraorden` debe ser unico para usuarios con `reqautorizadorfuerapptocompra = 1`; el resto usa orden `0`.
+`usuarioreqautorizadorfuerapptocompraorden` debe ser unico para usuarios con `usuarioreqautorizadorfuerapptocompra = 1`; el resto usa orden `0`.
 
 En la grilla de firmantes:
 
@@ -436,24 +438,24 @@ Permisos funcionales a consolidar:
 
 | Permiso conceptual | Uso |
 |---|---|
-| permite aprobar REQ | Lista de firmantes REQ y centros de costo |
-| permite aprobar PreOC | Lista de firmantes PreOC |
-| `reqautorizadorfuerapptocompra` | Usuario autorizador fuera de presupuesto para REQ |
-| `reqautorizadorfuerapptocompraorden` | Orden relativo de autorizadores fuera de presupuesto; unico cuando aplica |
-| comprador | Crear/editar PreOC si tiene acceso al formulario |
-| permite anular PreOC | Anulacion especial de PreOC cuando el estado lo permite |
-| editar precios | Editar precios en REQ |
-| permite crear item | Crear item local urgente |
-| permite editar item | Editar precio cero, uso funcional y activo/inactivo |
-| `permitesynctrnerp` | Botones de sincronizacion de transacciones ERP |
+| `usuariopermiteaprobreq` | Lista de firmantes REQ y centros de costo |
+| `usuariopermiteaprobpreoc` | Lista de firmantes PreOC |
+| `usuarioreqautorizadorfuerapptocompra` | Usuario autorizador fuera de presupuesto para REQ |
+| `usuarioreqautorizadorfuerapptocompraorden` | Orden relativo de autorizadores fuera de presupuesto; unico cuando aplica |
+| `usuariocomprador` | Crear/editar PreOC si tiene acceso al formulario |
+| `usuariopermiteanularpreoc` | Anulacion especial de PreOC cuando el estado lo permite |
+| `usuariopermiteeditarprecios` | Editar precios en REQ |
+| `usuariopermitecrearitem` | Crear item local urgente |
+| `usuariopermiteeditaritem` | Editar precio cero, uso funcional y activo/inactivo |
+| `usuariopermitesynctrnerp` | Botones de sincronizacion de transacciones ERP |
 
 ## 15. Modificaciones a `invitems`
 
 Campos/conceptos relevantes para REQ:
 
-- tipo Material/Servicio,
+- Material/Servicio por `invitemstockeable`,
 - precio referencial,
-- comprable,
+- comprable por `invitemcompra`,
 - uso funcional,
 - activo/inactivo,
 - `iteminglocal`.
@@ -461,6 +463,8 @@ Campos/conceptos relevantes para REQ:
 Reglas:
 
 - Si `iteminglocal = 1`, el item fue ingresado localmente para resolver una urgencia.
+- `invitemstockeable = 1` equivale a Material; `invitemstockeable = 0` equivale a Servicio.
+- `invitemcompra = 1` habilita el item para REQ y, por consecuencia, para PreOC nacida desde REQ.
 - Si ERP luego trae el item, ERP manda y actualiza los campos que correspondan.
 - La edicion local rapida aplica a cualquier item, pero solo para precio cero, uso funcional y activo/inactivo.
 - Debe advertirse que el cambio tambien debe realizarse en ERP.

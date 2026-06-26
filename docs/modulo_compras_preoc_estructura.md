@@ -14,7 +14,7 @@
 
 | # | Decision | Resolucion vigente |
 |---|---|---|
-| 1 | Creador de PreOC | Usuario comprador con permiso `comprador` |
+| 1 | Creador de PreOC | Usuario comprador con permiso `usuariocomprador` |
 | 2 | Origen de lineas | `reqaprobados` pendientes o parciales |
 | 3 | Compra parcial | Permitida; se actualiza saldo pendiente del requerimiento aprobado |
 | 4 | Cotizaciones | Fuera de alcance |
@@ -42,7 +42,7 @@
 | `preocdetallereqitems` | Transaccional | Lineas origen desde requerimientos aprobados |
 | `preocitems` | Transaccional | Items agrupados de la PreOC |
 | `preocimptos` | Transaccional | Impuestos por item agrupado |
-| `preocitemsdimensiones` | Transaccional | Dimensiones ERP por item o req-item, pendiente confirmar |
+| `preocitemsdimensiones` | Transaccional | Dimensiones ERP por req-item origen; puede mantener referencia nullable a item agrupado |
 | `preocpptoresumen` | Resumen | Resumen de presupuesto afectado por PreOC |
 | `preocfirmantes` | Transaccional | Firmantes/aprobadores de PreOC |
 | `preoccomentarios` | Funcional | Comentarios visibles de aprobacion, rechazo y anulacion |
@@ -101,7 +101,7 @@ Notas:
 - El presupuesto se resuelve por linea usando `preocfechaoc`, subfamilia del item y centro de costo.
 - `preocfecha` y `preocfechaoc` deben mostrarse ambas.
 - `preocvig` se mantiene por consistencia tecnica con el patron de baja logica, aunque el estado documental concentra la regla funcional.
-- La vista principal debe mostrar por defecto las PreOC del comprador login si `comprador = 1`. Si el usuario no tiene ese atributo, el filtro comprador inicia en `TODOS`.
+- La vista principal debe mostrar por defecto las PreOC del comprador login si `usuariocomprador = 1`. Si el usuario no tiene ese atributo, el filtro comprador inicia en `TODOS`.
 
 ## 3. Estados
 
@@ -221,13 +221,13 @@ Reglas:
 
 Tabla para representar `DimensionDistribucion`.
 
-> Pendiente de confirmacion con cliente/Finnegans: puede colgar del item agrupado (`preocitems`) o del req-item origen (`preocdetallereqitems`). Ambas opciones son soportadas por Finnegans segun revision preliminar.
+Definicion vigente: la distribucion cuelga operativamente del req-item origen (`preocdetallereqitems`), porque una PreOC puede agrupar el mismo item desde distintos centros/subfamilias/presupuestos. `preocitemid` puede quedar nullable como apoyo de consulta si se requiere reconstruir por item agrupado.
 
 | Columna | Tipo logico | NULL | Descripcion |
 |---|---|---|---|
 | `preocitemdimensionid` | INT PK AI | NO | PK |
-| `preocitemid` | INT FK | SI | Item agrupado, si la distribucion se define a nivel item |
-| `preocdetreqitemid` | INT FK | SI | Req-item origen, si la distribucion se define a nivel detalle |
+| `preocitemid` | INT FK | SI | Item agrupado, apoyo opcional de consulta |
+| `preocdetreqitemid` | INT FK | NO | Req-item origen que define centro/subfamilia/presupuesto |
 | `dimensioncodigo` | VARCHAR(50) | NO | Ej. `DIMPARFIN`, `DIMCTC` |
 | `distribucioncodigo` | VARCHAR(50) | SI | Codigo distribucion si aplica |
 | `tipocalculo` | VARCHAR(10) | NO | Tipo calculo ERP; ejemplo `2` |
@@ -241,7 +241,7 @@ Reglas:
 - Se completan desde maestros y reglas internas.
 - El comprador no las edita.
 - Deben visualizarse desde la PreOC, por ejemplo con accion "ver dimensiones" por linea.
-- Deben soportar mas de una distribucion por dimension si el ERP lo requiere, por ejemplo cuando un item agrupado distribuye por mas de un centro.
+- Deben soportar mas de una distribucion por dimension si el ERP lo requiere.
 
 ## 8. `preocpptoresumen`
 
@@ -438,7 +438,7 @@ El LOG tecnico no reemplaza comentarios funcionales.
 | cantidad | `Items[n].Cantidad` | Cantidad comprar |
 | precio | `Items[n].Precio` | Precio neto |
 | `preocdetdsccc` | `Items[n].Descripcion` | Centro de costo legible |
-| dimensiones | `DimensionDistribucion` | Desde `preocitemsdimensiones`, pendiente confirmar nivel |
+| dimensiones | `DimensionDistribucion` | Desde `preocitemsdimensiones` a nivel req-item origen |
 
 Pendiente tecnico:
 
@@ -461,9 +461,9 @@ Filtros:
 
 Reglas:
 
-- Si usuario login tiene `comprador = 1`, el filtro comprador inicia con ese usuario.
-- Si no tiene `comprador = 1`, comprador inicia en `TODOS`.
-- El combo comprador lista todos los usuarios con `comprador = 1`, independiente de su estado.
+- Si usuario login tiene `usuariocomprador = 1`, el filtro comprador inicia con ese usuario.
+- Si no tiene `usuariocomprador = 1`, comprador inicia en `TODOS`.
+- El combo comprador lista todos los usuarios con `usuariocomprador = 1`, independiente de su estado.
 - El filtro aprobador pendiente aplica para `PND` o `TODOS`; estados cerrados no tienen aprobador pendiente.
 
 ### 14.2 Seleccion de requerimientos aprobados
@@ -551,26 +551,40 @@ Debe mostrar:
 
 ## 15. Proveedores
 
-Falta definir la integracion de proveedores y la estructura de tabla definitiva segun lo que devuelva la API de Finnegans.
+La integracion de proveedores sigue la misma logica de productos:
 
-Requisitos esperados:
+1. sincronizar `ERP_PROVEEDORES_LIST`;
+2. guardar/cotejar proveedor base por codigo;
+3. consultar `ERP_PROVEEDORES_DETALLE` por cada proveedor grabado;
+4. completar campos de detalle y condiciones de pago asociadas.
+
+Requisitos:
 
 - maestro espejo ERP,
-- busqueda/autocomplete,
+- tabla puente proveedor-condicion de pago,
+- pantalla solo consulta y exportacion a Excel,
+- busqueda/autocomplete en PreOC,
 - condicion de pago precargable,
 - datos necesarios para impuestos/categoria fiscal si aplica.
+
+Campos observados:
+
+- list: `codigo`, `nombre`, `descripcion`, `activo`.
+- detalle: `Codigo`, `Nombre`, `Activo`, `RazonSocial`, `Email`, `CategoriaFiscalCodigo`, `IdentificacionTributariaCodigo`, `IdentificacionTributariaNumero`, `CondicionesPago`, `ConceptoProveedorCodigo`, `CuentaProveedorCodigo`, `MonedaID_Pago_Codigo`, `USR_MedioPago`.
+
+Las condiciones de pago se sincronizan con `ERP_CONDICIONES_PAGO_LIST` y `ERP_CONDICIONES_PAGO_DETALLE`. El detalle incluye `Tipo`, `EdicionFija`, cuentas e items con `Dias` y `Porcentaje`.
 
 ## 16. Usuarios y permisos
 
 | Permiso | Uso |
 |---|---|
-| `comprador` | Crear/editar PreOC si tiene acceso al formulario |
-| permite aprobacion PreOC | Puede ser firmante PreOC |
-| `permiteanularpreoc` | Permite anulacion especial cuando el estado lo permite |
+| `usuariocomprador` | Crear/editar PreOC si tiene acceso al formulario |
+| `usuariopermiteaprobpreoc` | Puede ser firmante PreOC |
+| `usuariopermiteanularpreoc` | Permite anulacion especial cuando el estado lo permite |
 
 Reglas:
 
-- Tener acceso al formulario no basta para crear PreOC; debe tener `comprador = 1`.
+- Tener acceso al formulario no basta para crear PreOC; debe tener `usuariocomprador = 1`.
 - La anulacion especial no permite saltarse la regla de firmantes aprobados.
 
 ## 17. Fuera de alcance
