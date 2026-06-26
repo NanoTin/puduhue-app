@@ -31,8 +31,17 @@ $fmtMoney = static function ($value, int $decimals = 0): string {
 };
 ?>
 
-<div class="container-fluid px-4 py-3">
-    <h3 class="mb-4">Presupuesto de Compras</h3>
+<div class="container-fluid px-4 py-3 pdh-page">
+    <div class="pdh-page__header">
+        <div>
+            <h3 class="mb-1">Presupuesto de Compras</h3>
+        </div>
+        <div class="pdh-page__actions">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#pptocompraCreateModeModal">
+                <i class="bi bi-plus-circle"></i> Crear Presupuesto
+            </button>
+        </div>
+    </div>
 
     <?php if (!empty($errorMessage)): ?>
         <div class="alert alert-danger" role="alert">
@@ -40,13 +49,7 @@ $fmtMoney = static function ($value, int $decimals = 0): string {
         </div>
     <?php endif; ?>
 
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#pptocompraCreateModeModal">
-            <i class="bi bi-plus-circle"></i> Crear Presupuesto
-        </button>
-    </div>
-
-    <form id="pptocompra-filter-form" action="?route=pptocompra/listar" method="GET" class="row g-2 mb-3">
+    <form id="pptocompra-filter-form" action="?route=pptocompra/listar" method="GET" class="row g-2 pdh-filter-bar">
         <input type="hidden" name="route" value="pptocompra/listar">
         <div class="col-md-2">
             <input type="number" name="filtroPptocompraid" class="form-control" placeholder="ID Presupuesto" value="<?= htmlspecialchars($filtros['filtroPptocompraid'] ?? '') ?>">
@@ -101,7 +104,7 @@ $fmtMoney = static function ($value, int $decimals = 0): string {
     </form>
 
     <div class="table-responsive">
-        <table class="table table-striped table-hover align-middle">
+        <table class="table table-striped table-hover align-middle pdh-data-table">
             <thead class="table-dark">
                 <tr>
                     <th>ID</th>
@@ -152,7 +155,7 @@ $fmtMoney = static function ($value, int $decimals = 0): string {
                             <td>
                                 <?= !empty($row['pptocompraactivo']) ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>' ?>
                             </td>
-                            <td class="text-center text-nowrap">
+                            <td class="pdh-data-table__actions">
                                 <a class="btn btn-outline-primary btn-sm" href="?route=pptocompra/detalle&pptocompraid=<?= urlencode($row['pptocompraid'] ?? '') ?>" title="Ver detalle" aria-label="Ver detalle" data-bs-toggle="tooltip">
                                     <i class="bi bi-eye"></i>
                                 </a>

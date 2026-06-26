@@ -51,6 +51,7 @@ if ($empresaNombre === '' && $empresaId > 0) {
     >
 
     <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/pdh-components.css">
 </head>
 <body>
 <script>

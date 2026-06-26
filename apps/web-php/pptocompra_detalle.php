@@ -80,19 +80,19 @@ $chartSvg = static function (array $series, string $fieldA, string $fieldB, stri
             continue;
         }
         $x = $count === 1 ? $pad + ($plotWidth / 2) : $pad + (($plotWidth / ($count - 1)) * $idx);
-        $labels .= '<text x="' . round($x, 2) . '" y="' . ($height - 8) . '" text-anchor="middle" class="ppto-chart-label">' . htmlspecialchars((string)($row['periodo'] ?? '')) . '</text>';
+        $labels .= '<text x="' . round($x, 2) . '" y="' . ($height - 8) . '" text-anchor="middle" class="pdh-chart__label">' . htmlspecialchars((string)($row['periodo'] ?? '')) . '</text>';
     }
 
     return '
         <div class="d-flex justify-content-end gap-3 small mb-2">
-            <span><span class="ppto-legend ppto-legend-primary"></span>' . htmlspecialchars($labelA) . '</span>
-            <span><span class="ppto-legend ppto-legend-success"></span>' . htmlspecialchars($labelB) . '</span>
+            <span><span class="pdh-chart-legend pdh-chart-legend--primary"></span>' . htmlspecialchars($labelA) . '</span>
+            <span><span class="pdh-chart-legend pdh-chart-legend--success"></span>' . htmlspecialchars($labelB) . '</span>
         </div>
-        <svg class="ppto-line-chart" viewBox="0 0 ' . $width . ' ' . $height . '" role="img" aria-label="Grafico presupuesto compra">
-            <line x1="' . $pad . '" y1="' . ($height - $pad) . '" x2="' . ($width - $pad) . '" y2="' . ($height - $pad) . '" class="ppto-chart-axis" />
-            <line x1="' . $pad . '" y1="' . $pad . '" x2="' . $pad . '" y2="' . ($height - $pad) . '" class="ppto-chart-axis" />
-            <polyline points="' . $pointsFor($fieldA) . '" class="ppto-chart-line ppto-chart-line-primary" />
-            <polyline points="' . $pointsFor($fieldB) . '" class="ppto-chart-line ppto-chart-line-success" />
+        <svg class="pdh-chart" viewBox="0 0 ' . $width . ' ' . $height . '" role="img" aria-label="Grafico presupuesto compra">
+            <line x1="' . $pad . '" y1="' . ($height - $pad) . '" x2="' . ($width - $pad) . '" y2="' . ($height - $pad) . '" class="pdh-chart__axis" />
+            <line x1="' . $pad . '" y1="' . $pad . '" x2="' . $pad . '" y2="' . ($height - $pad) . '" class="pdh-chart__axis" />
+            <polyline points="' . $pointsFor($fieldA) . '" class="pdh-chart__line pdh-chart__line--primary" />
+            <polyline points="' . $pointsFor($fieldB) . '" class="pdh-chart__line pdh-chart__line--success" />
             ' . $labels . '
         </svg>';
 };
@@ -127,23 +127,23 @@ $barChartSvg = static function (array $series, string $fieldA, string $fieldB, s
         $yA = $pad + $plotHeight - $heightA;
         $yB = $pad + $plotHeight - $heightB;
 
-        $bars .= '<rect x="' . round($baseX, 2) . '" y="' . round($yA, 2) . '" width="' . round($barWidth, 2) . '" height="' . round($heightA, 2) . '" rx="4" class="ppto-chart-bar ppto-chart-bar-primary" />';
-        $bars .= '<rect x="' . round($baseX + $barWidth + 3, 2) . '" y="' . round($yB, 2) . '" width="' . round($barWidth, 2) . '" height="' . round($heightB, 2) . '" rx="4" class="ppto-chart-bar ppto-chart-bar-success" />';
+        $bars .= '<rect x="' . round($baseX, 2) . '" y="' . round($yA, 2) . '" width="' . round($barWidth, 2) . '" height="' . round($heightA, 2) . '" rx="4" class="pdh-chart__bar pdh-chart__bar--primary" />';
+        $bars .= '<rect x="' . round($baseX + $barWidth + 3, 2) . '" y="' . round($yB, 2) . '" width="' . round($barWidth, 2) . '" height="' . round($heightB, 2) . '" rx="4" class="pdh-chart__bar pdh-chart__bar--success" />';
 
         if ($idx % max(1, (int)ceil($count / 6)) === 0 || $idx === $count - 1) {
             $labelX = $pad + ($slot * $idx) + ($slot / 2);
-            $labels .= '<text x="' . round($labelX, 2) . '" y="' . ($height - 8) . '" text-anchor="middle" class="ppto-chart-label">' . htmlspecialchars((string)($row['periodo'] ?? '')) . '</text>';
+            $labels .= '<text x="' . round($labelX, 2) . '" y="' . ($height - 8) . '" text-anchor="middle" class="pdh-chart__label">' . htmlspecialchars((string)($row['periodo'] ?? '')) . '</text>';
         }
     }
 
     return '
         <div class="d-flex justify-content-end gap-3 small mb-2">
-            <span><span class="ppto-legend ppto-legend-primary"></span>' . htmlspecialchars($labelA) . '</span>
-            <span><span class="ppto-legend ppto-legend-success"></span>' . htmlspecialchars($labelB) . '</span>
+            <span><span class="pdh-chart-legend pdh-chart-legend--primary"></span>' . htmlspecialchars($labelA) . '</span>
+            <span><span class="pdh-chart-legend pdh-chart-legend--success"></span>' . htmlspecialchars($labelB) . '</span>
         </div>
-        <svg class="ppto-line-chart" viewBox="0 0 ' . $width . ' ' . $height . '" role="img" aria-label="Grafico presupuesto compra">
-            <line x1="' . $pad . '" y1="' . ($height - $pad) . '" x2="' . ($width - $pad) . '" y2="' . ($height - $pad) . '" class="ppto-chart-axis" />
-            <line x1="' . $pad . '" y1="' . $pad . '" x2="' . $pad . '" y2="' . ($height - $pad) . '" class="ppto-chart-axis" />
+        <svg class="pdh-chart" viewBox="0 0 ' . $width . ' ' . $height . '" role="img" aria-label="Grafico presupuesto compra">
+            <line x1="' . $pad . '" y1="' . ($height - $pad) . '" x2="' . ($width - $pad) . '" y2="' . ($height - $pad) . '" class="pdh-chart__axis" />
+            <line x1="' . $pad . '" y1="' . $pad . '" x2="' . $pad . '" y2="' . ($height - $pad) . '" class="pdh-chart__axis" />
             ' . $bars . '
             ' . $labels . '
         </svg>';
@@ -190,33 +190,6 @@ if ($disponiblePct >= 50 && $disponiblePct <= 100) {
 ?>
 
 <style>
-    .ppto-detail-page {
-        --ppto-primary: #0f172a;
-        --ppto-muted: #64748b;
-        --ppto-border: #e2e8f0;
-        --ppto-surface: #ffffff;
-    }
-    .ppto-card {
-        background: var(--ppto-surface);
-        border: 1px solid var(--ppto-border);
-        border-radius: 8px;
-        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
-    }
-    .ppto-card.border-success {
-        border-color: var(--bs-success) !important;
-        border-width: 2px;
-        box-shadow: 0 14px 30px rgba(25, 135, 84, 0.14);
-    }
-    .ppto-card.border-warning {
-        border-color: var(--bs-warning) !important;
-        border-width: 2px;
-        box-shadow: 0 14px 30px rgba(255, 193, 7, 0.18);
-    }
-    .ppto-card.border-danger {
-        border-color: var(--bs-danger) !important;
-        border-width: 2px;
-        box-shadow: 0 14px 30px rgba(220, 53, 69, 0.14);
-    }
     .ppto-available-card {
         position: relative;
         overflow: hidden;
@@ -231,117 +204,22 @@ if ($disponiblePct >= 50 && $disponiblePct <= 100) {
         position: absolute;
         right: -8px;
     }
-    .ppto-available-badge {
-        align-items: center;
-        border-radius: 999px;
-        display: inline-flex;
-        font-size: 0.86rem;
-        font-weight: 800;
-        gap: 0.45rem;
-        padding: 0.42rem 0.78rem;
-    }
-    .ppto-available-badge-success {
-        background: rgba(25, 135, 84, 0.14);
-        color: #0f5132;
-    }
-    .ppto-available-badge-warning {
-        background: rgba(255, 193, 7, 0.23);
-        color: #664d03;
-    }
-    .ppto-available-badge-danger {
-        background: rgba(220, 53, 69, 0.14);
-        color: #842029;
-    }
-    .ppto-kpi-label {
-        color: #334155;
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-    }
-    .ppto-kpi-value {
-        color: var(--ppto-primary);
-        font-size: clamp(1.45rem, 2.2vw, 2rem);
-        font-weight: 800;
-        line-height: 1.1;
-    }
-    .ppto-kpi-note {
-        color: var(--ppto-muted);
-        font-size: 0.82rem;
-    }
-    .ppto-line-chart {
-        display: block;
-        width: 100%;
-        min-height: 220px;
-    }
-    .ppto-chart-axis {
-        stroke: #e2e8f0;
-        stroke-width: 1;
-    }
-    .ppto-chart-line {
-        fill: none;
-        stroke-width: 4;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-    }
-    .ppto-chart-line-primary {
-        stroke: #0f172a;
-    }
-    .ppto-chart-line-success {
-        stroke: #22c55e;
-    }
-    .ppto-chart-bar {
-        shape-rendering: geometricPrecision;
-    }
-    .ppto-chart-bar-primary {
-        fill: #0f172a;
-    }
-    .ppto-chart-bar-success {
-        fill: #22c55e;
-    }
-    .ppto-chart-label {
-        fill: #64748b;
-        font-size: 11px;
-    }
-    .ppto-legend {
-        display: inline-block;
-        width: 10px;
-        height: 10px;
-        border-radius: 999px;
-        margin-right: 6px;
-    }
-    .ppto-legend-primary {
-        background: #0f172a;
-    }
-    .ppto-legend-success {
-        background: #22c55e;
-    }
-    .ppto-trace-table th {
-        color: #334155;
-        font-size: 0.72rem;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        white-space: nowrap;
-    }
-    .ppto-trace-table td {
-        vertical-align: middle;
-    }
 </style>
 
-<div class="container-fluid px-4 py-3 ppto-detail-page">
-    <div class="d-flex justify-content-between align-items-start gap-3 mb-4 flex-wrap">
+<div class="container-fluid px-4 py-3 pdh-page">
+    <div class="pdh-page__header">
         <div>
-            <div class="small text-muted mb-1">
+            <div class="pdh-page__eyebrow">
                 Presupuesto / <?= htmlspecialchars((string)($pptocompra['temporadadescripcion'] ?? '')) ?>
             </div>
             <h3 class="mb-1">Presupuesto de Compras #<?= htmlspecialchars((string)($pptocompra['pptocompraid'] ?? '')) ?></h3>
-            <div class="text-muted">
+            <div class="pdh-page__subtitle">
                 <?= htmlspecialchars((string)($pptocompra['subfamiliadsc'] ?? '')) ?>
                 <span class="mx-1">|</span>
                 <?= htmlspecialchars((string)($pptocompra['centrocostodsc'] ?? '')) ?>
             </div>
         </div>
-        <div class="d-flex gap-2 flex-wrap">
+        <div class="pdh-page__actions">
             <?php if (!empty($pptocompra['pptocompraactivo'])): ?>
                 <a href="?route=pptocompra/ajustar&pptocompraid=<?= urlencode((string)($pptocompra['pptocompraid'] ?? '')) ?>" class="btn btn-primary btn-sm">
                     <i class="bi bi-sliders2"></i> Nuevo ajuste
@@ -362,17 +240,17 @@ if ($disponiblePct >= 50 && $disponiblePct <= 100) {
 
     <div class="row g-3 mb-4">
         <div class="col-12 col-sm-6 col-xl">
-            <div class="ppto-card p-3 h-100">
-                <div class="ppto-kpi-label mb-3">Presupuesto inicial</div>
-                <div class="ppto-kpi-value">$<?= htmlspecialchars($money($detalleResumen['presupuestado'] ?? 0)) ?></div>
-                <div class="ppto-kpi-note mt-3">Carga base confirmada</div>
+            <div class="pdh-card p-3 h-100">
+                <div class="pdh-kpi__label mb-3">Presupuesto inicial</div>
+                <div class="pdh-kpi__value">$<?= htmlspecialchars($money($detalleResumen['presupuestado'] ?? 0)) ?></div>
+                <div class="pdh-kpi__note mt-3">Carga base confirmada</div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-xl">
-            <div class="ppto-card p-3 h-100">
-                <div class="ppto-kpi-label mb-3">Ajustado</div>
-                <div class="ppto-kpi-value">$<?= htmlspecialchars($money($detalleResumen['ajustado'] ?? 0)) ?></div>
-                <div class="ppto-kpi-note mt-3">
+            <div class="pdh-card p-3 h-100">
+                <div class="pdh-kpi__label mb-3">Ajustado</div>
+                <div class="pdh-kpi__value">$<?= htmlspecialchars($money($detalleResumen['ajustado'] ?? 0)) ?></div>
+                <div class="pdh-kpi__note mt-3">
                     +<?= htmlspecialchars($money($detalleResumen['ajuste_positivo'] ?? 0)) ?>
                     /
                     <?= htmlspecialchars($money($detalleResumen['ajuste_negativo'] ?? 0)) ?>
@@ -380,17 +258,17 @@ if ($disponiblePct >= 50 && $disponiblePct <= 100) {
             </div>
         </div>
         <div class="col-12 col-sm-6 col-xl">
-            <div class="ppto-card p-3 h-100">
-                <div class="ppto-kpi-label mb-3">Reproyectado</div>
-                <div class="ppto-kpi-value">$<?= htmlspecialchars($money($detalleResumen['reproyectado'] ?? 0)) ?></div>
-                <div class="ppto-kpi-note mt-3">Inicial + ajustes + traspasos</div>
+            <div class="pdh-card p-3 h-100">
+                <div class="pdh-kpi__label mb-3">Reproyectado</div>
+                <div class="pdh-kpi__value">$<?= htmlspecialchars($money($detalleResumen['reproyectado'] ?? 0)) ?></div>
+                <div class="pdh-kpi__note mt-3">Inicial + ajustes + traspasos</div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-xl">
-            <div class="ppto-card p-3 h-100">
-                <div class="ppto-kpi-label mb-3">Consumido</div>
-                <div class="ppto-kpi-value">$<?= htmlspecialchars($money($detalleResumen['consumido'] ?? 0)) ?></div>
-                <div class="ppto-kpi-note mt-3">
+            <div class="pdh-card p-3 h-100">
+                <div class="pdh-kpi__label mb-3">Consumido</div>
+                <div class="pdh-kpi__value">$<?= htmlspecialchars($money($detalleResumen['consumido'] ?? 0)) ?></div>
+                <div class="pdh-kpi__note mt-3">
                     Pend. <?= htmlspecialchars($money($detalleResumen['consumo_pendiente'] ?? 0)) ?>
                     /
                     Conf. <?= htmlspecialchars($money($detalleResumen['consumo_confirmado'] ?? 0)) ?>
@@ -398,14 +276,14 @@ if ($disponiblePct >= 50 && $disponiblePct <= 100) {
             </div>
         </div>
         <div class="col-12 col-sm-6 col-xl">
-            <div class="ppto-card p-3 h-100 ppto-available-card <?= htmlspecialchars($disponibleBorder) ?> <?= htmlspecialchars($disponibleLabelClass) ?>"
+            <div class="pdh-card p-3 h-100 ppto-available-card <?= htmlspecialchars($disponibleBorder) ?> <?= htmlspecialchars($disponibleLabelClass) ?>"
                  title="<?= htmlspecialchars($disponibleTooltip) ?>"
                  data-bs-toggle="tooltip"
                  data-bs-placement="top">
-                <div class="ppto-kpi-label mb-3 <?= htmlspecialchars($disponibleLabelClass) ?>">Disponible</div>
-                <div class="ppto-kpi-value">$<?= htmlspecialchars($money($detalleResumen['disponible'] ?? 0)) ?></div>
-                <div class="ppto-kpi-note mt-3">
-                    <div class="ppto-available-badge ppto-available-badge-<?= htmlspecialchars($disponibleTone) ?>">
+                <div class="pdh-kpi__label mb-3 <?= htmlspecialchars($disponibleLabelClass) ?>">Disponible</div>
+                <div class="pdh-kpi__value">$<?= htmlspecialchars($money($detalleResumen['disponible'] ?? 0)) ?></div>
+                <div class="pdh-kpi__note mt-3">
+                    <div class="pdh-status-badge pdh-status-badge--<?= htmlspecialchars($disponibleTone) ?>">
                         <i class="bi <?= htmlspecialchars($disponibleIcon) ?>"></i>
                         <?= htmlspecialchars($disponibleBadge) ?>
                     </div>
@@ -416,14 +294,14 @@ if ($disponiblePct >= 50 && $disponiblePct <= 100) {
 
     <div class="row g-3 mb-4">
         <div class="col-lg-7">
-            <div class="ppto-card p-3 h-100">
+            <div class="pdh-card p-3 h-100">
                 <h5 class="mb-1">Ejecucion mensual</h5>
                 <div class="text-muted small mb-3">Presupuestado por mes vs consumo por mes</div>
                 <?= $barChartSvg($detalleResumen['series'] ?? [], 'presupuestado', 'consumo', 'Presupuestado', 'Consumo') ?>
             </div>
         </div>
         <div class="col-lg-5">
-            <div class="ppto-card p-3 h-100">
+            <div class="pdh-card p-3 h-100">
                 <h5 class="mb-1">Acumulado mensual</h5>
                 <div class="text-muted small mb-3">Presupuesto acumulado vs consumo acumulado</div>
                 <?= $chartSvg($detalleResumen['series'] ?? [], 'presupuestado_acum', 'consumo_acum', 'Presupuesto acum.', 'Consumo acum.') ?>
@@ -433,7 +311,7 @@ if ($disponiblePct >= 50 && $disponiblePct <= 100) {
 
     <div class="row g-3 mb-4">
         <div class="col-lg-7">
-            <div class="ppto-card p-3 h-100">
+            <div class="pdh-card p-3 h-100">
                 <h5 class="mb-3">Carga base mensual</h5>
                 <div class="table-responsive">
                     <table class="table table-sm table-hover align-middle mb-0">
@@ -462,7 +340,7 @@ if ($disponiblePct >= 50 && $disponiblePct <= 100) {
             </div>
         </div>
         <div class="col-lg-5">
-            <div class="ppto-card p-3 h-100">
+            <div class="pdh-card p-3 h-100">
                 <h5 class="mb-1">Resumen items temporada</h5>
                 <div class="text-muted small mb-3">Top 5 items con mayor consumo</div>
                 <!-- Pendiente: alimentar este ranking desde detalle PreOC cuando el modelo PreOC quede definido. -->
@@ -473,7 +351,7 @@ if ($disponiblePct >= 50 && $disponiblePct <= 100) {
         </div>
     </div>
 
-    <div class="ppto-card p-3" id="log-trazabilidad">
+    <div class="pdh-card p-3" id="log-trazabilidad">
         <div class="d-flex justify-content-between align-items-center gap-3 mb-3 flex-wrap">
             <div>
                 <h5 class="mb-1">Log de trazabilidad</h5>
@@ -498,7 +376,7 @@ if ($disponiblePct >= 50 && $disponiblePct <= 100) {
         </div>
 
         <div class="table-responsive">
-            <table class="table table-hover align-middle ppto-trace-table mb-0">
+            <table class="table table-hover align-middle pdh-trace-table mb-0">
                 <thead class="table-light">
                     <tr>
                         <th>Fecha</th>
