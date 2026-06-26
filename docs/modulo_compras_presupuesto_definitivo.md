@@ -3,7 +3,7 @@
 > Documento definitivo del modelo funcional y logico del presupuesto de compras.
 >
 > Alcance vigente:
-> - REQ solo valida, no genera movimiento presupuestario.
+> - REQ solo valida de forma informativa, no bloquea y no genera movimiento presupuestario.
 > - PreOC genera y administra los movimientos reales de presupuesto.
 > - La reserva provisional solo se borra si la PreOC sigue en curso y aun no tiene aprobaciones.
 
@@ -21,7 +21,7 @@ Definir el modelo de presupuesto de compras basado en:
 
 1. El presupuesto se reutiliza desde la tabla de temporadas.
 2. `temporadatipocodigo` debe permitir identificar temporadas de `PPTO_COMPRAS`.
-3. La validacion de REQ es informativa, no genera transacciones.
+3. La validacion de REQ es informativa, no bloquea y no genera transacciones.
 4. La PreOC si genera transacciones presupuestarias.
 5. La PreOC solo puede editarse mientras este `En Curso` y no tenga ninguna aprobacion.
 6. Si una linea provisional se elimina antes de aprobarse, se borra su transaccion provisional asociada.
@@ -54,6 +54,16 @@ Columnas logicas:
 | `ConsumosEnCurso` | Suma negativa de reservas provisionales y consumos no confirmados. |
 | `ConsumosConfirmados` | Suma negativa de consumos confirmados. |
 | `SaldoDisponible` | `Reproyectado + ConsumosEnCurso + ConsumosConfirmados`. |
+| `Responsable` | Usuario responsable del presupuesto, aprobador default de PreOC. |
+| `Administrador` | Usuario administrador del presupuesto, aprobador default de PreOC. |
+| `Colaborador` | Usuario colaborador opcional del presupuesto, aprobador default de PreOC si existe. |
+
+Reglas de firmantes asociados al presupuesto:
+
+- `pptocompraresponsableid` es obligatorio y debe apuntar a usuario activo con permiso de aprobacion PreOC.
+- `pptocompraadministradorid` es obligatorio y debe apuntar a usuario activo con permiso de aprobacion PreOC.
+- `pptocompracolaboradorid` es opcional; si existe, debe apuntar a usuario activo con permiso de aprobacion PreOC.
+- Responsable, administrador y colaborador pueden repetirse. Al construir firmantes de PreOC se deduplican y no se pueden quitar.
 
 ### 3.2 `PptoCompraMensual`
 
@@ -109,7 +119,7 @@ Catalogo de tipos funcionales, no autoincrementales.
 | `PPTO_AJUSTE_NEG` | Ajuste negativo manual. |
 | `PPTO_TRASPASO_SALIDA` | Salida de monto hacia otro presupuesto. |
 | `PPTO_TRASPASO_ENTRADA` | Entrada de monto desde otro presupuesto. |
-| `POC_RESERVA` | Reserva provisional al crear una PreOC. |
+| `POC_RESERVA` | Reserva provisional al enviar una PreOC de `BRR` a `PND`. |
 | `POC_CONFIRMACION` | Confirmacion al aprobar una PreOC. |
 | `POC_REVERSA` | Reversa al rechazar o anular una PreOC. |
 
@@ -134,13 +144,29 @@ Nota:
 
 ### 4.4 Validacion de REQ
 
-REQ solo valida, no descuenta.
+REQ solo valida de forma informativa, no descuenta y no bloquea.
 
 `DisponibleREQ = SaldoDisponible - RequerimientosEnCurso - RequerimientosAprobadosSinPreOC`
 
 Donde:
 - `RequerimientosEnCurso` son REQ abiertos que aun no pasan a PreOC.
 - `RequerimientosAprobadosSinPreOC` son REQ aprobados pendientes de PreOC.
+
+La validacion debe agrupar primero las lineas del REQ por subfamilia y centro de costo. Si no hay saldo suficiente, el REQ se puede crear/enviar, pero debe quedar marcado con advertencia y conservar snapshot actualizable del calculo.
+
+Para visualizacion, el REQ debe exponer un analisis de presupuesto de compra disponible para todo usuario que pueda ver el documento. El analisis se agrupa por temporada, subfamilia y centro de costo, e incluye:
+
+- saldo disponible actual del presupuesto,
+- monto de otros requerimientos en curso,
+- monto de requerimientos aprobados pendientes de compra,
+- monto de este requerimiento,
+- saldo disponible proyectado,
+- porcentaje o proporcion de este requerimiento sobre el saldo disponible actual,
+- deficit o advertencia cuando corresponda.
+
+`Saldo Disponible Proyectado = Disponible Actual Ppto - Monto Requerimientos en Curso Otros - Monto Requerimientos Aprobados Pendiente de Compra - Monto Este Requerimiento`.
+
+Si existe deficit en uno o mas grupos, el REQ debe requerir autorizadores fuera de presupuesto, segun la configuracion de usuarios.
 
 ### 4.5 Validacion de PreOC
 
@@ -193,10 +219,11 @@ La PreOC valida contra el saldo disponible operativo del presupuesto segun:
 
 ### 5.4 PreOC en curso
 
-- Al crearse, genera reserva provisional.
+- La reserva provisional se genera al pasar de `BRR` a `PND`, no al guardar un borrador.
 - Si la PreOC esta en curso y no tiene aprobaciones, una linea provisional puede eliminarse.
 - Si se elimina una linea provisional, se borra la transaccion provisional asociada.
 - No se genera reversa en ese caso.
+- Si una PreOC vuelve de `PND` a `BRR` antes de cualquier aprobacion, se libera o revierte la reserva asociada.
 
 ### 5.5 PreOC aprobada
 
@@ -211,7 +238,7 @@ La PreOC valida contra el saldo disponible operativo del presupuesto segun:
 | Estado | Efecto |
 |---|---|
 | `BRR` / armado | Solo visual e informativo. |
-| `EN_CURSO` | Solo valida disponibilidad. |
+| `PND` | Solo valida disponibilidad e informa advertencias. |
 | `APR` | No mueve presupuesto. |
 | `RCH` / `ANL` | No mueve presupuesto. |
 
@@ -219,9 +246,9 @@ La PreOC valida contra el saldo disponible operativo del presupuesto segun:
 
 | Estado | Efecto |
 |---|---|
-| `BRR` / creada | Reserva provisional. |
-| `EN_CURSO` sin aprobaciones | Editable; se puede borrar la reserva provisional de una linea. |
-| `EN_CURSO` con aprobaciones | No editable. |
+| `BRR` | Borrador sin reserva. |
+| `PND` sin aprobaciones | Genera reserva; editable; se puede borrar la reserva provisional de una linea o volver a `BRR` liberando reserva. |
+| `PND` con aprobaciones | No editable. |
 | `APR` | Confirmacion de reserva. |
 | `RCH` / `ANL` | Reversa positiva del compromiso confirmado. |
 
