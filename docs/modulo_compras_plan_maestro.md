@@ -177,10 +177,10 @@ Reglas:
 | Incremental | Archivo | Estado |
 |---|---|---|
 | 07 | `database/alter_table/07_modulo_compras_bases_compartidas.sql` | Creado. Bases compartidas. Validado manualmente en BD local: OK. |
-| 08 | `database/alter_table/08_modulo_compras_req.sql` | Creado. DDL REQ base. Pendiente revalidar tras cambio de PK de estados por codigo. |
-| 09 | `database/alter_table/09_modulo_compras_req_pendientes.sql` | Creado. Pendientes de compra (`reqaprobados*`). Pendiente revalidar tras recreacion. |
-| 10 | `database/alter_table/10_modulo_compras_preoc.sql` | Creado. DDL PreOC. Pendiente revalidar tras correccion MariaDB en FK finales. |
-| 11 | `database/alter_table/11_modulo_compras_presupuesto_sp.sql` | SP presupuestarios implementados segun contrato tecnico cerrado. Pendiente validar en MariaDB local. |
+| 08 | `database/alter_table/08_modulo_compras_req.sql` | Creado. DDL REQ base. Validado manualmente en BD local: OK. |
+| 09 | `database/alter_table/09_modulo_compras_req_pendientes.sql` | Creado. Pendientes de compra (`reqaprobados*`). Validado manualmente en BD local: OK. |
+| 10 | `database/alter_table/10_modulo_compras_preoc.sql` | Creado. DDL PreOC. Validado manualmente en BD local: OK. |
+| 11 | `database/alter_table/11_modulo_compras_presupuesto_sp.sql` | SP presupuestarios implementados segun contrato tecnico cerrado. Validado manualmente en BD local: OK. |
 
 ### 3.1 Auditoria aplicada
 
@@ -193,10 +193,10 @@ Reglas:
 ### 3.2 Estado de validacion manual en BD local
 
 - 07: OK.
-- 08: pendiente revalidar tras cambio de PK por codigo.
-- 09: pendiente revalidar tras recreacion.
-- 10: pendiente revalidar tras correccion MariaDB.
-- 11: SP implementados. Pendiente validar sintaxis/ejecucion en MariaDB local.
+- 08: OK.
+- 09: OK.
+- 10: OK.
+- 11: OK.
 
 ## 4. Secuencia recomendada
 
@@ -303,6 +303,84 @@ Reglas transversales:
    - errores visibles,
    - numero y fecha/hora ERP.
 
+### 4.4 Estrategia de implementacion por modulo inicial
+
+La implementacion funcional debe avanzar por flujo completo de negocio, no por capas aisladas. El orden acordado es:
+
+1. REQ completo.
+2. REQ aprobados / pendientes de compra para PreOC.
+3. PreOC completo.
+4. Sincronizacion ERP PreOC aprobada.
+
+#### 4.4.1 Primer bloque: REQ completo
+
+Objetivo: dejar operativo el ciclo REQ de punta a punta, incluyendo tablas ya creadas, SP, backend, frontend, rutas y procesos internos.
+
+Alcance REQ:
+
+- Tablas: la base del incremental 08 queda cerrada para este corte; solo se esperan mejoras posteriores si lo requiere el cliente.
+- SP:
+  - listar REQ;
+  - crear REQ, incluyendo snapshot/analisis presupuestario informativo;
+  - editar REQ, incluyendo recalculo de snapshot/analisis presupuestario;
+  - consultar REQ por ID;
+  - aprobar REQ;
+  - rechazar REQ;
+  - registrar comentarios/log funcional cuando corresponda;
+  - consultas relacionadas a presupuesto si el flujo o pantalla lo requiere.
+- Backend:
+  - Models/Services que consumen SP mediante `callSpMaint()` o mecanismo estandar vigente;
+  - control transaccional en PHP para cambios de estado, detalle, firmantes, snapshot y log;
+  - control de permisos por usuario para crear, editar, aprobar, rechazar y visualizar;
+  - no llamar SP desde vistas.
+- Frontend:
+  - pantalla principal de listado REQ;
+  - pantalla crear REQ;
+  - pantalla editar REQ;
+  - pantalla ver REQ;
+  - pantalla/listado de REQ por aprobar, reutilizando la vista de ver para aprobar/rechazar;
+  - visualizacion de advertencias presupuestarias sin bloquear el flujo normal de REQ.
+- Rutas:
+  - actualizar rutas necesarias para listado, crear, editar, ver y aprobaciones.
+
+Reglas REQ a preservar:
+
+- REQ no mueve presupuesto.
+- El analisis presupuestario de REQ es informativo.
+- `EDT` solo nace desde `PND`.
+- La salida normal de `EDT` debe ser guardar/reenviar o cancelar edicion.
+- Si hay abandono de navegador o perdida de conexion en `EDT`, el backend debe permitir retomar o liberar la edicion con regla controlada.
+
+#### 4.4.2 Segundo bloque: REQ aprobados / pendientes de compra
+
+Objetivo: implementar el puente entre REQ aprobado y seleccion para PreOC.
+
+Alcance:
+
+- Crear `reqaprobados` al aprobar REQ.
+- Consultar pendientes por comprador/filtros necesarios.
+- Permitir cambios de item con motivo si corresponde al contrato vigente.
+- Permitir anulacion de saldo pendiente cuando corresponda.
+- Mantener historial de movimientos de pendiente.
+- Preparar seleccion de pendientes para crear PreOC.
+
+#### 4.4.3 Tercer bloque: PreOC completo
+
+Objetivo: implementar PreOC despues de tener REQ y pendientes operativos.
+
+Alcance:
+
+- Crear/editar/ver PreOC desde pendientes aprobados.
+- Resolver totales, precios, impuestos y agrupaciones.
+- Resolver firmantes.
+- Exigir adjuntos al enviar a aprobacion, cuando exista DDL/servicio de adjuntos.
+- Integrar SP presupuestarios del incremental 11:
+  - reservar al pasar `BRR -> PND`;
+  - confirmar al aprobar;
+  - revertir por rechazo/anulacion;
+  - borrar reserva provisional si vuelve `PND -> BRR` sin aprobaciones.
+- Preparar posterior sincronizacion ERP.
+
 ## 5. Reglas transversales de implementacion
 
 ### 5.1 Backend/BD
@@ -332,12 +410,12 @@ Reglas transversales:
 
 ## 6. Pendientes criticos
 
-- Validar sintaxis/ejecucion del incremental 11 en MariaDB local.
+- Implementar primer bloque funcional REQ completo: SP, BE, FE, rutas, aprobaciones, log y analisis presupuestario informativo.
 - Definir contrato tecnico/DDL de adjuntos PreOC y maestro reutilizable de tipos/extensiones/MIME permitidos.
-- Validar sintaxis final de 08, 09 y 10 en MariaDB local.
 - Confirmar estrategia de recreacion/migracion si ya existen tablas de 08/09 en BD local.
 - Actualizar logs y SP existentes para nuevas columnas de usuarios, presupuesto e items.
-- Integrar desde backend los SP/servicios de reserva, confirmacion, reversa y recalculo presupuestario.
+- Implementar segundo bloque REQ aprobados / pendientes de compra para PreOC.
+- Implementar tercer bloque PreOC completo e integrar SP/servicios de reserva, confirmacion, reversa y recalculo presupuestario.
 - Confirmar campos obligatorios definitivos del POST ERP de PreOC.
 - Confirmar conceptos/impuestos activos requeridos por Finnegans.
 - Confirmar comportamiento esperado de `NumeroComprobante`.
@@ -394,23 +472,23 @@ Estados sugeridos:
 | CMP-013 | SQL 08 | Crear incremental 08 de DDL REQ base | Cerrado | `database/alter_table/08_modulo_compras_req.sql` |
 | CMP-014 | SQL 08 | Mover `reqaprobados*` fuera del incremental 08 | Cerrado | Pendientes de compra quedan en incremental 09 |
 | CMP-015 | SQL 08 | Corregir estados REQ a `BRR`, `PND`, `EDT`, `APR`, `RCH`, `ANL` | Cerrado | Seeds y FK usan estado documental vigente |
-| CMP-016 | SQL 08 | Ajustar maestros de estado REQ para usar codigo como PK | Cerrado | Pendiente revalidacion MariaDB tras cambio |
-| CMP-017 | SQL 08 | Revalidar incremental 08 en MariaDB local | Pendiente | Revalidar tras cambio de PK por codigo |
+| CMP-016 | SQL 08 | Ajustar maestros de estado REQ para usar codigo como PK | Cerrado | Validado posteriormente en MariaDB local |
+| CMP-017 | SQL 08 | Revalidar incremental 08 en MariaDB local | Validado | Reportado como OK en validacion 07-11 |
 | CMP-018 | SQL 09 | Crear incremental 09 de pendientes de compra | Cerrado | `database/alter_table/09_modulo_compras_req_pendientes.sql` |
 | CMP-019 | SQL 09 | Mantener `reqaprobados`, historial y cambios de item solo en incremental 09 | Cerrado | Evita duplicidad con 08 |
-| CMP-020 | SQL 09 | Revalidar incremental 09 en MariaDB local | Pendiente | Revalidar tras recreacion |
+| CMP-020 | SQL 09 | Revalidar incremental 09 en MariaDB local | Validado | Reportado como OK en validacion 07-11 |
 | CMP-021 | SQL 10 | Crear incremental 10 de DDL PreOC | Cerrado | `database/alter_table/10_modulo_compras_preoc.sql` |
 | CMP-022 | SQL 10 | Ajustar PreOC para permitir compras parciales sin unicidad por `reqaprobadoid` | Cerrado | Modelo vigente: vinculo por historial |
 | CMP-023 | SQL 10 | Ajustar estados PreOC para usar codigo como PK | Cerrado | Maestro `preocestados` por codigo |
-| CMP-024 | SQL 10 | Ajustar FK finales PreOC para MariaDB sin `ADD CONSTRAINT IF NOT EXISTS` | Cerrado | Requiere revalidacion local |
-| CMP-025 | SQL 10 | Revalidar incremental 10 en MariaDB local | Pendiente | Revalidar tras correccion MariaDB |
+| CMP-024 | SQL 10 | Ajustar FK finales PreOC para MariaDB sin `ADD CONSTRAINT IF NOT EXISTS` | Cerrado | Validado posteriormente en MariaDB local |
+| CMP-025 | SQL 10 | Revalidar incremental 10 en MariaDB local | Validado | Reportado como OK en validacion 07-11 |
 | CMP-026 | SQL 11 | Crear incremental 11 | Cerrado | `database/alter_table/11_modulo_compras_presupuesto_sp.sql`; contrato tecnico cerrado e implementado |
 | CMP-027 | SQL 11 | Definir contrato tecnico de SP presupuestarios | Cerrado | Contrato tecnico cerrado en seccion 4.2.1 y sincronizado con `database/alter_table/11_modulo_compras_presupuesto_sp.sql` |
-| CMP-028 | SQL 11 | Implementar reserva `POC_RESERVA` | Cerrado | Implementado en `sp_compras_preoc_ppto_reservar`; pendiente validacion MariaDB |
-| CMP-029 | SQL 11 | Implementar confirmacion `POC_CONFIRMACION` | Cerrado | Implementado en `sp_compras_preoc_ppto_confirmar`; pendiente validacion MariaDB |
-| CMP-030 | SQL 11 | Implementar reversa `POC_REVERSA` | Cerrado | Implementado en `sp_compras_preoc_ppto_revertir`; pendiente validacion MariaDB |
-| CMP-031 | SQL 11 | Implementar borrado de reserva provisional al volver `PND` a `BRR` sin aprobaciones | Cerrado | Implementado en `sp_compras_preoc_ppto_borrar_reserva_provisional`; decision vigente: borrar reservas, sin reversa; pendiente validacion MariaDB |
-| CMP-032 | SQL 11 | Implementar recalculo operacional de saldos `pptocompra` | Cerrado | Implementado en `sp_compras_ppto_recalcular_totales`; criterio alineado con `sp_pptocompra_recalcular_totales`; pendiente validacion MariaDB |
+| CMP-028 | SQL 11 | Implementar reserva `POC_RESERVA` | Validado | Implementado en `sp_compras_preoc_ppto_reservar`; reportado como OK en validacion 07-11 |
+| CMP-029 | SQL 11 | Implementar confirmacion `POC_CONFIRMACION` | Validado | Implementado en `sp_compras_preoc_ppto_confirmar`; reportado como OK en validacion 07-11 |
+| CMP-030 | SQL 11 | Implementar reversa `POC_REVERSA` | Validado | Implementado en `sp_compras_preoc_ppto_revertir`; reportado como OK en validacion 07-11 |
+| CMP-031 | SQL 11 | Implementar borrado de reserva provisional al volver `PND` a `BRR` sin aprobaciones | Validado | Implementado en `sp_compras_preoc_ppto_borrar_reserva_provisional`; decision vigente: borrar reservas, sin reversa; reportado como OK en validacion 07-11 |
+| CMP-032 | SQL 11 | Implementar recalculo operacional de saldos `pptocompra` | Validado | Implementado en `sp_compras_ppto_recalcular_totales`; criterio alineado con `sp_pptocompra_recalcular_totales`; reportado como OK en validacion 07-11 |
 | CMP-033 | Migracion | Confirmar estrategia si tablas 08/09 ya existen en BD local | Pendiente | Puede requerir recreacion controlada o migracion |
 | CMP-034 | Backend/SP | Actualizar SP de usuarios por permisos de Compras | Pendiente | Incluye logs y columnas nuevas |
 | CMP-035 | Backend/SP | Actualizar SP de presupuesto de compra por firmantes default PreOC | Pendiente | Responsable, administrador y colaborador |
@@ -427,7 +505,12 @@ Estados sugeridos:
 | CMP-046 | Spark | Preparar prompts cerrados para tareas delegables | Pendiente | Solo despues de cerrar objetivo, archivos permitidos/prohibidos y fuentes |
 | CMP-047 | SQL/PreOC | Definir DDL y contrato de adjuntos PreOC obligatorios | Pendiente | Contrato preliminar documentado; falta llevar a DDL y seed del maestro extension/MIME por modulo |
 | CMP-048 | UX/REQ | Definir recuperacion de REQ en estado `EDT` por abandono de navegador | Cerrado | `EDT` solo nace desde `PND`; contar `PND` y `EDT` en analisis informativo; salida normal con guardar/reenviar o cancelar; backend debe permitir retomar/liberar edicion |
+| CMP-049 | Planificacion | Ordenar implementacion por flujo vertical REQ -> aprobados pendientes -> PreOC | Cerrado | Estrategia documentada en seccion 4.4 |
+| CMP-050 | REQ | Implementar SP funcionales de REQ completo | Pendiente | Listar, crear, editar, consultar por ID, aprobar, rechazar, logs y presupuesto informativo |
+| CMP-051 | REQ | Implementar BE de REQ completo | Pendiente | Services/Models, control transaccional PHP, permisos, consumo de SP |
+| CMP-052 | REQ | Implementar FE de REQ completo | Pendiente | Listado, crear, editar, ver, listado por aprobar, aprobar/rechazar |
+| CMP-053 | REQ | Actualizar rutas REQ | Pendiente | Rutas para listado, crear, editar, ver y aprobaciones |
 
 ## 10. Cierre operativo
 
-El siguiente paso recomendado es revalidar SQL localmente en orden 07, 08, 09, 10 y 11. Despues de eso, avanzar a integracion backend de REQ/PreOC y a la definicion DDL de adjuntos.
+El siguiente paso recomendado es implementar el primer bloque funcional REQ completo: SP, BE, FE, rutas, aprobaciones, log y analisis presupuestario informativo. Despues, avanzar a REQ aprobados / pendientes de compra y finalmente PreOC.

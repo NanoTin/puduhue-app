@@ -9,22 +9,23 @@
 - Rama: feature/modulo-compras-base
 - PR:
 - Modelo recomendado:
-- Estado: Implementacion SQL 11 realizada; validacion DB pendiente
+- Estado: SQL 07-11 validado; siguiente corte REQ completo
 
 ## Objetivo actual
 
-Implementar el incremental `11_modulo_compras_presupuesto_sp.sql` para SP/servicios presupuestarios del modulo Compras, segun contrato tecnico cerrado.
+Preparar el siguiente corte funcional del modulo Compras: implementar REQ completo de punta a punta antes de avanzar a REQ aprobados / pendientes de compra y PreOC.
 
 ## Alcance permitido
 
-- Implementar SP presupuestarios del contrato 11.
-- Documentar estado actualizado del contrato 11.
+- Documentar estrategia de implementacion vertical por modulo inicial.
+- Mantener REQ como primer bloque funcional completo: SP, BE, FE, rutas, aprobaciones, log y analisis presupuestario informativo.
 - No ejecutar SQL contra BD real.
 - No llamar ERP/Finnegans.
 
 ## Fuera de alcance
 
 - Crear DDL no autorizado.
+- Implementar PreOC antes de cerrar REQ y pendientes de compra.
 - Modificar `.env`, secretos o credenciales.
 
 ## Documentos fuente
@@ -76,11 +77,16 @@ Implementar el incremental `11_modulo_compras_presupuesto_sp.sql` para SP/servic
 - Modulos iniciales del maestro de extensiones: `REQ`, `PREOC`, `RET_LECHE`.
 - Extensiones iniciales para PreOC: PDF, imagenes, MSG y KMZ.
 - Tamano recomendado: 10 MB por archivo y 50 MB total por PreOC.
+- La implementacion funcional debe avanzar por flujo vertical: primero REQ completo, despues REQ aprobados / pendientes de compra para PreOC, despues PreOC completo.
+- Primer bloque REQ completo incluye SP de listar, crear, editar, consultar por ID, aprobar/rechazar, logs/comentarios cuando corresponda y presupuesto informativo.
+- Primer bloque REQ completo incluye BE con Services/Models, control transaccional PHP, permisos y consumo de SP.
+- Primer bloque REQ completo incluye FE de listado, crear, editar, ver y listado por aprobar reutilizando la vista de ver para aprobar/rechazar.
+- Primer bloque REQ completo incluye actualizacion de rutas para listado, crear, editar, ver y aprobaciones.
 
 ## Riesgos y ambiguedades
 
 - Convertir contrato preliminar de adjuntos PreOC a DDL cuando se autorice.
-- Validar sintaxis/ejecucion del incremental 11 en MariaDB local antes de integrar backend.
+- Definir detalle de contrato SP REQ antes de implementar para no inventar parametros/salidas.
 
 ## Validaciones esperadas
 
@@ -101,5 +107,5 @@ Agregar validaciones especificas del corte cuando corresponda.
 ## Handoff para proximo chat
 
 Continuar conversacion sobre:
-- validar el incremental 11 en MariaDB local cuando se autorice.
-- integrar backend REQ/PreOC contra los SP presupuestarios.
+- definir contrato detallado de SP funcionales REQ.
+- implementar REQ completo en orden: SP, BE, FE y rutas.
