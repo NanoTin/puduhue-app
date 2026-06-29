@@ -10,6 +10,8 @@ use App\Helpers\Logger;
 
 // Autoload Composer + App
 require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
+require_once dirname(__DIR__) . '/Helpers/CsrfHelper.php';
+require_once dirname(__DIR__) . '/Helpers/FlashMessageHelper.php';
 
 // Cargar helpers básicos si existen
 \Env::load();
@@ -110,12 +112,19 @@ function handleWebRequest(array $menuData = []): void
         'users' => ['change-password'],
         'companies' => ['list-for-change'],
         'empresas' => ['cambiar-empresa'],
+        'erpendpoints' => ['diagnostico', 'ejecutar', 'log'],
+        'pptocompra' => ['detalle', 'ajustar', 'traspasar'],
+        'compras-req' => ['ver', 'pendientes-aprobacion', 'aprobar', 'rechazar', 'tomar-edicion', 'cancelar-edicion', 'validar-item-ppto'],
         'auth' => ['logout'],
     ];
     $routeKey = "$module/$action";
     
     $extraAllowed = in_array($action, $allowActions, true)
     || (isset($allowActionsByModule[$module]) && in_array($action, $allowActionsByModule[$module], true));
+
+    if ($module === 'pptocompra' && in_array($action, ['detalle', 'ajustar', 'traspasar'], true)) {
+        $extraAllowed = isset($allowedMenuRoutes['pptocompra/listar']);
+    }
 
     // Validación de menú
     if (!$extraAllowed && !isset($allowedMenuRoutes[$routeKey])) {
@@ -147,9 +156,11 @@ function handleWebRequest(array $menuData = []): void
         'users'             => \UsuariosController::class,
         'companies'         => \EmpresasController::class,
         'auth'              => \AuthController::class,
+        'erpendpoints'      => \ErpEndpointsController::class,
         'fundos'            => \FundosController::class,
         'menus'             => \MenusController::class,
         'clientes'          => \ClientesController::class,
+        'centroscosto'      => \CentroscostoController::class,
         'fundostipos'       => \FundostiposController::class,
         'fundosestanques'   => \FundosestanquesController::class,
         'fundosestanquesclientes' => \FundosestanquesclientesController::class,
@@ -160,6 +171,8 @@ function handleWebRequest(array $menuData = []): void
         'prodleche'         => \ProdlecheController::class,
         'prodlechereporte'  => \ProdlechereporteController::class,
         'prodlechetipos'    => \ProdlechetiposController::class,
+        'compras-req'       => \ComprasReqController::class,
+        'usuarios-centros-costo' => \UsuariosCentrosCostoController::class,
         'retiroleche'       => \RetirolecheController::class,
         'suplanimal'        => \SuplanimalController::class,
         'usuariosempresas'  => \UsuariosempresasController::class,
@@ -168,6 +181,7 @@ function handleWebRequest(array $menuData = []): void
         'invunidmed'        => \InvunidmedController::class,
         'pptolechemensual'  => \PptolechemensualController::class,
         'proylechediaria'   => \ProylechediariaController::class,
+        'pptocompra'        => \PptocompraController::class,
     ];
 
     if (!isset($map[$module])) {
@@ -198,18 +212,30 @@ function handleWebRequest(array $menuData = []): void
         'listar'   => 'listar',
         'crear'    => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'crearPost' : 'crearForm',
         'editar'   => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'editarPost' : 'editarForm',
+        'ver'      => 'ver',
+        'pendientes-aprobacion' => 'pendientesAprobacion',
         'visualizar' => 'visualizarForm',
         'anular'   => 'anularPost',
+        'aprobar'  => 'aprobarPost',
+        'rechazar' => 'rechazarPost',
+        'tomar-edicion' => 'tomarEdicionPost',
+        'cancelar-edicion' => 'cancelarEdicionPost',
+        'validar-item-ppto' => 'validarItemPpto',
         'eliminar' => 'eliminarPost',
-        'detalle'  => 'detalle',
+        'detalle'   => 'detalle',
+        'ajustar'   => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'ajustarPost' : 'ajustarForm',
+        'traspasar' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'traspasarPost' : 'traspasarForm',
         'sync'     => 'syncPost',
-        'carga_masiva' => 'cargaMasivaPost',
+        'carga_masiva' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'cargaMasivaPost' : 'cargaMasivaForm',
         'change-password' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'cambioClaveGuardar' : 'cambioClaveForm',
         'cambiopassword' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'cambioClaveGuardar' : 'cambioClaveForm',
         'generar-token-api' => 'generarTokenApiPost',
         'list-for-change' => 'listForChange',
         'cambiar-empresa' => 'cambiarEmpresaPost',
         'logout' => 'logout',
+        'diagnostico' => 'diagnostico',
+        'ejecutar' => ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'ejecutarPost' : null,
+        'log' => 'logJson',
 
         // AJAX: cargar padres por nivel (solo Menus)
         'padres-por-nivel' => 'padresPorNivel',
@@ -222,6 +248,11 @@ function handleWebRequest(array $menuData = []): void
         return;
     }
 
+    if (isCsrfProtectedWebPost($method) && !CsrfHelper::validate(CsrfHelper::tokenFromRequest(), 'web')) {
+        handleCsrfFailure($module);
+        return;
+    }
+
     try {
         $partial = isset($_GET['partial']) ? true : false;
         $controller->$method($partial);
@@ -230,4 +261,50 @@ function handleWebRequest(array $menuData = []): void
         http_response_code(500);
         echo "<h2>Error interno del servidor</h2>";
     }
+}
+
+function isCsrfProtectedWebPost(string $method): bool
+{
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+        return false;
+    }
+
+    return in_array($method, [
+        'crearPost',
+        'editarPost',
+        'anularPost',
+        'aprobarPost',
+        'rechazarPost',
+        'tomarEdicionPost',
+        'cancelarEdicionPost',
+        'eliminarPost',
+        'ajustarPost',
+        'traspasarPost',
+        'syncPost',
+        'cargaMasivaPost',
+        'cambioClaveGuardar',
+        'generarTokenApiPost',
+        'cambiarEmpresaPost',
+        'ejecutarPost',
+    ], true);
+}
+
+function handleCsrfFailure(string $module): void
+{
+    $isAjax = (($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest')
+        || str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
+
+    if ($isAjax) {
+        http_response_code(403);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'status' => 403,
+            'message' => 'Sesion expirada o token CSRF invalido.',
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        return;
+    }
+
+    FlashMessageHelper::toast('Sesion expirada o token CSRF invalido. Intente nuevamente.', 'danger');
+    $fallbackRoute = $module !== '' ? $module . '/listar' : 'dashboard';
+    header('Location: ?route=' . urlencode($fallbackRoute));
 }

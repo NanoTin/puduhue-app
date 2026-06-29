@@ -54,8 +54,8 @@ class UsuariosController
     {
         AuthMiddleware::requireAuth();
         $errorMessage = null;
-        
         $perfilesOptions = $this->servicePerfiles->listarPerfilesFormSelect(1);
+        $formData = $this->defaultFormData();
 
         $viewFile = $this->viewPath('usuarios_crear.php');
         require $viewFile;
@@ -94,6 +94,8 @@ class UsuariosController
         } catch (RuntimeException $e) {
             $errorMessage = $e->getMessage();
             $this->setToast($errorMessage, 'danger');
+            $perfilesOptions = $this->servicePerfiles->listarPerfilesFormSelect(1);
+            $formData = array_merge($this->defaultFormData(), $data);
             $viewFile = $this->viewPath('usuarios_crear.php');
             require $viewFile;
         }
@@ -147,6 +149,13 @@ class UsuariosController
         unset($data['_token'], $data['action'], $data['route']);
 
         try {
+            $password = $data['usuariopwd'] ?? '';
+            $passwordConfirm = $data['usuariopwd2'] ?? '';
+            if ($password !== $passwordConfirm) {
+                throw new RuntimeException('La confirmacion de contrasena no coincide.');
+            }
+            unset($data['usuariopwd2']);
+
             $this->service->editarUsuario(
                 $usuarioId,
                 $data,
@@ -169,6 +178,10 @@ class UsuariosController
                 $user['ip']
             );
             $usuario = $result['rows'][0] ?? null;
+            if ($usuario !== null) {
+                $usuario = array_merge($usuario, $data);
+            }
+            $perfilesOptions = $this->servicePerfiles->listarPerfilesFormSelect(1);
 
             $viewFile = $this->viewPath('usuarios_editar.php');
             require $viewFile;
@@ -348,9 +361,26 @@ class UsuariosController
 
     private function setToast(string $message, string $type = 'info'): void
     {
-        $_SESSION['toast'] = [
-            'message' => $message,
-            'type'    => $type,
+        require_once dirname(__DIR__, 2) . '/Helpers/FlashMessageHelper.php';
+        FlashMessageHelper::toast($message, $type);
+    }
+
+    private function defaultFormData(): array
+    {
+        return [
+            'usuarioesadmin' => 0,
+            'usuarioactivo' => 1,
+            'usuariobloqueado' => 0,
+            'usuariopermiteaprobreq' => 0,
+            'usuariopermiteaprobpreoc' => 0,
+            'usuariocomprador' => 0,
+            'usuariopermiteanularpreoc' => 0,
+            'usuariopermiteeditarprecios' => 0,
+            'usuariopermitecrearitem' => 0,
+            'usuariopermiteeditaritem' => 0,
+            'usuariopermitesynctrnerp' => 0,
+            'usuarioreqautorizadorfuerapptocompra' => 0,
+            'usuarioreqautorizadorfuerapptocompraorden' => 0,
         ];
     }
 

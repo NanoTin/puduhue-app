@@ -38,11 +38,11 @@ $formatFloatCl = static function ($value, int $decimals = 2): string {
 };
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Presupuesto Produccion Leche Mensual</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <form id="pptoleche-excel-form" action="?route=pptolechemensual/crear" method="POST" enctype="multipart/form-data" class="m-0">
+        <form id="pptoleche-excel-form" action="?route=pptolechemensual/crear" method="POST" enctype="multipart/form-data" class="m-0" data-confirm="1" data-confirm-message="¿Desea cargar el archivo Excel seleccionado?">
             <input type="file" name="pptoleche_excel" id="pptoleche_excel" class="d-none" accept=".xlsx,.xls,.csv">
             <button type="button" id="btn-pptoleche-excel" class="btn btn-success btn-sm">
                 <i class="bi bi-file-earmark-excel"></i> Carga masiva Excel
@@ -105,7 +105,7 @@ $formatFloatCl = static function ($value, int $decimals = 2): string {
                     <th>Lts x Vaca</th>
                     <th>Fecha</th>
                     <th>Dias Mes</th>
-                    <th style="width: 180px;">Acciones</th>
+                    <th class="col-actions-lg">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -126,11 +126,11 @@ $formatFloatCl = static function ($value, int $decimals = 2): string {
                                 <a class="btn btn-warning btn-sm" href="?route=pptolechemensual/editar&anio=<?= urlencode($p['pptolecanio'] ?? '') ?>&mes=<?= urlencode($p['pptolecmes'] ?? '') ?>&fundoid=<?= urlencode($p['fundoid'] ?? '') ?>">
                                     <i class="bi bi-pencil-square"></i> Editar
                                 </a>
-                                <form action="?route=pptolechemensual/anular" method="POST" class="d-inline">
+                                <form action="?route=pptolechemensual/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Eliminar registro?">
                                     <input type="hidden" name="pptolecanio" value="<?= htmlspecialchars($p['pptolecanio'] ?? '') ?>">
                                     <input type="hidden" name="pptolecmes" value="<?= htmlspecialchars($p['pptolecmes'] ?? '') ?>">
                                     <input type="hidden" name="fundoid" value="<?= htmlspecialchars($p['fundoid'] ?? '') ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar registro?');">
+                                    <button type="submit" class="btn btn-danger btn-sm">
                                         <i class="bi bi-x-circle"></i> Eliminar
                                     </button>
                                 </form>
@@ -168,9 +168,7 @@ $formatFloatCl = static function ($value, int $decimals = 2): string {
             });
             excelInput.addEventListener('change', function () {
                 if (excelInput.files && excelInput.files.length > 0) {
-                    if (confirm('¿Desea cargar el archivo Excel seleccionado?')) {
-                        excelForm.submit();
-                    }
+                    excelForm.requestSubmit();
                 }
             });
         }

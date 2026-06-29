@@ -27,7 +27,7 @@ if (!$isPartial) {
             <section class="mb-4">
                 <h5 class="section-title">Datos Generales</h5>
                 <div class="row g-3 align-items-end general-grid">
-                    <div class="col-12 col-lg-6" style="display: none;">
+                    <div class="col-12 col-lg-6 d-none">
                         <label for="empresaid" class="form-label">Empresa</label>
                         <select name="empresaid" id="empresaid" class="form-select" disabled>
                             <option value="">Seleccione</option>
@@ -119,7 +119,7 @@ if (!$isPartial) {
                     <table class="detail-table" id="detalleTable">
                         <thead>
                         <tr>
-                            <th style="width: 70px;">Linea</th>
+                            <th class="col-line-sm">Linea</th>
                             <th>Categoria Animal</th>
                             <th>Producto</th>
                             <th>U.M</th>

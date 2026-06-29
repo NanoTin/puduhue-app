@@ -204,10 +204,11 @@ Para cada ConceptoCodigo en erpcatfiscalconceptos (de la categoría fiscal del p
 | Columna              | Tipo           | NULL | Descripción                                          |
 |----------------------|----------------|------|------------------------------------------------------|
 | `erpmonedaid`        | INT PK AI      | NO   | PK interna                                           |
-| `erpmonedacod`       | VARCHAR(10)    | NO   | Código ERP (ej. `PES`, `DOL`). UNIQUE                |
-| `erpmonedadsc`       | VARCHAR(50)    | NO   | Descripción (ej. `Pesos Chilenos`, `Dólar`)          |
+| `erpmonedacod`       | VARCHAR(50)    | NO   | Código ERP (ej. `PES`, `DOL`). UNIQUE. El JSON real contiene códigos largos como `Otros Animales por Cabeza`. |
+| `erpmonedadsc`       | VARCHAR(100)   | NO   | Descripción/nombre visible desde ERP                 |
+| `erpmonedadescripcion` | VARCHAR(255) | SÍ   | Descripción adicional desde ERP                      |
 | `erpmonedadefault`   | TINYINT(1)     | NO   | 1=Moneda por defecto para Pre OC (solo una activa)   |
-| `erpmonedaActivo`    | TINYINT(1)     | NO   | 1=Activo (sync desde ERP)                            |
+| `erpmonedaactivo`    | TINYINT(1)     | NO   | 1=Activo (sync desde ERP)                            |
 | `sincfechahora`      | DATETIME       | SÍ   | Última sincronización                                |
 
 > [!NOTE]

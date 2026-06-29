@@ -102,6 +102,74 @@ if (!$isPartial) {
                     <option value="0" <?= empty($usuario['usuarioactivo']) ? 'selected' : '' ?>>No</option>
                 </select>
             </div>
+            <div class="form-field">
+                <label class="form-label" for="usuariopermiteaprobreq">Aprueba REQ</label>
+                <select class="form-select" id="usuariopermiteaprobreq" name="usuariopermiteaprobreq">
+                    <option value="1" <?= !empty($usuario['usuariopermiteaprobreq']) ? 'selected' : '' ?>>Sí</option>
+                    <option value="0" <?= empty($usuario['usuariopermiteaprobreq']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="usuariopermiteaprobpreoc">Aprueba PreOC</label>
+                <select class="form-select" id="usuariopermiteaprobpreoc" name="usuariopermiteaprobpreoc">
+                    <option value="1" <?= !empty($usuario['usuariopermiteaprobpreoc']) ? 'selected' : '' ?>>Sí</option>
+                    <option value="0" <?= empty($usuario['usuariopermiteaprobpreoc']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="usuariocomprador">Comprador</label>
+                <select class="form-select" id="usuariocomprador" name="usuariocomprador">
+                    <option value="1" <?= !empty($usuario['usuariocomprador']) ? 'selected' : '' ?>>Sí</option>
+                    <option value="0" <?= empty($usuario['usuariocomprador']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="usuariopermiteanularpreoc">Puede anular PreOC</label>
+                <select class="form-select" id="usuariopermiteanularpreoc" name="usuariopermiteanularpreoc">
+                    <option value="1" <?= !empty($usuario['usuariopermiteanularpreoc']) ? 'selected' : '' ?>>Sí</option>
+                    <option value="0" <?= empty($usuario['usuariopermiteanularpreoc']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="usuariopermiteeditarprecios">Puede editar precios</label>
+                <select class="form-select" id="usuariopermiteeditarprecios" name="usuariopermiteeditarprecios">
+                    <option value="1" <?= !empty($usuario['usuariopermiteeditarprecios']) ? 'selected' : '' ?>>Sí</option>
+                    <option value="0" <?= empty($usuario['usuariopermiteeditarprecios']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="usuariopermitecrearitem">Puede crear ítems</label>
+                <select class="form-select" id="usuariopermitecrearitem" name="usuariopermitecrearitem">
+                    <option value="1" <?= !empty($usuario['usuariopermitecrearitem']) ? 'selected' : '' ?>>Sí</option>
+                    <option value="0" <?= empty($usuario['usuariopermitecrearitem']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="usuariopermiteeditaritem">Puede editar ítems</label>
+                <select class="form-select" id="usuariopermiteeditaritem" name="usuariopermiteeditaritem">
+                    <option value="1" <?= !empty($usuario['usuariopermiteeditaritem']) ? 'selected' : '' ?>>Sí</option>
+                    <option value="0" <?= empty($usuario['usuariopermiteeditaritem']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="usuariopermitesynctrnerp">Puede sincronizar ERP</label>
+                <select class="form-select" id="usuariopermitesynctrnerp" name="usuariopermitesynctrnerp">
+                    <option value="1" <?= !empty($usuario['usuariopermitesynctrnerp']) ? 'selected' : '' ?>>Sí</option>
+                    <option value="0" <?= empty($usuario['usuariopermitesynctrnerp']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="usuarioreqautorizadorfuerapptocompra">Autorizador fuera ppto REQ</label>
+                <select class="form-select" id="usuarioreqautorizadorfuerapptocompra" name="usuarioreqautorizadorfuerapptocompra">
+                    <option value="1" <?= !empty($usuario['usuarioreqautorizadorfuerapptocompra']) ? 'selected' : '' ?>>Sí</option>
+                    <option value="0" <?= empty($usuario['usuarioreqautorizadorfuerapptocompra']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="usuarioreqautorizadorfuerapptocompraorden">Orden autorizador fuera ppto</label>
+                <input type="number" name="usuarioreqautorizadorfuerapptocompraorden" id="usuarioreqautorizadorfuerapptocompraorden" class="form-control" min="0"
+                    value="<?= htmlspecialchars((string)($usuario['usuarioreqautorizadorfuerapptocompraorden'] ?? 0)) ?>">
+            </div>
         </div>
         <!-- Botones de accion -->
         <div class="form-actions">
@@ -113,5 +181,47 @@ if (!$isPartial) {
 
 <?php require __DIR__ . '/partials/modal_confirm.php'; ?>
 <script src="assets/js/confirm-modal.js"></script>
+<script>
+    (function () {
+        const form = document.querySelector('form[action="?route=usuarios/editar"]');
+        if (!form) {
+            return;
+        }
+
+        const pwdInput = form.querySelector('input[name="usuariopwd"]');
+        const pwd2Input = document.getElementById('usuariopwd2');
+        const authFueraInput = document.getElementById('usuarioreqautorizadorfuerapptocompra');
+        const authFueraOrdenInput = document.getElementById('usuarioreqautorizadorfuerapptocompraorden');
+
+        const isValidPassword = (pwd) => {
+            return pwd.length >= 5 &&
+                /[A-Z]/.test(pwd) &&
+                /[0-9]/.test(pwd) &&
+                /[^A-Za-z0-9]/.test(pwd);
+        };
+
+        form.addEventListener('submit', function (evt) {
+            const pwd = pwdInput ? pwdInput.value : '';
+            const pwdConfirm = pwd2Input ? pwd2Input.value : '';
+
+            if (pwd !== '' && !isValidPassword(pwd)) {
+                evt.preventDefault();
+                window.ToastManager?.show('La contrasena debe tener al menos 5 caracteres, 1 mayuscula, 1 numero y 1 caracter especial.', 'warning');
+                return;
+            }
+
+            if (pwd !== pwdConfirm) {
+                evt.preventDefault();
+                window.ToastManager?.show('La confirmacion de contrasena no coincide.', 'warning');
+                return;
+            }
+
+            if (authFueraInput && authFueraOrdenInput && authFueraInput.value === '1' && (!authFueraOrdenInput.value || Number(authFueraOrdenInput.value) <= 0)) {
+                evt.preventDefault();
+                window.ToastManager?.show('Debe informar un orden mayor a cero para autorizador fuera de presupuesto.', 'warning');
+            }
+        });
+    })();
+</script>
 
 <?php if (!$isPartial) { require 'footer.php'; } ?>

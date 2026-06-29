@@ -38,7 +38,7 @@ Regla base:
  - No hay autoload garantizado en hosting: carga dependencias clave con `require_once` antes de usarlas (`src/Config/Env.php`, `src/Config/Database.php`, `src/Middleware/AuthMiddleware.php`; `Logger` en `src/Helpers/Logger.php` con namespace `App\Helpers`).
 
 1.2. Acceso a base de datos
-- Usar `src/Config/Database.php` como capa central de acceso a datos (global, sin namespace; las versiones en `src/Core` quedan como referencia/legacy). Incluye el archivo con `require_once` antes de instanciarlo porque no hay autoload confiable en hosting.
+- Usar `src/Config/Database.php` como capa central de acceso a datos (global, sin namespace). Incluye el archivo con `require_once` antes de instanciarlo porque no hay autoload confiable en hosting.
 - Database.php:
   - Implementa conexión PDO (MySQL/MariaDB).
   - Define métodos:
@@ -258,10 +258,7 @@ Tres columnas especiales de `Columns.csv` se usan para generar los `SELECT` de l
   - `Env.php` (global, sin namespace; cargar con `require_once`).
   - `Database.php` (global, sin namespace; cargar con `require_once`).
 - `src/Core/`:
-  - `BaseModel.php`
-  - `BaseController.php`
-  - `Response.php` (para JSON en API).
-  - `Router.php` (router genérico; el router web actual usa `handleWebRequest` en `src/Routes/web.php` sin esta clase).
+  - Retirado. No crear nuevas dependencias contra esa ruta.
 - `src/Routes/`:
   - `web.php`:
     - Registra rutas web (`?route=modulo/accion`).

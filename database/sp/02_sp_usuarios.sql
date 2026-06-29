@@ -23,6 +23,16 @@ sp_main: BEGIN
   DECLARE v_usuarioapikeyfechagen datetime;
   DECLARE v_usuarioapikeyultuso datetime;
   DECLARE v_usuarioapikeyipultuso varchar(50);
+  DECLARE v_usuariopermiteaprobreq tinyint(1);
+  DECLARE v_usuariopermiteaprobpreoc tinyint(1);
+  DECLARE v_usuariocomprador tinyint(1);
+  DECLARE v_usuariopermiteanularpreoc tinyint(1);
+  DECLARE v_usuariopermiteeditarprecios tinyint(1);
+  DECLARE v_usuariopermitecrearitem tinyint(1);
+  DECLARE v_usuariopermiteeditaritem tinyint(1);
+  DECLARE v_usuariopermitesynctrnerp tinyint(1);
+  DECLARE v_usuarioreqautorizadorfuerapptocompra tinyint(1);
+  DECLARE v_usuarioreqautorizadorfuerapptocompraorden int(11);
 
   IF p_in_json IS NULL OR JSON_TYPE(p_in_json) = 'NULL' OR JSON_LENGTH(p_in_json) = 0 THEN
     SET p_out_json = JSON_OBJECT('status', 400, 'message', 'p_in_json is required');
@@ -48,7 +58,17 @@ sp_main: BEGIN
     v_usuarioapikeyactiva = CAST(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioapikeyactiva')) AS SIGNED),
     v_usuarioapikeyfechagen = CAST(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioapikeyfechagen')) AS DATETIME),
     v_usuarioapikeyultuso = CAST(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioapikeyultuso')) AS DATETIME),
-    v_usuarioapikeyipultuso = JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioapikeyipultuso'));
+    v_usuarioapikeyipultuso = JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioapikeyipultuso')),
+    v_usuariopermiteaprobreq = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermiteaprobreq')), 'null') AS SIGNED),
+    v_usuariopermiteaprobpreoc = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermiteaprobpreoc')), 'null') AS SIGNED),
+    v_usuariocomprador = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariocomprador')), 'null') AS SIGNED),
+    v_usuariopermiteanularpreoc = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermiteanularpreoc')), 'null') AS SIGNED),
+    v_usuariopermiteeditarprecios = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermiteeditarprecios')), 'null') AS SIGNED),
+    v_usuariopermitecrearitem = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermitecrearitem')), 'null') AS SIGNED),
+    v_usuariopermiteeditaritem = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermiteeditaritem')), 'null') AS SIGNED),
+    v_usuariopermitesynctrnerp = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermitesynctrnerp')), 'null') AS SIGNED),
+    v_usuarioreqautorizadorfuerapptocompra = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioreqautorizadorfuerapptocompra')), 'null') AS SIGNED),
+    v_usuarioreqautorizadorfuerapptocompraorden = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioreqautorizadorfuerapptocompraorden')), 'null') AS SIGNED);
 
   IF EXISTS (SELECT 1 FROM `usuarios` WHERE `usuariorut` = v_usuariorut) THEN
     SET p_out_json = JSON_OBJECT('status', 400, 'message', 'Record with same usuariorut already exists');
@@ -74,6 +94,16 @@ sp_main: BEGIN
     `usuarioapikeyultuso`,
     `usuarioapikeyipultuso`,
     `usuarioactivo`,
+    `usuariopermiteaprobreq`,
+    `usuariopermiteaprobpreoc`,
+    `usuariocomprador`,
+    `usuariopermiteanularpreoc`,
+    `usuariopermiteeditarprecios`,
+    `usuariopermitecrearitem`,
+    `usuariopermiteeditaritem`,
+    `usuariopermitesynctrnerp`,
+    `usuarioreqautorizadorfuerapptocompra`,
+    `usuarioreqautorizadorfuerapptocompraorden`,
     `auditcreacionusuarioid`,
     `auditcreaciondispositivo`,
     `auditcreacionip`
@@ -97,6 +127,16 @@ sp_main: BEGIN
     v_usuarioapikeyultuso,
     v_usuarioapikeyipultuso,
     1,
+    IFNULL(v_usuariopermiteaprobreq, 0),
+    IFNULL(v_usuariopermiteaprobpreoc, 0),
+    IFNULL(v_usuariocomprador, 0),
+    IFNULL(v_usuariopermiteanularpreoc, 0),
+    IFNULL(v_usuariopermiteeditarprecios, 0),
+    IFNULL(v_usuariopermitecrearitem, 0),
+    IFNULL(v_usuariopermiteeditaritem, 0),
+    IFNULL(v_usuariopermitesynctrnerp, 0),
+    IFNULL(v_usuarioreqautorizadorfuerapptocompra, 0),
+    IFNULL(v_usuarioreqautorizadorfuerapptocompraorden, 0),
     p_in_usuarioid,
     p_in_dispositivo,
     p_in_ip
@@ -151,6 +191,16 @@ sp_main: BEGIN
   DECLARE v_usuarioapikeyultuso datetime;
   DECLARE v_usuarioapikeyipultuso varchar(50);
   DECLARE v_usuarioactivo tinyint(1);
+  DECLARE v_usuariopermiteaprobreq tinyint(1);
+  DECLARE v_usuariopermiteaprobpreoc tinyint(1);
+  DECLARE v_usuariocomprador tinyint(1);
+  DECLARE v_usuariopermiteanularpreoc tinyint(1);
+  DECLARE v_usuariopermiteeditarprecios tinyint(1);
+  DECLARE v_usuariopermitecrearitem tinyint(1);
+  DECLARE v_usuariopermiteeditaritem tinyint(1);
+  DECLARE v_usuariopermitesynctrnerp tinyint(1);
+  DECLARE v_usuarioreqautorizadorfuerapptocompra tinyint(1);
+  DECLARE v_usuarioreqautorizadorfuerapptocompraorden int(11);
   DECLARE v_prev_bkpjson JSON;
 
   IF p_in_json IS NULL OR JSON_TYPE(p_in_json) = 'NULL' OR JSON_LENGTH(p_in_json) = 0 THEN
@@ -175,14 +225,24 @@ sp_main: BEGIN
     v_usuarioapikeyfechagen = CAST(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioapikeyfechagen')) AS DATETIME),
     v_usuarioapikeyultuso = CAST(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioapikeyultuso')) AS DATETIME),
     v_usuarioapikeyipultuso = JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioapikeyipultuso')),
-    v_usuarioactivo = CAST(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioactivo')) AS SIGNED);
+    v_usuarioactivo = CAST(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioactivo')) AS SIGNED),
+    v_usuariopermiteaprobreq = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermiteaprobreq')), 'null') AS SIGNED),
+    v_usuariopermiteaprobpreoc = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermiteaprobpreoc')), 'null') AS SIGNED),
+    v_usuariocomprador = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariocomprador')), 'null') AS SIGNED),
+    v_usuariopermiteanularpreoc = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermiteanularpreoc')), 'null') AS SIGNED),
+    v_usuariopermiteeditarprecios = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermiteeditarprecios')), 'null') AS SIGNED),
+    v_usuariopermitecrearitem = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermitecrearitem')), 'null') AS SIGNED),
+    v_usuariopermiteeditaritem = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermiteeditaritem')), 'null') AS SIGNED),
+    v_usuariopermitesynctrnerp = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuariopermitesynctrnerp')), 'null') AS SIGNED),
+    v_usuarioreqautorizadorfuerapptocompra = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioreqautorizadorfuerapptocompra')), 'null') AS SIGNED),
+    v_usuarioreqautorizadorfuerapptocompraorden = CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(p_in_json, '$.usuarioreqautorizadorfuerapptocompraorden')), 'null') AS SIGNED);
 
   IF NOT EXISTS (SELECT 1 FROM `usuarios` WHERE `usuarioid` = v_usuarioid) THEN
     SET p_out_json = JSON_OBJECT('status', 400, 'message', 'Record not found');
     LEAVE sp_main;
   END IF;
 
-  SELECT JSON_OBJECT('usuarioid', `usuarios`.`usuarioid`, 'usuariocod', `usuarios`.`usuariocod`, 'usuariorut', `usuarios`.`usuariorut`, 'usuarionombre', `usuarios`.`usuarionombre`, 'usuariopwdhash', `usuarios`.`usuariopwdhash`, 'usuarioemail', `usuarios`.`usuarioemail`, 'usuariocelular', `usuarios`.`usuariocelular`, 'perfilid', `usuarios`.`perfilid`, 'empresaiddefault', `usuarios`.`empresaiddefault`, 'usuarioesroot', `usuarios`.`usuarioesroot`, 'usuarioesadmin', `usuarios`.`usuarioesadmin`, 'usuariobloqueado', `usuarios`.`usuariobloqueado`, 'usuariobloqueadodesc', `usuarios`.`usuariobloqueadodesc`, 'usuarioapikeyhash', `usuarios`.`usuarioapikeyhash`, 'usuarioapikeyactiva', `usuarios`.`usuarioapikeyactiva`, 'usuarioapikeyfechagen', `usuarios`.`usuarioapikeyfechagen`, 'usuarioapikeyultuso', `usuarios`.`usuarioapikeyultuso`, 'usuarioapikeyipultuso', `usuarios`.`usuarioapikeyipultuso`, 'usuarioactivo', `usuarios`.`usuarioactivo`, 'auditcreacionusuarioid', `usuarios`.`auditcreacionusuarioid`, 'auditcreaciondispositivo', `usuarios`.`auditcreaciondispositivo`, 'auditcreacionip', `usuarios`.`auditcreacionip`, 'auditcreacionfechahora', `usuarios`.`auditcreacionfechahora`, 'auditedicionusuarioid', `usuarios`.`auditedicionusuarioid`, 'auditediciondispositivo', `usuarios`.`auditediciondispositivo`, 'auditedicionip', `usuarios`.`auditedicionip`, 'auditedicionfechahora', `usuarios`.`auditedicionfechahora`)
+  SELECT JSON_OBJECT('usuarioid', `usuarios`.`usuarioid`, 'usuariocod', `usuarios`.`usuariocod`, 'usuariorut', `usuarios`.`usuariorut`, 'usuarionombre', `usuarios`.`usuarionombre`, 'usuariopwdhash', `usuarios`.`usuariopwdhash`, 'usuarioemail', `usuarios`.`usuarioemail`, 'usuariocelular', `usuarios`.`usuariocelular`, 'perfilid', `usuarios`.`perfilid`, 'empresaiddefault', `usuarios`.`empresaiddefault`, 'usuarioesroot', `usuarios`.`usuarioesroot`, 'usuarioesadmin', `usuarios`.`usuarioesadmin`, 'usuariobloqueado', `usuarios`.`usuariobloqueado`, 'usuariobloqueadodesc', `usuarios`.`usuariobloqueadodesc`, 'usuarioapikeyhash', `usuarios`.`usuarioapikeyhash`, 'usuarioapikeyactiva', `usuarios`.`usuarioapikeyactiva`, 'usuarioapikeyfechagen', `usuarios`.`usuarioapikeyfechagen`, 'usuarioapikeyultuso', `usuarios`.`usuarioapikeyultuso`, 'usuarioapikeyipultuso', `usuarios`.`usuarioapikeyipultuso`, 'usuarioactivo', `usuarios`.`usuarioactivo`, 'usuariopermiteaprobreq', `usuarios`.`usuariopermiteaprobreq`, 'usuariopermiteaprobpreoc', `usuarios`.`usuariopermiteaprobpreoc`, 'usuariocomprador', `usuarios`.`usuariocomprador`, 'usuariopermiteanularpreoc', `usuarios`.`usuariopermiteanularpreoc`, 'usuariopermiteeditarprecios', `usuarios`.`usuariopermiteeditarprecios`, 'usuariopermitecrearitem', `usuarios`.`usuariopermitecrearitem`, 'usuariopermiteeditaritem', `usuarios`.`usuariopermiteeditaritem`, 'usuariopermitesynctrnerp', `usuarios`.`usuariopermitesynctrnerp`, 'usuarioreqautorizadorfuerapptocompra', `usuarios`.`usuarioreqautorizadorfuerapptocompra`, 'usuarioreqautorizadorfuerapptocompraorden', `usuarios`.`usuarioreqautorizadorfuerapptocompraorden`, 'auditcreacionusuarioid', `usuarios`.`auditcreacionusuarioid`, 'auditcreaciondispositivo', `usuarios`.`auditcreaciondispositivo`, 'auditcreacionip', `usuarios`.`auditcreacionip`, 'auditcreacionfechahora', `usuarios`.`auditcreacionfechahora`, 'auditedicionusuarioid', `usuarios`.`auditedicionusuarioid`, 'auditediciondispositivo', `usuarios`.`auditediciondispositivo`, 'auditedicionip', `usuarios`.`auditedicionip`, 'auditedicionfechahora', `usuarios`.`auditedicionfechahora`)
   INTO v_prev_bkpjson
   FROM `usuarios`
   WHERE `usuarioid` = v_usuarioid
@@ -225,6 +285,16 @@ sp_main: BEGIN
     `usuarioapikeyultuso` = v_usuarioapikeyultuso,
     `usuarioapikeyipultuso` = v_usuarioapikeyipultuso,
     `usuarioactivo` = v_usuarioactivo,
+    `usuariopermiteaprobreq` = IFNULL(v_usuariopermiteaprobreq, 0),
+    `usuariopermiteaprobpreoc` = IFNULL(v_usuariopermiteaprobpreoc, 0),
+    `usuariocomprador` = IFNULL(v_usuariocomprador, 0),
+    `usuariopermiteanularpreoc` = IFNULL(v_usuariopermiteanularpreoc, 0),
+    `usuariopermiteeditarprecios` = IFNULL(v_usuariopermiteeditarprecios, 0),
+    `usuariopermitecrearitem` = IFNULL(v_usuariopermitecrearitem, 0),
+    `usuariopermiteeditaritem` = IFNULL(v_usuariopermiteeditaritem, 0),
+    `usuariopermitesynctrnerp` = IFNULL(v_usuariopermitesynctrnerp, 0),
+    `usuarioreqautorizadorfuerapptocompra` = IFNULL(v_usuarioreqautorizadorfuerapptocompra, 0),
+    `usuarioreqautorizadorfuerapptocompraorden` = IFNULL(v_usuarioreqautorizadorfuerapptocompraorden, 0),
     `auditedicionusuarioid` = p_in_usuarioid,
     `auditediciondispositivo` = p_in_dispositivo,
     `auditedicionip` = p_in_ip
@@ -257,7 +327,7 @@ sp_main: BEGIN
     LEAVE sp_main;
   END IF;
 
-  SELECT JSON_OBJECT('usuarioid', `usuarios`.`usuarioid`, 'usuariocod', `usuarios`.`usuariocod`, 'usuariorut', `usuarios`.`usuariorut`, 'usuarionombre', `usuarios`.`usuarionombre`, 'usuariopwdhash', `usuarios`.`usuariopwdhash`, 'usuarioemail', `usuarios`.`usuarioemail`, 'usuariocelular', `usuarios`.`usuariocelular`, 'perfilid', `usuarios`.`perfilid`, 'empresaiddefault', `usuarios`.`empresaiddefault`, 'usuarioesroot', `usuarios`.`usuarioesroot`, 'usuarioesadmin', `usuarios`.`usuarioesadmin`, 'usuariobloqueado', `usuarios`.`usuariobloqueado`, 'usuariobloqueadodesc', `usuarios`.`usuariobloqueadodesc`, 'usuarioapikeyhash', `usuarios`.`usuarioapikeyhash`, 'usuarioapikeyactiva', `usuarios`.`usuarioapikeyactiva`, 'usuarioapikeyfechagen', `usuarios`.`usuarioapikeyfechagen`, 'usuarioapikeyultuso', `usuarios`.`usuarioapikeyultuso`, 'usuarioapikeyipultuso', `usuarios`.`usuarioapikeyipultuso`, 'usuarioactivo', `usuarios`.`usuarioactivo`, 'auditcreacionusuarioid', `usuarios`.`auditcreacionusuarioid`, 'auditcreaciondispositivo', `usuarios`.`auditcreaciondispositivo`, 'auditcreacionip', `usuarios`.`auditcreacionip`, 'auditcreacionfechahora', `usuarios`.`auditcreacionfechahora`, 'auditedicionusuarioid', `usuarios`.`auditedicionusuarioid`, 'auditediciondispositivo', `usuarios`.`auditediciondispositivo`, 'auditedicionip', `usuarios`.`auditedicionip`, 'auditedicionfechahora', `usuarios`.`auditedicionfechahora`)
+  SELECT JSON_OBJECT('usuarioid', `usuarios`.`usuarioid`, 'usuariocod', `usuarios`.`usuariocod`, 'usuariorut', `usuarios`.`usuariorut`, 'usuarionombre', `usuarios`.`usuarionombre`, 'usuariopwdhash', `usuarios`.`usuariopwdhash`, 'usuarioemail', `usuarios`.`usuarioemail`, 'usuariocelular', `usuarios`.`usuariocelular`, 'perfilid', `usuarios`.`perfilid`, 'empresaiddefault', `usuarios`.`empresaiddefault`, 'usuarioesroot', `usuarios`.`usuarioesroot`, 'usuarioesadmin', `usuarios`.`usuarioesadmin`, 'usuariobloqueado', `usuarios`.`usuariobloqueado`, 'usuariobloqueadodesc', `usuarios`.`usuariobloqueadodesc`, 'usuarioapikeyhash', `usuarios`.`usuarioapikeyhash`, 'usuarioapikeyactiva', `usuarios`.`usuarioapikeyactiva`, 'usuarioapikeyfechagen', `usuarios`.`usuarioapikeyfechagen`, 'usuarioapikeyultuso', `usuarios`.`usuarioapikeyultuso`, 'usuarioapikeyipultuso', `usuarios`.`usuarioapikeyipultuso`, 'usuarioactivo', `usuarios`.`usuarioactivo`, 'usuariopermiteaprobreq', `usuarios`.`usuariopermiteaprobreq`, 'usuariopermiteaprobpreoc', `usuarios`.`usuariopermiteaprobpreoc`, 'usuariocomprador', `usuarios`.`usuariocomprador`, 'usuariopermiteanularpreoc', `usuarios`.`usuariopermiteanularpreoc`, 'usuariopermiteeditarprecios', `usuarios`.`usuariopermiteeditarprecios`, 'usuariopermitecrearitem', `usuarios`.`usuariopermitecrearitem`, 'usuariopermiteeditaritem', `usuarios`.`usuariopermiteeditaritem`, 'usuariopermitesynctrnerp', `usuarios`.`usuariopermitesynctrnerp`, 'usuarioreqautorizadorfuerapptocompra', `usuarios`.`usuarioreqautorizadorfuerapptocompra`, 'usuarioreqautorizadorfuerapptocompraorden', `usuarios`.`usuarioreqautorizadorfuerapptocompraorden`, 'auditcreacionusuarioid', `usuarios`.`auditcreacionusuarioid`, 'auditcreaciondispositivo', `usuarios`.`auditcreaciondispositivo`, 'auditcreacionip', `usuarios`.`auditcreacionip`, 'auditcreacionfechahora', `usuarios`.`auditcreacionfechahora`, 'auditedicionusuarioid', `usuarios`.`auditedicionusuarioid`, 'auditediciondispositivo', `usuarios`.`auditediciondispositivo`, 'auditedicionip', `usuarios`.`auditedicionip`, 'auditedicionfechahora', `usuarios`.`auditedicionfechahora`)
   INTO v_prev_bkpjson
   FROM `usuarios`
   WHERE `usuarioid` = v_usuarioid
@@ -418,7 +488,17 @@ sp_main: BEGIN
     t.`usuarioapikeyfechagen`,
     t.`usuarioapikeyultuso`,
     t.`usuarioapikeyipultuso`,
-    t.`usuarioactivo`
+    t.`usuarioactivo`,
+    t.`usuariopermiteaprobreq`,
+    t.`usuariopermiteaprobpreoc`,
+    t.`usuariocomprador`,
+    t.`usuariopermiteanularpreoc`,
+    t.`usuariopermiteeditarprecios`,
+    t.`usuariopermitecrearitem`,
+    t.`usuariopermiteeditaritem`,
+    t.`usuariopermitesynctrnerp`,
+    t.`usuarioreqautorizadorfuerapptocompra`,
+    t.`usuarioreqautorizadorfuerapptocompraorden`
   FROM `usuarios` t
   LEFT JOIN `perfiles` ON t.`perfilid` = `perfiles`.`perfilid`
   LEFT JOIN `empresas` ON t.`empresaiddefault` = `empresas`.`empresaid`

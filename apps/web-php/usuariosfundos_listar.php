@@ -7,7 +7,7 @@ if (!$isPartial) {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Usuarios - Fundos</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -59,7 +59,7 @@ if (!$isPartial) {
                     <th>Usuario</th>
                     <th>Fundo</th>
                     <th>Default</th>
-                    <th style="width: 140px;">Acciones</th>
+                    <th class="col-actions-2xs">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,10 +72,10 @@ if (!$isPartial) {
                             <td><?= htmlspecialchars($uf['fundos_fundonombre'] ?? '') ?></td>
                             <td><?= !empty($uf['ufdefault']) ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-danger">No</span>' ?></td>
                             <td>
-                                <form action="?route=usuariosfundos/eliminar" method="POST" class="d-inline">
+                                <form action="?route=usuariosfundos/eliminar" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Eliminar asociación?">
                                     <input type="hidden" name="usuarioid" value="<?= htmlspecialchars($uf['usuarioid'] ?? '') ?>">
                                     <input type="hidden" name="fundoid" value="<?= htmlspecialchars($uf['fundoid'] ?? '') ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar asociación?');">
+                                    <button type="submit" class="btn btn-danger btn-sm">
                                         <i class="bi bi-x-circle"></i> Eliminar
                                     </button>
                                 </form>

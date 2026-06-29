@@ -1,0 +1,566 @@
+[
+    {
+        "codigo": "SINUNIDAD",
+        "nombre": "Sin Unidad",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "KGS1",
+        "nombre": "Kilos (Hac.)",
+        "descripcion": "(USO EXCLUSIVO HACIENDA)",
+        "activo": true
+    },
+    {
+        "codigo": "CAB1",
+        "nombre": "Cabezas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "LI",
+        "nombre": "Litros",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "ML",
+        "nombre": "Mililitros/cm3",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CM",
+        "nombre": "Centímetros",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "KM",
+        "nombre": "Kilómetro",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "MT",
+        "nombre": "Metros",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "GR",
+        "nombre": "Gramos",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "KG",
+        "nombre": "Kilos",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "QUI",
+        "nombre": "Quintales",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "TON",
+        "nombre": "Toneladas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "BLS",
+        "nombre": "Bolsas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "DO",
+        "nombre": "Dosis",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "FR",
+        "nombre": "Frasco 500 cc",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HA",
+        "nombre": "Hectáreas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "HO",
+        "nombre": "Horas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "ME",
+        "nombre": "Mes",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "UN",
+        "nombre": "Unidades",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "MM",
+        "nombre": "Milímetros",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "20l",
+        "nombre": "Bidón de 20l",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "B5L",
+        "nombre": "Bidón 5 litros",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "MILLA",
+        "nombre": "Milla",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "MIL",
+        "nombre": "Miles",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "MLL",
+        "nombre": "Millares",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "RAC",
+        "nombre": "Raciones Forrajeras",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "b150",
+        "nombre": "Bidon de 150 Lts",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "b120",
+        "nombre": "Bidon de 120 Lts",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "P2",
+        "nombre": "Pie Cuadrado",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "1000 KILOWATT HORA",
+        "nombre": "1000 KILOWATT HORA",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BONIFICACION",
+        "nombre": "BONIFICACION",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CAB",
+        "nombre": "Cabezas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CAJX24",
+        "nombre": "Caja x 24 unidades",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CAJA",
+        "nombre": "Cajas ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CAN",
+        "nombre": "Canales",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CM3",
+        "nombre": "Centímetros Cúbicos",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CURIE",
+        "nombre": "CURIE",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DECAMETRO CUBICO",
+        "nombre": "DECAMETRO CUBICO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DOCENA",
+        "nombre": "DOCENA",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GBps",
+        "nombre": "GBps",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "GB",
+        "nombre": "Gigabytes",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "GHZ",
+        "nombre": "GigaHertz",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "GRAMO ACTIVO",
+        "nombre": "GRAMO ACTIVO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GRAMO BASE",
+        "nombre": "GRAMO BASE",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GRUESA",
+        "nombre": "GRUESA",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HECTOLITRO",
+        "nombre": "HECTOLITRO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HECTOMETRO CUBICO",
+        "nombre": "HECTOMETRO CUBICO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HZ",
+        "nombre": "Hertz",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "HH",
+        "nombre": "Hora hombre",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "HORMA",
+        "nombre": "HORMA",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "JGO.PQT. MAZO NAIPES",
+        "nombre": "JGO.PQT. MAZO NAIPES",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "KBPS",
+        "nombre": "KBps",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "KILOGRAMO ACTIVO",
+        "nombre": "KILOGRAMO ACTIVO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "KILOGRAMO BASE",
+        "nombre": "KILOGRAMO BASE",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "KILOGRAMO BRUTO",
+        "nombre": "KILOGRAMO BRUTO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "KHZ",
+        "nombre": "KiloHertz",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "KILOMETRO CUBICO",
+        "nombre": "KILOMETRO CUBICO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "KVA",
+        "nombre": "KVA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "MBPS",
+        "nombre": "MBps",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "MEGA U. INTER. ACT. ANTIB",
+        "nombre": "MEGA U. INTER. ACT. ANTIB",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MEGA U. INTER. ACT. HOR.",
+        "nombre": "MEGA U. INTER. ACT. HOR.",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MEGA UNIDAD INT. ACT. INMUNG",
+        "nombre": "MEGA UNIDAD INT. ACT. INMUNG",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MHZ",
+        "nombre": "MegaHertz",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "M2",
+        "nombre": "Metros Cuadrados",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "M3",
+        "nombre": "Metros Cubicos",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "MICROCURIE",
+        "nombre": "MICROCURIE",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MICROGRAMO",
+        "nombre": "MICROGRAMO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MILICURIE",
+        "nombre": "MILICURIE",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MILIGRAMO",
+        "nombre": "MILIGRAMO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MILILITRO",
+        "nombre": "MILILITRO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MILIMETRO CUBICO",
+        "nombre": "MILIMETRO CUBICO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MILLAR",
+        "nombre": "MILLAR",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MUIACTANT",
+        "nombre": "MUIACTANT",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MUIACTHOR",
+        "nombre": "MUIACTHOR",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MUIACTIG",
+        "nombre": "MUIACTIG",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "NANOGRAMO",
+        "nombre": "NANOGRAMO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "OTRAS UNIDADES",
+        "nombre": "OTRAS UNIDADES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "PACK",
+        "nombre": "PACK",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PAR",
+        "nombre": "PAR",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PP",
+        "nombre": "Par de pelos",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "PICOGRAMO",
+        "nombre": "PICOGRAMO",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "QUILATE",
+        "nombre": "QUILATE",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SEÑAS/ANTICIPOS",
+        "nombre": "SEÑAS/ANTICIPOS",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SIN DESCRIPCION",
+        "nombre": "SIN DESCRIPCION",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "U.INTER. ACT. HORMONAL",
+        "nombre": "U.INTER. ACT. HORMONAL",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "UIACTANT",
+        "nombre": "UIACTANT",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "UIACTHOR",
+        "nombre": "UIACTHOR",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "UIACTIG",
+        "nombre": "UIACTIG",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "UNIDAD INT. ACT. INMUNG",
+        "nombre": "UNIDAD INT. ACT. INMUNG",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "URACK",
+        "nombre": "Unidades de Rack",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "GL",
+        "nombre": "Valor Global",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "100",
+        "nombre": "MAXI SACOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "FRC",
+        "nombre": "Frasco",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "PM",
+        "nombre": "POMOS",
+        "descripcion": "",
+        "activo": true
+    }
+]

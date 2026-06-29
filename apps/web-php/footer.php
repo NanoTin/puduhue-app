@@ -20,6 +20,7 @@
         const menuLinks = document.querySelectorAll('.menu-link[data-close-drawer="true"]');
         const sidebar = document.getElementById('appSidebar');
         const flyout = document.getElementById('menuFlyout');
+        const sidebarStorageKey = 'pdh_sidebar_collapsed';
         let currentFlyoutGroup = null;
 
         const closeDrawer = () => body.classList.remove('sidebar-open');
@@ -54,16 +55,18 @@
             const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 56;
             if (rect) {
                 const left = rect.right;
-                const top = Math.max(headerHeight, Math.min(itemRect.top, window.innerHeight - 260));
+                const top = Math.max(headerHeight, Math.min(itemRect.top, window.innerHeight - 220));
+                const availableHeight = Math.max(220, window.innerHeight - top - 16);
                 flyout.style.left = `${left}px`;
                 flyout.style.top = `${top}px`;
-                flyout.style.maxHeight = `calc(100vh - ${headerHeight}px)`;
+                flyout.style.maxHeight = `${availableHeight}px`;
             }
 
             document.querySelectorAll('.menu-group').forEach(el => el.classList.remove('open'));
             group.classList.add('open');
 
             flyout.classList.add('visible');
+            flyout.scrollTop = 0;
             currentFlyoutGroup = group;
         };
 
@@ -71,6 +74,11 @@
         collapseBtn?.addEventListener('click', () => {
             closeFlyout();
             body.classList.toggle('sidebar-collapsed');
+            try {
+                localStorage.setItem(sidebarStorageKey, body.classList.contains('sidebar-collapsed') ? '1' : '0');
+            } catch (e) {
+                // Storage can be unavailable in restricted browser modes.
+            }
         });
         backdrop?.addEventListener('click', closeDrawer);
 
@@ -143,6 +151,52 @@
     });
 </script>
 <script src="assets/js/toast.js"></script>
+<script>
+    (function () {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+        if (!csrfToken) {
+            return;
+        }
+
+        document.addEventListener('submit', function (event) {
+            const form = event.target;
+            if (!form || form.tagName !== 'FORM') {
+                return;
+            }
+            if ((form.getAttribute('method') || 'GET').toUpperCase() !== 'POST') {
+                return;
+            }
+            if (!form.querySelector('input[name="_csrf"]')) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = '_csrf';
+                input.value = csrfToken;
+                form.appendChild(input);
+            }
+        }, true);
+
+        if (window.fetch && !window.__csrfFetchPatched) {
+            const originalFetch = window.fetch.bind(window);
+            window.fetch = function (resource, options = {}) {
+                const method = (options.method || 'GET').toUpperCase();
+                if (method !== 'POST') {
+                    return originalFetch(resource, options);
+                }
+
+                const headers = new Headers(options.headers || {});
+                if (!headers.has('X-CSRF-Token')) {
+                    headers.set('X-CSRF-Token', csrfToken);
+                }
+
+                return originalFetch(resource, {
+                    ...options,
+                    headers,
+                });
+            };
+            window.__csrfFetchPatched = true;
+        }
+    })();
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const trigger = document.getElementById('changeCompanyTrigger');
@@ -250,15 +304,14 @@
         });
     });
 </script>
+<?php require __DIR__ . '/partials/modal_confirm.php'; ?>
+<script src="assets/js/confirm-modal.js"></script>
 <?php
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
-$toastData = $_SESSION['toast'] ?? null;
+require_once dirname(__DIR__, 2) . '/src/Helpers/FlashMessageHelper.php';
+$toastData = FlashMessageHelper::pullToast();
 if (!empty($toastData['message'])):
     $toastMessage = json_encode($toastData['message'], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
     $toastType    = json_encode($toastData['type'] ?? 'info', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
-    unset($_SESSION['toast']);
 ?>
 <div id="toast-fallback" class="alert alert-info d-none" role="alert"></div>
 <script>

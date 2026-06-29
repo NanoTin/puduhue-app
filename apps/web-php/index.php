@@ -39,6 +39,8 @@ require_once $root . '/src/Middleware/AuthMiddleware.php';
 require_once $root . '/src/Helpers/Logger.php';
 require_once $root . '/src/Controllers/Web/PerfilesmenusController.php';
 
+use App\Helpers\Logger;
+
 AuthMiddleware::requireAuth();
 $user = AuthMiddleware::getUserContext();
 // ---------------------------------------------------------
@@ -123,7 +125,7 @@ try {
     $menuData = buildMenuTreeFromRows($menuRows);
 } catch (Throwable $e) {
     // Si falla la carga del menu, continuar sin bloquear la app.
-    \Logger::error('No se pudo cargar el menu desde BD: ' . $e->getMessage());
+    Logger::error('No se pudo cargar el menu desde BD: ' . $e->getMessage());
 }
 
 // ---------------------------------------------------------

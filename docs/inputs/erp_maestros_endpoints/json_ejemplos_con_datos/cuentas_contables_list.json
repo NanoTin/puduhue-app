@@ -1,0 +1,3044 @@
+[
+    {
+        "codigo": "ADE",
+        "nombre": "Alquiler Equipos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SERTER",
+        "nombre": "Ingreso Por Servicios A Terceros",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "COSECHAC",
+        "nombre": "Cosecha Contratada",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "COSECHAP",
+        "nombre": "Cosecha Propia",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LABC",
+        "nombre": "Labores  Contratadas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "LABVP",
+        "nombre": "Labores Propias",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SIEMBRAC",
+        "nombre": "Siembra Contratada",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "SIEMBRAP",
+        "nombre": "Siembra Propia",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BCO$",
+        "nombre": "Banco Cta Cte $",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BCOCCU$S",
+        "nombre": "Banco Cta Cte U$s",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CC",
+        "nombre": "Caja Campo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CCE",
+        "nombre": "Caja Central",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CLI",
+        "nombre": "Clientes no usar",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "ICFI",
+        "nombre": "Iva Crédito Fiscal",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IVADEBF",
+        "nombre": "Iva Debito Fiscal",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CAV",
+        "nombre": "Consumo De Agroquimicos Varios",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CCL",
+        "nombre": "Consumo De Combustibles Y Lubricantes",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CGanos",
+        "nombre": "Consumo De Granos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CS",
+        "nombre": "Consumo De Semillas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CFERTC",
+        "nombre": "Consumo De Fertilizantes",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "210201",
+        "nombre": "PROVEEDORES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "DPTDS",
+        "nombre": "Dif. Por Tenencia De Stocks",
+        "descripcion": "Dif. por Tenencia de Stocks",
+        "activo": false
+    },
+    {
+        "codigo": "DPTSIDP",
+        "nombre": "Dif. Por Tenencia Stock Inicial Período",
+        "descripcion": "Dif. por Tenencia Stock Inicial Período",
+        "activo": false
+    },
+    {
+        "codigo": "INGRESOPORPRODUCCION",
+        "nombre": "Ing. Producción Granos",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CSTOVTAAGR",
+        "nombre": "Costo De Ventas Granos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DIFINV",
+        "nombre": "Diferencia De Inventario",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "PASTYPRAD",
+        "nombre": "Pasturas Y Praderas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "INGSRVPROP",
+        "nombre": "Ingreso Por Servicio Propio",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "REPAYREPU",
+        "nombre": "Reparacion Y Repuestos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AMORT",
+        "nombre": "Amortizaciones",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GASTOSGRALES",
+        "nombre": "Gastos Generales",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SOFTWARE",
+        "nombre": "Software",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CCLC",
+        "nombre": "Provisión Labores Contratadas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "VOATC",
+        "nombre": "Valor Origen Alambrados, Tranqueras Y Corrales",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOCyT",
+        "nombre": "Valor Origen Campos Y Terrenos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOEQ",
+        "nombre": "Valor Origen Equinos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOH",
+        "nombre": "Valor Origen Herramientas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOIA",
+        "nombre": "Valor Origen Implementos Agrícolas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOIG",
+        "nombre": "Valor Origen Implementos Ganaderos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOINST",
+        "nombre": "Valor Origen Instalaciones",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOMYE",
+        "nombre": "Valor Origen Maquinarias Y Equipos T?Cnicos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOMEJ",
+        "nombre": "Valor Origen Mejoras",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOMYAG",
+        "nombre": "Valor Origen Molinos Y Aguadas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOMyU",
+        "nombre": "Valor Origen Muebles Y Utiles",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOROD",
+        "nombre": "Valor Origen Rodados",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOTRAC",
+        "nombre": "Valor Origen Tractores",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CUPte",
+        "nombre": "Cuenta Puente",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "AAROD",
+        "nombre": "Amort. Acum. Rodados",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VAL",
+        "nombre": "Valores A Depositar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "APSOC",
+        "nombre": "Aporte Capital Socios",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CAPS",
+        "nombre": "Capital Social",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ISAF",
+        "nombre": "Iva Saldo A Favor",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ICC",
+        "nombre": "Imp. Al Crédito Bancario Comp.",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IBPRS",
+        "nombre": "Imp. Bs. Personales Resp. Sust.",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HOVI",
+        "nombre": "Hacienda Ovina",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BYCVG",
+        "nombre": "Bonificaciones Y Castigos Comerciales De Granos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CARSOC",
+        "nombre": "Cargas Sociales",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CDPVET",
+        "nombre": "Consumo De Productos Veterinarios",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "COSTOCECION",
+        "nombre": "Costo Venta Interna Hacienda",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DINVNACIM",
+        "nombre": "Dif. Inv. Por Nacimiento",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ENE",
+        "nombre": "Energía",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "FERRMAT",
+        "nombre": "Ferretería Y Materiales",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "FYA",
+        "nombre": "Fletes Y Acarreos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GASBAN",
+        "nombre": "Gastos Bancarios",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HADMIN",
+        "nombre": "Honorarios Administrativos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HAL",
+        "nombre": "Honorarios Asesores Legales",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HONCONT",
+        "nombre": "Honorarios Contables",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HONVET",
+        "nombre": "Honorarios Veterinario",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IMPCHEQUE",
+        "nombre": "Impuesto Al Cheque",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LIB",
+        "nombre": "Librería",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MBU",
+        "nombre": "Mantenimiento Bienes De Uso",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MPER",
+        "nombre": "Manutención Personal",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SUE",
+        "nombre": "Sueldos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CCC",
+        "nombre": "Venta Cambio  De Categoría",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VIAT",
+        "nombre": "Viáticos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RDE",
+        "nombre": "Resultados Del Ejercicio",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CSP",
+        "nombre": "Cargas Sociales A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IIIBB",
+        "nombre": "Imp. A Los Ingresos Brutos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CARFIN",
+        "nombre": "Cargos Financieros E Intereses",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RDEA",
+        "nombre": "Resultados Del Ejercicio Anterior",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IMPINM",
+        "nombre": "Impuesto Inmobiliario",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PF",
+        "nombre": "Plazo Fijo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SAP",
+        "nombre": "Sueldos A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RETIVAR",
+        "nombre": "Retenciones De Iva Recibidas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SFIB",
+        "nombre": "Saldo A Favor Ingresos Brutos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PIB",
+        "nombre": "Percepciones De Ii.Bb. C.A.B.A. Sufridas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RETCALI",
+        "nombre": "Retención A Cuenta De Calidad",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RESERVA LEGAL",
+        "nombre": "Reserva Legal",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ACAP",
+        "nombre": "Arrendamiento De Campo A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ACAM",
+        "nombre": "Arrendamiento De Campo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CENTA",
+        "nombre": "Ajuste De Centavos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOTOR",
+        "nombre": "Valor Origen Toros",
+        "descripcion": "Cuenta de V.O. para reproductores de especie bovina",
+        "activo": false
+    },
+    {
+        "codigo": "VOCARNEROS",
+        "nombre": "Valor Origen Carneros",
+        "descripcion": "Cuenta de V.O. para los reproductores de la especie Ovina",
+        "activo": false
+    },
+    {
+        "codigo": "PDDC",
+        "nombre": "Proveedores/Deudores Dif. Cbio.",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PYS",
+        "nombre": "Patente Y Seguros",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DIFCAMB",
+        "nombre": "Diferencia De Cambio",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RETGE",
+        "nombre": "Retenciones De Ganancias Efectuadas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DCP",
+        "nombre": "Deudas Corto Plazo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AATRAC",
+        "nombre": "Amort. Acum. Tractores",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAMYU",
+        "nombre": "Amort. Acum. Muebles Y Utiles",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAIA",
+        "nombre": "Amort. Acum. Implementos Agrícolas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAMET",
+        "nombre": "Amort. Acum. Maquinaría Y Equipos Técnicos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAALAM",
+        "nombre": "Amort. Acum. Alamb. Tranqueras Y Tractores",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAMOLYAGU",
+        "nombre": "Amort. Acum. Molinos Y Aguadas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAEQ",
+        "nombre": "Amort. Acum. Equinos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAHE",
+        "nombre": "Amort. Acum. Herramientas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAREP",
+        "nombre": "Amort. Acum. Reproductores",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "COSVHP",
+        "nombre": "Costo De Ventas De Hacienda",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VDG",
+        "nombre": "Venta De Granos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VH",
+        "nombre": "Venta De Hacienda",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CVH",
+        "nombre": "Comisión Venta De Hacienda",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GC",
+        "nombre": "Gastos Comercialización",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HONING",
+        "nombre": "Honorarios Ingeniero Agrónomo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GSELL",
+        "nombre": "Gastos Sellado Y Otros",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IMPVAR",
+        "nombre": "Impuestos Varios",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RG",
+        "nombre": "Retenciones De Ganancias Recibidas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IBPAG",
+        "nombre": "Ingresos Brutos A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ACREEVAR",
+        "nombre": "Acreedores Varios",
+        "descripcion": "** CUENTA CORRIENTE UTILIZADA PARA IMPUTAR DEUDAS CREDITICIAS **",
+        "activo": false
+    },
+    {
+        "codigo": "PRESTR",
+        "nombre": "Préstamos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SALFAGAN",
+        "nombre": "Saldo A Favor Ganancias",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IMPMIPRE",
+        "nombre": "Impuesto Ganancia Mínima Presunta",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RETSUSS",
+        "nombre": "Retención Suss",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AGMP",
+        "nombre": "Anticipo Ganancia Mínima Presunta",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CONSMERC",
+        "nombre": "Consumo De Mercadería",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SEMSOJ",
+        "nombre": "Sementera De Soja",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SEMTRIG",
+        "nombre": "Sementera De Trigo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SEMSOR",
+        "nombre": "Sementera De Sorgo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SEMMAIZ",
+        "nombre": "Sementera De Maiz",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "ACTSEM",
+        "nombre": "Activacion De Sementeras",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "HEF",
+        "nombre": "Hacienda Equina (Factura)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HO-F",
+        "nombre": "Hacienda Ovina (Factura)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "NOVF",
+        "nombre": "Novillos (Factura)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "TERF",
+        "nombre": "Terneros/As (Factura)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "TOF",
+        "nombre": "Toros (Factura)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VCF",
+        "nombre": "Vacas (Factura)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VDTF",
+        "nombre": "Vacas De Tambo (Factura)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VQF",
+        "nombre": "Vaquillonas (Factura)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "NOVI",
+        "nombre": "Novillos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "TERN",
+        "nombre": "Terneros/As",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "TOROS",
+        "nombre": "Toros",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VACAS",
+        "nombre": "Vacas",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "VACTAM",
+        "nombre": "Vacas De Tambo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VQUI",
+        "nombre": "Vaquillonas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DIFMORT",
+        "nombre": "Dif. Inv. Por Mortandad",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOVAC-TAM",
+        "nombre": "Valor Origen Vaca De Tambo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DIFINCCTRAS",
+        "nombre": "Dif. Inv. C.C. Y Tras. Hacienda",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DIFINVHAC",
+        "nombre": "Diferencia De Inventario De Hacienda",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOVAQ-BU",
+        "nombre": "Valor Origen Vaquillonas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOTER-BU",
+        "nombre": "Valor Origen Terneras",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOCAB-BU",
+        "nombre": "Valor Origen Caballos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOBUE-BU",
+        "nombre": "Valor Origen Bueyes",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VTABU",
+        "nombre": "Venta Bien De Uso",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AJBU",
+        "nombre": "Ajuste Valor Origen Bien De Uso",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAABSUSO",
+        "nombre": "Ajuste Amor. Acum. Bien De Uso",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "OBENC",
+        "nombre": "Obra En Curso",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SEMEGIR",
+        "nombre": "Sementera De Girasol",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MERCENSTOCK",
+        "nombre": "Mercadería En Stock",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "MERCFACT",
+        "nombre": "Mercadería (Fact. A Recibir)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VENSERV",
+        "nombre": "Venta Servicios",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "COMIN",
+        "nombre": "Consumo De Insumos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SERV1",
+        "nombre": "Venta Servicio 1",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SERV2",
+        "nombre": "Venta Servicio 2",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GTE",
+        "nombre": "Gastos Telefonía",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DEFDIST",
+        "nombre": "Default Distribuciones",
+        "descripcion": "Cuanta de Uso Interno para dimensiones en Logística  (no contabiliza)",
+        "activo": false
+    },
+    {
+        "codigo": "BAJABU",
+        "nombre": "Baja De Bien De Uso",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AACAMYTERR",
+        "nombre": "Amort. Acum. Campos Y Terrenos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAINSTAL",
+        "nombre": "Amort. Acum. Instalaciones",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAMEJOR",
+        "nombre": "Amort. Acum. Mejoras",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOREPRO",
+        "nombre": "Valor Origen Reproductores",
+        "descripcion": "Cuenta de V.O. Reproductores genérica.",
+        "activo": false
+    },
+    {
+        "codigo": "AAIG",
+        "nombre": "Amort. Acum. Implementos Ganaderos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "INGVTA",
+        "nombre": "Ingresos Por Ventas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "COSVTAMERC",
+        "nombre": "Costo De Ventas De Mercadería",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BCDPES",
+        "nombre": "Banco Cta Cte $ - Cheques Diferidos",
+        "descripcion": "hola",
+        "activo": false
+    },
+    {
+        "codigo": "BCDDOL",
+        "nombre": "Banco Cta Cte U$s - Cheques Diferidos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GRANOSTOCK",
+        "nombre": "Granos En Stock",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AATAMBO",
+        "nombre": "Amort. Acum. Tambo",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AABOVIN",
+        "nombre": "Amort. Acum. Bovinos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "INSVAR",
+        "nombre": "Insumos Varios En Stock",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "FERT",
+        "nombre": "Fertilizantes En Stock",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "COMBUS",
+        "nombre": "Combustibles Y Lubricantes En Stock",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AGROQ",
+        "nombre": "Agroquímicos Varios En Stock",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SEMILLAS",
+        "nombre": "Semillas En Stock",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "INSVAR-FACT",
+        "nombre": "Insumos Varios (Fact. A Recibir)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "COMBUS-FACT",
+        "nombre": "Combustibles Y Lubricantes (Fact. A Recibir)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AGROQ-FACT",
+        "nombre": "Agroquímicos Varios (Fact. A Recibir)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SEMILLA-FACT",
+        "nombre": "Semillas (Fact. A Recibir)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VTAMERC",
+        "nombre": "Venta De Mercadería",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PRODVETSTCK",
+        "nombre": "Productos Veterinarios En Stock",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "PRODVETFACT",
+        "nombre": "Productos Veterinarios (Fact. A Recibir)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "GRANFACT",
+        "nombre": "Granos (Fact. A Recibir)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "FERT-FACT",
+        "nombre": "Fertilizantes (Fact. A Recibir)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ARYFSTCK",
+        "nombre": "Alimentos, Reservas Y Forrajes En Stock",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "ARYF-FACT",
+        "nombre": "Alimentos, Reservas Y Forrajes (Fact. A Recibir)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CONSARYF",
+        "nombre": "Consumo De Alimentos, Reservas Y Forrajes",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "LECHESTOCK",
+        "nombre": "Leche En Stock",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CONSLECHE",
+        "nombre": "Consumo De Leche",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IVAPERC3337",
+        "nombre": "Iva Percepciones 3337 Sufridas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ACCION",
+        "nombre": "Accionistas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAP",
+        "nombre": "Anticipos A Proveedores",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CHRT",
+        "nombre": "Cheques Rechazados De Terceros",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IT",
+        "nombre": "Inversiones Transitorias",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ACC",
+        "nombre": "Acciones",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "TYB",
+        "nombre": "Títulos Y Bonos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IVARET",
+        "nombre": "Iva Retenciones Efectuadas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IVAPERC",
+        "nombre": "Iva Percepciones Efectuadas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CTOVTALECHE",
+        "nombre": "Costo De Ventas Leche",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CONSHAC",
+        "nombre": "Consumos De Hacienda",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DIPC",
+        "nombre": "Dif. Inv. Por Prod. Carne",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IMPINT",
+        "nombre": "Impuestos Internos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BONIFBANC",
+        "nombre": "Bonificaciones Y Devoluciones Bancarias",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DEREXP",
+        "nombre": "Derechos De Exportacion",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DEREXPPAG",
+        "nombre": "Derechos De Exportación A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "REINACOB",
+        "nombre": "Reintegros A Cobrar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "REINEXPO",
+        "nombre": "Reintegros De Exportacion",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RIBR",
+        "nombre": "Retenciones De Iibb C.A.B.A. Recibidas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SEMVAR",
+        "nombre": "Sementeras Varias",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "Otros Animales Menores",
+        "nombre": "Otros Animales Menores",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "Otros Animales Menores (Factura)",
+        "nombre": "Otros Animales Menores (Factura)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HE",
+        "nombre": "Hacienda Equina",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOPASTURAS",
+        "nombre": "Valor Origen Pasturas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AAPRAD",
+        "nombre": "Amort. Acum. Praderas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HACPORC",
+        "nombre": "Hacienda Porcina",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "HAC-PORC",
+        "nombre": "Hacienda Porcina (Factura)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CHABCHAS",
+        "nombre": "Chanchas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RIBRBA",
+        "nombre": "Retenciones De Iibb Bs.As. Recibidas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PIBBA",
+        "nombre": "Percepciones De Ii.Bb. Bs.As. Sufridas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RETIIBB",
+        "nombre": "Retenciones De Iibb Bs.As. Efectuadas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BUF",
+        "nombre": "Búfalos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "BUFFACT",
+        "nombre": "Búfalos (Factura)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RETIIBBCABA",
+        "nombre": "Retenciones De Iibb C.A.B.A. Efectuadas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SOCIOS",
+        "nombre": "Socios",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IVAPAGAR",
+        "nombre": "Iva A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GANAPAGAR",
+        "nombre": "Ganancias A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VENTALECHE",
+        "nombre": "Venta  De Leche",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "DEUDINCO",
+        "nombre": "Deudores Incobrables",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CGMP",
+        "nombre": "Crédito Ganancia Mínima Presunta",
+        "descripcion": "** UTILIZADA PARA CONTABILIZAR LOS CRÉDITOS POR ANTICIPOS DE GANANCIA MÍNIMA PRESUNTA **",
+        "activo": false
+    },
+    {
+        "codigo": "AAECOMP",
+        "nombre": "Amort. Acum. Equipos De Computacion",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VOEQCOM",
+        "nombre": "Valor Origen Equipos De Computacion",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ARTAP",
+        "nombre": "A.R.T. A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ANT",
+        "nombre": "Anticipos Al Personal",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "EMBSAP",
+        "nombre": "Embargos De Sueldos A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GRE4CAT",
+        "nombre": "Ganancias Ret. Efectuadas 4º Cat.",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PRE",
+        "nombre": "Préstamos Al Personal",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PROVSAC",
+        "nombre": "Provisión S.A.C.",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PROVVAC",
+        "nombre": "Provisión Vacaciones",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SACPROV",
+        "nombre": "S.A.C. Provisión",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SCVOAP",
+        "nombre": "Seguro Colectivo De Vida Obligatorio A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SSAP",
+        "nombre": "Seguro De Sepelio A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SVAP",
+        "nombre": "Seguro De Vida A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SUSSAP",
+        "nombre": "Suss A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VACPROV",
+        "nombre": "Vacaciones Provisión",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "UATREAP",
+        "nombre": "Sindicato Uatre A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VIV",
+        "nombre": "Vivienda",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SSRAP",
+        "nombre": "Seguro De Sep. Renatea A Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "COMIDA",
+        "nombre": "Dec. Alimentacion",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RENAP",
+        "nombre": "Renatea",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PIB_CABA",
+        "nombre": "Percepciones De Ii.Bb. C.A.B.A. Efectuadas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RECABCBBSAS",
+        "nombre": "Recaudaciones Bancarias De Ii.Bb. Bsas Sufridas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RECABCCABA",
+        "nombre": "Recaudaciones Bancarias De Ii.Bb. C.A.B.A. Sufridas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PIB_BSAS",
+        "nombre": "Percepciones De Ii.Bb. Bsas Efectuadas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CSEM",
+        "nombre": "Consumo De Semen",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SEMEN-FACT",
+        "nombre": "Semen (Fact. A Recibir)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SEMEN",
+        "nombre": "Semen En Stock",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PROSEMEN",
+        "nombre": "Ing. Producción Semen",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IPAYF",
+        "nombre": "Ing. Producción Forrajes.",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "IPALECH",
+        "nombre": "Ing. Producción Leche",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "INPDVARIo",
+        "nombre": "Ing. Producción Generales",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "IPSEMI",
+        "nombre": "Ing. Producción Semillas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "VLAFAC",
+        "nombre": "Vta. Labores A Facturar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "RENDICION_GASTOS",
+        "nombre": "Rendicion De Gastos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "FONDOFIJO",
+        "nombre": "Fondo Fijo",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CTAPTEDESPACHOIMP",
+        "nombre": "Cuenta Puente Despacho Importacion",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ACTPASTU",
+        "nombre": "Activacion De Pasturas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "PLF",
+        "nombre": "Pendiente Final",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CCH",
+        "nombre": "Comisión Compra De Hacienda",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CVG",
+        "nombre": "Comisión Venta De Granos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CCG",
+        "nombre": "Comisión Compra De Granos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "SINDAP",
+        "nombre": "Sindicato a Pagar",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "GASCOMNG",
+        "nombre": "Gastos Comercialización - NG",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "110101",
+        "nombre": "CAJA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110102",
+        "nombre": "BANCO BICE ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110103",
+        "nombre": "BANCO CHILE PUDUHUE (PESOS)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110105",
+        "nombre": "FONDO FIJO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110106",
+        "nombre": "FONDOS POR RENDIR",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110201",
+        "nombre": "CLIENTES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110202",
+        "nombre": "DEUDORES VARIOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110203",
+        "nombre": "ANTICIPO REMUNERACIONES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110204",
+        "nombre": "ANTICIPO PROVEEDORES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110301",
+        "nombre": "IVA CRÉDITO FISCAL",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110302",
+        "nombre": "OTROS IMPUESTOS POR RECUPERAR",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110501",
+        "nombre": "ESTABLECIMIENTO DE MAIZ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110601",
+        "nombre": "ESTABLECIMIENTO AVENA-TAMA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "1110-04",
+        "nombre": "Puente agronomía",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "1110-05",
+        "nombre": "Materiales",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "1110-07",
+        "nombre": "Forraje",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "1103-01",
+        "nombre": "Arriendos anticipados",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "120201",
+        "nombre": "VACAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120202",
+        "nombre": "CRIANZA HEMBRAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120203",
+        "nombre": "MACHOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120301",
+        "nombre": "DERECHOS DE AGUA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120501",
+        "nombre": "IMPTOS. DIFERIDOS POR PERDIDAS FISCALES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120401",
+        "nombre": "DERECHOS DE USO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120402",
+        "nombre": "INTERESES DIFERIDOS DERECHOS DE USO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120403",
+        "nombre": "AMORTIZACION ACUM DERECHOS DE USO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120101",
+        "nombre": "TERRENOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120102",
+        "nombre": "PRADERAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120103",
+        "nombre": "CONSTRUCCIONES E INSTALACIONES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120104",
+        "nombre": "MUEBLES Y EQUIPOS DE OFICINA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120105",
+        "nombre": "MAQUINARIAS Y EQUIPOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120106",
+        "nombre": "HERRAMIENTAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120107",
+        "nombre": "CAMINOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120108",
+        "nombre": "ACTIVOS EN LEASING",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120109",
+        "nombre": "RED DE PURINES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120110",
+        "nombre": "REDES DE AGUA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120111",
+        "nombre": "RED ELÉCTRICA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120112",
+        "nombre": "CERCOS ELÉCTRICOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120113",
+        "nombre": "OBRAS EN CURSO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120114",
+        "nombre": "DEPRECIACIÓN CONSTRUCCIÓN E INSTALACIONES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120115",
+        "nombre": "DEPRECIACIÓN MAQUINARIAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120116",
+        "nombre": "DETERIORO PRADERAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "230101",
+        "nombre": "CAPITAL",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "230201",
+        "nombre": "OTRAS RESERVAS REVALUACION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "230301",
+        "nombre": "RESULTADO ACUMULADO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210401",
+        "nombre": "PROVISIÓN DE VACACIONES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210202",
+        "nombre": "REMUNERACIONES POR PAGAR",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210203",
+        "nombre": "HONORARIOS POR PAGAR",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210204",
+        "nombre": "IMPOSICIONES POR PAGAR",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210205",
+        "nombre": "OTRAS CUENTAS POR PAGAR",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210206",
+        "nombre": "ACREEDORES POR LEASING",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210207",
+        "nombre": "ANTICIPO CLIENTES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210505",
+        "nombre": "PROVISIÓN PPM",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210503",
+        "nombre": "RETENCION PROFESIONALES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210504",
+        "nombre": "IMPUESTOS POR PAGAR",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210101",
+        "nombre": "OBLIGACIONES CON BANCOS E IIFF C/P",
+        "descripcion": "Obligaciones con bancos e instituciones financieras corto plazo",
+        "activo": true
+    },
+    {
+        "codigo": "210506",
+        "nombre": "PROVISIONES DE GASTO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210501",
+        "nombre": "IVA DEBITO FISCAL",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210502",
+        "nombre": "IMPUESTO UNICO A LOS TRABAJADORES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "220101",
+        "nombre": "OBLIGACIONES POR LEASING",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "220201",
+        "nombre": "OBLIGACIONES CON BANCOS E IIFF L/P",
+        "descripcion": "Obligac. con bancos e inst financieras a Largo Plazo",
+        "activo": true
+    },
+    {
+        "codigo": "220202",
+        "nombre": "OTROS PASIVOS FINANCIEROS NO CORRIENTES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "310101",
+        "nombre": "VENTA DE LECHE",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "320101",
+        "nombre": "VENTA DE VACAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "320104",
+        "nombre": "VENTA DE TERNERAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "330101",
+        "nombre": "OTROS INGRESOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "4101-01",
+        "nombre": "Costos de Vacunas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "4101-02",
+        "nombre": "Costo de mastitis",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "4101-03",
+        "nombre": "Costo de cojeras",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "4101-04",
+        "nombre": "Costo de secado",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "4101-05",
+        "nombre": "Costo preparto",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "4101-06",
+        "nombre": "Costo postparto",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "4101-07",
+        "nombre": "Consumo inseminación",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "4101-08",
+        "nombre": "costo servicios veternarios",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "4101-09",
+        "nombre": "Gastos en Mantención de Insumos Veterinarioso",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "4101-10",
+        "nombre": "Mantencion y reparación sistema de Riego",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "410200",
+        "nombre": "INSUMOS SALA ORDEÑA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410201",
+        "nombre": "MANTENCIÓN SALA ORDEÑA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410202",
+        "nombre": "ROPA DE TRABAJO (EN LECHERÍA)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410303",
+        "nombre": "COSTO SALES MINERALES CRIANZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410301",
+        "nombre": "COSTO CONCENTRADO COMPRADO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410302",
+        "nombre": "COSTO FORRAJE COMPRADO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410401",
+        "nombre": "ANALISIS DE SUELO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410501",
+        "nombre": "MANO DE OBRA (REMUNERACIONES)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410503",
+        "nombre": "ENERGIA ELECTRICA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410504",
+        "nombre": "COMBUSTIBLES Y LUBRICANTES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410505",
+        "nombre": "FLETES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410506",
+        "nombre": "ARRIENDO DE CAMPOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410507",
+        "nombre": "COSTO VENTA DEL GANADO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410508",
+        "nombre": "MORTALIDAD DEL GANADO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420101",
+        "nombre": "REMUNERACIONES PERSONAL (ADM)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420304",
+        "nombre": "HONORARIOS ADMINISTRACION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "4201-04",
+        "nombre": "Gastos de Oficina",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "420605",
+        "nombre": "PATENTES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420201",
+        "nombre": "GASTOS DE CAPACITACION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420406",
+        "nombre": "GASTOS DE ADM. GENERAL",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420308",
+        "nombre": "GASTOS LEGALES Y NOTARIALES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420301",
+        "nombre": "ASESORIAS LEGALES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420302",
+        "nombre": "ASESORIAS CONTABLES Y TRIBUTARIAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420601",
+        "nombre": "SEGUROS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420602",
+        "nombre": "CONTRIBUCIONES BR",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420405",
+        "nombre": "ARRIENDO OFICINA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420402",
+        "nombre": "SISTEMAS Y APLICACIONES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420401",
+        "nombre": "COMUNICACIONES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420603",
+        "nombre": "GASTOS RECHAZADOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420604",
+        "nombre": "DEPRECIACION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410509",
+        "nombre": "AMORTIZACION VACAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "450101",
+        "nombre": "REAJUSTES IPC",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "430102",
+        "nombre": "INTERESES FINANCIEROS DEVENGADOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "430101",
+        "nombre": "COMISIONES Y GASTOS BANCARIOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "430103",
+        "nombre": "INTERESES LEASING",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "440101",
+        "nombre": "OTROS EGRESOS (FUSION)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110104",
+        "nombre": "BANCO ESTADO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110401",
+        "nombre": "MATERIALES E INSUMOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "4101-120",
+        "nombre": "Consumo Fertilizantes ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "4101-121",
+        "nombre": "Consumo Agroquimicos",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "320102",
+        "nombre": "VENTA DE VAQUILLAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "320103",
+        "nombre": "VENTA DE MACHOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410103",
+        "nombre": "PLAN SANITARIO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410106",
+        "nombre": "TRATAMIENTOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410104",
+        "nombre": "REPRODUCCIÓN",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410101",
+        "nombre": "CERTIFICACIONES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410102",
+        "nombre": "CONTROL LECHERO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410105",
+        "nombre": "SERV VETERINARIOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "1110-50",
+        "nombre": "Mantención Pradera en Proceso",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "1110-51",
+        "nombre": "Cultivos en Proceso",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "4101-125",
+        "nombre": "Asesorías Agronómicas",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "110502",
+        "nombre": "ESTABLECIMIENTO DE RAPS FORRAJERO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110602",
+        "nombre": "ESTABLECIMIENTO BALLICA HÍBRIDA OTOÑO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110603",
+        "nombre": "ESTABLECIMIENTO DE AVENA OTOÑO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110604",
+        "nombre": "ESTABLECIMIENTO PRADERA HÍBRIDA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "1110-33",
+        "nombre": "Establecimiento Pradera Híbrida",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110605",
+        "nombre": "ESTABLECIMIENTO PRADERA PERMANENTE",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110606",
+        "nombre": "FERTILIZACION DE PRADERAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110607",
+        "nombre": "REGENERACIÓN AVENA/TRITICALE-BALLICA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110608",
+        "nombre": "REGENERACION PRADERA BALLICA (ACHICORIA)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410402",
+        "nombre": "ASESORIAS AGRONÓMICAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410408",
+        "nombre": "COSTO BALLICA HIBRIDA OTOÑO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410407",
+        "nombre": "COSTO AVENA-TAMA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410410",
+        "nombre": "COSTO PRADERA HIBRIDA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410411",
+        "nombre": "COSTO PRADERA PERMANENTE",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410412",
+        "nombre": "AMORTIZACION FERTILIZACION PRADERAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410413",
+        "nombre": "COSTO REGENERACION AVENA / TRITICALE-BALLICA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410414",
+        "nombre": "COSTO REGENERACION PRADERA BALLICA (ACHICORIA)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410406",
+        "nombre": "AMORTIZACION RAPS FORRAJERO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110205",
+        "nombre": "PRESTAMOS A TRABAJADORES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110303",
+        "nombre": "ARRIENDOS ANTICIPADOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110701",
+        "nombre": "SILO DE MAIZ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110702",
+        "nombre": "SILO PARVA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110703",
+        "nombre": "FORRAJE PROPIO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110704",
+        "nombre": "FORRAJE COMPRADO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210208",
+        "nombre": "FACTURAS POR RECIBIR",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210301",
+        "nombre": "CUENTAS POR PAGAR EMPR.RELAC",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "220401",
+        "nombre": "PASIVOS POR IMPUESTOS DIFERIDOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "330102",
+        "nombre": "UTILIDAD (PÉRDIDA) VTA PPE",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410304",
+        "nombre": "COSTO SALES MINERALES LACTANCIA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410305",
+        "nombre": "COSTO SALES MINERALES VACA SECA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410306",
+        "nombre": "COSTO SALES MINERALES PREPARTO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410403",
+        "nombre": "COSTO SILO MAIZ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410404",
+        "nombre": "COSTO SILO PARVA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410405",
+        "nombre": "COSTO SILO BOLO PROPIO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410409",
+        "nombre": "COSTO AVENA OTOÑO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410502",
+        "nombre": "MANO DE OBRA (BENEF. AL PERSONAL)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420102",
+        "nombre": "BENEFICIOS AL PERSONAL (ADM)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420303",
+        "nombre": "ASESORIAS GESTOR",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420305",
+        "nombre": "HONORARIOS FORESTALES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420306",
+        "nombre": "ASESORIAS DE GESTION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420307",
+        "nombre": "HONORARIOS PREV. RIESGO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420404",
+        "nombre": "CONTROL DE PLAGAS (CAMPOS) (NO USAR)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "420501",
+        "nombre": "ARRIENDOS VEHICULOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "460101",
+        "nombre": "IMPUESTOS DIFERIDOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "460102",
+        "nombre": "IMPUESTO RENTA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410510",
+        "nombre": "MANTENCION CERCOS (no usar)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "410602",
+        "nombre": "MANTENCION CAMINOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410603",
+        "nombre": "MANTENCION INFRAESTRUCTURA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410604",
+        "nombre": "MANTENCION REDES DE AGUA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410605",
+        "nombre": "MANTENCION MOTOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410606",
+        "nombre": "MANTENCION TRACTORES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410607",
+        "nombre": "MANTENCION VEHICULOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410608",
+        "nombre": "MANTENCION OTROS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410609",
+        "nombre": "MANTENCION OTRAS MAQUINARIAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420407",
+        "nombre": "GASTOS PREV. DE RIESGOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420403",
+        "nombre": "SERV BASICOS (AGUA-LUZ)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420409",
+        "nombre": " VIAJES Y ESTADIASS (no usar)",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "410307",
+        "nombre": "COSTO MELAZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410107",
+        "nombre": "OTROS INSUMOS VETERINARIOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410601",
+        "nombre": "MANTENCION CERCOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420408",
+        "nombre": "VIAJES Y ESTADIAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410415",
+        "nombre": "SERVICIO SIEMBRA Y FERTILIZACION  ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410416",
+        "nombre": "MANTENCION DE PRADERAS ",
+        "descripcion": "MANTENCION PRADERAS ",
+        "activo": true
+    },
+    {
+        "codigo": "120117",
+        "nombre": "PROYECTO RIEGO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110107",
+        "nombre": "TARJETA DE CREDITO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120118",
+        "nombre": "VEHICULOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210506*",
+        "nombre": "RENDICION DE GASTOS",
+        "descripcion": "Cuenta Puente",
+        "activo": false
+    },
+    {
+        "codigo": "120601",
+        "nombre": "ACTIVOS FINANCIEROS NO CORRIENTES",
+        "descripcion": "ACTIVOS FINANCIEROS NO CORRIENTES",
+        "activo": true
+    },
+    {
+        "codigo": "330103",
+        "nombre": "FAIR VALUE",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420410",
+        "nombre": "GASTOS MEDIOAMBIENTALES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110108",
+        "nombre": "BANCO BCI PUDUHUE",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410511",
+        "nombre": "CONTROL DE PLAGAS (CAMPOS)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410512",
+        "nombre": "COMUNICACIONES (PRODUCCION)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410513",
+        "nombre": "VIAJES Y ESTADIAS (PRODUCCION)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110109",
+        "nombre": "BANCO CHILE PUDUHUE (DOLARES)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "450102",
+        "nombre": "DIFERENCIA DE CAMBIO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210102",
+        "nombre": "LINEA DE CREDITO CHILE",
+        "descripcion": "LINEA DE CREDITO CHILE",
+        "activo": true
+    },
+    {
+        "codigo": "120204",
+        "nombre": "FAIR VALUE VACAS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120205",
+        "nombre": "FAIR VALUE CRIANZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120206",
+        "nombre": "OTROS GANADOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110110",
+        "nombre": "DEPÓSITO A PLAZO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210507",
+        "nombre": "IVA CREDITO FISCAL RETENIDO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110206",
+        "nombre": "DEPOSITO EN TRANSITO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110304",
+        "nombre": "GASTOS ANTICIPADOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110402",
+        "nombre": "CEREALES COMPRADOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110207",
+        "nombre": "CUENTAS POR COBRAR EMPR RELAC",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110111",
+        "nombre": "BANCO CHILE CAPAC (PESOS)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110112",
+        "nombre": "BANCO BICE CAPAC",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110113",
+        "nombre": "BANCO SANTANDER CAPAC",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410514",
+        "nombre": "OTROS COSTOS AGRICOLAS FUSION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "420610",
+        "nombre": "OTROS GTOS ADM",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "110114",
+        "nombre": "BANCO CHILE CAPAC (DOLARES)",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "120620",
+        "nombre": "ACCIONES PROPIA EMISION",
+        "descripcion": "ACTIVOS FINANCIEROS NO CORRIENTES",
+        "activo": true
+    },
+    {
+        "codigo": "440120",
+        "nombre": "RESULTADO ACCIONES PROPIA EMISION",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210103",
+        "nombre": "OBLIGACIONES CON TERCEROS C/P",
+        "descripcion": "Obligaciones con terceros C/P",
+        "activo": true
+    },
+    {
+        "codigo": "220203",
+        "nombre": "OBLIGACIONES CON TERCEROS L/P",
+        "descripcion": "Obligaciones con terceros L/P",
+        "activo": true
+    },
+    {
+        "codigo": "430104",
+        "nombre": "INTERESES FINANCIEROS DEVENGADOS CON TRONADOR",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "41050001",
+        "nombre": "ARRIENDO DE CAMPOS CULTIVO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "41050002",
+        "nombre": "CULTIVO COMPRADO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "410515",
+        "nombre": "CULTURA ORGANIZACIONAL Y PLANIFICACION",
+        "descripcion": "CULTURA ORGANIZACIONAL Y PLANIFICACION",
+        "activo": true
+    },
+    {
+        "codigo": "110115",
+        "nombre": "BANCO BCI CAPAC",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "210104",
+        "nombre": "LINEA DE CREDITO SANTANDER",
+        "descripcion": "LINEA DE CREDITO SANTANDER",
+        "activo": true
+    }
+]

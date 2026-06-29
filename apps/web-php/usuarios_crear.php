@@ -27,15 +27,18 @@ if (!$isPartial) {
         <div class="form-grid-4">
             <div class="form-field">
                 <label class="form-label" for="usuariorut">RUT</label>
-                <input type="text" name="usuariorut" id="usuariorut" class="form-control" required maxlength="12" placeholder="XXXXXXXX-X">
+                <input type="text" name="usuariorut" id="usuariorut" class="form-control" required maxlength="12" placeholder="XXXXXXXX-X"
+                    value="<?= htmlspecialchars($formData['usuariorut'] ?? '') ?>">
             </div>
             <div class="form-field">
                 <label class="form-label" for="usuariocod">Codigo</label>
-                <input type="text" name="usuariocod" id="usuariocod" class="form-control" required maxlength="12" readonly>
+                <input type="text" name="usuariocod" id="usuariocod" class="form-control" required maxlength="12" readonly
+                    value="<?= htmlspecialchars($formData['usuariocod'] ?? '') ?>">
             </div>
             <div class="form-field form-field-half">
                 <label class="form-label" for="usuarionombre">Nombre</label>
-                <input type="text" name="usuarionombre" id="usuarionombre" class="form-control" required maxlength="100">
+                <input type="text" name="usuarionombre" id="usuarionombre" class="form-control" required maxlength="100"
+                    value="<?= htmlspecialchars($formData['usuarionombre'] ?? '') ?>">
             </div>
             <div class="form-field">
                 <label class="form-label" for="usuariopwd">Contraseña</label>
@@ -47,18 +50,21 @@ if (!$isPartial) {
             </div>
             <div class="form-field form-field-half">
                 <label class="form-label" for="usuarioemail">Email</label>
-                <input type="email" name="usuarioemail" id="usuarioemail" class="form-control" maxlength="100">
+                <input type="email" name="usuarioemail" id="usuarioemail" class="form-control" maxlength="100"
+                    value="<?= htmlspecialchars($formData['usuarioemail'] ?? '') ?>">
             </div>
             <div class="form-field">
                 <label class="form-label" for="usuariocelular">Celular</label>
-                <input type="text" name="usuariocelular" id="usuariocelular" class="form-control" maxlength="12">
+                <input type="text" name="usuariocelular" id="usuariocelular" class="form-control" maxlength="12"
+                    value="<?= htmlspecialchars($formData['usuariocelular'] ?? '') ?>">
             </div>
             <div class="form-field">
                 <label class="form-label" for="perfilid">Perfil</label>
                 <select name="perfilid" id="perfilid" class="form-select" required>
                     <option value="">Seleccione...</option>
                     <?php foreach (($perfilesOptions ?? []) as $perfilOpt): ?>
-                        <option value="<?= htmlspecialchars($perfilOpt['perfilid']) ?>">
+                        <option value="<?= htmlspecialchars($perfilOpt['perfilid']) ?>"
+                            <?= (string)($formData['perfilid'] ?? '') === (string)($perfilOpt['perfilid'] ?? '') ? 'selected' : '' ?>>
                             <?= htmlspecialchars($perfilOpt['perfildesc']) ?>
                         </option>
                     <?php endforeach; ?>
@@ -67,16 +73,84 @@ if (!$isPartial) {
             <div class="form-field">
                 <label class="form-check-label" for="usuarioesadmin">Administrador de Sistema</label>
                 <select class="form-select" id="usuarioesadmin" name="usuarioesadmin">
-                    <option value="1">Si</option>
-                    <option value="0" selected>No</option>
+                    <option value="1" <?= !empty($formData['usuarioesadmin']) ? 'selected' : '' ?>>Si</option>
+                    <option value="0" <?= empty($formData['usuarioesadmin']) ? 'selected' : '' ?>>No</option>
                 </select>
             </div>
             <div class="form-field">
                 <label class="form-check-label" for="usuarioactivo">Activo</label>
                 <select class="form-select" id="usuarioactivo" name="usuarioactivo" readonly>
-                    <option value="1" selected>Si</option>
-                    <option value="0">No</option>
+                    <option value="1" <?= !empty($formData['usuarioactivo']) ? 'selected' : '' ?>>Si</option>
+                    <option value="0" <?= empty($formData['usuarioactivo']) ? 'selected' : '' ?>>No</option>
                 </select>
+            </div>
+            <div class="form-field">
+                <label class="form-check-label" for="usuariopermiteaprobreq">Aprueba REQ</label>
+                <select class="form-select" id="usuariopermiteaprobreq" name="usuariopermiteaprobreq">
+                    <option value="1" <?= !empty($formData['usuariopermiteaprobreq']) ? 'selected' : '' ?>>Si</option>
+                    <option value="0" <?= empty($formData['usuariopermiteaprobreq']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-check-label" for="usuariopermiteaprobpreoc">Aprueba PreOC</label>
+                <select class="form-select" id="usuariopermiteaprobpreoc" name="usuariopermiteaprobpreoc">
+                    <option value="1" <?= !empty($formData['usuariopermiteaprobpreoc']) ? 'selected' : '' ?>>Si</option>
+                    <option value="0" <?= empty($formData['usuariopermiteaprobpreoc']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-check-label" for="usuariocomprador">Comprador</label>
+                <select class="form-select" id="usuariocomprador" name="usuariocomprador">
+                    <option value="1" <?= !empty($formData['usuariocomprador']) ? 'selected' : '' ?>>Si</option>
+                    <option value="0" <?= empty($formData['usuariocomprador']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-check-label" for="usuariopermiteanularpreoc">Puede anular PreOC</label>
+                <select class="form-select" id="usuariopermiteanularpreoc" name="usuariopermiteanularpreoc">
+                    <option value="1" <?= !empty($formData['usuariopermiteanularpreoc']) ? 'selected' : '' ?>>Si</option>
+                    <option value="0" <?= empty($formData['usuariopermiteanularpreoc']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-check-label" for="usuariopermiteeditarprecios">Puede editar precios</label>
+                <select class="form-select" id="usuariopermiteeditarprecios" name="usuariopermiteeditarprecios">
+                    <option value="1" <?= !empty($formData['usuariopermiteeditarprecios']) ? 'selected' : '' ?>>Si</option>
+                    <option value="0" <?= empty($formData['usuariopermiteeditarprecios']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-check-label" for="usuariopermitecrearitem">Puede crear ítems</label>
+                <select class="form-select" id="usuariopermitecrearitem" name="usuariopermitecrearitem">
+                    <option value="1" <?= !empty($formData['usuariopermitecrearitem']) ? 'selected' : '' ?>>Si</option>
+                    <option value="0" <?= empty($formData['usuariopermitecrearitem']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-check-label" for="usuariopermiteeditaritem">Puede editar ítems</label>
+                <select class="form-select" id="usuariopermiteeditaritem" name="usuariopermiteeditaritem">
+                    <option value="1" <?= !empty($formData['usuariopermiteeditaritem']) ? 'selected' : '' ?>>Si</option>
+                    <option value="0" <?= empty($formData['usuariopermiteeditaritem']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-check-label" for="usuariopermitesynctrnerp">Puede sincronizar ERP</label>
+                <select class="form-select" id="usuariopermitesynctrnerp" name="usuariopermitesynctrnerp">
+                    <option value="1" <?= !empty($formData['usuariopermitesynctrnerp']) ? 'selected' : '' ?>>Si</option>
+                    <option value="0" <?= empty($formData['usuariopermitesynctrnerp']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-check-label" for="usuarioreqautorizadorfuerapptocompra">Autorizador fuera ppto REQ</label>
+                <select class="form-select" id="usuarioreqautorizadorfuerapptocompra" name="usuarioreqautorizadorfuerapptocompra">
+                    <option value="1" <?= !empty($formData['usuarioreqautorizadorfuerapptocompra']) ? 'selected' : '' ?>>Si</option>
+                    <option value="0" <?= empty($formData['usuarioreqautorizadorfuerapptocompra']) ? 'selected' : '' ?>>No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="usuarioreqautorizadorfuerapptocompraorden">Orden autorizador fuera ppto</label>
+                <input type="number" name="usuarioreqautorizadorfuerapptocompraorden" id="usuarioreqautorizadorfuerapptocompraorden" class="form-control" min="0"
+                    value="<?= htmlspecialchars((string)($formData['usuarioreqautorizadorfuerapptocompraorden'] ?? 0)) ?>">
             </div>
         </div>
         <!-- Botones de accion -->
@@ -98,11 +172,15 @@ if (!$isPartial) {
     const codInput = document.getElementById('usuariocod');
     const pwdInput = document.getElementById('usuariopwd');
     const pwd2Input = document.getElementById('usuariopwd2');
+    const authFueraInput = document.getElementById('usuarioreqautorizadorfuerapptocompra');
+    const authFueraOrdenInput = document.getElementById('usuarioreqautorizadorfuerapptocompraorden');
     const errorBox = document.getElementById('formError');
 
     const showError = (msg) => {
+        if (window.ToastManager) {
+            window.ToastManager.show(msg, 'warning');
+        }
         if (!errorBox) {
-            alert(msg);
             return;
         }
         errorBox.textContent = msg;
@@ -201,6 +279,11 @@ if (!$isPartial) {
             evt.preventDefault();
             showError('La confirmacion de contrasena no coincide.');
             return;
+        }
+
+        if (authFueraInput && authFueraOrdenInput && authFueraInput.value === '1' && (!authFueraOrdenInput.value || Number(authFueraOrdenInput.value) <= 0)) {
+            evt.preventDefault();
+            showError('Debe informar un orden mayor a cero para autorizador fuera de presupuesto.');
         }
     });
 })();

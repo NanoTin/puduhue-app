@@ -202,9 +202,7 @@ class FundosController
 
     private function setToast(string $message, string $type = 'info'): void
     {
-        $_SESSION['toast'] = [
-            'message' => $message,
-            'type'    => $type,
-        ];
+        require_once dirname(__DIR__, 2) . '/Helpers/FlashMessageHelper.php';
+        FlashMessageHelper::toast($message, $type);
     }
 }

@@ -1,671 +1,596 @@
-# Módulo REQ (Requerimiento de Compra) — Estructura de Datos v3
+# Modulo REQ (Requerimiento de Compra) - Estructura de Datos v4
 
-> [!NOTE]
-> Diseño detallado de tablas para el módulo de Requerimiento de Compra (REQ).
-> En Finnegans: "Pedido de Compra". En Puduhue App: "Requerimiento".
+> Diseno funcional y logico vigente para Requerimientos de Compra.
 >
-> Convenciones aplicadas del proyecto:
-> - PK: `<tabla>id` INT AUTO_INCREMENT.
-> - Baja lógica: `<tabla>vig` TINYINT(1).
-> - Auditoría: 8 columnas estándar (4 creación + 4 edición). Ver README §7.1.
-> - LOG: tabla separada `<tabla>log` con `logid`, `logtipo`, `logparamjson`, `logregbkpjson`. Ver README §7.2.
+> Fuente normativa principal: `docs/ADR/modulo-compras/ADR-003-requerimientos-pendientes-compra.md`.
+>
+> Este documento reemplaza la version v3, que mantenia estados y reglas ya superadas (`CSO`, `VNC` como estado principal, presupuesto REQ bloqueante e inactividad basada en funcionarios).
 
-### Decisiones confirmadas
+## 0. Decisiones vigentes
 
-| # | Decisión | Resolución |
-|---|----------|------------|
-| 1 | Estado Borrador | ✅ Confirmado. REQ inicia en BRR |
-| 2 | Bodegas/Fundos | ✅ Fundos fuera del flujo de compras. CC es independiente (incluye dptos como Adquisiciones, IT, Contabilidad) |
-| 3 | Precio editable | ✅ Sí, pero solo usuarios con atributo `editarprecios = 1` |
-| 4 | Historial precios | ✅ No se crea tabla separada. Se obtiene de las POC históricas |
-| 5 | Edición en Pendiente | ✅ Sí, con nuevo estado `EDT` (En Edición) + control de concurrencia |
-| 6 | REQ → POC | ✅ Múltiples REQs → 1 POC. Compra parcial posible. Nueva tabla intermedia `reqaprobados` |
-| 7 | Vinculación parcial | ✅ Respondido en #6 — por cantidades parciales, no por líneas |
-| 8 | DELETE de líneas | ✅ Físico. Sin log al crear; con log al editar (al confirmar modificación) |
-| 9 | `empresaid` | ✅ Se incluye, inferido del CC. CC tiene `empresaid` FK |
-| 10 | Última solicitud | ✅ JOIN dinámico, sin columnas duplicadas |
-| 11 | Tipos REQ | ✅ Separados: Material (EsCompra+EsStockeable) vs Servicio (solo EsCompra). Nunca mixtos |
-| 12 | Aprobación parcial | ✅ No. La autorización es general (todo el REQ) |
-| 13 | Borrador | ✅ Confirmado. Existe estado BRR |
-| 14 | Solicitante asignado | ✅ Campo separado al creador. FK → `funcionarios`. El CC se carga del funcionario, editable |
-| 15 | Aprobador por defecto | ✅ Jefe del CC (Maestro de Centros). Creador puede agregar más firmantes |
-| 16 | REQ rechazado | ✅ Puede corregirse. Solo ANL bloquea toda modificación |
-| 17 | Inactividad aprobador | ✅ Nueva transacción: aprobador → reemplazo + fechas. Estado especial "Omitido por inactividad" |
-| 18 | Moneda | ✅ Solo CLP |
-| 19 | Módulo en proyecto actual | ✅ Se integra a Puduhue App Web |
+| # | Decision | Resolucion vigente |
+|---|---|---|
+| 1 | Estados REQ | `BRR`, `PND`, `EDT`, `APR`, `RCH`, `ANL` |
+| 2 | Cambios solicitados | No existe `CSO`; se usa `RCH` con comentario obligatorio |
+| 3 | Vinculo con PreOC | No es estado principal; se maneja en columna separada de estado PreOC |
+| 4 | REQ rechazado | Corregible y reenviable |
+| 5 | Reenvio tras rechazo | Recalcula firmantes default, conserva manuales activos y reaplica inactividad |
+| 6 | Edicion | No se permite editar si ya existe al menos una aprobacion o si esta aprobado |
+| 7 | Concurrencia | Aprobar/Rechazar siempre revalida estado en backend/SP |
+| 8 | Presupuesto REQ | Informativo, no bloqueante y no genera movimientos |
+| 9 | Fecha funcional REQ | La define sistema/BD; se actualiza en cada edicion permitida |
+| 10 | Firmantes default REQ | Jefe de centro y jefe tecnico del centro, no removibles |
+| 11 | Inactividad | Basada en usuarios aprobadores, no en funcionarios |
+| 12 | Centro operativo | Sale de `usuarioscentroscosto`; funcionario es opcional |
+| 13 | Items precio cero | No se pueden agregar al REQ |
+| 14 | Pendientes de compra | `reqaprobados` no apunta a una PreOC unica; el vinculo vive en historial |
+| 15 | Anulacion de saldo | Solo sobre cantidad pendiente y con motivo obligatorio |
+| 16 | Fuera de presupuesto | Si falta saldo, se agregan autorizadores fuera de presupuesto al final |
+| 17 | Siguiente aprobador | Se resuelve con funcion interna que valida vigencia e inactividad |
+| 18 | Creacion REQ | Item y firmante manual se agregan con boton `+` y modal |
 
----
+## 1. Tablas nuevas o ajustadas
 
-## 1. Tablas Nuevas — Resumen
-
-| Tabla                           | Tipo           | Descripción                                                  |
-|---------------------------------|----------------|--------------------------------------------------------------|
-| `reqcompras`                    | Transaccional  | Cabecera del Requerimiento                                   |
-| `reqcomprasdetalle`             | Transaccional  | Detalle (ítems) del Requerimiento                            |
-| `reqcomprasfirmantes`           | Transaccional  | Lista de firmantes/aprobadores por REQ                       |
-| `reqcompraslog`                 | LOG            | Registro de acciones (INS/UPD/ANL/APR/RCH/CSO/EDT/CMB)      |
-| `reqcomprasestados`             | Maestro        | Catálogo de estados para REQ                                 |
-| `reqaprobados`                  | Transaccional  | Líneas aprobadas listas para compra (link REQ → POC)         |
-| `reqaprobadoshistorial`         | Transaccional  | Historial de movimientos de cada línea aprobada              |
-| `reqaprobadoscambios`           | Transaccional  | Historial de cambios de ítem realizados por el comprador     |
-| `pocestados`                    | Maestro        | Catálogo de estados para Pre OC (flujo independiente)        |
-| `centroscosto`                  | Maestro        | Centros de costo (sync Finnegans + editable localmente)      |
-| `usuarioscentroscosto`          | Asociación     | Centros de costo accesibles por usuario                      |
-| `funcionarios`                  | Maestro        | Funcionarios de la empresa (solicitantes / aprobadores)      |
-| `funcionariosinactividad`       | Transaccional  | Períodos de inactividad de aprobadores + reemplazo           |
+| Tabla | Tipo | Descripcion |
+|---|---|---|
+| `reqcompras` | Transaccional | Cabecera del Requerimiento |
+| `reqcomprasdetalle` | Transaccional | Detalle de items del Requerimiento |
+| `reqcomprasfirmantes` | Transaccional | Lista de aprobadores por REQ |
+| `reqcomprascomentarios` | Funcional | Comentarios visibles de aprobacion, rechazo y anulacion |
+| `reqcompraslog` | LOG | Auditoria tecnica del REQ |
+| `reqcomprasestados` | Maestro | Catalogo de estados documentales |
+| `reqcompraestadopreoc` | Maestro | Catalogo de estado de vinculacion con PreOC |
+| `reqcompraspptosnapshot` | Referencia | Copia actualizable del calculo presupuestario del REQ |
+| `reqaprobados` | Transaccional | Lineas aprobadas listas para compra |
+| `reqaprobadoshistorial` | Transaccional | Historial de compras/anulaciones por linea aprobada |
+| `reqaprobadoscambios` | Transaccional | Cambios de item realizados por comprador |
+| `aprobadoresperiodoinactividad` | Transaccional | Periodos de inactividad y reemplazos de usuarios aprobadores |
+| `aprobadoresperiodoinactividadlog` | LOG | Trazabilidad de creacion, edicion e inactivacion de periodos |
+| `usuarioscentroscosto` | Asociacion | Centros de costo accesibles por usuario |
+| `funcionarios` | Maestro | Funcionarios/solicitantes, con RUT como PK funcional |
 
 ### Tablas existentes a modificar
 
-| Tabla              | Cambio                                                                                                    |
-|--------------------|-----------------------------------------------------------------------------------------------------------|
-| `invitems`         | Agregar `invitemtipo`, `invitemprecioref`, `invitemcomprable`, `invitemmodulo`, `invitemcompra`, `invitemventa`, `inviteminventario`, `invitemvig` |
-| `usuarios`         | Agregar `autorizareq`, `editarprecios`, `comprador`, `permitecreareditar`                                 |
-
----
-
-## 2. `reqcompras` — Cabecera del Requerimiento
-
-| Columna                        | Tipo           | NULL | Default    | Descripción / Notas                                                          |
-|--------------------------------|----------------|------|------------|------------------------------------------------------------------------------|
-| `reqcompraid`                  | INT PK AI      | NO   |            | PK interna                                                                   |
-| `reqcompracod`                 | VARCHAR(20)    | NO   |            | Código visible: `REQ-000001`. Autogenerado, UNIQUE                           |
-| `empresaid`                    | INT FK         | NO   |            | FK → `empresas`. Inferido del CC del solicitante                             |
-| `reqcompratipo`                | TINYINT        | NO   |            | 1=Material, 2=Servicio. **Nunca mixto**                                      |
-| `reqcomprafecha`               | DATE           | NO   | CURDATE()  | Fecha de creación. No editable. Fijada por SP                                |
-| `centrocostoid`                | INT FK         | NO   |            | FK → `centroscosto`. Se carga del CC del solicitante, editable               |
-| `funcionarioid`                | INT FK         | NO   |            | FK → `funcionarios`. Solicitante asignado (≠ usuario creador)                |
-| `reqcompraobs`                 | TEXT           | SÍ   | NULL       | Observación genérica del requerimiento (cabecera)                            |
-| `reqcompraestadoid`            | INT FK         | NO   |            | FK → `reqcomprasestados`. Estado actual del flujo                            |
-| `reqcompraaprobadorpendienteid`| INT FK         | SÍ   | NULL       | FK → `usuarios`. Siguiente firmante. NULL cuando BRR/APR/RCH/ANL/EDT        |
-| `reqcompranettotal`            | DECIMAL(15,2)  | NO   | 0.00       | Suma total neto del detalle (recalculado por SP)                             |
-| `reqcompravig`                 | TINYINT(1)     | NO   | 1          | 1=vigente, 0=anulado                                                         |
-| + 8 columnas de auditoría      |                |      |            | Estándar del proyecto                                                        |
-
-**Índices:**
-- `PK (reqcompraid)`
-- `UNIQUE (reqcompracod)`
-- `FK → empresas`, `FK → centroscosto`, `FK → funcionarios`, `FK → reqcomprasestados`, `FK → usuarios` (nullable)
-
----
-
-## 3. `reqcomprasdetalle` — Detalle (Ítems)
-
-| Columna                        | Tipo           | NULL | Default    | Descripción / Notas                                  |
-|--------------------------------|----------------|------|------------|-------------------------------------------------------|
-| `reqcompradetid`               | INT PK AI      | NO   |            | PK interna                                            |
-| `reqcompraid`                  | INT FK         | NO   |            | FK → `reqcompras`                                     |
-| `reqcompradetlinea`            | INT            | NO   |            | Nro de línea (1, 2, 3... renumerable al eliminar)     |
-| `invitemid`                    | INT FK         | NO   |            | FK → `invitems`                                       |
-| `reqcompradetdsc`              | VARCHAR(200)   | NO   |            | Descripción (copiada de `invitems.invitemdsc`)        |
-| `invunidmedid`                 | INT FK         | NO   |            | FK → `invunidadesmedidas`                             |
-| `reqcompradetcantidad`         | DECIMAL(15,4)  | NO   |            | Cantidad solicitada                                   |
-| `reqcompradetprecioneto`       | DECIMAL(15,2)  | NO   | 0.00       | Precio neto unitario (del maestro, editable con permiso) |
-| `reqcompradettotalneto`        | DECIMAL(15,2)  | NO   | 0.00       | CALC: `cantidad × precioneto`                         |
-| `invbodegaid`                  | INT FK         | SÍ   | NULL       | Bodega central (opcional, por línea)                  |
-| `reqcompradetobs`              | TEXT           | SÍ   | NULL       | Observación por línea (opcional)                      |
-
-**Reglas de filtrado en front:**
-- Mostrar solo ítems donde `invitemcomprable = 1` AND `invitemactivo = 1`
-- Si `reqcompratipo = 1` (Material) → solo `invitemtipo = 1`
-- Si `reqcompratipo = 2` (Servicio) → solo `invitemtipo = 2`
-
-**Eliminación de líneas:**
-- **Al crear (BRR)**: DELETE físico, sin log. Renumerar líneas.
-- **Al editar (EDT)**: DELETE físico + log `UPD` en `reqcompraslog` al confirmar modificación. Renumerar líneas. Recalcular `reqcompranettotal`.
-
-### Datos de la Última Solicitud (JOIN dinámico)
-
-Se obtienen en el SP de consulta, no se almacenan:
-```sql
--- Para cada línea, obtener la última solicitud del mismo ítem:
-LEFT JOIN (
-    SELECT rd2.invitemid, MAX(rc2.reqcompraid) AS last_reqid
-    FROM reqcomprasdetalle rd2
-    JOIN reqcompras rc2 ON rd2.reqcompraid = rc2.reqcompraid
-    WHERE rc2.reqcompraid < @current_reqid AND rc2.reqcompravig = 1
-    GROUP BY rd2.invitemid
-) AS last_req ON rd.invitemid = last_req.invitemid
--- → anterior_fecha, anterior_cantidad, anterior_precio, anterior_solicitante
-```
-
----
-
-## 4. `reqcomprasfirmantes` — Lista de Aprobadores
-
-| Columna                        | Tipo           | NULL | Default    | Descripción / Notas                                                      |
-|--------------------------------|----------------|------|------------|--------------------------------------------------------------------------|
-| `reqcomprafirmanteid`          | INT PK AI      | NO   |            | PK interna                                                               |
-| `reqcompraid`                  | INT FK         | NO   |            | FK → `reqcompras`                                                       |
-| `firmanteusuarioid`            | INT FK         | NO   |            | FK → `usuarios` (con `autorizareq = 1`)                                 |
-| `firmanteorden`                | INT            | NO   |            | Orden de firma (1, 2, N). Reordenable por creador                       |
-| `firmanteestado`               | TINYINT        | NO   | 0          | 0=Pendiente, 1=Aprobado, 2=Rechazado, 3=Cambios solicitados, 4=Omitido por inactividad |
-| `firmanteomitido`              | TINYINT(1)     | NO   | 0          | 1 = Omitido por inactividad (reemplazado por otro firmante)             |
-| `firmantereemplazodeid`        | INT FK         | SÍ   | NULL       | FK → `reqcomprasfirmantes`. ID del firmante que fue reemplazado (si aplica) |
-| `firmanteobs`                  | TEXT           | SÍ   | NULL       | Motivo de rechazo o comentario                                          |
-| `firmantefechahora`            | DATETIME       | SÍ   | NULL       | Fecha/hora de firma. NULL si pendiente                                  |
-
-**Constraint**: `UNIQUE (reqcompraid, firmanteusuarioid)`
-
-### Lógica de firmantes
-
-**Al crear REQ en BRR:**
-1. Agregar automáticamente como firmante 1 al **jefe del CC** (`centroscosto.centrocostojefeusuarioid`).
-2. El SP verifica si ese aprobador tiene una **transacción de inactividad** activa en ese período:
-   - Si sí: agrega al aprobador con estado `Omitido por inactividad` + `firmanteomitido = 1`, y agrega al **reemplazante** como firmante pendiente.
-   - Si no: agrega normalmente.
-3. El creador puede agregar más firmantes (usuarios con `autorizareq = 1`).
-4. Se pueden reordenar (`firmanteorden`).
-
-**Al enviar (BRR → PND):**
-- `reqcompraaprobadorpendienteid` = firmante con `firmanteorden = 1` y `firmanteomitido = 0`.
-- Se notifica al primer firmante activo.
-
-**Al aprobar firmante N:**
-- Si hay firmante N+1 → `aprobadorpendienteid = firmante[N+1]`.
-- Si era el último → `aprobadorpendienteid = NULL`, estado → `APR`.
-- Cada línea aprobada se copia a `reqaprobados`.
-
-**Al rechazar:**
-- Estado → `RCH` (puede corregirse). Solo `ANL` bloquea toda modificación futura.
-- `CSO` (cambios solicitados): editable, el creador corrige y reenvía → `PND`.
-- `aprobadorpendienteid = NULL`.
-
----
-
-## 5. Flujo de Estados
-
-```
-                 ┌─────────────────── CREAR ──────────────────────┐
-                 ▼                                                │
-            ┌─────────┐       Enviar        ┌─────────────┐      │
-            │   BRR   │ ──────────────────► │     PND     │      │
-            │Borrador │                     │  Pendiente  │      │
-            └────┬────┘                     └──┬──┬──┬────┘      │
-                 │                             │  │  │           │
-                 │  Anular                     │  │  │           │
-                 ▼                             │  │  │           │
-            ┌─────────┐                        │  │  │           │
-            │   ANL   │  ◄─────────────────────┘  │  │           │
-            │ Anulada │                           │  │           │
-            └─────────┘                           │  │           │
-                                                  │  │           │
-            ┌─────────┐     Editar (creador)      │  │           │
-            │   EDT   │  ◄────────────────────────┘  │           │
-            │En Edición│ ── Confirmar edición ───┐   │           │
-            └─────────┘                          │   │           │
-                 ▲                               ▼   │           │
-                 │                          ┌────────┤           │
-                 │                          │  PND   │           │
-                 │                          └──┬─────┤           │
-                 │                             │     │           │
-                 │         Último firmante OK   │     │           │
-                 │                             ▼     │           │
-                 │                        ┌────────┐ │           │
-                 │                        │  APR   │ │           │
-                 │                        │Aprobada│ │           │
-                 │                        └───┬────┘ │           │
-                 │                            │      │           │
-                 │                            ▼      │           │
-                 │                        ┌────────┐ │           │
-                 │                        │  VNC   │ │           │
-                 │                        │Vinculada│ │           │
-                 │                        └────────┘ │           │
-                 │                                   │           │
-                 │                                   ▼           │
-                 │                             ┌──────────┐      │
-                 │                             │   RCH    │      │
-                 │                             │Rechazada │      │
-                 │                             └──────────┘      │
-                 │                                               │
-                 │                              ┌──────────┐     │
-                 └──────────────────────────────│   CSO    │     │
-                      Editar tras cambios       │ Cambios  │     │
-                      solicitados               │Solicitados│    │
-                                                └──────────┘     │
-```
-
-### Control de Concurrencia (Estado EDT)
-
-> [!IMPORTANT]
-> Cuando el creador presiona "Editar" estando el REQ en `PND`:
-> 1. El SP cambia el estado a `EDT` (En Edición) inmediatamente.
-> 2. Si un aprobador intenta firmar un REQ en estado `EDT`, el SP rechaza la operación y retorna:
->    `"El requerimiento está siendo editado por el solicitante. Intente más tarde."`
-> 3. Al confirmar la edición, el estado vuelve a `PND` y se actualiza `aprobadorpendienteid`.
-> 4. Las firmas previas se mantienen (no se reinician las autorizaciones).
->
-> **En front**: Al cargar la pantalla de aprobación, validar que el estado sea `PND`. Si es `EDT`, mostrar alerta y deshabilitar botón de firma.
-
----
-
-## 6. `reqcomprasestados` — Maestro de Estados
-
-| ID | Código | Descripción                 | Editable | Notas                                                       |
-|----|--------|-----------------------------|-----------|-------------------------------------------------------------|
-| 1  | `BRR`  | Borrador                    | ✅ Sí    | Creado, no enviado                                          |
-| 2  | `PND`  | Pendiente de aprobación     | ❌ No    | Enviado a firmantes                                         |
-| 3  | `EDT`  | En edición                  | ✅ Sí    | Creador editando después de enviar                          |
-| 4  | `APR`  | Aprobada                    | ❌ No    | Todos los firmantes aprobaron                               |
-| 5  | `RCH`  | Rechazada                   | ✅ Sí    | Puede corregirse y reenviarse (≠ ANL)                       |
-| 6  | `CSO`  | Cambios solicitados         | ✅ Sí    | Firmante pide modificaciones                                |
-| 7  | `ANL`  | Anulada                     | ❌ No    | Baja lógica definitiva. No puede modificarse                |
-| 8  | `VNC`  | Vinculada a POC             | ❌ No    | Ya se generó Pre OC (total o parcial)                       |
-
-**Estructura de la tabla:**
-
-| Columna                  | Tipo           | Descripción              |
-|--------------------------|----------------|--------------------------|
-| `reqcompraestadoid`      | INT PK AI      | PK                       |
-| `reqcompraestadocod`     | VARCHAR(5)     | Código corto             |
-| `reqcompraestadodsc`     | VARCHAR(50)    | Descripción              |
-| `reqcompraestadoeditable`| TINYINT(1)     | ¿El REQ es editable en este estado? |
-| `reqcompraestadoactivo`  | TINYINT(1)     | Vigente                  |
-
----
-
-## 7. `reqaprobados` — Líneas Aprobadas Listas para Compra
-
-> [!NOTE]
-> Tabla intermedia que separa la lógica del REQ de la lógica de la POC.
-> Cada registro = 1 línea de un REQ aprobado, lista para ser comprada.
-> Permite:
-> - Consolidar múltiples REQs en 1 POC.
-> - Compra parcial (parte de la cantidad ahora, el resto después).
-> - El solicitante puede consultar el estado de su pedido.
-
-| Columna                        | Tipo           | NULL | Default | Descripción                                           |
-|--------------------------------|----------------|------|---------|-------------------------------------------------------|
-| `reqaprobadoid`                | INT PK AI      | NO   |         | PK interna                                            |
-| `reqcompradetid`               | INT FK         | NO   |         | FK → `reqcomprasdetalle`. Línea original del REQ      |
-| `reqcompraid`                  | INT FK         | NO   |         | FK → `reqcompras` (desnormalizado para consultas rápidas) |
-| `invitemid`                    | INT FK         | NO   |         | FK → `invitems` (desnormalizado)                      |
-| `reqaprobadodsc`               | VARCHAR(200)   | NO   |         | Descripción (copiada del detalle REQ)                 |
-| `reqaprobadocantidadoriginal`  | DECIMAL(15,4)  | NO   |         | Cantidad original del REQ                             |
-| `reqaprobadocantidadpendiente` | DECIMAL(15,4)  | NO   |         | Cantidad aún sin vincular a POC. Inicia = original    |
-| `reqaprobadoprecioneto`        | DECIMAL(15,2)  | NO   |         | Precio neto unitario (del REQ)                        |
-| `reqaprobadoestado`            | TINYINT        | NO   | 1       | 1=Pendiente, 2=Parcial, 3=Completa, 4=Cancelada      |
-| `reqaprobadofecha`             | DATE           | NO   |         | Fecha de aprobación                                   |
-| + 4 columnas auditoría creación |               |      |         | Solo creación (se genera automáticamente)             |
-
-**Índices:**
-- `PK (reqaprobadoid)`
-- `FK → reqcomprasdetalle`, `FK → reqcompras`, `FK → invitems`
-- `IDX (reqaprobadoestado)` — para filtrar pendientes
-
-### Flujo de `reqaprobados`
-
-```
-REQ Aprobada (APR)
-    │
-    ▼ SP copia cada línea del detalle
-┌────────────────────────────┐
-│       reqaprobados         │
-│ estado = 1 (Pendiente)     │
-│ cantidadpendiente = total  │
-└──────────┬─────────────────┘
-           │
-           │ Al crear POC, se toman N líneas de aquí
-           ▼
-    ┌──────────────────────────────┐
-    │ Si cantidadpendiente > 0    │ → estado = 2 (Parcial)
-    │ Si cantidadpendiente = 0    │ → estado = 3 (Completa)
-    └──────────────────────────────┘
-```
-
----
-
-## 8. `reqaprobadoshistorial` — Historial de Movimientos
-
-> Cada vez que una línea aprobada se vincula (total o parcialmente) a una POC, se registra aquí.
-
-| Columna                        | Tipo           | NULL | Descripción                                           |
-|--------------------------------|----------------|------|-------------------------------------------------------|
-| `reqaprobadohistid`            | INT PK AI      | NO   | PK interna                                            |
-| `reqaprobadoid`                | INT FK         | NO   | FK → `reqaprobados`                                   |
-| `preocid`                      | INT FK         | SÍ   | FK → `preoc` (Pre OC donde se vinculó)                |
-| `preocdetid`                   | INT FK         | SÍ   | FK → `preocdetalle` (línea específica de la POC)      |
-| `histcantidad`                 | DECIMAL(15,4)  | NO   | Cantidad vinculada en este movimiento                 |
-| `histprecioneto`               | DECIMAL(15,2)  | NO   | Precio neto al momento de vincular                    |
-| `histfechahora`                | DATETIME       | NO   | Fecha/hora del movimiento                             |
-| `histusuarioid`                | INT FK         | NO   | FK → `usuarios`. Quién vinculó                        |
-| `histobs`                      | TEXT           | SÍ   | Observación                                           |
-
-### Ejemplo de compra parcial
-
-```
-REQ-000001, Línea 1: 100 kg de FER028
-    │
-    ├─► reqaprobados: cantidadoriginal=100, cantidadpendiente=100, estado=Pendiente
-    │
-    ├─► POC-000010 (compra 60 kg)
-    │   └─ historial: cantidad=60, preocid=10
-    │   └─ reqaprobados: cantidadpendiente=40, estado=Parcial
-    │
-    └─► POC-000015 (compra 40 kg)
-        └─ historial: cantidad=40, preocid=15
-        └─ reqaprobados: cantidadpendiente=0, estado=Completa
-```
-
-Esta estructura permite al solicitante ver:
-- ✅ "60 kg comprados en POC-000010 el 15/03"
-- ✅ "40 kg comprados en POC-000015 el 22/03"
-- ✅ "0 kg pendientes — Completa"
-
----
-
-## 9. `reqcompraslog` — Log de Auditoría
-
-| Columna              | Tipo           | Descripción                                           |
-|----------------------|----------------|-------------------------------------------------------|
-| `reqcompraid`        | INT FK         | FK → `reqcompras`                                     |
-| `logid`              | INT PK AI      | PK del log                                            |
-| `logusuarioid`       | INT            | `p_in_usuarioid`                                      |
-| `logdispositivo`     | VARCHAR(100)   | `p_in_dispositivo`                                    |
-| `logip`              | VARCHAR(50)    | `p_in_ip`                                             |
-| `logfechahora`       | DATETIME       | NOW()                                                 |
-| `logtipo`            | VARCHAR(3)     | Ver tabla abajo                                       |
-| `logparamjson`       | JSON           | `p_in_json`                                           |
-| `logregbkpjson`      | JSON           | Registro antes de modificación                        |
-
-| `logtipo` | Significado             | Cuándo se registra                                             |
-|-----------|-------------------------|----------------------------------------------------------------|
-| `INS`     | Inserción               | Al **enviar** el REQ (BRR→PND), no al crear borrador          |
-| `UPD`     | Actualización           | Al confirmar edición (EDT→PND)                                 |
-| `ANL`     | Anulación               | Baja lógica (→ANL)                                             |
-| `APR`     | Aprobación              | Un firmante aprueba                                            |
-| `RCH`     | Rechazo                 | Un firmante rechaza                                            |
-| `CSO`     | Cambios solicitados     | Un firmante solicita cambios                                   |
-| `EDT`     | En edición              | Creador inicia edición (PND→EDT)                               |
-| `CMB`     | Cambio de ítem          | Comprador cambia un ítem en pantalla de pendientes de compra   |
-
-**Regla**: Al crear/editar en estado BRR (borrador), NO se genera log. El log inicia al enviar (`INS`).
-
----
-
-## 10. Maestros de Soporte
-
-### 10.1. `centroscosto` — Centros de Costo
-
-| Columna                    | Tipo           | NULL | Descripción                                                                     |
-|----------------------------|----------------|------|---------------------------------------------------------------------------------|
-| `centrocostoid`            | INT PK AI      | NO   | PK interna                                                                      |
-| `empresaid`                | INT FK         | NO   | FK → `empresas`. Para inferir empresa en REQ                                    |
-| `centrocostocod`           | VARCHAR(50)    | NO   | Código visible                                                                  |
-| `centrocostodsc`           | VARCHAR(100)   | NO   | Descripción (sync desde Finnegans)                                              |
-| `erpcentrocostocod`        | VARCHAR(50)    | NO   | Código en Finnegans (`DIMCTC`)                                                  |
-| `centrocostojefeusuarioid` | INT FK         | SÍ   | FK → `usuarios`. Jefe del centro (firmante 1 por defecto). **Editable localmente** |
-| `centrocostoactivo`        | TINYINT(1)     | NO   | Vigente (sync desde Finnegans)                                                  |
-| `sincfechahora`            | DATETIME       | SÍ   | Fecha de última sincronización desde ERP                                        |
-| + 8 columnas de auditoría  |                |      | Estándar                                                                        |
-
-> [!NOTE]
-> **Estrategia híbrida**: Los datos base (`centrocostocod`, `centrocostodsc`, `erpcentrocostocod`, `centrocostoactivo`) se sincronizan desde Finnegans por cron. En pantalla **no hay eventos CRUD** — solo botón Exportar y botón Sincronizar On-Demand. Los atributos locales (`centrocostojefeusuarioid`) son editables localmente.
-
-### 10.2. `usuarioscentroscosto` — Asociación Usuarios ↔ CC
-
-> Patrón `usuariosfundos`: PK compuesta, solo auditoría de creación.
-
-| Columna                    | Tipo           | Descripción                                  |
-|----------------------------|----------------|-----------------------------------------------|
-| `usuarioid`                | INT FK         | FK → `usuarios`                               |
-| `centrocostoid`            | INT FK         | FK → `centroscosto`                           |
-| + 4 columnas auditoría creación |           | Estándar                                      |
-| `PK (usuarioid, centrocostoid)` |           |                                               |
-
-### 10.3. `funcionarios` — Maestro de Funcionarios (nuevo)
-
-> Carga inicial desde Excel. Sincronización: si un funcionario no viene en el Excel, se desactiva.
-
-| Columna                    | Tipo           | NULL | Descripción                                  |
-|----------------------------|----------------|------|-----------------------------------------------|
-| `funcionarioid`            | INT PK AI      | NO   | PK interna                                    |
-| `funcionariorut`           | VARCHAR(20)    | NO   | RUT del funcionario. UNIQUE                   |
-| `funcionarionombre`        | VARCHAR(100)   | NO   | Nombre completo                               |
-| `funcionariocargo`         | VARCHAR(100)   | SÍ   | Cargo                                         |
-| `centrocostoid`            | INT FK         | SÍ   | FK → `centroscosto`. CC al que pertenece      |
-| `funcionarioemail`         | VARCHAR(150)   | SÍ   | Correo electrónico                            |
-| `funcionarioactivo`        | TINYINT(1)     | NO   | 1=Activo, 0=Inactivo                          |
-| + 8 columnas de auditoría  |                |      | Estándar                                      |
-
-### 10.4. `funcionariosinactividad` — Períodos de Inactividad (nuevo)
-
-> Solo aplica a aprobadores (usuarios con `autorizareq = 1`). Permite registrar un período de ausencia y definir reemplazante.
-
-| Columna                        | Tipo           | NULL | Descripción                                                 |
-|--------------------------------|----------------|------|-------------------------------------------------------------|
-| `funcionarioinactiviadid`      | INT PK AI      | NO   | PK interna                                                  |
-| `usuarioid`                    | INT FK         | NO   | FK → `usuarios`. Aprobador que se ausenta                   |
-| `usuarioreemplazoid`           | INT FK         | NO   | FK → `usuarios`. Aprobador reemplazante                     |
-| `motivoinactividad`            | TINYINT        | NO   | 1=Vacaciones, 2=Licencia, 3=Permiso, 4=Otro                 |
-| `fechadesde`                   | DATE           | NO   | Inicio del período de inactividad                           |
-| `fechahasta`                   | DATE           | NO   | Fin del período (incluido)                                  |
-| `inactividadactivo`            | TINYINT(1)     | NO   | 1=Vigente, 0=Cancelado                                      |
-| + 8 columnas de auditoría      |                |      | Estándar                                                    |
-
-> [!NOTE]
-> Al generar la lista de firmantes de un REQ, el SP verifica si el aprobador tiene inactividad activa cuyo rango incluye la fecha actual. Si sí, agrega al aprobador con `firmanteomitido = 1` y al reemplazante como firmante activo pendiente.
-
-### 10.5. `reqaprobadoscambios` — Historial de Cambios de Ítem (nuevo)
-
-> Permite al comprador cambiar un ítem del requerimiento en la pantalla de "Pendientes de Compra", dejando trazabilidad del cambio.
-
-| Columna                        | Tipo           | NULL | Descripción                                                     |
-|--------------------------------|----------------|------|-----------------------------------------------------------------|
-| `reqcambioid`                  | INT PK AI      | NO   | PK interna                                                      |
-| `reqaprobadoid`                | INT FK         | NO   | FK → `reqaprobados`. Línea afectada                             |
-| `invitemidoriginal`            | INT FK         | NO   | FK → `invitems`. Ítem original del REQ                          |
-| `invitemidnuevo`               | INT FK         | NO   | FK → `invitems`. Ítem nuevo asignado por el comprador           |
-| `reqcambioobs`                 | TEXT           | SÍ   | Motivo del cambio                                               |
-| `reqcambiofechahora`           | DATETIME       | NO   | Fecha/hora del cambio                                           |
-| `reqcambiousuarioid`           | INT FK         | NO   | FK → `usuarios`. Comprador que realizó el cambio               |
-
-> [!IMPORTANT]
-> Validación: El ítem nuevo NO puede ser un ítem que ya exista en el requerimiento original.
-> Esta tabla alimenta las métricas de errores de solicitantes.
-
----
-
-## 11. Modificaciones a Tablas Existentes
-
-### 11.1. `invitems` — Nuevas columnas
-
-```sql
-ALTER TABLE invitems
-    ADD COLUMN invitemtipo TINYINT NOT NULL DEFAULT 0
-        COMMENT '0=Sin clasificar, 1=Material (EsCompra+EsStockeable), 2=Servicio (solo EsCompra)',
-    ADD COLUMN invitemprecioref DECIMAL(15,2) NOT NULL DEFAULT 0.00
-        COMMENT 'Precio neto referencial para REQ',
-    ADD COLUMN invitemcomprable TINYINT(1) NOT NULL DEFAULT 0
-        COMMENT '1=Aplica para compras',
-    ADD COLUMN invitemmodulo VARCHAR(10) NOT NULL DEFAULT ''
-        COMMENT 'Código del módulo de uso: LCH/CMB/ALM/BDG',
-    ADD COLUMN invitemcompra TINYINT(1) NOT NULL DEFAULT 0
-        COMMENT '1=Se usa en operaciones de Compra',
-    ADD COLUMN invitemventa TINYINT(1) NOT NULL DEFAULT 0
-        COMMENT '1=Se usa en operaciones de Venta',
-    ADD COLUMN inviteminventario TINYINT(1) NOT NULL DEFAULT 0
-        COMMENT '1=Aplica a Inventario';
-```
-
-> [!NOTE]
-> El campo `invitemmodulo` reemplaza la lógica anterior de `LECHE = SI/NO`.
-> - Producto con `LECHE = SI` → migrar a `invitemmodulo = 'LCH'`
-> - Producto con `LECHE = NO` → migrar a `invitemmodulo = 'ALM'`
-
-### 11.2. `usuarios` — Nuevas columnas
-
-```sql
-ALTER TABLE usuarios
-    ADD COLUMN autorizareq TINYINT(1) NOT NULL DEFAULT 0
-        COMMENT '1=Puede ser firmante/aprobador de REQ',
-    ADD COLUMN editarprecios TINYINT(1) NOT NULL DEFAULT 0
-        COMMENT '1=Puede editar precios en REQ',
-    ADD COLUMN comprador TINYINT(1) NOT NULL DEFAULT 0
-        COMMENT '1=Puede Crear/Editar/Anular Pre OC (aunque tenga el módulo en su perfil)',
-    ADD COLUMN permitecreareditar TINYINT(1) NOT NULL DEFAULT 0
-        COMMENT '1=Puede Crear/Editar productos en el Maestro de Productos';
-```
-
----
-
-## 12. Diagrama de Relaciones
-
-```
-┌──────────────┐        ┌─────────────────────┐       ┌────────────────────────────┐
-│   empresas   │◄───────│    centroscosto      │◄──────│       funcionarios         │
-│ empresaid    │        │ centrocostoid        │       │ funcionarioid              │
-└──────────────┘        │ empresaid FK         │       │ funcionariorut / nombre    │
-                        │ centrocostojefe FK ──┼──┐    │ centrocostoid FK           │
-                        └────────┬────────────┘  │    │ funcionarioactivo          │
-                                 │               │    └────────────────────────────┘
-                      ┌──────────┴───┐           │
-                      │ usuarioscc   │    ┌──────┴──────────────────────┐
-                      │ usuarioid FK │    │          usuarios            │
-                      │ centrocosto FK    │ autorizareq   comprador      │
-                      └──────────────┘   │ editarprecios permitecreareditar │
-                                         └──────┬───────────────┬────────┘
-                                                │               │
-              ┌─────────────────────────────────┘               │
-              │                                                  │
-              ▼                                                  ▼
-┌─────────────────────────┐                   ┌──────────────────────────────┐
-│       reqcompras        │◄── reqcompraslog   │  funcionariosinactividad     │
-│ reqcompraid             │                    │ usuarioid FK (aprobador)     │
-│ reqcompracod            │  ┌──────────────────────────────────────────────┐ │
-│ empresaid FK            │  │            reqcomprasfirmantes               │ │
-│ centrocostoid FK        │──►│ firmanteusuarioid FK                        │ │
-│ funcionarioid FK ───────┼──►│ firmanteorden (reordenable)                 │ │
-│ reqcompraestadoid FK ───┼──┐│ firmanteestado (0-4)                        │ │
-│ aprobadorpendiente FK   │  ││ firmanteomitido (inactividad)               │ │
-│ reqcompranettotal       │  │└──────────────────────────────────────────────┘ │
-└──────────┬──────────────┘  │                                                 │
-           │                 ▼                                                 │
-           │      ┌────────────────────┐                                       │
-           │      │  reqcomprasestados │                                       │
-           │      │ BRR/PND/EDT/APR   │         Cuando aprobador tiene         │
-           │      │ RCH/CSO/ANL/VNC   │◄────────── inactividad activa ─────────┘
-           │      └────────────────────┘         → firmanteomitido = 1
-           │                                     → agrega reemplazante
-           ▼
-┌─────────────────────┐              ┌──────────────────────────────┐
-│  reqcomprasdetalle  │── (APR) ────►│         reqaprobados         │
-│ invitemid FK        │              │ reqcompradetid FK            │
-│ invunidmedid FK     │              │ cantidadoriginal             │
-│ cantidad            │              │ cantidadpendiente            │
-│ precioneto          │              │ estado (Pend/Parc/Comp)      │
-│ totalneto           │              └──────────┬──────────┬────────┘
-└─────────────────────┘                         │          │
-           │                                    ▼          ▼
-           ▼                     ┌─────────────────┐  ┌───────────────────────┐
-┌──────────────────┐             │reqaprobadoshist.│  │  reqaprobadoscambios  │
-│    invitems      │             │ preocid FK       │  │ reqaprobadoid FK      │
-│ invitemtipo      │             │ histcantidad     │  │ invitemidoriginal FK  │
-│ invitemprecioref │             │ histprecioneto   │  │ invitemidnuevo FK     │
-│ invitemcomprable │             └─────────────────┘  │ comprador FK          │
-│ invitemmodulo    │                                   │ (métricas errores)    │
-│ invitemcompra    │                                   └───────────────────────┘
-│ invitemventa     │
-│ inviteminventario│
-└──────────────────┘
-```
-
----
-
-## 13. Resumen del Flujo Completo
-
-```
-1. CREAR (BRR)
-   → Usuario selecciona Solicitante (de Maestro de Funcionarios)
-   → El CC se carga del CC del funcionario seleccionado (editable)
-   → Selecciona tipo (Material / Servicio). Nunca mixtos.
-   → Agrega ítems filtrados por tipo y módulo de uso
-   → El SP agrega como firmante 1 al jefe del CC
-       · Si el jefe tiene inactividad activa → agrega su reemplazo como activo
-         y al jefe con firmanteomitido = 1
-   → Creador puede agregar más firmantes (autorizareq = 1)
-   → Reordena firmantes si necesario
-
-2. ENVIAR (BRR → PND)
-   → Se genera log INS
-   → aprobadorpendiente = primer firmante con firmanteomitido = 0
-   → Notificación al primer firmante activo
-
-3. APROBAR (PND)
-   → Firmante N firma → log APR
-   → Si hay N+1 (no omitido) → aprobadorpendiente = firmante[N+1]
-   → Si era el último → aprobadorpendiente = NULL, estado → APR
-   → Se copian líneas a reqaprobados (cantidadpendiente = total)
-
-4. EDITAR (PND → EDT → PND)
-   → Creador presiona "Editar" → estado EDT
-   → Aprobadores: si intentan firmar, SP retorna "El REQ está siendo editado"
-   → Creador modifica → presiona "Confirmar" → estado PND + log UPD
-   → Firmas previas se mantienen
-
-5. RECHAZAR
-   → Estado → RCH. Puede corregirse y reenviarse
-   → Solo ANL bloquea toda modificación futura
-
-6. CAMBIOS SOLICITADOS (CSO)
-   → Firmante pide cambios → estado CSO
-   → Creador edita → reenvía → PND
-
-7. CAMBIO DE ÍTEM (por comprador, en Pendientes de Compra)
-   → Comprador cambia ítem en reqaprobados
-   → SP valida que el ítem nuevo no exista ya en el REQ original
-   → Se registra en reqaprobadoscambios → log CMB en reqcompraslog
-   → El REQ original muestra el cambio con historial
-   → Alimenta métricas de errores de solicitantes
-
-8. VINCULAR A POC (APR → VNC)
-   → Desde reqaprobados (pendientes), el comprador crea la Pre OC
-   → Compra parcial: cantidadpendiente se reduce
-   → Se registra en reqaprobadoshistorial
-   → Cuando cantidadpendiente = 0 → estado Completa
-   → Cuando todas las líneas = Completa → REQ estado VNC
-
-9. ANULAR (cualquier estado editable)
-   → Estado → ANL (baja lógica definitiva)
-   → No puede volver a modificarse
-```
-
----
-
-## 13. Resumen del Flujo Completo
-
-```
-1. CREAR (BRR)
-   → Usuario selecciona CC (de sus CC)
-   → Selecciona tipo (Material/Servicio)
-   → Agrega ítems (filtrados por tipo)
-   → Configura firmantes (jefe CC + otros con autorizareq=1)
-   → Reordena firmantes si necesario
-
-2. ENVIAR (BRR → PND)
-   → Se genera log INS
-   → aprobadorpendiente = firmante[1]
-   → Notificación al primer firmante
-
-3. APROBAR (PND)
-   → Firmante N firma → log APR
-   → Si hay N+1 → aprobadorpendiente = firmante[N+1]
-   → Si era último → estado APR
-   → Se copian líneas a reqaprobados (cantidadpendiente = total)
-
-4. EDITAR (PND → EDT → PND)
-   → Creador presiona "Editar" → estado EDT
-   → Aprobadores ven mensaje "En edición"
-   → Creador modifica → presiona "Confirmar" → estado PND + log UPD
-   → Firmas previas se mantienen
-
-5. RECHAZAR / CAMBIOS SOLICITADOS
-   → Firmante rechaza → estado RCH (definitivo) o CSO (corregible)
-   → CSO: creador edita → reenvía → PND
-
-6. VINCULAR A POC (APR → VNC)
-   → Desde reqaprobados, al crear POC se toman líneas
-   → Compra parcial: cantidadpendiente se reduce
-   → Se registra en reqaprobadoshistorial
-   → Cuando cantidadpendiente = 0 → estado Completa
-   → Cuando todas las líneas = Completa → REQ estado VNC
-```
+| Tabla | Cambio |
+|---|---|
+| `usuarios` | Separar permisos de aprobacion REQ, aprobacion PreOC, comprador, anular PreOC, editar precios, crear/editar item y sincronizar transacciones ERP |
+| `invitems` | Mantener `invitemstockeable` como Material/Servicio, precio referencial, comprable, uso funcional, estado local y marca `iteminglocal` |
+| `centroscosto` | Mantener atributos locales de jefe de centro y jefe tecnico |
+
+## 2. `reqcompras` - Cabecera del Requerimiento
+
+| Columna | Tipo logico | NULL | Descripcion / regla |
+|---|---|---|---|
+| `reqcompraid` | INT PK AI | NO | PK interna |
+| `reqcompracod` | VARCHAR(20) | NO | Codigo visible `REQ-00000001`: prefijo `REQ-` + `reqcompraid` con `LPAD` a 8 digitos |
+| `reqcompratipo` | TINYINT | NO | 1=Material, 2=Servicio; nunca mixto |
+| `reqcomprafecha` | DATE | NO | Fecha funcional definida por sistema/BD; se actualiza en cada edicion permitida |
+| `centrocostoid` | INT FK | NO | Centro elegido desde `usuarioscentroscosto` |
+| `funcionariorut` | VARCHAR(20) FK | SI | Solicitante asignado opcional |
+| `reqcompraobs` | TEXT | SI | Observacion general |
+| `reqcompraprioridad` | TINYINT | NO | 1=Normal, 2=Alta; efecto visual y correo |
+| `reqcompraestadoid` | VARCHAR(20) FK | NO | Estado documental |
+| `reqcompraestadopreocid` | VARCHAR(20) FK | SI | Estado de vinculacion con PreOC |
+| `reqaprobadoridpnd` | INT FK | SI | Usuario aprobador pendiente cuando esta en `PND`; se limpia al rechazar o aprobar completamente |
+| `reqaprobacionfecha` | DATE | SI | Fecha de aprobacion completa, para KPI |
+| `reqadvertenciapptocompra` | TINYINT(1) | NO | 1 si existe advertencia presupuestaria informativa |
+| `reqfuerapptocompra` | TINYINT(1) | NO | 1 si requiere autorizador fuera de presupuesto |
+| `reqcompranettotal` | DECIMAL(15,2) | NO | Total neto recalculado desde detalle |
+| `reqcompravig` | TINYINT(1) | NO | Vigente/baja logica |
+| + auditoria |  |  | Columnas estandar del proyecto |
+
+Notas:
+
+- `empresaid` no se resuelve desde el centro de costo ERP. El ERP usa una sola base de centros para todas las empresas; una separacion por empresa quedaria como dato local futuro si el cliente lo solicita.
+- Si el usuario no tiene centros asignados, no puede crear REQ y se informa: "No tiene centro(s) asignado(s). Informar a Administracion."
+- Si el usuario tiene varios centros, puede elegir cualquiera activo entre sus centros asignados.
+- `reqcompracod` es global, no editable por usuario, no reciclable y no cambia aunque el REQ se anule. Lo genera `sp_compras_req_crear` despues de obtener `reqcompraid`.
+
+## 3. `reqcomprasdetalle` - Detalle de items
+
+| Columna | Tipo logico | NULL | Descripcion / regla |
+|---|---|---|---|
+| `reqcompradetid` | INT PK AI | NO | PK interna |
+| `reqcompraid` | INT FK | NO | FK a cabecera |
+| `reqcompradetlinea` | INT | NO | Numero de linea |
+| `invitemid` | INT FK | NO | Item seleccionado |
+| `subfamiliaid` | INT FK | NO | Subfamilia del item al momento del REQ |
+| `reqcompradetitemcod` | VARCHAR(50) | NO | Snapshot del codigo del item |
+| `reqcompradetdsc` | VARCHAR(200) | NO | Snapshot de descripcion al momento del REQ |
+| `invunidmedid` | INT FK | NO | Unidad de medida |
+| `reqcompradetcantidad` | DECIMAL(15,4) | NO | Cantidad requerida |
+| `reqitemcantanulada` | DECIMAL(15,4) | NO | Cantidad anulada acumulada por comprador desde pendientes |
+| `reqcompradetprecioneto` | DECIMAL(15,2) | NO | Precio neto unitario usado en el REQ |
+| `reqcompradettotalneto` | DECIMAL(15,2) | NO | Cantidad x precio |
+| `reqcompradetobs` | TEXT | SI | Observacion por linea |
+| `reqcompradetitemmodificado` | TINYINT(1) | NO | 1 si el item fue cambiado en pendientes de compra |
+| `reqcompradetadvertenciappto` | TINYINT(1) | NO | 1 si esta linea participa en una advertencia presupuestaria |
+| `reqcompradetultreqfecha` | DATE | SI | Fecha del ultimo REQ para el mismo centro e item |
+| `reqcompradetultreqcantidad` | DECIMAL(15,4) | SI | Cantidad solicitada en ese ultimo REQ |
+
+Reglas:
+
+- Mostrar solo items comprables, activos y del mismo tipo del REQ.
+- Un item con precio cero no puede agregarse al REQ. Debe indicarse que se contacte a Administracion.
+- No se permite mezclar Material y Servicio.
+- Material/Servicio se resuelve desde `invitemstockeable`: `1` Material, `0` Servicio.
+- Para agregar un item a REQ debe cumplirse `invitemcompra = 1`.
+- La prioridad visual del REQ no altera reglas de aprobacion.
+- `subfamiliaid` facilita el cruce con `reqcompraspptosnapshot` para saber que items originaron cada grupo presupuestario.
+- La fecha ultimo requerimiento se obtiene buscando la maxima fecha para el mismo centro de costo e item.
+- La cantidad ultimo requerimiento corresponde a la cantidad solicitada para esa fecha.
+- Los datos de ultimo requerimiento son informativos y deben mostrarse en grilla y tarjetas de visualizacion.
+
+## 4. Estados
+
+### 4.1 Estados documentales del REQ
+
+| Codigo | Descripcion | Editable | Notas |
+|---|---|---|---|
+| `BRR` | Borrador | Si | Creado o guardado sin enviar |
+| `PND` | Pendiente de aprobacion | No directa | Enviado a firmantes |
+| `EDT` | En edicion | Si | Creador editando antes de que exista aprobacion |
+| `APR` | Aprobado | No | Todos los firmantes aprobaron |
+| `RCH` | Rechazado | Si | Corregible y reenviable |
+| `ANL` | Anulado | No | Definitivo |
+
+### 4.2 Estado de vinculacion con PreOC
+
+| Codigo | Descripcion | Regla |
+|---|---|---|
+| Sin estado | Sin vinculo | No aplica o no tiene compras asociadas |
+| `VNC_Parcial` | Vinculado parcial | Existe compra parcial o saldo pendiente/anulado |
+| `VNC_Total` | Vinculado total | Toda la cantidad requerida quedo comprada o anulada operativamente |
+
+## 5. Flujo REQ
+
+1. Crear/guardar `BRR`.
+2. Seleccionar centro desde `usuarioscentroscosto`.
+3. Funcionario solicitante es opcional.
+4. Agregar items compatibles con el tipo REQ.
+5. Calcular presupuesto informativo agrupando por subfamilia + centro de costo.
+6. Guardar advertencias y snapshot actualizable de presupuesto.
+7. Generar firmantes default: jefe de centro y jefe tecnico, si existen.
+8. Permitir firmantes manuales activos con permiso de aprobar REQ.
+9. Si no hay firmantes, advertir que el documento quedara como borrador si continua.
+10. Al finalizar/enviar, si hay falta de saldo, agregar autorizadores fuera de presupuesto al final.
+11. Enviar `BRR -> PND` solo si existe al menos un firmante activo.
+12. Resolver siguiente aprobador con validacion de vigencia e inactividad.
+13. Aprobar secuencialmente.
+14. Al aprobar el ultimo firmante habilitado: estado `APR`, limpiar aprobador pendiente, guardar fecha de aprobacion y crear `reqaprobados`.
+15. Al rechazar: estado `RCH`, limpiar aprobador pendiente y registrar comentario obligatorio.
+16. Al reenviar desde `RCH`: recalcular default, conservar manuales activos, aplicar inactividad y volver a `PND`.
+17. Al anular: estado `ANL`, sin modificaciones posteriores.
+
+## 6. Concurrencia en aprobacion
+
+Aunque la pantalla valide que un REQ esta en `PND`, Aprobar y Rechazar deben validar nuevamente en backend/SP.
+
+Si el creador paso el REQ a `EDT` mientras un aprobador lo tenia abierto:
+
+- se rechaza la accion,
+- se muestra mensaje indicando que el requerimiento esta siendo editado,
+- al confirmar, se redirige al listado de pendientes de aprobacion.
+
+## 7. `reqcomprasfirmantes`
+
+| Columna | Tipo logico | NULL | Descripcion / regla |
+|---|---|---|---|
+| `reqcomprafirmanteid` | INT PK AI | NO | PK interna |
+| `reqcompraid` | INT FK | NO | REQ |
+| `firmanteusuarioid` | INT FK | NO | Usuario aprobador |
+| `firmanteorden` | INT | NO | Orden secuencial |
+| `firmantetipo` | VARCHAR(20) | NO | JEF_CC/JEF_TEC/MANUAL/FUERA_PPTO/REEMPLAZO u otro |
+| `firmantedefault` | TINYINT(1) | NO | 1 si viene de regla default y no se puede remover |
+| `firmantefuerapptocompra` | TINYINT(1) | NO | 1 si participa como autorizador fuera de presupuesto |
+| `firmantemotivoinclusion` | VARCHAR(50) | SI | Motivo de inclusion, por ejemplo `REQ_SIN_SALDO_PPTO` |
+| `firmanteestado` | VARCHAR(5) | NO | PND/APR/RCH/INA/NVG |
+| `firmantefechahora` | DATETIME | SI | Fecha/hora del evento |
+| `firmantecomentario` | TEXT | SI | Comentario de aprobacion/rechazo o inactividad |
+| `firmantereemplazodeid` | INT FK | SI | Firmante inactivo al que reemplaza |
+
+Reglas:
+
+- Los default no se remueven.
+- No se permiten duplicados.
+- Solo usuarios activos con permiso de aprobar REQ.
+- Si un default esta inactivo, queda como `Inactivo` y se agrega reemplazante.
+- El comentario de rechazo debe tener mas de 10 caracteres.
+- Jefe de centro, jefe tecnico y manuales pueden reordenarse entre si.
+- Los firmantes fuera de presupuesto se agregan al final, no se remueven y no se reordenan.
+- Si un usuario ya existe en la lista y tambien califica como fuera de presupuesto, se mantiene una sola fila y se marca el motivo correspondiente.
+
+### 7.1 Autorizadores fuera de presupuesto
+
+Cuando el snapshot presupuestario detecta falta de saldo:
+
+1. Se setea advertencia en cabecera.
+2. Se agregan al final los usuarios activos con `usuarioreqautorizadorfuerapptocompra = 1`.
+3. Se ordenan por `usuarioreqautorizadorfuerapptocompraorden`.
+4. Se agregan una sola vez aunque existan multiples deficits.
+5. Se les marca `firmantedefault = 1`, `firmantefuerapptocompra = 1` y motivo `REQ_SIN_SALDO_PPTO`.
+6. Se aplica inactividad/reemplazo.
+
+`usuarioreqautorizadorfuerapptocompraorden` debe ser unico para usuarios con `usuarioreqautorizadorfuerapptocompra = 1`; el resto usa orden `0`.
+
+En la grilla de firmantes:
+
+- estos firmantes quedan fijos al final,
+- sus botones Subir/Bajar quedan bloqueados,
+- el firmante inmediatamente anterior a ellos no puede bajar para quedar despues de un autorizador fuera de presupuesto.
+
+### 7.2 Resolucion del siguiente aprobador
+
+Cada vez que se necesita avanzar al siguiente firmante, el backend/SP debe ejecutar una funcion de resolucion:
+
+1. Buscar el siguiente firmante por orden.
+2. Si el usuario no esta vigente:
+   - marcar firmante `NVG`,
+   - registrar comentario funcional,
+   - registrar LOG,
+   - continuar con el siguiente.
+3. Si el usuario esta vigente pero tiene periodo de inactividad:
+   - marcar firmante original `INA`,
+   - registrar comentario con motivo de inactividad,
+   - insertar reemplazante inmediatamente despues,
+   - reordenar la lista,
+   - asignar reemplazante como pendiente.
+4. Si el usuario esta vigente y sin inactividad:
+   - asignarlo a `reqaprobadoridpnd`.
+
+Si no queda ningun firmante habilitado, el REQ queda `APR` solo si ya existe al menos una aprobacion efectiva y no quedan aprobaciones pendientes validas. Si esto ocurre antes de cualquier aprobacion efectiva, el REQ no debe avanzar automaticamente a `APR`.
+
+`reqaprobadoridpnd` es una denormalizacion controlada para consultas rapidas y debe coincidir con el firmante pendiente vigente. La pantalla de pendientes filtra por esta columna contra el usuario login.
+
+## 8. `reqcomprascomentarios`
+
+Tabla funcional separada del LOG tecnico.
+
+| Columna | Tipo logico | NULL | Descripcion |
+|---|---|---|---|
+| `reqcomentarioid` | INT PK AI | NO | PK |
+| `reqcompraid` | INT FK | NO | REQ |
+| `usuarioid` | INT FK | NO | Usuario que comenta |
+| `reqcomentariotipo` | VARCHAR(20) | NO | APR/RCH/ANL/INFO u otro tipo funcional |
+| `reqcomentariotxt` | TEXT | NO | Comentario visible |
+| `reqcomentariofechahora` | DATETIME | NO | Fecha/hora |
+
+El rechazo siempre genera comentario funcional obligatorio. La aprobacion puede generar comentario opcional.
+
+## 9. `reqcompraspptosnapshot`
+
+Guarda la copia actualizable del calculo presupuestario usado por el REQ.
+
+| Columna | Tipo logico | NULL | Descripcion |
+|---|---|---|---|
+| `reqpptosnapshotid` | INT PK AI | NO | PK |
+| `reqcompraid` | INT FK | NO | REQ |
+| `subfamiliaid` | INT FK | NO | Subfamilia agrupada |
+| `centrocostoid` | INT FK | NO | Centro del REQ |
+| `pptocompraid` | INT FK | SI | Presupuesto encontrado, si existe |
+| `reqpptomonto` | DECIMAL(15,2) | NO | Monto requerido por grupo |
+| `reqpptosaldodisponible` | DECIMAL(15,2) | SI | Saldo disponible calculado en ese momento |
+| `reqpptomontootroscurso` | DECIMAL(15,2) | NO | Otros REQ en curso para la misma combinacion |
+| `reqpptomontoaprobadospend` | DECIMAL(15,2) | NO | REQ aprobados pendientes de compra |
+| `reqpptosaldoproyectado` | DECIMAL(15,2) | SI | Disponible actual - otros curso - aprobados pendientes - este REQ |
+| `reqpptoporcentajeuso` | DECIMAL(9,4) | SI | Proporcion de este REQ sobre disponible actual |
+| `reqpptodeficit` | DECIMAL(15,2) | NO | Monto de deficit estimado, si aplica |
+| `reqpptoadvertencia` | TINYINT(1) | NO | 1 si no hay presupuesto o saldo suficiente |
+| `reqpptofuerapptocompra` | TINYINT(1) | NO | 1 si requiere autorizacion fuera de presupuesto |
+| `reqpptofechahora` | DATETIME | NO | Fecha/hora del calculo |
+
+Reglas:
+
+- REQ solo informa, no bloquea.
+- REQ no genera movimientos de presupuesto.
+- Si el REQ se edita, se recalcula y reemplaza/actualiza la copia.
+- El boton "Analisis de ppto de compra" debe estar disponible para todo usuario que pueda visualizar el REQ.
+- El analisis se muestra agrupado por subfamilia y centro de costo. La temporada solo se muestra si el backend la entrega explicitamente.
+
+## 10. `reqaprobados`
+
+Tabla operativa de lineas aprobadas listas para compra. Mantiene una fila por linea aprobada; no contiene `preocid`.
+
+| Columna | Tipo logico | NULL | Descripcion |
+|---|---|---|---|
+| `reqaprobadoid` | INT PK AI | NO | PK |
+| `reqcompradetid` | INT FK | NO | Linea original del REQ |
+| `reqcompraid` | INT FK | NO | REQ |
+| `invitemid` | INT FK | NO | Item actual asociado |
+| `reqaprobadoitemcod` | VARCHAR(50) | NO | Snapshot codigo |
+| `reqaprobadoitemdsc` | VARCHAR(200) | NO | Snapshot descripcion |
+| `invunidmedid` | INT FK | NO | Unidad de medida snapshot/relacion |
+| `reqaprobadocantidadreq` | DECIMAL(15,4) | NO | Cantidad requerida |
+| `reqaprobadocantidadpendiente` | DECIMAL(15,4) | NO | Cantidad pendiente de compra |
+| `reqaprobadocantidadcomprada` | DECIMAL(15,4) | NO | Cantidad comprada acumulada |
+| `reqaprobadocantidadanulada` | DECIMAL(15,4) | NO | Cantidad anulada acumulada |
+| `reqaprobadoprecioneto` | DECIMAL(15,2) | NO | Precio neto de referencia |
+| `reqaprobadoestado` | TINYINT | NO | 1=Pendiente, 2=Parcial, 3=Completa, 4=Anulada |
+| `reqaprobadofecha` | DATE | NO | Fecha de aprobacion del REQ |
+
+Regla de consistencia:
+
+`reqaprobadocantidadreq = reqaprobadocantidadpendiente + reqaprobadocantidadcomprada + reqaprobadocantidadanulada`
+
+## 11. `reqaprobadoshistorial`
+
+Registra compras y anulaciones de saldo pendiente.
+
+| Columna | Tipo logico | NULL | Descripcion |
+|---|---|---|---|
+| `reqaprobadohistid` | INT PK AI | NO | PK |
+| `reqaprobadoid` | INT FK | NO | Linea aprobada |
+| `preocid` | INT FK | SI | PreOC asociada, si es compra |
+| `preocdetid` | INT FK | SI | Linea PreOC asociada, si es compra |
+| `histtipo` | VARCHAR(20) | NO | COMPRA/ANULACION/AJUSTE u otro |
+| `histcantidadpendienteantes` | DECIMAL(15,4) | NO | Cantidad pendiente antes de aplicar el movimiento |
+| `histcantidad` | DECIMAL(15,4) | NO | Cantidad afectada |
+| `histprecioneto` | DECIMAL(15,2) | SI | Precio al momento, si aplica |
+| `histitemcod` | VARCHAR(50) | SI | Snapshot rapido |
+| `histitemdsc` | VARCHAR(200) | SI | Snapshot rapido |
+| `histusuarioid` | INT FK | NO | Usuario |
+| `histfechahora` | DATETIME | NO | Fecha/hora |
+| `histobs` | TEXT | SI | Motivo/observacion |
+
+Anulacion:
+
+- solo sobre cantidad pendiente,
+- motivo obligatorio,
+- visible para el solicitante,
+- si ya se compro todo, no permite anular.
+- `histcantidadpendienteantes` permite reconstruir rapidamente el saldo posterior del evento para consultas historicas.
+
+## 12. `reqaprobadoscambios`
+
+| Columna | Tipo logico | NULL | Descripcion |
+|---|---|---|---|
+| `reqcambioid` | INT PK AI | NO | PK |
+| `reqaprobadoid` | INT FK | NO | Linea afectada |
+| `invitemidoriginal` | INT FK | NO | Item original |
+| `invitemidnuevo` | INT FK | NO | Item nuevo |
+| `reqcambioobs` | TEXT | NO | Motivo obligatorio |
+| `reqcambiofechahora` | DATETIME | NO | Fecha/hora |
+| `reqcambiousuarioid` | INT FK | NO | Comprador |
+
+Validaciones:
+
+- no existen transacciones posteriores,
+- no duplicar item ya existente en el REQ original,
+- no cambiar Material por Servicio ni Servicio por Material.
+
+## 13. Maestros y bases compartidas
+
+### 13.1 `usuarioscentroscosto`
+
+| Columna | Tipo logico | Descripcion |
+|---|---|---|
+| `usuarioid` | INT FK | Usuario |
+| `centrocostoid` | INT FK | Centro asignado |
+| `usucendefault` | TINYINT(1) | Centro default del usuario |
+| `usucenactivo` | TINYINT(1) | Asociacion activa |
+| + auditoria |  | Auditoria estandar |
+
+Debe existir solo un default activo por usuario.
+
+### 13.2 `centroscosto`
+
+Datos ERP base no editables desde pantalla:
+
+- codigo,
+- descripcion,
+- activo.
+
+Atributos locales editables:
+
+- jefe de centro,
+- jefe tecnico.
+
+`DIMCTC` se resuelve internamente desde el codigo del centro. No se expone como dato editable del comprador.
+
+### 13.3 `funcionarios`
+
+| Columna | Tipo logico | Descripcion |
+|---|---|---|
+| `funcionariorut` | VARCHAR(20) PK | RUT validado |
+| `funcionarionombre` | VARCHAR(100) | Nombre |
+| `funcionariocargo` | VARCHAR(100) | Cargo |
+| `funcionarioemail` | VARCHAR(150) | Correo |
+| `funcencos` | INT/VARCHAR | Centro de costo asociado |
+| `funcionarioactivo` | TINYINT(1) | Activo |
+
+Funcionario es opcional en REQ.
+
+### 13.4 `aprobadoresperiodoinactividad`
+
+| Columna | Tipo logico | Descripcion |
+|---|---|---|
+| `aprobadorperiodoid` | INT PK AI | PK |
+| `usuarioid` | INT FK | Aprobador ausente |
+| `usuarioreemplazoid` | INT FK | Reemplazante |
+| `motivoinactividad` | TINYINT/VARCHAR | Ausencia, vacaciones, licencia, permiso, otro |
+| `fechadesde` | DATE | Inicio |
+| `fechahasta` | DATE | Fin incluido |
+| `periodoactivo` | TINYINT(1) | Vigente |
+| + auditoria |  | Auditoria estandar |
+
+Reglas:
+
+- No se elimina fisicamente un periodo de inactividad existente.
+- Si deja de aplicar, se cambia su estado a inactivo.
+- Toda creacion, edicion o inactivacion debe dejar LOG.
+
+### 13.5 `aprobadoresperiodoinactividadlog`
+
+Tabla de auditoria especifica para periodos de inactividad.
+
+| Columna | Tipo logico | Descripcion |
+|---|---|---|
+| `aprobadorperiodologid` | INT PK AI | PK |
+| `aprobadorperiodoid` | INT FK | Periodo afectado |
+| `logusuarioid` | INT FK | Usuario que ejecuta |
+| `logtipo` | VARCHAR(10) | INS/UPD/INA u otro |
+| `logfechahora` | DATETIME | Fecha/hora |
+| `logparamjson` | JSON | Parametros/evento |
+| `logregbkpjson` | JSON | Registro antes del cambio si aplica |
+
+## 14. Modificaciones a `usuarios`
+
+Permisos funcionales a consolidar:
+
+| Permiso conceptual | Uso |
+|---|---|
+| `usuariopermiteaprobreq` | Lista de firmantes REQ y centros de costo |
+| `usuariopermiteaprobpreoc` | Lista de firmantes PreOC |
+| `usuarioreqautorizadorfuerapptocompra` | Usuario autorizador fuera de presupuesto para REQ |
+| `usuarioreqautorizadorfuerapptocompraorden` | Orden relativo de autorizadores fuera de presupuesto; unico cuando aplica |
+| `usuariocomprador` | Crear/editar PreOC si tiene acceso al formulario |
+| `usuariopermiteanularpreoc` | Anulacion especial de PreOC cuando el estado lo permite |
+| `usuariopermiteeditarprecios` | Editar precios en REQ |
+| `usuariopermitecrearitem` | Crear item local urgente |
+| `usuariopermiteeditaritem` | Editar precio cero, uso funcional y activo/inactivo |
+| `usuariopermitesynctrnerp` | Botones de sincronizacion de transacciones ERP |
+
+## 15. Modificaciones a `invitems`
+
+Campos/conceptos relevantes para REQ:
+
+- Material/Servicio por `invitemstockeable`,
+- precio referencial,
+- comprable por `invitemcompra`,
+- uso funcional,
+- activo/inactivo,
+- `iteminglocal`.
+
+Reglas:
+
+- Si `iteminglocal = 1`, el item fue ingresado localmente para resolver una urgencia.
+- `invitemstockeable = 1` equivale a Material; `invitemstockeable = 0` equivale a Servicio.
+- `invitemcompra = 1` habilita el item para REQ y, por consecuencia, para PreOC nacida desde REQ.
+- Si ERP luego trae el item, ERP manda y actualiza los campos que correspondan.
+- La edicion local rapida aplica a cualquier item, pero solo para precio cero, uso funcional y activo/inactivo.
+- Debe advertirse que el cambio tambien debe realizarse en ERP.
+
+## 16. Pantallas y experiencia
+
+### 16.0 Creacion y edicion de REQ
+
+La pantalla puede operar como una vista unica con grupos:
+
+1. Cabecera/Datos generales.
+2. Detalle de items.
+3. Lista de firmantes.
+4. Resumen, advertencias y analisis de presupuesto.
+
+Agregar item:
+
+- Boton con signo `+`.
+- Modal de busqueda de item.
+- Busqueda por codigo/descripcion con coincidencia tipo `LIKE '%texto%'`.
+- Se recomienda minimo de caracteres para busquedas amplias.
+- Mostrar datos relacionados del item: codigo, descripcion, unidad, precio, uso funcional, subfamilia y datos utiles disponibles.
+- El usuario informa cantidad.
+- Botones Cancelar y Grabar.
+- Al grabar se valida item activo, comprable, tipo compatible y precio mayor a cero.
+- Al grabar se agrega a grilla, se calcula linea, se recalculan totales y analisis presupuestario.
+
+Primer item:
+
+- Al agregar el primer item, se bloquean centro de costo y tipo de REQ.
+- Se genera lista de firmantes default.
+- Se habilita gestion de firmantes manuales.
+
+Eliminar item:
+
+- Recalcula numeros de linea.
+- Recalcula totales y analisis presupuestario.
+- Si se eliminan todos los items estando en `BRR`, se desbloquean centro y tipo, y se limpian firmantes.
+- Si habia firmantes manuales, debe pedir confirmacion antes de limpiar.
+
+Agregar firmante manual:
+
+- Boton con signo `+`.
+- Modal de busqueda de usuarios.
+- Filtrar usuarios activos con permiso de aprobacion de REQ.
+- Al grabar se valida duplicidad.
+- Si esta OK, se agrega a la grilla como manual, removible y reordenable.
+
+Reordenar firmantes:
+
+- La grilla debe tener botones Subir y Bajar.
+- El primer registro no puede subir.
+- El ultimo registro no puede bajar.
+- Si hay un solo registro, ambos botones quedan bloqueados.
+- Al mover se intercambia orden y se renumera sin huecos.
+- Los default jefe/jefe tecnico no se remueven, pero si pueden reordenarse.
+- Los fuera de presupuesto quedan fijos al final.
+
+### 16.1 `reqcompra_pend_aprob`
+
+Listado de pendientes de aprobacion.
+
+- El usuario login se obtiene desde sesion/websession, no por URL.
+- Acciones con iconos: Ver, Aprobar, Rechazar.
+- Si el usuario es creador y aprobador pendiente, se muestran todos los botones aplicables.
+
+### 16.2 `reqcompra_ver`
+
+Pantalla de visualizacion/analisis.
+
+- Si el usuario es creador, muestra Editar cuando el estado lo permite.
+- Si el usuario es aprobador pendiente, muestra Aprobar/Rechazar.
+- En movil, el detalle se muestra como tarjetas.
+- Los botones de accion quedan fijos en la parte superior cuando exista un listado extenso.
+
+### 16.3 Visualizacion de tracking
+
+Debe mostrar:
+
+- advertencia presupuestaria arriba si `reqadvertenciapptocompra = 1`,
+- boton "Analisis de ppto de compra" disponible para todos los usuarios que puedan visualizar,
+- items con falta de saldo resaltados en amarillo suave,
+- fecha y cantidad del ultimo requerimiento del mismo centro-item, tanto en grilla como en tarjetas,
+- prioridad alta con marca visual,
+- si el item tiene PreOC asociada,
+- compra parcial/total,
+- item modificado,
+- historial funcional,
+- dias sin asociar a PreOC.
+
+## 17. LOG tecnico
+
+`reqcompraslog` conserva auditoria tecnica. Tipos vigentes minimos:
+
+| Tipo | Evento |
+|---|---|
+| `INS` | Envio inicial del REQ |
+| `UPD` | Modificacion confirmada |
+| `ANL` | Anulacion |
+| `APR` | Aprobacion |
+| `RCH` | Rechazo |
+| `EDT` | Paso a edicion |
+| `CMB` | Cambio de item |
+| `AJP` | Reservado para ajuste/anulacion de cantidad pendiente futuro; no forma parte del primer corte REQ |
+
+Los comentarios funcionales no reemplazan el LOG.
+
+Convencion minima para el primer corte REQ:
+
+- `EDT`: registrar toma de edicion desde `PND`.
+- `UPD`: registrar guardado como borrador y tambien reenvio a aprobacion cuando exista modificacion confirmada del documento.
+- No se crea un codigo nuevo de LOG solo para `reenviar_aprobacion` en este corte; si en el futuro se requiere mayor granularidad, se podra ampliar con ADR o contrato tecnico especifico.
+
+## 18. Emails
+
+Queda preparado el requisito funcional de correos:
+
+- aprobador con REQ pendiente,
+- solicitante cuando REQ sea aprobado o rechazado,
+- enfasis visual/textual cuando la prioridad sea Alta.
+
+## 19. Fuera de alcance de esta estructura
+
+- Crear tablas o SQL definitivos.
+- Implementar pantallas.
+- Integracion de recepcion ERP en tracking.
+- Monto maximo por requerimiento.
+- Descripcion de producto editada libremente fuera de reglas de item local.

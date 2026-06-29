@@ -1,0 +1,175 @@
+[
+    {
+        "codigo": "PRUEBA",
+        "nombre": "PRUEBA",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "ACO000",
+        "nombre": "ALIMENTOS COMPRADOS ",
+        "activo": true
+    },
+    {
+        "codigo": "APR000",
+        "nombre": "ALIMENTOS PROPIOS ",
+        "activo": true
+    },
+    {
+        "codigo": "ARC000",
+        "nombre": "ARRIENDO DE CAMPOS",
+        "activo": true
+    },
+    {
+        "codigo": "CCL000",
+        "nombre": "COSTOS COMBUSTIBLES Y LUBRICANTES",
+        "activo": true
+    },
+    {
+        "codigo": "CCR000",
+        "nombre": "COSTOS CRIANZA",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "CRM000",
+        "nombre": "COSTOS DE REPARACION Y MANTENCION ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "CVE000",
+        "nombre": "COSTO VENTA",
+        "activo": true
+    },
+    {
+        "codigo": "CXG000",
+        "nombre": "CAPEX",
+        "activo": true
+    },
+    {
+        "codigo": "GFI000",
+        "nombre": "GASTOS FINANCIEROS ",
+        "activo": true
+    },
+    {
+        "codigo": "GGE000",
+        "nombre": "GASTOS GENERALES",
+        "activo": true
+    },
+    {
+        "codigo": "HAD000",
+        "nombre": "HONORARIOS DE ADMINISTRACION ",
+        "activo": true
+    },
+    {
+        "codigo": "LEC000",
+        "nombre": "LECHERIA ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "MOB000",
+        "nombre": "MANO DE OBRA ",
+        "activo": true
+    },
+    {
+        "codigo": "REB000",
+        "nombre": "REBAÑO",
+        "activo": true
+    },
+    {
+        "codigo": "GGP000",
+        "nombre": "GASTOS GENERALES DE PRODUCCION ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "VLE000",
+        "nombre": "VENTA DE LECHE",
+        "activo": true
+    },
+    {
+        "codigo": "CEL000",
+        "nombre": "ENERGIA ELECTRICA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "SIS000",
+        "nombre": "SISTEMAS ERP",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "FGE000",
+        "nombre": "FLETES GENERALES",
+        "activo": true
+    },
+    {
+        "codigo": "MOA",
+        "nombre": "MANO DE OBRA DE ADMINISTRACION ",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "OIN000",
+        "nombre": "OTROS ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "VGA000",
+        "nombre": "VENTA DE GANADO",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "OTRVTA01",
+        "nombre": "OTRAS VENTAS",
+        "descripcion": "",
+        "activo": false
+    },
+    {
+        "codigo": "AVH000",
+        "nombre": "ARRIENDO VEHICULOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "ESG000",
+        "nombre": "MEDIO AMBIENTE Y SOCIAL Y GOBERNANZA",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "SEF000",
+        "nombre": "SEGURO FORRAJERO ",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "GBR000",
+        "nombre": "GASTOS BIENES Y RAICES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "SEG000",
+        "nombre": "SEGUROS GENERALES",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "PRE000",
+        "nombre": "PRESTAMOS BANCARIOS",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "IMP000",
+        "nombre": "IMPUESTOS",
+        "descripcion": "",
+        "activo": true
+    }
+]

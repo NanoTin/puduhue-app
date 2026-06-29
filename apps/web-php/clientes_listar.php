@@ -8,7 +8,7 @@ if (!$isPartial) {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Clientes</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -67,7 +67,7 @@ if (!$isPartial) {
                     <th>Email</th>
                     <th>Contacto</th>
                     <th>Activo</th>
-                    <th style="width: 180px;">Acciones</th>
+                    <th class="col-actions-lg">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -89,9 +89,9 @@ if (!$isPartial) {
                                     <i class="bi bi-pencil-square"></i> Editar
                                 </a>
                                 <?php if (!empty($c['clienteactivo'])): ?>
-                                    <form action="?route=clientes/anular" method="POST" class="d-inline">
+                                    <form action="?route=clientes/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Desea anular este cliente?">
                                         <input type="hidden" name="clienteid" value="<?= htmlspecialchars($c['clienteid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Desea anular este cliente?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="bi bi-x-circle"></i> Anular
                                         </button>
                                     </form>

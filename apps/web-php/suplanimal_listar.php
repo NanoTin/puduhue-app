@@ -32,7 +32,7 @@ if ($fechaHastaValue === '') {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-3">
     <h3 class="mb-4">Suplementacion Animal</h3>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -58,7 +58,7 @@ if ($fechaHastaValue === '') {
 
     <form id="suplanimal-filter-form" action="?route=suplanimal/listar" method="GET" class="row g-2 mb-3">
         <input type="hidden" name="route" value="suplanimal/listar">
-        <div class="col-md-2" style="display: none;">
+        <div class="col-md-2 d-none">
             <input type="number" name="filtroEmpresaid" class="form-control" placeholder="Empresa ID"
                    value="<?= htmlspecialchars($empresaIdWS ?? '') ?>">
         </div>
@@ -73,7 +73,7 @@ if ($fechaHastaValue === '') {
                 <?php endforeach; ?>
             </select>
         </div>
-        <div class="col-md-2" style="display: none;">
+        <div class="col-md-2 d-none">
             <input type="number" name="filtroInvbodegaid" class="form-control" placeholder="Bodega ID"
                    value="<?= htmlspecialchars($filtros['filtroInvbodegaid'] ?? '') ?>">
         </div>
@@ -122,7 +122,7 @@ if ($fechaHastaValue === '') {
                     <th>Cant. Detalles</th>
                     <th>Pend. ERP</th>
                     <th>Estado</th>
-                    <th style="width: 190px;">Acciones</th>
+                    <th class="col-actions-lg">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -142,8 +142,8 @@ if ($fechaHastaValue === '') {
                             <td><?= htmlspecialchars($s['invbodegadsc'] ?? $s['invbodegaid'] ?? '') ?></td>
                             <td><?= htmlspecialchars($formatDate($s['suplanimalfecha'] ?? '')) ?></td>
                             <td><?= htmlspecialchars($s['suplanimalobservacion'] ?? '') ?></td>
-                            <td style="text-align:right"><?= htmlspecialchars($s['cant_detalles'] ?? '') ?></td>
-                            <td style="text-align:right"><?= htmlspecialchars($s['cant_detalles_pend_erp'] ?? '') ?></td>
+                            <td class="text-end"><?= htmlspecialchars($s['cant_detalles'] ?? '') ?></td>
+                            <td class="text-end"><?= htmlspecialchars($s['cant_detalles_pend_erp'] ?? '') ?></td>
                             <td><?= htmlspecialchars($estatus) ?></td>
                             <td>
                                 <?php if ($isConfirmada || $isAnulada): ?>
@@ -163,18 +163,18 @@ if ($fechaHastaValue === '') {
                                         <i class="bi bi-x-circle"></i>
                                     </button>
                                 <?php elseif (!$isConfirmada && !empty($estatus) && $estatus !== 'ANL'): ?>
-                                    <form action="?route=suplanimal/anular" method="POST" class="d-inline">
+                                    <form action="?route=suplanimal/anular" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Desea anular el registro Nro. <?= htmlspecialchars($s['suplanimalid'] ?? '') ?>?">
                                         <input type="hidden" name="suplanimalid" value="<?= htmlspecialchars($s['suplanimalid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Desea anular el registro Nro. <?= htmlspecialchars($s['suplanimalid'] ?? '') ?>?');" title="Anular" aria-label="Anular">
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Anular" aria-label="Anular">
                                             <i class="bi bi-x-circle"></i>
                                         </button>
                                     </form>
                                 <?php endif; ?>
                                 <!-- Boton para sincronizar con el ERP siempre y cuando el estado sea PND. Si no, boton deshabilitado -->
                                 <?php if (!empty($s['suplanimalstatus']) && $s['suplanimalstatus'] === 'PND'): ?>
-                                    <form action="?route=suplanimal/sync" method="POST" class="d-inline">
+                                    <form action="?route=suplanimal/sync" method="POST" class="d-inline" data-confirm="1" data-confirm-message="¿Desea sincronizar este registro?">
                                         <input type="hidden" name="suplanimalid" value="<?= htmlspecialchars($s['suplanimalid'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('¿Desea sincronizar este registro?');" <?= (!empty($s['suplanimalstatus']) && $s['suplanimalstatus'] === 'PND') ? '' : 'disabled' ?> title="Sincronizar ERP" aria-label="Sincronizar ERP">
+                                        <button type="submit" class="btn btn-primary btn-sm" <?= (!empty($s['suplanimalstatus']) && $s['suplanimalstatus'] === 'PND') ? '' : 'disabled' ?> title="Sincronizar ERP" aria-label="Sincronizar ERP">
                                             <i class="bi bi-arrow-repeat"></i>
                                         </button>
                                     </form>
@@ -195,28 +195,6 @@ if ($fechaHastaValue === '') {
         <span>Sincronizando con el ERP. Espere...</span>
     </div>
 </div>
-<style>
-    .erp-sync-loader {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.35);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1055;
-    }
-    .erp-sync-card {
-        background: #ffffff;
-        color: #111111;
-        padding: 14px 18px;
-        border-radius: 8px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-weight: 600;
-    }
-</style>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('suplanimal-filter-form');
@@ -251,7 +229,10 @@ if ($fechaHastaValue === '') {
         const syncForms = document.querySelectorAll('form[action*="suplanimal/sync"]');
         if (syncLoader && syncForms.length) {
             syncForms.forEach(function (syncForm) {
-                syncForm.addEventListener('submit', function () {
+                syncForm.addEventListener('submit', function (event) {
+                    if (event.defaultPrevented || syncForm.dataset.confirmed !== '1') {
+                        return;
+                    }
                     const submitButton = syncForm.querySelector('button[type="submit"]');
                     if (submitButton) {
                         submitButton.disabled = true;

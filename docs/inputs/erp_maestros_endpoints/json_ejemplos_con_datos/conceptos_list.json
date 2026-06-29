@@ -1,0 +1,38 @@
+[
+    {
+        "codigo": "CLI",
+        "nombre": "Clientes",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "HONOR",
+        "nombre": "Honorarios",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "ORG",
+        "nombre": "Organización",
+        "descripcion": "Concepto utilizado en CRM",
+        "activo": true
+    },
+    {
+        "codigo": "PROV",
+        "nombre": "Proveedores",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "RENDICION_FONDOS",
+        "nombre": "Responsable de Fondos",
+        "descripcion": "",
+        "activo": true
+    },
+    {
+        "codigo": "3ros",
+        "nombre": "Servicios de Terceros",
+        "descripcion": "",
+        "activo": true
+    }
+]

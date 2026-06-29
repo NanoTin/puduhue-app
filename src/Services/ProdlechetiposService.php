@@ -34,7 +34,7 @@ class ProdlechetiposService
 
     public function listarProdlechetiposFormGrid($activoFilter = null): array
     {
-        $sql = "SELECT prodlechetipoid, prodlechetipodsc, prodlecheventa FROM prodlechetipos";
+        $sql = "SELECT prodlechetipoid, prodlechetipodsc, prodlecheventa, prodlecheactivo FROM prodlechetipos";
         $params = [];
         if ($activoFilter === '0' || $activoFilter === 0 || $activoFilter === '1' || $activoFilter === 1) {
             $sql .= " WHERE prodlecheactivo = ?";
