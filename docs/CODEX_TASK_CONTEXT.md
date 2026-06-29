@@ -38,9 +38,15 @@ Implementar el mantenedor completo de asignacion Usuario-Centro de Costo (`usuar
 - `docs/modulo_compras_req_contrato_sp.md`
 - `docs/modulo_compras_req_contrato_be.md`
 - `docs/modulo_compras_req_contrato_fe.md`
+- `docs/modulo_compras_req_pendientes_contrato_sp.md`
+- `docs/modulo_compras_req_pendientes_contrato_be.md`
+- `docs/modulo_compras_req_pendientes_contrato_fe.md`
 - `docs/modulo_compras_presupuesto_definitivo.md`
 - `docs/modulo_compras_req_estructura.md`
 - `docs/modulo_compras_preoc_estructura.md`
+- `docs/modulo_compras_preoc_contrato_sp.md`
+- `docs/modulo_compras_preoc_contrato_be.md`
+- `docs/modulo_compras_preoc_contrato_fe.md`
 - `docs/ADR/modulo-compras/ADR-001-modelo-presupuesto-compras.md`
 - `docs/ADR/modulo-compras/ADR-002-compromiso-edicion-preoc.md`
 - `docs/ADR/modulo-compras/ADR-003-requerimientos-pendientes-compra.md`
@@ -101,11 +107,31 @@ Implementar el mantenedor completo de asignacion Usuario-Centro de Costo (`usuar
 - Contrato FE REQ documenta estructura visual, acciones, modales, presupuesto informativo, toasts y validaciones cliente para el primer corte.
 - Primer bloque REQ completo incluye FE de listado, crear, editar, ver y listado por aprobar reutilizando la vista de ver para aprobar/rechazar.
 - Primer bloque REQ completo incluye actualizacion de rutas para listado, crear, editar, ver y aprobaciones.
+- Flujo visual PreOC documentado en `docs/modulo_compras_preoc_estructura.md`: `preoc_listar` toma como base `compras_req_listar.php`, filtro comprador default al login si `usuariocomprador = 1`, filtro vacio/TODOS si no es comprador, fechas default desde hoy menos 45 dias hasta hoy, accion `Por aprobar` solo para `usuariopermiteaprobpreoc = 1` y accion `Nueva PreOC` solo para compradores.
+- Formulario PreOC se documenta por secciones: Cabecera, Items, Lista de firmantes y Presupuesto de compras.
+- Cabecera PreOC usa nombres reales del DDL: `erpproveedorid`, `erpcondicionpagoid`, `preocfechaoc`, `preocobsinterna`, `preocobsoc`.
+- Items PreOC se agregan exclusivamente desde `reqaprobados` pendientes/parciales; se agrupan en `preocitems`; el comprador informa precio neto una vez por item agrupado y el sistema distribuye calculos hacia requerimiento-item, presupuestos y totales.
+- Para PreOC, `ComprasCatalogosService` puede extenderse con metodos especificos por caso de uso; no crear SP auxiliares por combo/modal salvo regla transaccional critica.
+- Contratos SP/BE/FE de pendientes de compra creados:
+  - `docs/modulo_compras_req_pendientes_contrato_sp.md`;
+  - `docs/modulo_compras_req_pendientes_contrato_be.md`;
+  - `docs/modulo_compras_req_pendientes_contrato_fe.md`.
+- Contratos SP/BE/FE de PreOC creados:
+  - `docs/modulo_compras_preoc_contrato_sp.md`;
+  - `docs/modulo_compras_preoc_contrato_be.md`;
+  - `docs/modulo_compras_preoc_contrato_fe.md`.
+- Codigo visible PreOC cerrado como `POC-00000001`: prefijo `POC-` + `LPAD(preocid, 8, '0')`, global, no editable, no reciclable.
+- `reqaprobadoshistorial.preocdetid` referencia `preocdetallereqitems.preocdetreqitemid`; no renombrar en contratos ni implementacion.
+- Impuestos/conceptos Finnegans y POST ERP real quedan fuera del corte funcional local de PreOC.
 
 ## Riesgos y ambiguedades
 
 - Convertir contrato preliminar de adjuntos PreOC a DDL cuando se autorice.
 - Mantener alineados los contratos SP/BE/FE de REQ antes de implementar para no inventar parametros/salidas.
+- Antes de implementar PreOC debe implementarse o al menos validar el contrato separado de REQ aprobados / pendientes de compra.
+- Cuidar nombres reales del DDL PreOC en contratos: no usar alias logicos `proveedorid`/`condicionpagoid` si las columnas vigentes son `erpproveedorid`/`erpcondicionpagoid`.
+- Definir en contrato FE/BE nombres finales de vistas/rutas PreOC y pendientes de compra; `preoc_listar` y `reqcompra_aprobados_listar` son nombres conceptuales en la estructura.
+- Adjuntos PreOC siguen como bloqueo funcional para enviar a aprobacion hasta aprobar DDL de `preocadjuntos` y maestro de extensiones.
 
 ## Validaciones esperadas
 
@@ -175,3 +201,5 @@ Continuar conversacion sobre:
 - probar en navegador el mantenedor `usuarios-centros-costo` con casos de crear, reactivar, desactivar y cambio de default.
 - revisar funcionalmente las vistas REQ en navegador local y ajustar UX si aparece algun gap.
 - continuar luego con REQ aprobados / pendientes de compra para alimentar PreOC.
+- implementar pendientes de compra segun contratos `docs/modulo_compras_req_pendientes_contrato_*.md`.
+- implementar PreOC despues de pendientes segun contratos `docs/modulo_compras_preoc_contrato_*.md`, resolviendo antes el bloqueo de adjuntos si se requiere enviar a aprobacion.

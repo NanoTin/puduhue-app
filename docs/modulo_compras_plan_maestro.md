@@ -13,7 +13,13 @@
 - `docs/modulo_compras_req_contrato_sp.md`
 - `docs/modulo_compras_req_contrato_be.md`
 - `docs/modulo_compras_req_contrato_fe.md`
+- `docs/modulo_compras_req_pendientes_contrato_sp.md`
+- `docs/modulo_compras_req_pendientes_contrato_be.md`
+- `docs/modulo_compras_req_pendientes_contrato_fe.md`
 - `docs/modulo_compras_preoc_estructura.md`
+- `docs/modulo_compras_preoc_contrato_sp.md`
+- `docs/modulo_compras_preoc_contrato_be.md`
+- `docs/modulo_compras_preoc_contrato_fe.md`
 - `docs/modulo_compras_presupuesto_definitivo.md`
 - `docs/ADR/modulo-compras/ADR-001-modelo-presupuesto-compras.md`
 - `docs/ADR/modulo-compras/ADR-002-compromiso-edicion-preoc.md`
@@ -76,6 +82,10 @@
   `reqaprobadocantidadreq = reqaprobadocantidadpendiente + reqaprobadocantidadcomprada + reqaprobadocantidadanulada`.
 - La anulacion opera solo sobre cantidad pendiente y requiere motivo obligatorio.
 - El cambio de item lo ejecuta el comprador desde pendientes de compra, no dentro de PreOC.
+- Contratos SP/BE/FE de pendientes de compra quedan documentados como prerequisito funcional de PreOC:
+  - `docs/modulo_compras_req_pendientes_contrato_sp.md`;
+  - `docs/modulo_compras_req_pendientes_contrato_be.md`;
+  - `docs/modulo_compras_req_pendientes_contrato_fe.md`.
 
 ### 2.4 PreOC
 
@@ -102,6 +112,12 @@
 - La descripcion del adjunto debe ser obligatoria, corta, y sirve como base para generar el nombre fisico del archivo.
 - El nombre fisico de adjuntos debe normalizarse a ASCII: sin acentos, sin `ñ`, sin espacios, sin caracteres especiales peligrosos; los espacios se reemplazan por `_` y se agrega sufijo unico para evitar duplicados.
 - El nombre/descripcion original se conserva como metadata visible.
+- Contratos SP/BE/FE PreOC quedan documentados para el corte funcional local:
+  - `docs/modulo_compras_preoc_contrato_sp.md`;
+  - `docs/modulo_compras_preoc_contrato_be.md`;
+  - `docs/modulo_compras_preoc_contrato_fe.md`.
+- Codigo visible PreOC cerrado como `POC-00000001`: prefijo `POC-` + `LPAD(preocid, 8, '0')`, global, no editable, no reciclable.
+- Integracion ERP real y definicion final de impuestos/conceptos Finnegans quedan fuera del corte funcional local.
 
 #### 2.4.1 Contrato preliminar adjuntos PreOC
 
@@ -222,12 +238,12 @@ Reglas:
    - generar snapshot,
    - detectar deficit,
    - resolver firmantes fuera de presupuesto.
-5. Crear contratos/SP de pendientes de compra:
+5. Implementar segun contratos SP/BE/FE de pendientes de compra:
    - crear `reqaprobados` al aprobar REQ,
    - cambiar item con motivo,
    - anular saldo pendiente,
    - consultar pendientes/parciales.
-6. Crear contratos/SP de PreOC:
+6. Implementar segun contratos SP/BE/FE de PreOC:
    - crear borrador desde pendientes,
    - resolver presupuesto por linea,
    - calcular totales/impuestos,

@@ -57,7 +57,7 @@
 | Tabla | Relacion |
 |---|---|
 | `reqaprobados` | Fuente de lineas aprobadas; no contiene `preocid` unico |
-| `reqaprobadoshistorial` | Guarda vinculos de compra/anulacion con `preocid` y `preocdetreqitemid` |
+| `reqaprobadoshistorial` | Guarda vinculos de compra/anulacion con `preocid` y `preocdetid`, donde `preocdetid` referencia `preocdetallereqitems.preocdetreqitemid` |
 | `PptoCompra` | Presupuesto resuelto automaticamente por linea |
 | `usuarios` | Permisos de comprador, aprobacion PreOC y anulacion especial |
 | `aprobadoresperiodoinactividad` | Reemplazo de aprobadores inactivos |
@@ -67,21 +67,21 @@
 | Columna | Tipo logico | NULL | Descripcion / regla |
 |---|---|---|---|
 | `preocid` | INT PK AI | NO | PK interna |
-| `preocdoc` | VARCHAR(20) | NO | Codigo visible, por ejemplo `POC-000001` |
+| `preocdoc` | VARCHAR(20) | NO | Codigo visible `POC-00000001`: prefijo `POC-` + `preocid` con `LPAD` a 8 digitos |
 | `preoctipo` | TINYINT | NO | 1=Material (`OC`), 2=Servicio (`OCSS`) |
 | `preocfecha` | DATE | NO | Fecha de creacion interna definida por sistema/BD, no editable |
 | `preocfechaoc` | DATE | NO | Fecha seleccionada por usuario para presupuesto y envio ERP |
 | `compradorusuarioid` | INT FK | NO | Usuario comprador creador |
-| `proveedorid` | INT FK | NO | Proveedor espejo ERP |
-| `condicionpagoid` | INT FK | SI | Condicion de pago precargada desde proveedor y editable antes de enviar |
+| `erpproveedorid` | INT FK | NO | Proveedor espejo ERP |
+| `erpcondicionpagoid` | INT FK | SI | Condicion de pago precargada desde proveedor y editable antes de enviar |
 | `preocworkflowcod` | VARCHAR(50) | NO | Workflow fijo de compra |
 | `erpmonedacod` | VARCHAR(10) | NO | Moneda operativa; CLP=`PES` |
 | `erpprovinciaid` | INT FK | SI | Provincia/destino global si aplica |
 | `preocobsinterna` | TEXT | SI | Observacion interna de la PreOC |
 | `preocobsoc` | TEXT | SI | Observacion para formato imprimible / OC |
 | `preocprioridad` | TINYINT | NO | 1=Normal, 2=Alta; efecto visual/correo |
-| `preocestadoid` | INT FK | NO | Estado documental |
-| `preocestadoerpid` | INT FK | SI | Estado ERP separado |
+| `preocestadoid` | VARCHAR(20) FK | NO | Estado documental |
+| `preocestadoerpid` | VARCHAR(20) FK | SI | Estado ERP separado |
 | `preocaprobadoridpnd` | INT FK | SI | Aprobador pendiente vigente para consultas rapidas |
 | `preocaprobacionfecha` | DATE | SI | Fecha de aprobacion completa |
 | `preocnettotal` | DECIMAL(15,2) | NO | Total neto recalculado desde detalle |
@@ -100,6 +100,7 @@ Notas:
 - No se guarda un unico `pptocompraid` en cabecera, porque una PreOC puede contener lineas que resuelven distintos presupuestos por subfamilia y centro.
 - El presupuesto se resuelve por linea usando `preocfechaoc`, subfamilia del item y centro de costo.
 - `preocfecha` y `preocfechaoc` deben mostrarse ambas.
+- `preocdoc` es global, no editable por usuario, no reciclable y no cambia aunque la PreOC se anule.
 - `preocvig` se mantiene por consistencia tecnica con el patron de baja logica, aunque el estado documental concentra la regla funcional.
 - La vista principal debe mostrar por defecto las PreOC del comprador login si `usuariocomprador = 1`. Si el usuario no tiene ese atributo, el filtro comprador inicia en `TODOS`.
 
@@ -451,13 +452,22 @@ Pendiente tecnico:
 
 ### 14.1 `preoc_listar`
 
+Objetivo:
+
+- Mostrar el listado principal de PreOC al entrar desde el menu de Compras.
+- Tomar como base visual `apps/web-php/compras_req_listar.php`: header, barra de acciones, filtros GET, tabla responsive, badges de estado y acciones por fila.
+- Mostrar por defecto las PreOC creadas por el comprador login cuando `usuariocomprador = 1`.
+- Si el usuario login no es comprador, pero tiene acceso a la pantalla, el filtro comprador inicia vacio y equivale a `TODOS`.
+
 Filtros:
 
 - Comprador.
 - Estado PreOC.
 - Estado ERP.
 - Aprobador pendiente.
-- Fecha, proveedor y otros filtros operativos.
+- Fecha desde.
+- Fecha hasta.
+- Proveedor y otros filtros operativos que cierre el contrato FE.
 
 Reglas:
 
@@ -465,6 +475,27 @@ Reglas:
 - Si no tiene `usuariocomprador = 1`, comprador inicia en `TODOS`.
 - El combo comprador lista todos los usuarios con `usuariocomprador = 1`, independiente de su estado.
 - El filtro aprobador pendiente aplica para `PND` o `TODOS`; estados cerrados no tienen aprobador pendiente.
+- `filtroFechaDesde` inicia por defecto en fecha actual menos 45 dias.
+- `filtroFechaHasta` inicia por defecto en fecha actual.
+- Los defaults de fecha son de UX/listado; los SP deben aceptar filtros vacios segun contrato.
+
+Acciones superiores:
+
+- `Por aprobar`: visible si el usuario login tiene `usuariopermiteaprobpreoc = 1`. Al presionar, muestra solo PreOC en que `preocaprobadoridpnd` corresponde al usuario login.
+- `Nueva PreOC`: lleva al flujo de creacion de PreOC. La accion requiere `usuariocomprador = 1`; tener acceso al menu no basta para crear.
+
+Columnas minimas a definir en contrato FE:
+
+- codigo PreOC (`preocdoc`);
+- fechas `preocfecha` y `preocfechaoc`;
+- comprador;
+- proveedor;
+- estado documental;
+- estado ERP;
+- prioridad;
+- total;
+- aprobador pendiente;
+- acciones.
 
 ### 14.2 Seleccion de requerimientos aprobados
 
@@ -482,23 +513,40 @@ Notas:
 
 - Se debe cuidar el flujo de volver/avanzar del navegador para no perder la seleccion o datos guardados.
 - La seleccion debe poder persistirse como borrador o estado intermedio si el flujo lo requiere.
+- La fuente de datos son exclusivamente lineas `reqaprobados` con cantidad pendiente mayor a cero, incluyendo parciales.
+- No se debe crear un vinculo directo y unico desde `reqaprobados` hacia PreOC.
+- El vinculo de compra/anulacion se registra en `reqaprobadoshistorial` cuando el flujo confirme el movimiento que corresponda.
+- La pantalla de pendientes de compra debe cerrarse como contrato separado antes del contrato PreOC, porque ahi viven el cambio de item, la anulacion de saldo pendiente y la seleccion inicial para PreOC.
 
 ### 14.3 Crear/editar PreOC
 
+Estructura visual:
+
+La pantalla debe organizarse como formulario transaccional, tomando REQ v1 como base de patron, con estas secciones:
+
+1. Cabecera.
+2. Items.
+3. Lista de firmantes.
+4. Presupuesto de compras.
+
 Flujo:
 
-1. Comprador selecciona proveedor.
-2. Condicion de pago se precarga desde proveedor y puede editarse antes de enviar.
-3. Se muestran las lineas seleccionadas desde `reqaprobados` pendientes/parciales.
-4. Define cantidad a comprar, sin exceder saldo pendiente.
-5. El sistema agrupa por item en `preocitems`.
-6. El comprador informa/confirma precio neto por item agrupado.
-7. El sistema calcula impuestos en `preocimptos`.
-8. El sistema resuelve presupuesto por req-item y arma `preocpptoresumen`.
-9. El sistema prepara dimensiones.
-10. El sistema genera firmantes default desde presupuestos y reglas por monto.
-11. El comprador puede agregar manuales y reordenar.
-12. Guarda `BRR` o envia `PND`.
+1. Comprador selecciona `preocfechaoc`, usada para resolver presupuesto y fecha ERP.
+2. Comprador selecciona proveedor (`erpproveedorid`).
+3. Condicion de pago (`erpcondicionpagoid`) se precarga desde proveedor y puede editarse antes de enviar.
+4. Comprador informa observacion interna (`preocobsinterna`) para uso del usuario/equipo.
+5. Comprador informa observacion para ERP/formato OC (`preocobsoc`).
+6. Se muestran las lineas seleccionadas desde `reqaprobados` pendientes/parciales.
+7. Comprador define cantidad a comprar por linea, sin exceder saldo pendiente.
+8. El sistema agrupa por item en `preocitems`.
+9. El comprador informa/confirma precio neto una vez por item agrupado.
+10. El sistema distribuye internamente ese precio hacia las lineas origen para calcular subtotal por requerimiento-item, presupuesto afectado y totales generales.
+11. El sistema calcula impuestos en `preocimptos`.
+12. El sistema resuelve presupuesto por req-item y arma `preocpptoresumen`.
+13. El sistema prepara dimensiones.
+14. El sistema genera firmantes default desde presupuestos y reglas por monto.
+15. El comprador puede agregar manuales y reordenar.
+16. Guarda `BRR` o envia `PND`.
 
 Reglas:
 
@@ -508,6 +556,10 @@ Reglas:
 - Si hay aprobaciones, no hay edicion de lineas.
 - No puede finalizar/enviar si falta precio en algun item agrupado.
 - Debe mostrar grilla de presupuestos usados, montos de PreOC y comparacion contra saldo disponible.
+- La lista de firmantes se crea por defecto desde los presupuestos de compra resueltos por las lineas.
+- Si se extiende `ComprasCatalogosService`, los metodos deben ser especificos por caso de uso PreOC, por ejemplo compradores, aprobadores PreOC, proveedores, condiciones de pago y pendientes aprobados para seleccion.
+- No crear SP auxiliares por cada combo o modal salvo que el contrato defina una regla transaccional critica.
+- La revision de REQ v1 debe usarse como base para adaptar patrones de listado, acciones superiores, filtros, toasts, formularios, modales y grillas, sin heredar reglas que sean exclusivas de REQ.
 
 ### 14.4 Modal de precio por item
 
