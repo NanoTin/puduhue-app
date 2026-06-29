@@ -304,6 +304,17 @@ class UsuariosService
             throw new \RuntimeException('El RUT es requerido y debe tener formato XXXXXXXX-V.');
         }
 
+        $autorizaFuera = $this->normalizeBoolInt($data['usuarioreqautorizadorfuerapptocompra'] ?? ($existing['usuarioreqautorizadorfuerapptocompra'] ?? 0));
+        $autorizaOrden = $this->normalizeNullableInt($data['usuarioreqautorizadorfuerapptocompraorden'] ?? ($existing['usuarioreqautorizadorfuerapptocompraorden'] ?? 0)) ?? 0;
+
+        if ($autorizaFuera === 1 && $autorizaOrden <= 0) {
+            throw new \RuntimeException('Debe informar un orden mayor a cero para autorizador fuera de presupuesto.');
+        }
+
+        if ($autorizaFuera === 0) {
+            $autorizaOrden = 0;
+        }
+
         $apiHash = $existing['usuarioapikeyhash'] ?? password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT);
         $apiActiva = $existing['usuarioapikeyactiva'] ?? 1;
         $apiFechaGen = $existing['usuarioapikeyfechagen'] ?? $now;
@@ -329,6 +340,16 @@ class UsuariosService
             'usuarioapikeyultuso'   => $apiUltUso,
             'usuarioapikeyipultuso' => $apiIpUltUso,
             'usuarioactivo'         => !empty($data['usuarioactivo']) ? 1 : 0,
+            'usuariopermiteaprobreq' => $this->normalizeBoolInt($data['usuariopermiteaprobreq'] ?? ($existing['usuariopermiteaprobreq'] ?? 0)),
+            'usuariopermiteaprobpreoc' => $this->normalizeBoolInt($data['usuariopermiteaprobpreoc'] ?? ($existing['usuariopermiteaprobpreoc'] ?? 0)),
+            'usuariocomprador' => $this->normalizeBoolInt($data['usuariocomprador'] ?? ($existing['usuariocomprador'] ?? 0)),
+            'usuariopermiteanularpreoc' => $this->normalizeBoolInt($data['usuariopermiteanularpreoc'] ?? ($existing['usuariopermiteanularpreoc'] ?? 0)),
+            'usuariopermiteeditarprecios' => $this->normalizeBoolInt($data['usuariopermiteeditarprecios'] ?? ($existing['usuariopermiteeditarprecios'] ?? 0)),
+            'usuariopermitecrearitem' => $this->normalizeBoolInt($data['usuariopermitecrearitem'] ?? ($existing['usuariopermitecrearitem'] ?? 0)),
+            'usuariopermiteeditaritem' => $this->normalizeBoolInt($data['usuariopermiteeditaritem'] ?? ($existing['usuariopermiteeditaritem'] ?? 0)),
+            'usuariopermitesynctrnerp' => $this->normalizeBoolInt($data['usuariopermitesynctrnerp'] ?? ($existing['usuariopermitesynctrnerp'] ?? 0)),
+            'usuarioreqautorizadorfuerapptocompra' => $autorizaFuera,
+            'usuarioreqautorizadorfuerapptocompraorden' => $autorizaOrden,
         ];
     }
 
@@ -399,6 +420,25 @@ class UsuariosService
         if (!($hasLength && $hasUpper && $hasNumber && $hasSpecial)) {
             throw new \RuntimeException('La contrasena no cumple la politica (min 5, al menos 1 mayuscula, 1 numero y 1 caracter especial).');
         }
+    }
+
+    private function normalizeBoolInt($value): int
+    {
+        return !empty($value) ? 1 : 0;
+    }
+
+    private function normalizeNullableInt($value): ?int
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $value = trim((string)$value);
+        if ($value === '' || !preg_match('/^-?\d+$/', $value)) {
+            return null;
+        }
+
+        return (int)$value;
     }
 
     private function buildApiTokenPlainValue(): string

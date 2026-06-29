@@ -94,6 +94,8 @@ sp_main: BEGIN
         pc.subfamiliaid,
         pc.centrocostoid,
         pc.pptocomprasaldodisponible,
+        IFNULL(otros.monto_otros, 0) AS reqpptomontootroscurso,
+        IFNULL(aprob.monto_aprobados, 0) AS reqpptomontoaprobadospend,
         pc.pptocomprapresupuestado,
         pc.pptocompraajustespositivos,
         pc.pptocompraajustenegativos,
@@ -105,6 +107,32 @@ sp_main: BEGIN
         pc.pptocompracolaboradorid
     FROM `pptocompra` pc
     INNER JOIN `temporadas` t ON t.temporadaid = pc.temporadaid
+    LEFT JOIN (
+        SELECT
+            d.subfamiliaid,
+            r.centrocostoid,
+            SUM(d.reqcompradettotalneto) AS monto_otros
+        FROM `reqcompras` r
+        INNER JOIN `reqcomprasdetalle` d ON d.reqcompraid = r.reqcompraid
+        WHERE r.reqcompravig = 1
+          AND r.reqcompraestadoid IN ('PND', 'EDT')
+        GROUP BY d.subfamiliaid, r.centrocostoid
+    ) otros
+        ON otros.subfamiliaid = pc.subfamiliaid
+       AND otros.centrocostoid = pc.centrocostoid
+    LEFT JOIN (
+        SELECT
+            d.subfamiliaid,
+            r.centrocostoid,
+            SUM(ra.reqaprobadocantidadpendiente * ra.reqaprobadoprecioneto) AS monto_aprobados
+        FROM `reqaprobados` ra
+        INNER JOIN `reqcomprasdetalle` d ON d.reqcompradetid = ra.reqcompradetid
+        INNER JOIN `reqcompras` r ON r.reqcompraid = ra.reqcompraid
+        WHERE ra.reqaprobadocantidadpendiente > 0
+        GROUP BY d.subfamiliaid, r.centrocostoid
+    ) aprob
+        ON aprob.subfamiliaid = pc.subfamiliaid
+       AND aprob.centrocostoid = pc.centrocostoid
     WHERE t.temporadatipocodigo = 'PPTO_COMPRAS'
       AND v_fecha BETWEEN t.temporadainicio AND t.temporadafin
       AND pc.subfamiliaid = v_subfamiliaid
@@ -154,6 +182,7 @@ sp_main: BEGIN
     SELECT
         cur.reqcompraid,
         cur.subfamiliaid,
+        sf.subfamiliadsc,
         cur.centrocostoid,
         pc.pptocompraid,
         IFNULL(pc.pptocomprasaldodisponible, 0) AS reqpptosaldodisponible,
@@ -188,6 +217,8 @@ sp_main: BEGIN
         WHERE r.reqcompraid = v_reqcompraid
         GROUP BY r.reqcompraid, d.subfamiliaid, r.centrocostoid, r.reqcomprafecha
     ) cur
+    LEFT JOIN `subfamilias` sf
+        ON sf.subfamiliaid = cur.subfamiliaid
     LEFT JOIN `temporadas` t
         ON t.temporadatipocodigo = 'PPTO_COMPRAS'
        AND cur.reqcomprafecha BETWEEN t.temporadainicio AND t.temporadafin

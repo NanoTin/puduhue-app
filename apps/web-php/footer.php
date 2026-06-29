@@ -55,16 +55,18 @@
             const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 56;
             if (rect) {
                 const left = rect.right;
-                const top = Math.max(headerHeight, Math.min(itemRect.top, window.innerHeight - 260));
+                const top = Math.max(headerHeight, Math.min(itemRect.top, window.innerHeight - 220));
+                const availableHeight = Math.max(220, window.innerHeight - top - 16);
                 flyout.style.left = `${left}px`;
                 flyout.style.top = `${top}px`;
-                flyout.style.maxHeight = `calc(100vh - ${headerHeight}px)`;
+                flyout.style.maxHeight = `${availableHeight}px`;
             }
 
             document.querySelectorAll('.menu-group').forEach(el => el.classList.remove('open'));
             group.classList.add('open');
 
             flyout.classList.add('visible');
+            flyout.scrollTop = 0;
             currentFlyoutGroup = group;
         };
 

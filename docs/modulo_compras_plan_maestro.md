@@ -168,6 +168,7 @@ Reglas:
 - `usuarios` debe separar permisos de aprobacion REQ, aprobacion PreOC, comprador, anulacion PreOC, edicion de precios, creacion/edicion de item, sincronizacion ERP y autorizador fuera de presupuesto.
 - `usuarioscentroscosto` define centros disponibles para crear REQ y centro default.
 - Solo puede existir un centro default activo por usuario; en el primer corte se valida en SP/BE.
+- Si una asociacion usuario-centro existe inactiva, el mantenedor debe reactivarla en vez de crear una fila duplicada.
 - `funcionarios` usa RUT como PK funcional y no equivale a usuario del sistema.
 - `aprobadoresperiodoinactividad` aplica a REQ y PreOC.
 - `invitemstockeable = 1` equivale a Material y `0` a Servicio.
@@ -515,10 +516,10 @@ Estados sugeridos:
 | CMP-047 | SQL/PreOC | Definir DDL y contrato de adjuntos PreOC obligatorios | Pendiente | Contrato preliminar documentado; falta llevar a DDL y seed del maestro extension/MIME por modulo |
 | CMP-048 | UX/REQ | Definir recuperacion de REQ en estado `EDT` por abandono de navegador | Cerrado | `EDT` solo nace desde `PND`; contar `PND` y `EDT` en analisis informativo; salida normal con guardar/reenviar o cancelar; si abandona, queda `EDT` hasta que el creador retome o exista liberacion controlada/manual |
 | CMP-049 | Planificacion | Ordenar implementacion por flujo vertical REQ -> aprobados pendientes -> PreOC | Cerrado | Estrategia documentada en seccion 4.4 |
-| CMP-050 | REQ | Implementar SP funcionales de REQ completo | Pendiente | Contrato tecnico documentado en `docs/modulo_compras_req_contrato_sp.md`; implementar listar, crear, editar, consultar por ID, aprobar, rechazar, logs y presupuesto informativo |
-| CMP-051 | REQ | Implementar BE de REQ completo | Pendiente | Contrato tecnico documentado en `docs/modulo_compras_req_contrato_be.md`; Services/Controller, `ComprasCatalogosService`, rutas, permisos, consumo de SP |
-| CMP-052 | REQ | Implementar FE de REQ completo | Pendiente | Contrato tecnico documentado en `docs/modulo_compras_req_contrato_fe.md`; listado, crear, editar, ver, listado por aprobar, aprobar/rechazar |
-| CMP-053 | REQ | Actualizar rutas REQ | Pendiente | Rutas para listado, crear, editar, ver y aprobaciones |
+| CMP-050 | REQ | Implementar SP funcionales de REQ completo | Implementado | `database/sp/02_sp_compras_req.sql`; pendiente validacion MariaDB local antes de ejecutar en BD real |
+| CMP-051 | REQ | Implementar BE de REQ completo | Implementado | `ComprasReqService`, `ComprasCatalogosService`, `ComprasReqController`; pendiente prueba funcional integrada |
+| CMP-052 | REQ | Implementar FE de REQ completo | Implementado | Vistas REQ creadas segun contrato; pendiente revision visual/navegacion en navegador local |
+| CMP-053 | REQ | Actualizar rutas REQ | Implementado | `src/Routes/web.php`, `apps/web-php/menu.json` y estilos auxiliares de REQ |
 
 ## 10. Cierre operativo
 

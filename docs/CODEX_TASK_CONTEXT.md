@@ -6,14 +6,14 @@
 ## Estado
 
 - Fecha: 2026-06-26
-- Rama: feature/modulo-compras-base
+- Rama: feature/compras-usuarios-centroscosto
 - PR:
 - Modelo recomendado:
-- Estado: SQL 07-11 validado; siguiente corte REQ completo
+- Estado: REQ completo implementado en repo; mantenedor `usuarioscentroscosto` implementado en repo; pendiente validacion MariaDB local de SP REQ y `usuarioscentroscosto`
 
 ## Objetivo actual
 
-Preparar el siguiente corte funcional del modulo Compras: implementar REQ completo de punta a punta antes de avanzar a REQ aprobados / pendientes de compra y PreOC.
+Implementar el mantenedor completo de asignacion Usuario-Centro de Costo (`usuarioscentroscosto`) como corte separado y compatible con REQ ya implementado.
 
 ## Alcance permitido
 
@@ -51,6 +51,7 @@ Preparar el siguiente corte funcional del modulo Compras: implementar REQ comple
 - `database/alter_table/10_modulo_compras_preoc.sql`
 - `database/alter_table/11_modulo_compras_presupuesto_sp.sql`
 - `database/sp/02_sp_pptocompra.sql`
+- `database/sp/02_sp_usuarioscentroscosto.sql`
 
 ## Decisiones vigentes
 
@@ -91,6 +92,8 @@ Preparar el siguiente corte funcional del modulo Compras: implementar REQ comple
 - Primer bloque REQ completo incluye SP de listar, crear, editar, consultar por ID, aprobar/rechazar, logs/comentarios cuando corresponda y presupuesto informativo.
 - Primer bloque REQ completo incluye BE con Services/Models, control transaccional PHP, permisos y consumo de SP.
 - Catalogos de formularios, filtros y modales de Compras se centralizan en `ComprasCatalogosService` con metodos `*FormSelect` / `*FormGrid`; no crear SP auxiliares por cada combo o modal salvo regla transaccional critica.
+- Si una asociacion `usuarioscentroscosto` ya existe inactiva para el mismo usuario y centro, el mantenedor la reactiva en vez de crear un duplicado nuevo.
+- El mantenedor `usuarioscentroscosto` opera con SP propios de listar, insertar y editar; `editar` resuelve activar, desactivar y marcar default con LOG tecnico.
 - Vistas REQ aprobadas: `compras_req_listar.php`, `compras_req_crear.php`, `compras_req_editar.php`, `compras_req_ver.php`, `compras_req_pendientes_aprobacion.php`.
 - Post-edicion REQ exitoso redirige a `compras-req/ver&id=X`; filtros en modales de items/aprobadores son client-side en el primer corte.
 - Codigo visible REQ cerrado como `REQ-00000001`: prefijo `REQ-` + `LPAD(reqcompraid, 8, '0')`, global, no editable, no reciclable.
@@ -111,6 +114,47 @@ Preparar el siguiente corte funcional del modulo Compras: implementar REQ comple
 
 Agregar validaciones especificas del corte cuando corresponda.
 
+## Validaciones ejecutadas en este corte
+
+- `php -l` en:
+  - `src/Routes/web.php`
+  - `src/Services/ComprasCatalogosService.php`
+  - `src/Services/ComprasReqService.php`
+  - `src/Controllers/Web/ComprasReqController.php`
+  - `apps/web-php/compras_req_listar.php`
+  - `apps/web-php/compras_req_crear.php`
+  - `apps/web-php/compras_req_editar.php`
+  - `apps/web-php/compras_req_ver.php`
+  - `apps/web-php/compras_req_pendientes_aprobacion.php`
+  - `src/Services/UsuariosCentrosCostoService.php`
+  - `src/Controllers/Web/UsuariosCentrosCostoController.php`
+  - `apps/web-php/usuarioscentroscosto_listar.php`
+  - `apps/web-php/usuarioscentroscosto_crear.php`
+- `git diff --check`
+- `git status --short`
+- `git diff --stat`
+- validacion sintactica de `apps/web-php/menu.json` con `php -r`
+
+## Archivos modificados en este corte
+
+- `database/sp/02_sp_compras_req.sql`
+- `database/sp/02_sp_usuarioscentroscosto.sql`
+- `src/Services/ComprasCatalogosService.php`
+- `src/Services/ComprasReqService.php`
+- `src/Services/UsuariosCentrosCostoService.php`
+- `src/Controllers/Web/ComprasReqController.php`
+- `src/Controllers/Web/UsuariosCentrosCostoController.php`
+- `src/Routes/web.php`
+- `apps/web-php/menu.json`
+- `apps/web-php/assets/css/pdh-components.css`
+- `apps/web-php/compras_req_listar.php`
+- `apps/web-php/compras_req_crear.php`
+- `apps/web-php/compras_req_editar.php`
+- `apps/web-php/compras_req_ver.php`
+- `apps/web-php/compras_req_pendientes_aprobacion.php`
+- `apps/web-php/usuarioscentroscosto_listar.php`
+- `apps/web-php/usuarioscentroscosto_crear.php`
+
 ## Estado de avance
 
 - [x] Contexto leido
@@ -118,15 +162,16 @@ Agregar validaciones especificas del corte cuando corresponda.
 - [x] Contrato SP REQ documentado
 - [x] Contrato BE REQ documentado
 - [x] Contrato FE REQ documentado
-- [ ] Implementacion
-- [ ] Validacion
-- [ ] Revision
-- [ ] Cierre
+- [x] Implementacion
+- [x] Validacion
+- [x] Revision
+- [x] Cierre
 
 ## Handoff para proximo chat
 
 Continuar conversacion sobre:
-- revisar y aprobar `docs/modulo_compras_req_contrato_sp.md`.
-- revisar y aprobar `docs/modulo_compras_req_contrato_be.md`.
-- revisar y aprobar `docs/modulo_compras_req_contrato_fe.md`.
-- implementar REQ completo en orden: SP, BE, FE y rutas.
+- validar `database/sp/02_sp_compras_req.sql` en MariaDB local antes de aplicar en BD real.
+- validar `database/sp/02_sp_usuarioscentroscosto.sql` en MariaDB local antes de aplicar en BD real.
+- probar en navegador el mantenedor `usuarios-centros-costo` con casos de crear, reactivar, desactivar y cambio de default.
+- revisar funcionalmente las vistas REQ en navegador local y ajustar UX si aparece algun gap.
+- continuar luego con REQ aprobados / pendientes de compra para alimentar PreOC.
