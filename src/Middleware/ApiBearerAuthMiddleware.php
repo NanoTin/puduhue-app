@@ -3,6 +3,7 @@
 class ApiBearerAuthMiddleware
 {
     private \Database $db;
+    private ?bool $hasTokenScopesColumn = null;
 
     public function __construct()
     {
@@ -17,12 +18,14 @@ class ApiBearerAuthMiddleware
         }
 
         $tokenHash = $this->hashToken($plainToken);
+        $tokenScopesSelect = $this->hasTokenScopesColumn() ? 't.tokenpermisos,' : 'NULL AS tokenpermisos,';
         $sql = "
             SELECT
                 t.usuarioapitokenid,
                 t.usuarioid,
                 t.tokenactiva,
                 t.tokenfechaexpira,
+                {$tokenScopesSelect}
                 u.usuarioactivo,
                 u.usuarionombre,
                 u.usuariorut
@@ -52,8 +55,26 @@ class ApiBearerAuthMiddleware
             'usuarioapitokenid' => (int)$row['usuarioapitokenid'],
             'usuarionombre' => (string)($row['usuarionombre'] ?? ''),
             'usuariorut' => (string)($row['usuariorut'] ?? ''),
+            'tokenpermisos' => (string)($row['tokenpermisos'] ?? ''),
             'plain_token' => $plainToken,
         ];
+    }
+
+    public function authorize(array $authContext, string $resource, string $action): void
+    {
+        $permission = $resource . ':' . $action;
+        $rawScopes = trim((string)($authContext['tokenpermisos'] ?? ''));
+
+        if ($rawScopes === '') {
+            return;
+        }
+
+        $scopes = array_filter(array_map('trim', explode(',', $rawScopes)));
+        if (in_array('*', $scopes, true) || in_array($permission, $scopes, true)) {
+            return;
+        }
+
+        throw new ApiException('Token sin permiso para este recurso.', 403);
     }
 
     public function markTokenUsage(int $usuarioApiTokenId, string $ip): void
@@ -89,5 +110,21 @@ class ApiBearerAuthMiddleware
         }
 
         return hash_hmac('sha256', $plainToken, $secret);
+    }
+
+    private function hasTokenScopesColumn(): bool
+    {
+        if ($this->hasTokenScopesColumn !== null) {
+            return $this->hasTokenScopesColumn;
+        }
+
+        try {
+            $rows = $this->db->select("SHOW COLUMNS FROM usuariosapitokens LIKE 'tokenpermisos'");
+            $this->hasTokenScopesColumn = !empty($rows);
+        } catch (\Throwable $e) {
+            $this->hasTokenScopesColumn = false;
+        }
+
+        return $this->hasTokenScopesColumn;
     }
 }

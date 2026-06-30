@@ -8,6 +8,7 @@ CREATE TABLE `usuariosapitokens` (
   `tokenfechaexpira` datetime NULL DEFAULT NULL,
   `tokenultuso` datetime NULL DEFAULT NULL,
   `tokenipultuso` varchar(50) NULL DEFAULT NULL,
+  `tokenpermisos` varchar(500) NOT NULL DEFAULT 'prodleche-detalle:query',
   `observacion` varchar(255) NULL DEFAULT NULL,
   `auditcreacionusuarioid` int(11) NOT NULL,
   `auditcreaciondispositivo` varchar(100) NOT NULL,

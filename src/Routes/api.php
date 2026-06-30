@@ -26,11 +26,24 @@ function handleApiRequest(): void
     $errors = [];
 
     try {
+        $route = apiTryResolveRoute($path);
+        if ($route !== null) {
+            $version = $route['version'];
+            $resource = $route['resource'];
+            $action = $route['action'];
+        }
+
         if ($method !== 'POST') {
             throw new ApiException('Metodo HTTP no permitido.', 405);
         }
 
-        $route = apiResolveRoute($path);
+        if ($route === null) {
+            $route = apiResolveRoute($path);
+            $version = $route['version'];
+            $resource = $route['resource'];
+            $action = $route['action'];
+        }
+
         $version = $route['version'];
         $resource = $route['resource'];
         $action = $route['action'];
@@ -43,6 +56,7 @@ function handleApiRequest(): void
 
         $auth = new ApiBearerAuthMiddleware();
         $authContext = $auth->authenticate($headers);
+        $auth->authorize($authContext, $resource, $action);
 
         [$controller, $methodName] = apiResolveController($resource, $action);
         $response = $controller->$methodName($payload, [
@@ -92,6 +106,15 @@ function handleApiRequest(): void
     }
 
     ApiResponse::send($statusCode, $message, $data, $meta, $errors);
+}
+
+function apiTryResolveRoute(string $path): ?array
+{
+    try {
+        return apiResolveRoute($path);
+    } catch (ApiException $e) {
+        return null;
+    }
 }
 
 function apiResolveRoute(string $path): array

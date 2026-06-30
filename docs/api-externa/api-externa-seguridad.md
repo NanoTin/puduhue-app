@@ -39,6 +39,7 @@ Usar solo:
 - `tokenactiva = 1`.
 - `tokenfechaexpira` nula o futura.
 - Usuario asociado activo.
+- `tokenpermisos` vacio, `*`, o incluye el permiso exacto `{recurso}:{accion}`.
 
 ## 5. Generacion y almacenamiento de tokens
 
@@ -72,6 +73,8 @@ Decision recomendada para este proyecto:
 - Permitir dias configurables por el usuario interno.
 - Permitir "sin expiracion" con `tokenfechaexpira = NULL`.
 - Revocar debe marcar `tokenactiva = 0` y registrar auditoria.
+- Para reportes automatizados de Power BI, usar tokens de vida larga o sin expiracion, pero dedicados por consumidor y con `tokenpermisos` acotado.
+- Ejemplo de permiso inicial: `prodleche-detalle:query`.
 
 ## 7. Logging
 

@@ -97,6 +97,7 @@ CREATE TABLE `usuariosapitokens` (
   `tokenfechaexpira` datetime NULL DEFAULT NULL,
   `tokenultuso` datetime NULL DEFAULT NULL,
   `tokenipultuso` varchar(50) NULL DEFAULT NULL,
+  `tokenpermisos` varchar(500) NOT NULL DEFAULT 'prodleche-detalle:query',
   `observacion` varchar(255) NULL DEFAULT NULL,
   `auditcreacionusuarioid` int(11) NOT NULL,
   `auditcreaciondispositivo` varchar(100) NOT NULL,
@@ -222,13 +223,14 @@ Error interno controlado. Nunca exponer stacktrace ni SQL.
 6. Validar `Authorization: Bearer`.
 7. Buscar token activo en `usuariosapitokens`.
 8. Validar expiracion y `usuarioactivo`.
-9. Parsear JSON.
-10. Validar `page`, `page_size` y filtros del recurso.
-11. Ejecutar service de consulta con PDO parametrizado.
-12. Construir respuesta JSON estandar.
-13. Actualizar `tokenultuso` y `tokenipultuso`.
-14. Insertar fila en `apirequestlog`.
-15. Responder al cliente.
+9. Validar permiso exacto en `tokenpermisos` con formato `{recurso}:{accion}`.
+10. Parsear JSON.
+11. Validar `page`, `page_size` y filtros del recurso.
+12. Ejecutar service de consulta con PDO parametrizado.
+13. Construir respuesta JSON estandar.
+14. Actualizar `tokenultuso` y `tokenipultuso`.
+15. Insertar fila en `apirequestlog`.
+16. Responder al cliente.
 
 ## 10. Acceso a datos
 
