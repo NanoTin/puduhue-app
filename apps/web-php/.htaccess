@@ -1,11 +1,20 @@
 # Desactivar listado de directorios
 Options -Indexes
+ServerSignature Off
 
 # Hacer que login.php sea la página por defecto
 DirectoryIndex login.php
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Bloquear archivos de apoyo/configuracion expuestos por el document root.
+    RewriteRule (^|/)(menu\.json|\.env|\.git|\.svn|\.hg) - [F,L,NC]
+    RewriteRule (^|/)(composer\.(json|lock)|package(-lock)?\.json|pnpm-lock\.yaml|yarn\.lock|\.DS_Store)$ - [F,L,NC]
+
+    # Las vistas internas se cargan desde index.php/router, no como archivos directos.
+    RewriteCond %{REQUEST_URI} !/(index|login|export_excel)\.php$ [NC]
+    RewriteRule \.php$ - [F,L,NC]
 
     # Si es la raíz y no se está pidiendo un archivo estático, ir a login.php
     RewriteCond %{REQUEST_URI} ^/?$ 
@@ -14,4 +23,10 @@ DirectoryIndex login.php
     RewriteRule ^$ login.php [L]
 
     # (Opcional) Podrías agregar reglas adicionales para rutas limpias más adelante
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "same-origin"
+    Header always set X-Frame-Options "SAMEORIGIN"
 </IfModule>

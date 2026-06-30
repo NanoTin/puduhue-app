@@ -156,6 +156,7 @@ function handleWebRequest(array $menuData = []): void
         'users'             => \UsuariosController::class,
         'companies'         => \EmpresasController::class,
         'auth'              => \AuthController::class,
+        'apirequestlog'     => \ApirequestlogController::class,
         'erpendpoints'      => \ErpEndpointsController::class,
         'fundos'            => \FundosController::class,
         'menus'             => \MenusController::class,

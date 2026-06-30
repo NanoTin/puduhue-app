@@ -414,6 +414,24 @@
     "auditedicionfechahora": "2025-01-01 00:00:00"
   },
   {
+    "menuid": 33,
+    "menunivel": 3,
+    "menupadre": 8,
+    "menudesc": "Monitoreo API",
+    "menuform": "apirequestlog/listar",
+    "menuorden": 8,
+    "menuicono": "bi-shield-check",
+    "menuactivo": 1,
+    "auditcreacionusuarioid": "system",
+    "auditcreaciondispositivo": "",
+    "auditcreacionip": "",
+    "auditcreacionfechahora": "2025-01-01 00:00:00",
+    "auditedicionusuarioid": "system",
+    "auditediciondispositivo": "",
+    "auditedicionip": "",
+    "auditedicionfechahora": "2025-01-01 00:00:00"
+  },
+  {
     "menuid": 17,
     "menunivel": 3,
     "menupadre": 9,

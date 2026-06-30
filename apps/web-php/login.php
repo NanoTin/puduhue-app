@@ -1,12 +1,22 @@
 <?php
-$isSecureCookie = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-    || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
-session_set_cookie_params([
-    'httponly' => true,
-    'secure'   => $isSecureCookie,
-    'samesite' => 'Lax',
-]);
-session_start();
+if (ob_get_level() === 0) {
+    ob_start();
+}
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    $isSecureCookie = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+
+    if (!headers_sent()) {
+        session_set_cookie_params([
+            'httponly' => true,
+            'secure'   => $isSecureCookie,
+            'samesite' => 'Lax',
+        ]);
+    }
+
+    session_start();
+}
 
 $rootPath = dirname(__DIR__, 2);
 require_once $rootPath . '/src/Config/Env.php';
