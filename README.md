@@ -417,7 +417,7 @@ Categoría A con TotalAnimales = 150 (aunque sea el mismo día y mismo fundo) �
             "Kilos": "Calculo de 'totalanimales' x 500. Ej.: 60000",
             "OrganizacionID": null,
             "Tropa": null,
-            "EventoHaciendaClasificacionID": null,
+            "EventoHaciendaClasificacionID": "ESTRATÉGICA-55",
             "CantidadCertificada": "Suma del grupo detalle columna 'totalconsumido'. Ej.:4232.000000",
             "EventoHaciendaID": "SUPLEMENTACION"
         }

@@ -323,7 +323,7 @@ class SuplanimalService
             'Kilos' => $totalAnimales * 500,
             'OrganizacionID' => null,
             'Tropa' => null,
-            'EventoHaciendaClasificacionID' => null,
+            'EventoHaciendaClasificacionID' => 'ESTRATÉGICA-55',
             'CantidadCertificada' => $cantidadCertificada,
             'EventoHaciendaID' => 'SUPLEMENTACION',
         ]];
