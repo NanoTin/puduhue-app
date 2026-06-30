@@ -139,8 +139,8 @@ Reglas:
 | Codigo | Descripcion | Regla |
 |---|---|---|
 | Sin estado | Sin vinculo | No aplica o no tiene compras asociadas |
-| `VNC_Parcial` | Vinculado parcial | Existe compra parcial o saldo pendiente/anulado |
-| `VNC_Total` | Vinculado total | Toda la cantidad requerida quedo comprada o anulada operativamente |
+| `LNK_Parcial` | Vinculado parcial | Existe compra parcial asociada a PreOC |
+| `LNK_Total` | Vinculado total | Todas las lineas aprobadas comprables del REQ quedaron vinculadas por compra PreOC |
 
 ## 5. Flujo REQ
 

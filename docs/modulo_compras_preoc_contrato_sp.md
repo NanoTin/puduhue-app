@@ -33,6 +33,8 @@ La PreOC:
 - confirma, revierte o borra reservas segun estado y aprobaciones;
 - mantiene estados documentales separados de estados ERP;
 - deja integracion ERP real fuera de este corte local.
+- usa carrito transitorio separado de `reqaprobados` para seleccionar lineas antes de crear borrador;
+- conserva historial documental de estados y de resoluciones de aprobadores separado del LOG tecnico.
 
 ## 3. Reglas transversales
 
@@ -48,6 +50,8 @@ La PreOC:
 - `preocdetallereqitems.pptocompraid` guarda el presupuesto resuelto por linea.
 - `preocpptoresumen` agrupa por presupuesto afectado.
 - `reqaprobadoshistorial.preocdetid` referencia `preocdetallereqitems.preocdetreqitemid`; no renombrar.
+- Mientras no exista DDL aprobado de adjuntos, no se permite cerrar `BRR -> PND`.
+- El estado de vinculacion PreOC en REQ usa codigos `LNK_Parcial` y `LNK_Total`.
 
 ## 4. Codigo visible `preocdoc`
 
@@ -100,6 +104,9 @@ Permisos:
 | `sp_compras_preoc_consulta_por_id_firmantes` | Consultar firmantes PreOC. | `preocid` | Firmantes ordenados, tipo, estado, reemplazo y comentario. | `preocfirmantes`, `usuarios` |
 | `sp_compras_preoc_consulta_por_id_comentarios` | Consultar comentarios funcionales. | `preocid` | Comentarios ordenados por fecha/hora. | `preoccomentarios`, `usuarios` |
 | `sp_compras_preoc_consulta_por_id_movimientos_ppto` | Consultar movimientos presupuestarios asociados. | `preocid` | Movimientos `pptocompratransacciones` vinculados a `PREOCPPTORESUMEN:<id>`. | `pptocompratransacciones`, `preocpptoresumen` |
+| `sp_compras_preoc_consulta_por_id_estados_historial` | Consultar historial documental de estados. | `preocid` | Estado anterior, estado nuevo, usuario, fecha/hora y observacion. | `preocestadoshistorial`, `preocestados`, `usuarios` |
+| `sp_compras_preoc_consulta_por_id_resoluciones_historial` | Consultar historial de resoluciones de aprobadores por ciclo. | `preocid` | Ciclo, firmante, orden, tipo, estado, comentario, fecha/hora. | `preocfirmanteshistorial`, `usuarios` |
+| `sp_compras_preoc_carrito_consulta_usuario` | Consultar carrito activo del usuario comprador. | opcional `preoccarritotoken` | Lineas agregadas al carrito, cantidades y datos REQ/item. | `preoccarrito`, `reqaprobados`, `reqcompras`, `reqcomprasdetalle` |
 
 Reglas de filtros:
 
@@ -112,13 +119,16 @@ Reglas de filtros:
 
 | SP | Objetivo | JSON entrada minimo | Salida `p_out_json` | Tablas afectadas |
 |---|---|---|---|---|
-| `sp_compras_preoc_crear` | Crear PreOC en `BRR` o crear y enviar a `PND`. | cabecera, `accion`, `detalle[]`, `firmantesManual[]` | `status`, `message`, `id`, `preocdoc`, `estado`, `preocaprobadoridpnd` | `preoc`, `preocdetallereqitems`, `preocitems`, `preocimptos`, `preocpptoresumen`, `preocitemsdimensiones`, `preocfirmantes`, `preoccomentarios`, `preoclog` |
-| `sp_compras_preoc_editar` | Editar PreOC permitida y guardar `BRR` o reenviar `PND`. | `preocid`, cabecera editable, `accion`, `detalle[]`, `firmantesManual[]`, `comentario` opcional | `status`, `message`, `id`, `estado`, `preocaprobadoridpnd` | mismas tablas de crear, mas LOG |
+| `sp_compras_preoc_crear` | Crear PreOC en `BRR`. | cabecera, `detalle[]`, `itemsAgrupados[]`, `firmantesManual[]`, `preoccarritotoken` opcional | `status`, `message`, `id`, `preocdoc`, `estado` | `preoc`, `preocdetallereqitems`, `preocitems`, `preocimptos`, `preocpptoresumen`, `preocitemsdimensiones`, `preocfirmantes`, `preoccomentarios`, `preoclog`, `preocestadoshistorial`, `preoccarrito` |
+| `sp_compras_preoc_editar` | Editar PreOC permitida y guardar `BRR`. | `preocid`, cabecera editable, `detalle[]`, `itemsAgrupados[]`, `firmantesManual[]`, `comentario` opcional | `status`, `message`, `id`, `estado` | mismas tablas de crear, mas LOG e historial |
 | `sp_compras_preoc_enviar_aprobacion` | Pasar `BRR -> PND` o reenviar ciclo presupuestario. | `preocid` | `status`, `message`, `id`, `estado`, `preocaprobadoridpnd` | `preoc`, `preocfirmantes`, `preocpptoresumen`, `pptocompratransacciones`, `preoclog` |
 | `sp_compras_preoc_volver_borrador` | Pasar `PND -> BRR` sin aprobaciones. | `preocid`, `motivo` opcional | `status`, `message`, `id`, `estado` | `preoc`, `preocpptoresumen`, `pptocompratransacciones`, `preoclog` |
 | `sp_compras_preoc_aprobar` | Aprobar firmante pendiente y avanzar flujo. | `preocid`, `comentario` opcional | `status`, `message`, `id`, `estado`, `preocaprobadoridpnd`, `aprobadoCompleto` | `preoc`, `preocfirmantes`, `preoccomentarios`, `preocpptoresumen`, `pptocompratransacciones`, `reqaprobados`, `reqaprobadoshistorial`, `preoclog` |
 | `sp_compras_preoc_rechazar` | Rechazar PreOC con comentario obligatorio. | `preocid`, `comentario` | `status`, `message`, `id`, `estado` | `preoc`, `preocfirmantes`, `preoccomentarios`, `preocpptoresumen`, `pptocompratransacciones`, `preoclog` |
+| `sp_compras_preoc_rearmar` | Pasar `RCH -> BRR` para corregir y reiniciar ciclo. | `preocid`, `comentario` | `status`, `message`, `id`, `estado` | `preoc`, `preocfirmantes`, `preocfirmanteshistorial`, `preoccomentarios`, `preocestadoshistorial`, `preoclog` |
 | `sp_compras_preoc_anular` | Anular PreOC cuando el estado lo permita. | `preocid`, `comentario` | `status`, `message`, `id`, `estado`, `estadoErp` | `preoc`, `preoccomentarios`, `preocpptoresumen`, `pptocompratransacciones`, `preoclog` |
+| `sp_compras_preoc_carrito_agregar` | Agregar linea aprobada al carrito del comprador. | `reqaprobadoid`, `cantidad`, `preoccarritotoken`, `preoctipo` | `status`, `message`, `id` | `preoccarrito` |
+| `sp_compras_preoc_carrito_liberar` | Liberar linea o carrito activo del comprador. | `preoccarritoid` o `preoccarritotoken` | `status`, `message` | `preoccarrito` |
 
 Los SP de PreOC deben invocar o coordinar con los SP presupuestarios ya contratados:
 
@@ -141,7 +151,7 @@ Campos de entrada:
 - `preocobsinterna` opcional.
 - `preocobsoc` opcional.
 - `preocprioridad`: `1` Normal, `2` Alta.
-- `accion`: `guardar_borrador`, `enviar_aprobacion` o `reenviar_aprobacion`.
+- `preoccarritotoken` opcional si la PreOC nace desde carrito.
 
 Campos resueltos por SP/sistema:
 
@@ -185,7 +195,22 @@ Validaciones:
 - El item actual viene desde `reqaprobados`; no se cambia en PreOC.
 - Presupuesto debe resolverse por `preocfechaoc`, `subfamiliaid`, `centrocostoid`.
 
-## 10. Items agrupados, precio e impuestos
+## 10. Payload `itemsAgrupados[]`
+
+Cada elemento contiene:
+
+- `invitemid`.
+- `preocitemprecioneto`.
+
+Reglas:
+
+- Debe existir un elemento por cada item agrupado derivado de `detalle[]`.
+- El precio neto unitario se informa una vez por item agrupado.
+- El SP distribuye `preocitemprecioneto` hacia todas las lineas `preocdetallereqitems` del mismo `invitemid`.
+- En `BRR` se puede guardar precio cero; no se puede enviar a aprobacion con precio cero o faltante.
+- Si una linea se elimina desde una PreOC editable antes de aprobacion, vuelve a quedar disponible por saldo pendiente; no depende del carrito convertido.
+
+## 11. Items agrupados, precio e impuestos
 
 Reglas:
 
@@ -193,10 +218,19 @@ Reglas:
 - El comprador informa precio neto una vez por item agrupado.
 - El precio agrupado se distribuye internamente hacia lineas `preocdetallereqitems`.
 - No se puede enviar a aprobacion si algun item agrupado no tiene precio neto mayor a cero.
-- Impuestos/conceptos Finnegans no estan cerrados para este corte; el contrato debe permitir calcular/guardar impuestos solo con reglas locales existentes y dejar integracion ERP fuera.
-- Si no existe regla local de impuesto cerrada, la implementacion debe bloquear envio o dejar impuestos en cero solo con aprobacion explicita del negocio.
+- Cada item debe tener `invitems.erptasaimpositivaid` informado.
+- `preocimptos.imptoid` guarda el `erptasasimpositivas.erptasaimpositivaid` usado para el calculo.
+- `preocimptotasa` guarda snapshot de `erptasasimpositivas.erptasaimpositivaporcentaje`.
+- La tasa se calcula como porcentaje: por ejemplo `19.0000` equivale a `0.19`.
+- `preocimptonetototal = preocitemnetototal`.
+- `preocimptomonto = preocimptonetototal * (preocimptotasa / 100)`.
+- `preocitems.preocitemimptostotal = SUM(preocimptos.preocimptomonto)` por item agrupado.
+- `preoc.preocimptostotal = SUM(preocitems.preocitemimptostotal)`.
+- `preoctotal = preocnettotal + preocimptostotal`.
+- Si `invitems.erptasaimpositivaid` es NULL, la tasa no existe, esta inactiva o no tiene porcentaje, el item no se puede agregar/enviar y se informa contactar a Administracion.
+- `preocimptos` queda como detalle tecnico para validar totales y preparar JSON ERP futuro; no implica llamada real a ERP.
 
-## 11. Firmantes
+## 12. Firmantes
 
 La lista se genera desde:
 
@@ -213,8 +247,28 @@ Reglas:
 - Los manuales no pueden duplicar usuarios ya presentes.
 - Aplica inactividad/reemplazo igual que REQ.
 - `preocaprobadoridpnd` debe coincidir con el firmante pendiente vigente.
+- Cada envio/reenvio a aprobacion abre un ciclo de aprobacion nuevo.
+- Antes de reiniciar firmantes por rechazo/rearmado, el SP debe conservar snapshot en `preocfirmanteshistorial`.
 
-## 12. Presupuesto
+## 13. Historial documental y de aprobadores
+
+Tablas requeridas:
+
+- `preocestadoshistorial`: registra estado anterior, estado nuevo, usuario, fecha/hora y observacion.
+- `preocfirmanteshistorial`: registra snapshot de resoluciones por ciclo antes de reiniciar firmantes o al cerrar resoluciones relevantes.
+
+Reglas:
+
+- Todo cambio de `preoc.preocestadoid` inserta una fila en `preocestadoshistorial`.
+- La creacion registra `NULL -> BRR`.
+- El envio registra `BRR -> PND`.
+- La aprobacion completa registra `PND -> APR`.
+- El rechazo registra `PND -> RCH`.
+- Rearmar registra `RCH -> BRR`.
+- Anular registra `<estado anterior> -> ANL`.
+- El LOG tecnico no reemplaza estos historiales funcionales.
+
+## 14. Presupuesto
 
 Eventos:
 
@@ -233,7 +287,7 @@ Movimientos:
 - `pptocomprareflinea = 'PREOCPPTORESUMEN:<preocpptoresumenid>'`.
 - Cada envio a aprobacion abre ciclo nuevo en `pptocompregruppomovimiento`: `PREOC:<preocid>:CICLO:<n>`.
 
-## 13. Actualizacion de pendientes al aprobar
+## 15. Actualizacion de pendientes al aprobar
 
 Al aprobar completamente:
 
@@ -250,8 +304,40 @@ Al aprobar completamente:
   - restar cantidad pendiente;
   - sumar cantidad comprada;
   - recalcular estado.
+- Recalcular `reqcompras.reqcompraestadopreocid` para cada REQ origen:
+  - `LNK_Parcial` si existe compra PreOC y aun queda saldo pendiente operativo asociado a compra;
+  - `LNK_Total` si todas las lineas aprobadas comprables del REQ quedaron vinculadas por compra PreOC.
+- Las anulaciones operativas sin compra PreOC no deben marcar vinculacion PreOC por si solas.
 
-## 14. Adjuntos PreOC
+## 16. Carrito de seleccion PreOC
+
+Reglas:
+
+- El carrito vive en tabla separada `preoccarrito`; no se agregan columnas transitorias a `reqaprobados`.
+- La consulta de pendientes para seleccionar PreOC debe excluir lineas con carrito activo de cualquier usuario.
+- La consulta tambien debe excluir lineas ya tomadas por PreOC vigente en `BRR` o `PND`, mientras no hayan sido eliminadas/liberadas.
+- Si el usuario tiene carrito activo anterior, el FE debe permitir continuar o liberar.
+- Al crear PreOC desde carrito, las filas de carrito pasan a estado convertido/liberado y la disponibilidad queda controlada por `preocdetallereqitems`.
+- La validacion final siempre se repite en `sp_compras_preoc_crear`.
+
+## 17. Matriz de anulacion PreOC
+
+| Estado | Condicion | Regla |
+|---|---|---|
+| `BRR` | Sin reserva | Permite anular sin movimiento presupuestario. |
+| `PND` | Sin aprobaciones | Permite anular borrando reserva provisional sin reversa. |
+| `PND` | Con alguna aprobacion | No permite anulacion directa; debe resolverse por rechazo. |
+| `APR` | No sincronizada o ERP `ERR` | Permite anular con permiso especial y genera reversa positiva cuando corresponde. |
+| `APR` + ERP `SNC` | Sincronizada | Permite anulacion local especial; no llama ERP y mantiene estado ERP `SNC`. |
+| `RCH` | Rechazada | No se anula; puede rearmarse si corresponde. |
+| `ANL` | Ya anulada | No repite accion. |
+
+Reglas:
+
+- Comentario obligatorio de mas de 10 caracteres.
+- El modal/flujo debe advertir que la anulacion local no realiza cambios en ERP y que la accion ERP debe hacerse directamente en Finnegans cuando corresponda.
+
+## 18. Adjuntos PreOC
 
 Regla funcional vigente:
 
@@ -264,7 +350,7 @@ Bloqueo tecnico:
 - La implementacion de `sp_compras_preoc_enviar_aprobacion` debe validar adjuntos solo cuando exista DDL aprobado.
 - Si el corte PreOC se implementa antes de aprobar DDL de adjuntos, debe reportarse bloqueo funcional o dejar el envio a aprobacion fuera de alcance.
 
-## 15. ERP / Finnegans
+## 19. ERP / Finnegans
 
 Fuera de este corte:
 
@@ -275,7 +361,7 @@ Fuera de este corte:
 
 El corte local puede mantener columnas ERP (`preocestadoerpid`, `erptransaccionid`, `erpnumerodoc`, `erperror`, `erprespuestajson`) sin ejecutar llamadas reales.
 
-## 16. Fuera de alcance
+## 20. Fuera de alcance
 
 - Cotizaciones.
 - Multimoneda.
@@ -284,7 +370,15 @@ El corte local puede mantener columnas ERP (`preocestadoerpid`, `erptransaccioni
 - Anulacion ERP remota.
 - Ejecucion real contra ERP/Finnegans.
 
-## 17. Validaciones de implementacion
+## 21. DDL adicional requerido antes de implementar PreOC completo
+
+- `preoccarrito`.
+- `preocestadoshistorial`.
+- `preocfirmanteshistorial`.
+- DDL aprobado de `preocadjuntos` y maestro de extensiones/tipos.
+- Ajuste de `reqcompraestadopreoc` a codigos `LNK_Parcial` y `LNK_Total`.
+
+## 22. Validaciones de implementacion
 
 Cuando se implemente SQL:
 

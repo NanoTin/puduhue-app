@@ -69,8 +69,8 @@ CREATE TABLE IF NOT EXISTS `reqcompraestadopreoc` (
 INSERT INTO `reqcompraestadopreoc`
   (`reqcompraestadopreoccod`,`reqcompraestadopreocdsc`,`reqcompraestadopreocactivo`,`auditcreacionusuarioid`,`auditcreaciondispositivo`,`auditcreacionip`,`auditcreacionfechahora`)
 VALUES
-  ('VNC_Parcial', 'Vinculado Parcial', 1, 1, 'system', '127.0.0.1', NOW()),
-  ('VNC_Total', 'Vinculado Total', 1, 1, 'system', '127.0.0.1', NOW())
+  ('LNK_Parcial', 'Vinculado Parcial', 1, 1, 'system', '127.0.0.1', NOW()),
+  ('LNK_Total', 'Vinculado Total', 1, 1, 'system', '127.0.0.1', NOW())
 ON DUPLICATE KEY UPDATE
   `reqcompraestadopreocactivo` = VALUES(`reqcompraestadopreocactivo`),
   `reqcompraestadopreocdsc` = VALUES(`reqcompraestadopreocdsc`),

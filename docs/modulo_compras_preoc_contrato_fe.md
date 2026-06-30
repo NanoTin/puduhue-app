@@ -56,7 +56,7 @@ Fuera de alcance:
 | `BRR` | Borrador | `bg-secondary` | Ver, Editar, Enviar, Anular |
 | `PND` | Pendiente | `bg-warning text-dark` | Ver, aprobar/rechazar si corresponde, volver a borrador si no hay aprobaciones |
 | `APR` | Aprobada | `bg-success` | Ver |
-| `RCH` | Rechazada | `bg-danger` | Ver, Editar/Rearmar si corresponde |
+| `RCH` | Rechazada | `bg-danger` | Ver, Rearmar si corresponde |
 | `ANL` | Anulada | `bg-dark` | Ver |
 
 Estado ERP:
@@ -82,7 +82,7 @@ Estructura:
 - Header `Pre Ordenes de Compra`.
 - Acciones superiores:
   - `Por aprobar`: visible si usuario login tiene `usuariopermiteaprobpreoc = 1`.
-  - `Nueva PreOC`: visible/habilitada si usuario login tiene `usuariocomprador = 1`.
+  - `Nueva PreOC`: visible/habilitada si usuario login tiene `usuariocomprador = 1`; abre modal para elegir Material o Servicio.
 - Filtros GET:
   - busqueda general (`filtroBusqueda`);
   - comprador;
@@ -124,6 +124,8 @@ Variables:
 - `$proveedoresRows`
 - `$condicionesPagoOptions`
 - `$aprobadoresRows`
+- `$carritoRows`
+- `$preoccarritotoken`
 - `$errorMessage`
 - `$partial`
 
@@ -155,13 +157,19 @@ Botones:
 
 - Cancelar.
 - Guardar como borrador.
-- Enviar a aprobacion.
+- Enviar a aprobacion solo si existe soporte aprobado de adjuntos y validaciones completas.
+
+Si el usuario tiene carrito activo previo:
+
+- mostrar aviso al entrar al flujo;
+- permitir continuar con el carrito;
+- permitir liberar el carrito.
 
 ## 7. Items PreOC
 
 Origen:
 
-- Lineas seleccionadas desde `reqaprobados` pendientes/parciales.
+- Lineas seleccionadas desde `reqaprobados` pendientes/parciales mediante carrito PreOC.
 - El item se cambia en pendientes de compra, no en PreOC.
 
 Grilla de lineas origen:
@@ -192,6 +200,7 @@ Reglas UI:
 - No permitir enviar si falta precio neto mayor a cero en algun item agrupado.
 - El precio se informa una vez por item agrupado.
 - Mostrar totales generales de compra y montos por presupuesto.
+- No permitir agregar items sin tasa impositiva de compra; mostrar mensaje para contactar a Administracion.
 
 ## 8. Modal de precio
 
@@ -209,7 +218,7 @@ Al confirmar:
 
 - actualiza item agrupado;
 - actualiza subtotales de lineas relacionadas;
-- recalcula presupuesto y totales visibles.
+- recalcula impuestos, presupuesto y totales visibles.
 
 ## 9. Firmantes
 
@@ -258,7 +267,7 @@ Reglas:
 Botones:
 
 - Guardar como borrador.
-- Enviar/Reenviar a aprobacion.
+- Enviar/Reenviar a aprobacion solo si existe soporte aprobado de adjuntos y validaciones completas.
 - Volver a borrador si `PND` sin aprobaciones.
 - Volver a ver.
 
@@ -288,7 +297,10 @@ Estructura:
   - Volver a borrador;
   - Aprobar;
   - Rechazar;
+  - Rearmar;
   - Anular.
+  - Historial de Estados.
+  - Historial de Resoluciones.
 - Bloques:
   - cabecera;
   - lineas origen;
@@ -303,6 +315,17 @@ Rechazo y anulacion:
 
 - comentario obligatorio de mas de 10 caracteres.
 - usar modal; no usar solo confirmacion simple.
+
+Anulacion:
+
+- el modal debe advertir que la accion local no realiza cambios en ERP/Finnegans;
+- si corresponde accion ERP, debe hacerse directamente en ERP.
+
+Rearmar:
+
+- visible solo en `RCH` cuando el backend indique `$puedeRearmar`;
+- requiere comentario;
+- redirige a editar luego de pasar a `BRR`.
 
 ## 13. `compras_preoc_pendientes_aprobacion.php`
 
@@ -349,6 +372,11 @@ Bloqueo actual:
 
 - No implementar UI real de adjuntos hasta aprobar DDL de `preocadjuntos` y maestro de extensiones.
 - Si el corte exige envio a aprobacion, se debe resolver primero el DDL de adjuntos o declarar bloqueo.
+
+Mientras no exista soporte aprobado:
+
+- los botones de enviar/reenviar deben ocultarse o mostrarse deshabilitados;
+- el usuario solo puede guardar borrador.
 
 ## 15. ERP
 

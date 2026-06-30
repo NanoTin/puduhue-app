@@ -172,7 +172,7 @@ POST:
 Objetivo:
 
 - Permitir al comprador seleccionar lineas pendientes/parciales que alimentaran una nueva PreOC.
-- Esta pantalla no crea PreOC por si sola hasta que el contrato PreOC defina la ruta destino.
+- Esta pantalla no crea PreOC por si sola; agrega lineas a un carrito PreOC.
 
 Variables:
 
@@ -187,11 +187,12 @@ Estructura:
 
 - Header `Seleccionar pendientes para PreOC`.
 - Filtros equivalentes al listado, restringidos a lineas con saldo pendiente.
-- Tabla responsive con checkbox por fila.
-- Panel o lista de seleccionados.
+- Tabla responsive con checkbox por fila para agregar al carrito.
+- Boton/indicador de carrito con contador.
+- Modal de carrito con lineas agregadas y accion liberar.
 - Acciones:
   - Volver;
-  - Limpiar seleccion;
+  - Liberar carrito;
   - Crear PreOC.
 
 Reglas UI:
@@ -199,7 +200,10 @@ Reglas UI:
 - Solo se seleccionan lineas con `reqaprobadocantidadpendiente > 0`.
 - Debe evitarse mezclar Material y Servicio si el contrato PreOC mantiene una PreOC de tipo unico.
 - La cantidad a comprar puede definirse en PreOC; si se define en esta pantalla, debe validarse contra saldo pendiente y enviarse como seleccion preliminar.
-- La seleccion debe sobrevivir al filtrado durante la sesion de la pantalla, por POST o mecanismo que cierre el contrato BE.
+- La seleccion debe sobrevivir al filtrado usando carrito persistente.
+- Al agregar una linea al carrito, debe dejar de mostrarse en la grilla principal.
+- Si el usuario vuelve al flujo con carrito activo, debe poder continuar o liberar.
+- Si el item no tiene tasa impositiva de compra configurada, no se puede agregar y se muestra mensaje para contactar a Administracion.
 
 ## 8. Mensajes y toasts
 

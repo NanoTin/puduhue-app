@@ -32,8 +32,8 @@ No se usara `CSO`. La solicitud de cambios se trata como rechazo (`RCH`) con com
 No se usara `VNC` como estado principal del REQ. La vinculacion con PreOC se representara en una columna separada de estado PreOC:
 
 - sin estado: no aplica o no tiene vinculo,
-- `VNC_Parcial`: vinculacion parcial,
-- `VNC_Total`: vinculacion total.
+- `LNK_Parcial`: vinculacion parcial,
+- `LNK_Total`: vinculacion total.
 
 ### Rechazo y reenvio
 

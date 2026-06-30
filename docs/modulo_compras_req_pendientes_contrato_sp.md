@@ -31,6 +31,7 @@ Este corte:
 - expone historial operativo por linea;
 - prepara la seleccion de pendientes para crear PreOC;
 - conserva `reqaprobadoshistorial` como vinculo operativo de compra/anulacion.
+- alimenta el carrito PreOC sin marcar estado temporal en `reqaprobados`.
 
 ## 3. Reglas transversales
 
@@ -86,6 +87,8 @@ Reglas de filtros:
 - `filtroFechaHasta` nulo usa fecha actual.
 - `filtroSoloConSaldo = 1` restringe a `reqaprobadocantidadpendiente > 0`.
 - No filtrar comprador desde URL como regla de seguridad; permisos se validan por usuario ejecutor.
+- La seleccion para PreOC debe excluir lineas con carrito PreOC activo de cualquier usuario.
+- La seleccion para PreOC debe excluir lineas ya tomadas por PreOC vigente en `BRR` o `PND`, mientras sigan en `preocdetallereqitems`.
 
 ## 6. SP de mantenimiento
 
@@ -119,7 +122,7 @@ Efectos:
   - sumar `cantidad` a `reqaprobadocantidadanulada`;
   - recalcular `reqaprobadoestado`;
   - actualizar auditoria de edicion.
-- Actualizar `reqcomprasdetalle.reqitemcantanulada` si la columna existe en el DDL vigente.
+- Actualizar `reqcomprasdetalle.reqitemcantanulada`.
 
 ## 8. Cambio de item
 
@@ -144,14 +147,21 @@ Efectos:
   - `invitemidnuevo`;
   - `reqcambioobs`;
   - `reqcambiousuarioid`.
-- Insertar historial con `histtipo = 'AJUSTE'`, cantidad cero o cantidad informativa segun se cierre en implementacion, item anterior/nuevo y motivo.
+- Insertar historial con:
+  - `histtipo = 'AJUSTE'`;
+  - `histcantidadpendienteantes = reqaprobadocantidadpendiente`;
+  - `histcantidad = 0`;
+  - `histprecioneto = nuevo precio snapshot`;
+  - `histitemcod = nuevo codigo`;
+  - `histitemdsc = nueva descripcion`;
+  - `histobs = motivo`.
 - Actualizar `reqaprobados` con el nuevo item y snapshots:
   - `invitemid`;
   - `reqaprobadoitemcod`;
   - `reqaprobadoitemdsc`;
   - `invunidmedid`;
   - `reqaprobadoprecioneto`.
-- Marcar visualmente el detalle REQ mediante `reqcomprasdetalle.reqcompradetitemmodificado` si la columna existe en el DDL vigente.
+- Marcar visualmente el detalle REQ mediante `reqcomprasdetalle.reqcompradetitemmodificado = 1`.
 
 ## 9. Preparacion para PreOC
 
@@ -161,8 +171,9 @@ La seleccion para PreOC debe entregar solo lineas con:
 - `reqaprobadoestado IN (1, 2)`;
 - REQ origen vigente y aprobado;
 - tipo compatible entre lineas seleccionadas si el contrato PreOC exige no mezclar Material/Servicio.
+- item con tasa impositiva de compra configurada.
 
-La seleccion no crea PreOC ni reserva presupuesto. Solo alimenta el formulario PreOC.
+La seleccion no crea PreOC ni reserva presupuesto. Solo alimenta el carrito/formulario PreOC.
 
 ## 10. Fuera de alcance
 

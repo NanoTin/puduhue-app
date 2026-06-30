@@ -123,6 +123,15 @@ Implementar el mantenedor completo de asignacion Usuario-Centro de Costo (`usuar
 - Codigo visible PreOC cerrado como `POC-00000001`: prefijo `POC-` + `LPAD(preocid, 8, '0')`, global, no editable, no reciclable.
 - `reqaprobadoshistorial.preocdetid` referencia `preocdetallereqitems.preocdetreqitemid`; no renombrar en contratos ni implementacion.
 - Impuestos/conceptos Finnegans y POST ERP real quedan fuera del corte funcional local de PreOC.
+- Estado de vinculacion PreOC en REQ queda con codigos `LNK_Parcial` y `LNK_Total`; reemplaza la nomenclatura previa de vinculacion.
+- PreOC usa carrito separado `preoccarrito` para seleccion de lineas aprobadas; no agregar columnas temporales a `reqaprobados`.
+- Seleccion de pendientes para PreOC debe excluir carritos activos y lineas ya tomadas por PreOC vigente `BRR`/`PND`.
+- PreOC recibe `itemsAgrupados[]` para precio neto por item agrupado.
+- Impuestos PreOC se calculan desde `invitems.erptasaimpositivaid` y `erptasasimpositivas.erptasaimpositivaporcentaje`; `preocimptos` queda como detalle tecnico para validar totales y preparar JSON ERP futuro.
+- Si un item no tiene tasa impositiva de compra o la tasa no tiene porcentaje, no se puede agregar/enviar; mensaje a Administracion.
+- PreOC debe registrar historial funcional de estados en `preocestadoshistorial`.
+- PreOC debe registrar historial de resoluciones de aprobadores en `preocfirmanteshistorial`, especialmente antes de reiniciar por `RCH -> BRR`.
+- Mientras no exista DDL aprobado de adjuntos, PreOC puede guardar borrador pero no cerrar `BRR -> PND`.
 
 ## Riesgos y ambiguedades
 

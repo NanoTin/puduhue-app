@@ -25,7 +25,7 @@ El contrato BE PreOC cubre:
 - `ComprasPreocService`;
 - `ComprasPreocController`;
 - extension acotada de `ComprasCatalogosService`;
-- rutas web para listar, crear, editar, ver, enviar, aprobar, rechazar, anular y volver a borrador;
+- rutas web para listar, carrito, crear, editar, ver, enviar, aprobar, rechazar, rearmar, anular y volver a borrador;
 - consumo de SP definidos en `docs/modulo_compras_preoc_contrato_sp.md`;
 - integracion con SP presupuestarios del incremental 11.
 
@@ -62,19 +62,26 @@ Metodos publicos:
 | `consultarPreocFirmantes(int $preocid, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_consulta_por_id_firmantes` | Firmantes. |
 | `consultarPreocComentarios(int $preocid, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_consulta_por_id_comentarios` | Comentarios. |
 | `consultarPreocMovimientosPpto(int $preocid, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_consulta_por_id_movimientos_ppto` | Movimientos presupuestarios. |
-| `crearPreoc(array $data, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_crear` | Crear borrador o enviar. |
-| `editarPreoc(int $preocid, array $data, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_editar` | Guardar/reenviar cambios. |
+| `crearPreoc(array $data, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_crear` | Crear borrador. |
+| `editarPreoc(int $preocid, array $data, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_editar` | Guardar cambios en borrador editable. |
 | `enviarAprobacion(int $preocid, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_enviar_aprobacion` | Enviar `BRR -> PND`. |
 | `volverBorrador(int $preocid, ?string $motivo, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_volver_borrador` | Volver `PND -> BRR` sin aprobaciones. |
 | `aprobarPreoc(int $preocid, ?string $comentario, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_aprobar` | Aprobar firmante pendiente. |
 | `rechazarPreoc(int $preocid, string $comentario, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_rechazar` | Rechazar con comentario obligatorio. |
+| `rearmarPreoc(int $preocid, string $comentario, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_rearmar` | Pasar `RCH -> BRR` e iniciar nuevo ciclo editable. |
 | `anularPreoc(int $preocid, string $comentario, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_anular` | Anular cuando corresponda. |
+| `consultarEstadosHistorial(int $preocid, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_consulta_por_id_estados_historial` | Historial documental de estados. |
+| `consultarResolucionesHistorial(int $preocid, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_consulta_por_id_resoluciones_historial` | Historial de resoluciones por ciclo. |
+| `consultarCarritoUsuario(?string $token, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_carrito_consulta_usuario` | Carrito activo del comprador. |
+| `agregarCarrito(int $reqaprobadoid, float $cantidad, int $preoctipo, string $token, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_carrito_agregar` | Agregar pendiente al carrito. |
+| `liberarCarrito(array $data, int $usuarioId, ?string $disp, ?string $ip): array` | `sp_compras_preoc_carrito_liberar` | Liberar linea o carrito. |
 
 Auxiliares internos recomendados:
 
 - `normalizarFiltrosListado`
 - `normalizarCabeceraInput`
 - `normalizarDetalleInput`
+- `normalizarItemsAgrupadosInput`
 - `normalizarFirmantesInput`
 - `consultarPreocCompleta`
 
@@ -102,6 +109,10 @@ Rutas aprobadas:
 | Ruta | Verbo | Metodo Controller | Vista / salida |
 |---|---|---|---|
 | `compras-preoc/listar` | GET | `listar(bool $partial = false): void` | `compras_preoc_listar.php` |
+| `compras-preoc/seleccionar-tipo` | POST | `seleccionarTipoPost(bool $partial = false): void` | redirect/seleccion pendientes |
+| `compras-preoc/carrito` | GET | `carrito(bool $partial = false): void` | modal/parcial carrito |
+| `compras-preoc/carrito-agregar` | POST | `carritoAgregarPost(bool $partial = false): void` | redirect/seleccion |
+| `compras-preoc/carrito-liberar` | POST | `carritoLiberarPost(bool $partial = false): void` | redirect/seleccion o listar |
 | `compras-preoc/crear` | GET | `crearForm(bool $partial = false): void` | `compras_preoc_crear.php` |
 | `compras-preoc/crear` | POST | `crearPost(bool $partial = false): void` | redirect/ver o vuelve a crear |
 | `compras-preoc/editar` | GET | `editarForm(bool $partial = false): void` | `compras_preoc_editar.php` |
@@ -112,6 +123,7 @@ Rutas aprobadas:
 | `compras-preoc/volver-borrador` | POST | `volverBorradorPost(bool $partial = false): void` | redirect/ver |
 | `compras-preoc/aprobar` | POST | `aprobarPost(bool $partial = false): void` | redirect/pendientes o ver |
 | `compras-preoc/rechazar` | POST | `rechazarPost(bool $partial = false): void` | redirect/pendientes o ver |
+| `compras-preoc/rearmar` | POST | `rearmarPost(bool $partial = false): void` | redirect/editar |
 | `compras-preoc/anular` | POST | `anularPost(bool $partial = false): void` | redirect/listar o ver |
 
 Reglas:
@@ -157,6 +169,8 @@ Variables:
 - `$proveedoresRows`
 - `$condicionesPagoOptions`
 - `$aprobadoresRows`
+- `$carritoRows`
+- `$preoccarritotoken`
 - `$errorMessage`
 - `$partial`
 
@@ -179,7 +193,10 @@ Variables:
 - `$puedeVolverBorrador`
 - `$puedeAprobar`
 - `$puedeRechazar`
+- `$puedeRearmar`
 - `$puedeAnular`
+- `$estadosHistorial`
+- `$resolucionesHistorial`
 - `$errorMessage`
 - `$partial`
 
@@ -205,6 +222,7 @@ Banderas UX:
 - `puedeVolverBorrador`: estado `PND` sin aprobaciones.
 - `puedeAprobar`: usuario login igual a `preocaprobadoridpnd`, estado `PND`.
 - `puedeRechazar`: usuario login igual a `preocaprobadoridpnd`, estado `PND`.
+- `puedeRearmar`: estado `RCH`, comprador creador y sin bloqueo ERP/documental.
 - `puedeAnular`: estado permitido y permiso correspondiente; no salta la regla de firmantes aprobados.
 
 La autorizacion final vive en SP.
@@ -219,7 +237,16 @@ Si no existe DDL aprobado:
 - no permitir cerrar `BRR -> PND` si el alcance exige adjunto obligatorio;
 - reportar bloqueo antes de implementar envio.
 
-## 10. Validaciones
+## 10. Carrito, impuestos e historiales
+
+- El carrito usa tabla separada `preoccarrito`; no escribir estado temporal en `reqaprobados`.
+- La seleccion de pendientes debe excluir carritos activos y lineas ya tomadas por PreOC vigente `BRR`/`PND`.
+- El formulario PreOC debe enviar `itemsAgrupados[]` con precio neto por `invitemid`.
+- El BE no calcula impuestos como fuente de verdad; normaliza datos y delega a SP.
+- Si el SP informa item sin tasa impositiva, el BE devuelve toast/mensaje indicando contactar a Administracion.
+- Las vistas de ver PreOC deben poder cargar historial de estados y resoluciones para los botones correspondientes.
+
+## 11. Validaciones
 
 Cuando se implemente:
 

@@ -120,8 +120,8 @@ Implementar en Puduhue App Web un flujo completo de compras que cubra:
   - `ANL` Anulado.
 - La vinculacion con PreOC se maneja en una columna separada de estado PreOC:
   - sin estado,
-  - `VNC_Parcial`,
-  - `VNC_Total`.
+  - `LNK_Parcial`,
+  - `LNK_Total`.
 - `RCH` puede corregirse y reenviarse.
 - Al reenviar desde `RCH`, se recalculan firmantes default, se conservan manuales activos y se reaplica inactividad.
 - `ANL` bloquea cualquier modificacion posterior.

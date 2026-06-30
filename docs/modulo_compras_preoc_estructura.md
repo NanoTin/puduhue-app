@@ -45,8 +45,11 @@
 | `preocitemsdimensiones` | Transaccional | Dimensiones ERP por req-item origen; puede mantener referencia nullable a item agrupado |
 | `preocpptoresumen` | Resumen | Resumen de presupuesto afectado por PreOC |
 | `preocfirmantes` | Transaccional | Firmantes/aprobadores de PreOC |
+| `preocfirmanteshistorial` | Historial funcional | Snapshot de resoluciones de aprobadores por ciclo |
 | `preoccomentarios` | Funcional | Comentarios visibles de aprobacion, rechazo y anulacion |
+| `preocestadoshistorial` | Historial funcional | Cambios de estado documental de PreOC |
 | `preoclog` | LOG | Auditoria tecnica |
+| `preoccarrito` | Transitorio | Carrito de seleccion de lineas aprobadas antes de crear PreOC |
 | `preocestados` | Maestro | Estados documentales |
 | `preocestadoserp` | Maestro | Estados de sincronizacion ERP |
 | `preocaprobadoresxmonto` | Maestro | Reglas de aprobadores por monto neto |
@@ -121,6 +124,7 @@ Reglas:
 - No existe `CSO`; se usa `RCH` con comentario obligatorio.
 - `PND -> BRR` solo se permite si ningun firmante aprobo; libera o revierte reserva.
 - `RCH -> BRR` se permite para corregir/rearmar; el rechazo ya hizo la reversa.
+- `RCH -> BRR` reinicia el ciclo de aprobacion y antes conserva las resoluciones previas en `preocfirmanteshistorial`.
 - Cuando existe al menos una aprobacion, la PreOC deja de ser editable.
 - Una PreOC con al menos un firmante aprobado no puede anularse directamente; debe solicitarse rechazo.
 - Una PreOC sincronizada puede anularse localmente con permiso especial y comentario obligatorio.
@@ -205,7 +209,7 @@ Detalle de impuestos por item agrupado.
 |---|---|---|---|
 | `preocimptoid` | INT PK AI | NO | PK |
 | `preocitemid` | INT FK | NO | Item agrupado |
-| `imptoid` | INT FK | SI | Impuesto/concepto, pendiente confirmar con soporte Finnegans |
+| `imptoid` | INT FK | SI | Guarda el `erptasasimpositivas.erptasaimpositivaid` usado como tasa de compra |
 | `preocimptoneto` | DECIMAL(15,2) | NO | Precio neto unitario base |
 | `preocimptocantidadtotal` | DECIMAL(15,4) | NO | Cantidad total del item |
 | `preocimptonetototal` | DECIMAL(15,2) | NO | Neto total base |
@@ -214,9 +218,13 @@ Detalle de impuestos por item agrupado.
 
 Reglas:
 
-- Un item puede tener uno o mas impuestos.
-- La tasa puede venir del item o de un grupo/categoria de impuestos pendiente de confirmar con soporte Finnegans.
+- Para el corte vigente, cada item tiene una tasa impositiva de compra en `invitems.erptasaimpositivaid`.
+- La tasa se resuelve contra `erptasasimpositivas.erptasaimpositivaporcentaje`.
+- `preocimptotasa` guarda snapshot del porcentaje numerico, por ejemplo `19.0000`.
+- Para calcular, el porcentaje se divide por 100.
+- Si el item no tiene tasa configurada o la tasa no tiene porcentaje, no se puede agregar/enviar y se debe indicar contactar a Administracion.
 - La suma de `preocimptomonto` alimenta `preocitems.preocitemimptostotal` y `preoc.preocimptostotal`.
+- `preocimptos` se mantiene tambien como detalle tecnico para validar totales y preparar JSON ERP futuro.
 
 ## 7. `preocitemsdimensiones`
 
@@ -414,6 +422,56 @@ Tipos minimos:
 
 El LOG tecnico no reemplaza comentarios funcionales.
 
+## 12.1 Historial funcional de estados
+
+`preocestadoshistorial` registra cada cambio documental:
+
+| Columna | Tipo logico | NULL | Descripcion |
+|---|---|---|---|
+| `preocestadohistid` | INT PK AI | NO | PK |
+| `preocid` | INT FK | NO | PreOC |
+| `preocestadoanteriorid` | VARCHAR(20) FK | SI | Estado anterior; NULL al crear |
+| `preocestadonuevoid` | VARCHAR(20) FK | NO | Estado nuevo |
+| `usuarioid` | INT FK | NO | Usuario que ejecuta |
+| `preocestadohistfechahora` | DATETIME | NO | Fecha/hora |
+| `preocestadohistobs` | TEXT | SI | Observacion o motivo |
+
+La vista PreOC debe exponer boton `Historial de Estados`.
+
+## 12.2 Historial de resoluciones de aprobadores
+
+`preocfirmanteshistorial` conserva snapshots de firmantes/resoluciones por ciclo antes de reiniciar la lista activa.
+
+Campos minimos:
+
+- `preocfirmantehistid`;
+- `preocid`;
+- `preoccicloaprobacion`;
+- `firmanteusuarioid`;
+- `firmantetipo`;
+- `firmanteorden`;
+- `firmantedefault`;
+- `firmanteestado`;
+- `firmantefechahora`;
+- `firmantecomentario`;
+- `firmantereemplazodeid`;
+- auditoria/hist usuario y fecha.
+
+La vista PreOC debe exponer boton `Historial de Resoluciones`.
+
+## 12.3 Carrito PreOC
+
+`preoccarrito` guarda la seleccion transitoria antes de crear una PreOC.
+
+Reglas:
+
+- No se agregan columnas de carrito a `reqaprobados`.
+- La seleccion de pendientes excluye carritos activos de cualquier usuario.
+- La seleccion excluye lineas ya tomadas por PreOC vigente en `BRR` o `PND`.
+- Si el usuario tiene carrito activo previo, puede continuar o liberar.
+- Al crear borrador desde carrito, el carrito pasa a convertido/liberado y la disponibilidad queda controlada por el detalle PreOC.
+- Si una linea se elimina desde PreOC editable antes de aprobacion, vuelve a quedar disponible segun saldo pendiente.
+
 ## 13. Integracion ERP
 
 ### 13.1 Cuando se integra
@@ -503,11 +561,12 @@ Flujo propuesto:
 
 1. Desde `preoc_listar`, el comprador presiona Crear.
 2. Se abre `reqcompra_aprobados_listar` o pantalla equivalente.
-3. Se listan requerimientos-items pendientes de compra.
-4. Cada fila tiene checkbox para seleccionar/agregar.
-5. La pantalla incluye filtros para buscar.
-6. El comprador puede ver un listado temporal/oculto de seleccionados mediante boton.
-7. Cuando completa la seleccion, presiona Crear PreOC.
+3. Antes de listar, el comprador selecciona tipo Material o Servicio.
+4. Se listan requerimientos-items pendientes de compra compatibles con ese tipo.
+5. Cada fila tiene checkbox para agregar al carrito.
+6. La pantalla incluye filtros para buscar sin perder lo agregado.
+7. El comprador puede ver y liberar el carrito mediante boton.
+8. Cuando completa la seleccion, presiona Crear PreOC.
 
 Notas:
 

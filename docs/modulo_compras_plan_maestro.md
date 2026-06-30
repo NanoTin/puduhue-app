@@ -56,7 +56,7 @@
 
 - Estados documentales vigentes: `BRR`, `PND`, `EDT`, `APR`, `RCH`, `ANL`.
 - No se usa `CSO`; cambios solicitados se tratan como `RCH` con comentario obligatorio.
-- No se usa `VNC` como estado principal; el vinculo con PreOC vive en `reqcompraestadopreoc`.
+- No se usa `VNC` como estado principal; el vinculo con PreOC vive en `reqcompraestadopreoc` con codigos `LNK_Parcial` y `LNK_Total`.
 - REQ rechazado es corregible y reenviable.
 - Un REQ no se puede editar si ya tiene al menos una aprobacion o si esta aprobado.
 - La fecha funcional REQ la define sistema/BD y se actualiza en cada edicion permitida.
@@ -105,6 +105,13 @@
 - Tipo ERP: Material `OC`, Servicio `OCSS`.
 - PreOC debe tener adjuntos/archivos; se requiere al menos un adjunto obligatorio antes de enviar a aprobacion.
 - La obligatoriedad de adjuntos PreOC se valida al pasar `BRR` a `PND`; no bloquea guardar borrador.
+- Mientras el DDL de adjuntos no este aprobado, PreOC puede guardar borrador pero no cerrar `BRR -> PND`.
+- La seleccion de lineas para PreOC usa carrito separado en `preoccarrito`; no se agregan columnas temporales a `reqaprobados`.
+- La consulta de pendientes excluye carritos activos y lineas ya tomadas por PreOC vigente en `BRR` o `PND`.
+- PreOC resuelve impuestos desde `invitems.erptasaimpositivaid` hacia `erptasasimpositivas.erptasaimpositivaporcentaje`; si falta tasa o porcentaje, el item no se puede agregar/enviar.
+- `preocimptos` se mantiene como detalle tecnico de impuestos por item agrupado para validar totales y preparar JSON ERP futuro.
+- PreOC debe registrar historial funcional de estados en `preocestadoshistorial`, separado del LOG tecnico.
+- PreOC debe registrar historial de resoluciones de aprobadores en `preocfirmanteshistorial`, especialmente antes de reiniciar firmantes por `RCH -> BRR`.
 - Adjuntos PreOC debe soportar inicialmente PDF, imagenes, MSG y KMZ.
 - El tipo de adjunto no debe ser digitado por el usuario; debe resolverse por extension/MIME desde una configuracion reutilizable de tipos permitidos por modulo.
 - Adjuntos PreOC se almacenan como archivo fisico y metadata en BD; no se guardan como BLOB.

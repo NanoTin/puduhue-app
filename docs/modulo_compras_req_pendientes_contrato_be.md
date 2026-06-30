@@ -26,6 +26,7 @@ El contrato BE de pendientes cubre:
 - servicio de pendientes de compra;
 - controlador web de pendientes;
 - rutas web para listar, ver, anular saldo, cambiar item y seleccionar para PreOC;
+- seleccion de pendientes para carrito PreOC sin crear PreOC directamente;
 - consumo de SP definidos en `docs/modulo_compras_req_pendientes_contrato_sp.md`;
 - uso y extension acotada de `ComprasCatalogosService` para catalogos de items comprador cuando sea necesario.
 
@@ -172,7 +173,7 @@ La autorizacion final vive en SP.
 
 - Anulacion exitosa: `?route=compras-req-pendientes/ver&id=X`.
 - Cambio de item exitoso: `?route=compras-req-pendientes/ver&id=X`.
-- Seleccion para PreOC: queda preparada para redirigir a la ruta de creacion PreOC cuando el contrato PreOC este implementado.
+- Seleccion para PreOC: agrega lineas al carrito PreOC mediante rutas `compras-preoc/carrito-*`; la creacion de borrador se realiza desde el carrito.
 
 ## 10. Validaciones
 
