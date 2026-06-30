@@ -45,6 +45,7 @@ if (!$isPartial) {
         <?php endif; ?>
 
         <form id="prodlecheForm" method="POST" action="?route=prodleche/editar">
+            <?= CsrfHelper::input('web') ?>
             <input type="hidden" name="prodlecheid" value="<?= htmlspecialchars($formData['prodlecheid'] ?? '') ?>">
 
             <section class="mb-4">
