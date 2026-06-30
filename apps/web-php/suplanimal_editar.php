@@ -32,6 +32,7 @@ if (!$isPartial) {
         <?php endif; ?>
 
         <form id="suplanimalForm" method="POST" action="?route=suplanimal/editar">
+            <?= CsrfHelper::input('web') ?>
             <input type="hidden" name="suplanimalid" value="<?= htmlspecialchars($formData['suplanimalid'] ?? '') ?>">
             <section class="mb-4">
                 <h5 class="section-title">Datos Generales</h5>

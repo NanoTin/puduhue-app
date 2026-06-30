@@ -33,6 +33,7 @@ if (!$isPartial) {
         <?php endif; ?>
 
         <form id="prodlecheForm" method="POST" action="?route=prodleche/crear">
+            <?= CsrfHelper::input('web') ?>
             <section class="mb-4">
                 <h5 class="section-title">Datos Generales</h5>
                 <div class="row g-3 align-items-end general-grid">
